@@ -13,6 +13,7 @@ public class GameScreen implements Screen {
 	private Game game;
 	private FightScene fightScene;
 	private Viewport viewport;
+	public static boolean newGame;
 	
 	private static final int MIN_WIDTH = 1280;
     private static final int MIN_HEIGHT = 720;
@@ -21,13 +22,14 @@ public class GameScreen implements Screen {
 
 	public GameScreen(Game game) {		
 		this.game = game;
+		newGame = true;
 		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);
 		this.fightScene = new FightScene(viewport);		
 	}
 
 	@Override
 	public void render (float delta) {
-		Gdx.gl.glClearColor(64/255f, 64/255f, 64/255f, 1);
+		Gdx.gl.glClearColor(55/255f, 55/255f, 55/255f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		// Render FightScene
