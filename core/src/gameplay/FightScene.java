@@ -1,17 +1,17 @@
 package gameplay;
 
 import java.util.Random;
+
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -23,16 +23,14 @@ import com.onionscape.game.GameScreen;
 import player.Storage;
 import player.Player;
 
-public class FightScene {
+public class FightScene implements Screen{
 	Skin skin;
-    BitmapFont font;
-    TextButton.TextButtonStyle buttonStyle;
-	LabelStyle labelStyle;
     Viewport vp;
     String combatText;
     Random rand = new Random();
-    private Stage stage;
-    private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4;
+    private Game game;
+    public Stage stage;
+    private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
     private Label playerHP, enemyHP, combatLog;
     private int eHP = 50, eDmg = 2;
     private boolean pDead, eDead, btnClicked;
@@ -43,28 +41,25 @@ public class FightScene {
     private int rendLeft, attackCount = 3;
     private boolean enemyStunned, barrierActive, hardenActive;
 
-    public FightScene(Viewport viewport) {
+    public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
+    	this.gameScreen = gameScreen;
+    	this.game = game;
         stage = new Stage(viewport);
         vp = viewport;
         Gdx.input.setInputProcessor(stage);  // Set the stage to process inputs
         skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
         storage = Storage.getInstance();
-        Player.setHp(Player.getMaxHP());
         
-        if(GameScreen.newGame)
-        	setRandomAbility();
         
-        createFont();       
+        if(GameScreen.newGame) {
+        	Player.newGame();
+        }        	
+        
+        storage.createFont();       
         createComponents();
         componentParameters();            
         
         GameScreen.newGame = false;
-    }
-
-    public void render() {
-    	update();
-        stage.act();
-        stage.draw();
     }
     
     public void update() {
@@ -153,11 +148,14 @@ public class FightScene {
     		}   		
     		break;
     	case "Rend":
-    		if(rand.nextInt(4) != 0)
-    			playerAttack(2);
+    		if(rand.nextInt(4) != 0) {
+    			rendLeft = 3;
+    			newLine();
+    			combatLog.setText(combatText + "\n Bleed applied to enemy");
+    		}   			
     		else {
     			newLine();
-    			combatLog.setText(combatText + "\n Player's attack missed");
+    			combatLog.setText(combatText + "\n Player failed to apply bleed");
     		}  			
     		break;
     	case "Whirlwind":
@@ -185,16 +183,22 @@ public class FightScene {
     		}  			
     		break;
     	case "Barrier":
-    		if(rand.nextInt(4) != 0)
-    			playerAttack(6);
+    		if(rand.nextInt(4) != 0) {
+    			barrierActive = true;
+    			newLine();
+    			combatLog.setText(combatText + "\n Player activated Barrier");
+    		}
     		else {
     			newLine();
     			combatLog.setText(combatText + "\n Player failed to use Barrier");
     		}  			
     		break;
     	case "Harden":
-    		if(rand.nextInt(4) != 0)
-    			playerAttack(7);
+    		if(rand.nextInt(4) != 0) {
+    			hardenActive = true;
+    			newLine();
+    			combatLog.setText(combatText + "\n Player activated Harden");
+    		}
     		else {
     			newLine();
     			combatLog.setText(combatText + "\n Player failed to use Harden");
@@ -213,9 +217,6 @@ public class FightScene {
     	case 1:
     		temp = Player.getStrength() + rand.nextInt(1, storage.swing.getAttackPower() + 1);
     		eHP -= temp;
-    		break;
-    	case 2:
-    		rendLeft = 3;
     		break;
     	case 3:
     		for(int i = 0; i < 3; i++)
@@ -245,18 +246,7 @@ public class FightScene {
         if(x == 0)
         	combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
         else if(x == 1 || x == 3 || x == 4 || x == 5)
-        	combatLog.setText(combatText + "\n " + getAbilityName(x) + 
-        			" hit the enemy for " + temp + " damage");
-        else if(x == 6) {
-        	combatLog.setText(combatText + "\n Player used " + getAbilityName(x) + 
-        			" and is now protected from" + " \n the next attack");
-        	newLine();
-        }
-        else if(x == 7) {
-        	combatLog.setText(combatText + "\n Player used " + getAbilityName(x) + 
-        			" resulting in having higher " + "\n damage resistance for the next attack");
-        	newLine();
-        }
+        	combatLog.setText(combatText + "\n " + getAbilityName(x) + " hit the enemy for " + temp + " damage");
         
         // Bleed hits after a succesful attack
         if(rendLeft > 0 && x != 6 && x != 7) {
@@ -267,8 +257,11 @@ public class FightScene {
         	rendLeft--;
         }        
         
-        if(eHP <= 0)
-        	eDead = true; 
+        if(eHP <= 0) {
+        	eDead = true;
+        	Player.gainExp(20);
+        	Player.checkExp();
+        }       	
     }
     
     private void enemyAttack() {
@@ -279,7 +272,7 @@ public class FightScene {
     	}  		
     	
     	if(!barrierActive && !enemyStunned) {
-    		Player.setHp(Player.getHp() - temp);    	        
+    		Player.loseHP(temp);
             newLine();
             combatLog.setText(combatText + "\n Enemy attacked for " + temp + " damage");
     	}
@@ -296,26 +289,7 @@ public class FightScene {
     		       
         if(Player.getHp() <= 0)
         	pDead = true;   	
-    }
-    
-    private void setRandomAbility() {
-    	int id1, id2, id3, id4;
-    	id1 = rand.nextInt(1,8);   
-    	id2 = rand.nextInt(1,8);    
-    	id3 = rand.nextInt(1,8);    
-    	id4 = rand.nextInt(1,8);
-    	
-    	Player.setAbID1(id1);
-    	while(id1 == id2)
-    		id2 = rand.nextInt(1,8); 
-    	Player.setAbID2(id2);
-    	while(id3 == id1 || id3 == id2)
-    		id3 = rand.nextInt(1,8); 
-    	Player.setAbID3(id3);
-    	while(id4 == id1 || id4 == id2 || id4 == id3)
-    		id4 = rand.nextInt(1,8); 
-    	Player.setAbID4(id4);
-    }
+    }   
     
     private void setAbility(TextButton button, int abID, Label abUseLbl) {
     	switch(abID) {
@@ -414,28 +388,13 @@ public class FightScene {
     	}
     }
     
-    private void createFont() {
-    	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/RetroGaming.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 25;
-        font = generator.generateFont(parameter);
-        generator.dispose();
-        
-        // Create a new style for button
-        buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
-        buttonStyle.font = font;   
-        
-        labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
-        labelStyle.font = font;        
-    }
-    
     private void createComponents() {
-    	playerHP = new Label("Player HP: " + Player.getHp() + "/" + Player.getMaxHP(), labelStyle);
-    	enemyHP = new Label("Enemy HP: " + eHP + "/" + 50, labelStyle);
+    	playerHP = new Label("Player HP: " + Player.getHp() + "/" + Player.getMaxHP(), storage.labelStyle);
+    	enemyHP = new Label("Enemy HP: " + eHP + "/" + 50, storage.labelStyle);
     	
-    	combatLog = new Label("", labelStyle);
+    	combatLog = new Label("", storage.labelStyle);
     	
-    	attackBtn = new TextButton("Attack", buttonStyle);
+    	attackBtn = new TextButton("Attack", storage.buttonStyle);
     	attackBtn.setName("Attack");
     	attackBtn.addListener(new ClickListener() {
     	    @Override
@@ -444,9 +403,9 @@ public class FightScene {
     	        btnClicked = true;
     	    }});
     	
-    	ability1 = new TextButton("Ability1", buttonStyle);
+    	ability1 = new TextButton("Ability1", storage.buttonStyle);
     	ab1Uses = setUsesLeft(Player.getAbID1());
-    	ab1UseLbl = new Label("", labelStyle);
+    	ab1UseLbl = new Label("", storage.labelStyle);
 		ab1UseLbl.setName("Uses left: " + ab1Uses);
     	setAbility(ability1, Player.getAbID1(), ab1UseLbl);    	
     	ability1.addListener(new ClickListener() {
@@ -465,9 +424,9 @@ public class FightScene {
     	        btnClicked = true;
     	    }});
     	
-    	ability2 = new TextButton("Ability2", buttonStyle);
+    	ability2 = new TextButton("Ability2", storage.buttonStyle);
     	ab2Uses = setUsesLeft(Player.getAbID2());
-    	ab2UseLbl = new Label("", labelStyle);
+    	ab2UseLbl = new Label("", storage.labelStyle);
 		ab2UseLbl.setName("Uses left: " + ab2Uses);
     	setAbility(ability2, Player.getAbID2(), ab2UseLbl);
     	ability2.addListener(new ClickListener() {
@@ -486,9 +445,9 @@ public class FightScene {
     	        btnClicked = true;
     	    }});
     	
-    	ability3 = new TextButton("Ability3", buttonStyle);
+    	ability3 = new TextButton("Ability3", storage.buttonStyle);
     	ab3Uses = setUsesLeft(Player.getAbID3());
-    	ab3UseLbl = new Label("", labelStyle);
+    	ab3UseLbl = new Label("", storage.labelStyle);
     	ab3UseLbl.setName("Uses left: " + ab3Uses);
     	setAbility(ability3, Player.getAbID3(), ab3UseLbl);
     	ability3.addListener(new ClickListener() {
@@ -507,9 +466,9 @@ public class FightScene {
     	        btnClicked = true;
     	    }});
     	
-    	ability4 = new TextButton("Ability4", buttonStyle);
+    	ability4 = new TextButton("Ability4", storage.buttonStyle);
     	ab4Uses = setUsesLeft(Player.getAbID4());
-    	ab4UseLbl = new Label("", labelStyle);
+    	ab4UseLbl = new Label("", storage.labelStyle);
     	ab4UseLbl.setName("Uses left: " + ab4Uses);
     	setAbility(ability4, Player.getAbID4(), ab4UseLbl);
     	ability4.addListener(new ClickListener() {
@@ -528,7 +487,7 @@ public class FightScene {
     	        btnClicked = true;
     	    }});
         
-    	endTurn = new TextButton("End Turn", buttonStyle);
+    	endTurn = new TextButton("End Turn", storage.buttonStyle);
     	endTurn.setColor(Color.LIGHT_GRAY);
     	endTurn.addListener(new ClickListener() {
         	@Override
@@ -537,12 +496,24 @@ public class FightScene {
         		enemyAttack();
     	        btnClicked = true;
     	    }});
+    	
+    	homeBtn = new TextButton("Home", storage.buttonStyle);
+    	homeBtn.setColor(Color.RED);
+    	homeBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			stage.clear();
+        		gameScreen.setCurrentState(GameScreen.HOME);
+    	    }});
     }
     
     private void componentParameters() {
     	playerHP.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 2.5f);
     	
-    	enemyHP.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 1.2f);
+    	enemyHP.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 1.07f);
+    	
+    	homeBtn.setSize(150, 100);
+    	homeBtn.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 5f);
     	
     	combatLog.setColor(Color.BLACK);
     	Container<Label> container = new Container<Label>(combatLog);
@@ -578,20 +549,59 @@ public class FightScene {
         stage.addActor(ability2);
         stage.addActor(ability3);
         stage.addActor(ability4);
+        stage.addActor(homeBtn);       
     }
     
     public void newLine() {
     	combatText = combatLog.getText().toString();
         int lines = combatText.split("\n").length;
-        if(lines >= 12) {
+        if(lines >= 13) {
             int index = combatText.indexOf("\n");
             combatText = combatText.substring(index+1);
-        }
+        }        
     }
     
+    @Override
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        font.dispose();
+        storage.font.dispose();
     }
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+    public void render(float delta) {
+    	update();
+        stage.act();
+        stage.draw();
+    }
+
+	@Override
+	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -8,10 +8,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import gameplay.FightScene;
+import gameplay.Home;
 
 public class GameScreen implements Screen {
 	private Game game;
-	private FightScene fightScene;
+	public FightScene fightScene;
+	public Home home;
 	private Viewport viewport;
 	public static boolean newGame;
 	
@@ -19,22 +21,47 @@ public class GameScreen implements Screen {
     private static final int MIN_HEIGHT = 720;
     private static final int MAX_WIDTH = 1920;
     private static final int MAX_HEIGHT = 1080;
+    
+    public static final int FIGHT_SCENE = 0;
+    public static final int HOME = 1;
+    private int currentState;
 
 	public GameScreen(Game game) {		
 		this.game = game;
 		newGame = true;
 		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);
-		this.fightScene = new FightScene(viewport);		
+	    setCurrentState(FIGHT_SCENE);
+	}
+	
+	public void setCurrentState(int newState) {
+	    currentState = newState;
+	    switch (currentState) {
+	        case FIGHT_SCENE:
+	        	this.fightScene = new FightScene(viewport, game, this);
+	            Gdx.input.setInputProcessor(fightScene.stage);
+	            break;
+	        case HOME:
+	        	this.home = new Home(viewport, game, this);
+	            Gdx.input.setInputProcessor(home.stage);
+	            break;
+	    }
 	}
 
 	@Override
-	public void render (float delta) {
-		Gdx.gl.glClearColor(55/255f, 55/255f, 55/255f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-		// Render FightScene
-		fightScene.render();
+	public void render(float delta) {
+	    Gdx.gl.glClearColor(55 / 255f, 55 / 255f, 55 / 255f, 1);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+	    switch (currentState) {
+	        case FIGHT_SCENE:
+	            fightScene.render(delta);
+	            break;
+	        case HOME:
+	            home.render(delta);
+	            break;
+	    }
 	}
+
 
 	@Override
 	public void show() {
@@ -73,8 +100,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		fightScene.dispose();
 	}
 
 }
