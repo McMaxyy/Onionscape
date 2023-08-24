@@ -35,7 +35,7 @@ public class FightScene implements Screen{
     private int eHP = 50, eDmg = 2;
     private boolean pDead, eDead, btnClicked;
     private Storage storage;
-    private int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
+    private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
     private Label ab1UseLbl, ab2UseLbl, ab3UseLbl, ab4UseLbl;
     private GameScreen gameScreen;
     private int rendLeft, attackCount = 3;
@@ -57,7 +57,25 @@ public class FightScene implements Screen{
         
         storage.createFont();       
         createComponents();
-        componentParameters();            
+        componentParameters(); 
+        
+        // Check if coming to a raid with depleted ability
+        if(ab1Uses <= 0) {
+			ability1.setTouchable(Touchable.disabled);
+    		ability1.setColor(Color.GRAY);
+		}
+		if(ab2Uses <= 0) {
+			ability2.setTouchable(Touchable.disabled);
+    		ability2.setColor(Color.GRAY);
+		}
+		if(ab3Uses <= 0) {
+			ability3.setTouchable(Touchable.disabled);
+    		ability3.setColor(Color.GRAY);
+		}
+		if(ab4Uses <= 0) {
+			ability4.setTouchable(Touchable.disabled);
+    		ability4.setColor(Color.GRAY);
+		}  
         
         GameScreen.newGame = false;
     }
@@ -404,7 +422,8 @@ public class FightScene implements Screen{
     	    }});
     	
     	ability1 = new TextButton("Ability1", storage.buttonStyle);
-    	ab1Uses = setUsesLeft(Player.getAbID1());
+    	if(gameScreen.newGame)
+    		ab1Uses = setUsesLeft(Player.getAbID1());
     	ab1UseLbl = new Label("", storage.labelStyle);
 		ab1UseLbl.setName("Uses left: " + ab1Uses);
     	setAbility(ability1, Player.getAbID1(), ab1UseLbl);    	
@@ -425,7 +444,8 @@ public class FightScene implements Screen{
     	    }});
     	
     	ability2 = new TextButton("Ability2", storage.buttonStyle);
-    	ab2Uses = setUsesLeft(Player.getAbID2());
+    	if(gameScreen.newGame)
+    		ab2Uses = setUsesLeft(Player.getAbID2());
     	ab2UseLbl = new Label("", storage.labelStyle);
 		ab2UseLbl.setName("Uses left: " + ab2Uses);
     	setAbility(ability2, Player.getAbID2(), ab2UseLbl);
@@ -446,7 +466,8 @@ public class FightScene implements Screen{
     	    }});
     	
     	ability3 = new TextButton("Ability3", storage.buttonStyle);
-    	ab3Uses = setUsesLeft(Player.getAbID3());
+    	if(gameScreen.newGame)
+    		ab3Uses = setUsesLeft(Player.getAbID3());
     	ab3UseLbl = new Label("", storage.labelStyle);
     	ab3UseLbl.setName("Uses left: " + ab3Uses);
     	setAbility(ability3, Player.getAbID3(), ab3UseLbl);
@@ -467,7 +488,8 @@ public class FightScene implements Screen{
     	    }});
     	
     	ability4 = new TextButton("Ability4", storage.buttonStyle);
-    	ab4Uses = setUsesLeft(Player.getAbID4());
+    	if(gameScreen.newGame)
+    		ab4Uses = setUsesLeft(Player.getAbID4());
     	ab4UseLbl = new Label("", storage.labelStyle);
     	ab4UseLbl.setName("Uses left: " + ab4Uses);
     	setAbility(ability4, Player.getAbID4(), ab4UseLbl);

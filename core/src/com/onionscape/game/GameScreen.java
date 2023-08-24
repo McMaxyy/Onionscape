@@ -9,11 +9,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import gameplay.FightScene;
 import gameplay.Home;
+import player.BerserkerSkillTree;
 
 public class GameScreen implements Screen {
 	private Game game;
-	public FightScene fightScene;
-	public Home home;
+	private FightScene fightScene;
+	private Home home;
+	private BerserkerSkillTree zerkerTree;
 	private Viewport viewport;
 	public static boolean newGame;
 	
@@ -24,13 +26,14 @@ public class GameScreen implements Screen {
     
     public static final int FIGHT_SCENE = 0;
     public static final int HOME = 1;
+    public static final int ZERKER_TREE = 2;
     private int currentState;
 
 	public GameScreen(Game game) {		
 		this.game = game;
 		newGame = true;
 		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);
-	    setCurrentState(FIGHT_SCENE);
+	    setCurrentState(ZERKER_TREE);
 	}
 	
 	public void setCurrentState(int newState) {
@@ -43,6 +46,10 @@ public class GameScreen implements Screen {
 	        case HOME:
 	        	this.home = new Home(viewport, game, this);
 	            Gdx.input.setInputProcessor(home.stage);
+	            break;
+	        case ZERKER_TREE:
+	        	this.zerkerTree = new BerserkerSkillTree(viewport, game, this);
+	            Gdx.input.setInputProcessor(zerkerTree.stage);
 	            break;
 	    }
 	}
@@ -58,6 +65,9 @@ public class GameScreen implements Screen {
 	            break;
 	        case HOME:
 	            home.render(delta);
+	            break;
+	        case ZERKER_TREE:
+	        	zerkerTree.render(delta);
 	            break;
 	    }
 	}

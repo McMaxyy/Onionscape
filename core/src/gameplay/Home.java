@@ -23,12 +23,9 @@ public class Home implements Screen {
 	public Stage stage;
 	private Storage storage;
 	private Game game;
-	private TextButton fight, newGame, levelUp;
-	private TextButton twoHandBtn, oneHandBtn, thickSkinBtn;
-	private Label twoHandLbl, oneHandLbl, thickSkinLbl;
+	private TextButton fight, newGame, zerkerTreeBtn;
 	private Label level, exp;
 	private GameScreen gameScreen;
-	private boolean skillTreeVisible = false;
 	
 	public Home(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -65,7 +62,18 @@ public class Home implements Screen {
     	    }});
 		newGame.setSize(150, 100);
 		newGame.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 2f);
-		stage.addActor(newGame);		
+		stage.addActor(newGame);
+		
+		zerkerTreeBtn = new TextButton("Skill Tree", storage.buttonStyle);
+		zerkerTreeBtn.setColor(Color.LIGHT_GRAY);
+		zerkerTreeBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			gameScreen.setCurrentState(GameScreen.ZERKER_TREE);
+    	    }});
+		zerkerTreeBtn.setSize(150, 100);
+		zerkerTreeBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 2f);
+		stage.addActor(zerkerTreeBtn);
 		
 		level = new Label("Level: " + Player.getLevel(), storage.labelStyle);
 		level.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.1f);
@@ -73,102 +81,7 @@ public class Home implements Screen {
 		
 		exp = new Label("Exp: " + Player.getExp(), storage.labelStyle);
 		exp.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.15f);
-		stage.addActor(exp);
-		
-		// Skill Tree buttons
-		levelUp = new TextButton("Skill Tree", storage.buttonStyle);
-		levelUp.setColor(Color.LIGHT_GRAY);
-		levelUp.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			if(!skillTreeVisible)
-    				showSkillTree();
-    			else
-    				hideSkillTree();
-    	    }});
-		levelUp.setSize(250, 100);
-		levelUp.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 5f);
-		stage.addActor(levelUp);
-		
-		twoHandBtn = new TextButton("+", storage.buttonStyle);
-		twoHandBtn.setColor(Color.WHITE);
-		twoHandBtn.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			Player.setTwoHandStr(Player.getTwoHandStr() + 1);
-    			BerserkerSkillTree.setTwoHMastery(BerserkerSkillTree.getTwoHMastery() + 1);
-    			Player.skillPointUse();
-    			twoHandLbl.setText("2H Mastery (" + BerserkerSkillTree.getTwoHMastery() + "/5)");
-    	    }});
-		twoHandBtn.setSize(50, 50);
-		twoHandBtn.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 10f);
-		
-		oneHandBtn = new TextButton("+", storage.buttonStyle);
-		oneHandBtn.setColor(Color.WHITE);
-		oneHandBtn.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			Player.setOneHandStr(Player.getOneHandStr() + 1);
-    			BerserkerSkillTree.setOneHMastery(BerserkerSkillTree.getOneHMastery() + 1);
-    			Player.skillPointUse();
-    			oneHandLbl.setText("2H Mastery (" + BerserkerSkillTree.getOneHMastery() + "/5)");
-    	    }});
-		oneHandBtn.setSize(50, 50);
-		oneHandBtn.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
-		
-		thickSkinBtn = new TextButton("+", storage.buttonStyle);
-		thickSkinBtn.setColor(Color.WHITE);
-		thickSkinBtn.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			Player.setDmgResist(Player.getDmgResist() + 1);
-    			BerserkerSkillTree.setThickSkin(BerserkerSkillTree.getThickSkin() + 1);
-    			Player.skillPointUse();
-    			thickSkinLbl.setText("Thick Skin (" + BerserkerSkillTree.getThickSkin() + "/5)");
-    	    }});
-		thickSkinBtn.setSize(50, 50);
-		thickSkinBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 10f);
-		
-		// Skill Tree labels
-		twoHandLbl = new Label("2H Mastery (" + BerserkerSkillTree.getTwoHMastery() + "/5)", storage.labelStyle);
-		twoHandLbl.setPosition(vp.getWorldWidth() / 50f, vp.getWorldHeight() / 6.5f);
-		
-		oneHandLbl = new Label("1H Mastery (" + BerserkerSkillTree.getOneHMastery() + "/5)", storage.labelStyle);
-		oneHandLbl.setPosition(vp.getWorldWidth() / 6f, vp.getWorldHeight() / 6.5f);
-		
-		thickSkinLbl = new Label("Thick Skin (" + BerserkerSkillTree.getThickSkin() + "/5)", storage.labelStyle);
-		thickSkinLbl.setPosition(vp.getWorldWidth() / 3.2f, vp.getWorldHeight() / 6.5f);
-	}
-	
-	private void showSkillTree() {
-		stage.addActor(twoHandBtn);
-		stage.addActor(twoHandLbl);
-		stage.addActor(oneHandBtn);
-		stage.addActor(oneHandLbl);
-		stage.addActor(thickSkinBtn);
-		stage.addActor(thickSkinLbl);
-		skillTreeVisible = true;
-	}
-	
-	private void hideSkillTree() {
-		twoHandBtn.remove();
-		twoHandLbl.remove();
-		oneHandBtn.remove();
-		oneHandLbl.remove();
-		thickSkinBtn.remove();
-		thickSkinLbl.remove();
-		skillTreeVisible = false;
-	}
-	
-	private void lockUpgradeButtons() {
-		twoHandBtn.remove();
-		oneHandBtn.remove();
-		thickSkinBtn.remove();
-	}
-	
-	public void update() {
-		if(Player.getSkillPoints() <= 0)
-			lockUpgradeButtons();
+		stage.addActor(exp);	
 	}
 	
 	public void dispose() {
@@ -185,7 +98,6 @@ public class Home implements Screen {
 
 	@Override
 	public void render(float delta) {
-		update();
 		stage.act();
 		stage.draw();
 		

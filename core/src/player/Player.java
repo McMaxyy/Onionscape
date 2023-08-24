@@ -6,15 +6,38 @@ public class Player {
 	private static int maxHP = 60;
 	private static int hp;
 	private static int strength = 3;
+	private static int weaponDmg = 0;
 	private static int dmgResist = 0;
 	private static int coins = 9999;
 	private static int level = 1;
 	private static int exp = 0;
 	private static int levelCap = 20;
-	private static int skillPoints = 1;
+	private static int skillPoints = 30;	
 	private static int twoHandStr = 0, oneHandStr = 0;
 	public static int abID1, abID2, abID3, abID4;
 	private static Random rand = new Random();
+	
+	public static void skillTreeGains(int x) {
+		switch(x) {
+		case 0:
+			twoHandStr++;
+			break;
+		case 1:
+			oneHandStr++;
+			break;
+		case 2:
+			dmgResist++;
+			break;
+		case 3:
+			weaponDmg++;
+			break;
+		case 4:
+			strength++;
+			break;
+		case 5:
+			dmgResist += 10;
+		}
+	}
 	
 	public static void loseHP(int x) {
 		hp -= x;
@@ -121,6 +144,10 @@ public class Player {
 
 	public static int getSkillPoints() {
 		return skillPoints;
+	}	
+
+	public static void setSkillPoints(int skillPoints) {
+		Player.skillPoints = skillPoints;
 	}
 
 	public static int getDmgResist() {
@@ -145,5 +172,13 @@ public class Player {
 
 	public static void setOneHandStr(int oneHandStr) {
 		Player.oneHandStr = oneHandStr;
-	}	
+	}
+	
+	public static int getWeaponDmg() {
+		return weaponDmg;
+	}
+
+	public static void setWeaponDmg(int weaponDmg) {
+		Player.weaponDmg = weaponDmg;
+	}
 }
