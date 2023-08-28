@@ -1,4 +1,4 @@
-package gameplay;
+package scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 
 import player.Player;
-import player.BerserkerSkillTree;
 import player.Storage;
 
 public class Home implements Screen {
@@ -24,6 +23,7 @@ public class Home implements Screen {
 	private Storage storage;
 	private Game game;
 	private TextButton fight, newGame, zerkerTreeBtn;
+	private TextButton oneHand, twoHand;
 	private Label level, exp;
 	private GameScreen gameScreen;
 	
@@ -36,6 +36,7 @@ public class Home implements Screen {
 		storage = Storage.getInstance();
 		skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
 		storage.createFont();
+		Player.weaponState = 0;
 		
 		createComponents();	
 	}	
@@ -82,6 +83,28 @@ public class Home implements Screen {
 		exp = new Label("Exp: " + Player.getExp(), storage.labelStyle);
 		exp.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.15f);
 		stage.addActor(exp);	
+		
+		oneHand = new TextButton("OneHand", storage.buttonStyle);
+		oneHand.setColor(Color.LIGHT_GRAY);
+		oneHand.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			Player.weaponState = 1;
+    	    }});
+		oneHand.setSize(150, 100);
+		oneHand.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 10f);
+		stage.addActor(oneHand);
+		
+		twoHand = new TextButton("TwoHand", storage.buttonStyle);
+		twoHand.setColor(Color.LIGHT_GRAY);
+		twoHand.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			Player.weaponState = 2;
+    	    }});
+		twoHand.setSize(150, 100);
+		twoHand.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);
+		stage.addActor(twoHand);
 	}
 	
 	public void dispose() {

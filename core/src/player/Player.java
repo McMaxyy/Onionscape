@@ -15,6 +15,7 @@ public class Player {
 	private static int skillPoints = 30;	
 	private static int twoHandStr = 0, oneHandStr = 0;
 	public static int abID1, abID2, abID3, abID4;
+	public static int weaponState = 0;
 	private static Random rand = new Random();
 	
 	public static void skillTreeGains(int x) {
@@ -37,6 +38,10 @@ public class Player {
 		case 5:
 			dmgResist += 10;
 		}
+	}
+	
+	public static void gainHP(int x) {
+		hp += x;
 	}
 	
 	public static void loseHP(int x) {

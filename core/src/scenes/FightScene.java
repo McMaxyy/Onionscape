@@ -1,4 +1,4 @@
-package gameplay;
+package scenes;
 
 import java.util.Random;
 
@@ -38,8 +38,8 @@ public class FightScene implements Screen{
     private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
     private Label ab1UseLbl, ab2UseLbl, ab3UseLbl, ab4UseLbl;
     private GameScreen gameScreen;
-    private int rendLeft, attackCount = 3;
-    private boolean enemyStunned, barrierActive, hardenActive;
+    private int rendLeft, attackCount = 3, eAttackCount = 0, bludgeonCount = 0, doubleSwingCount = 0;
+    private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false;
 
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -50,6 +50,9 @@ public class FightScene implements Screen{
         skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
         storage = Storage.getInstance();
         
+        // Check if the player has the Lucky Strike mastery activated
+        if(BerserkerSkillTree.luckyStrike == 1)
+        	firstAttack = true;
         
         if(GameScreen.newGame) {
         	Player.newGame();
@@ -118,8 +121,7 @@ public class FightScene implements Screen{
     			ability4.setTouchable(Touchable.enabled);
         		ability4.setColor(Color.LIGHT_GRAY);
     		}    		
-    	}
-    		
+    	}    		
     	  	
     	if(pDead || eDead) {
     		attackBtn.setTouchable(Touchable.disabled);
@@ -225,32 +227,33 @@ public class FightScene implements Screen{
     	}
     }
     
-    private void playerAttack(int x) {
+    private void playerAttack(int x) {    	
     	int temp = 0;
+    	boolean hit = false;
     	switch(x) {
     	case 0:
-    		temp = Player.getStrength();
-    		eHP -= temp;   		
+    		temp += Player.getStrength();    		 
+    		hit = true;
     		break;
     	case 1:
-    		temp = Player.getStrength() + rand.nextInt(1, storage.swing.getAttackPower() + 1);
-    		eHP -= temp;
+    		temp += Player.getStrength() + rand.nextInt(1, storage.swing.getAttackPower() + 1);
+    		hit = true;
     		break;
     	case 3:
     		for(int i = 0; i < 3; i++)
     			temp += rand.nextInt(1, storage.whirlwind.getAttackPower() + 1);
     		temp += Player.getStrength();
-    		eHP -= temp;
+    		hit = true;
     		break;
     	case 4:
     		enemyStunned = true;
-    		temp = Player.getStrength() + rand.nextInt(1, storage.groundBreaker.getAttackPower() + 1);
-    		eHP -= temp;
+    		temp += Player.getStrength() + rand.nextInt(1, storage.groundBreaker.getAttackPower() + 1);
+    		hit = true;
     		break;
     	case 5:
     		enemyStunned = true;
-    		temp = Player.getStrength() + rand.nextInt(1, storage.bash.getAttackPower() + 1);
-    		eHP -= temp;
+    		temp += Player.getStrength() + rand.nextInt(1, storage.bash.getAttackPower() + 1);
+    		hit = true;
     		break;
     	case 6:
     		barrierActive = true;
@@ -259,19 +262,58 @@ public class FightScene implements Screen{
     		hardenActive = true;
     		break;
     	}
-    	    	        
+    	
+    	// Add weapon damage
+    	if(Player.weaponState == 1) {
+    		doubleSwingCount++;
+    		temp += Player.getOneHandStr() + Player.getWeaponDmg();
+    		if(doubleSwingCount == 3) {
+    			doubleSwingCount = 0;
+    			temp *= 2;
+    		}
+    	}   		
+    	else if(Player.weaponState == 2) {
+    		temp += Player.getTwoHandStr() + Player.getWeaponDmg();
+    		if(bludgeonCount == 5) {
+    			bludgeonCount = 0;
+    			enemyStunned = true;
+    		}
+    	}    		
+    	
         newLine();
-        if(x == 0)
-        	combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
-        else if(x == 1 || x == 3 || x == 4 || x == 5)
-        	combatLog.setText(combatText + "\n " + getAbilityName(x) + " hit the enemy for " + temp + " damage");
+        if(hit) {
+        	if(firstAttack)
+        		temp *= 2;
+        	eHP -= temp;
+        	if(x == 0)
+        		combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
+        	else if(x == 1 || x == 3 || x == 4 || x == 5)
+        		combatLog.setText(combatText + "\n " + getAbilityName(x) + " hit the enemy for " + temp + " damage");
+        	
+        	// Life steal mastery
+        	if(BerserkerSkillTree.lifeSteal == 1) {
+        		if(Player.getHp() < Player.getMaxHP()) {
+        			Player.gainHP(temp / 3);
+        			if(Player.getHp() > Player.getMaxHP())
+        				Player.setHp(Player.getMaxHP());
+        		}      		
+        	}      		
+        }
         
         // Bleed hits after a succesful attack
         if(rendLeft > 0 && x != 6 && x != 7) {
-        	temp = storage.rend.getAttackPower();
+        	temp = storage.rend.getAttackPower() + BerserkerSkillTree.rendMastery;
         	eHP -= temp;
         	newLine();
         	combatLog.setText(combatText + "\n Rend hit the enemy for " + temp + " damage");
+        	
+        	// Poison Rend mastery
+        	if(BerserkerSkillTree.poisonRend == 1) {
+            	eHP -= storage.rend.getAttackPower();
+        		newLine();
+            	combatLog.setText(combatText + "\n Enemy hit with poison for " + storage.rend.getAttackPower() + " damage");
+        	}
+   	
         	rendLeft--;
         }        
         
@@ -279,15 +321,31 @@ public class FightScene implements Screen{
         	eDead = true;
         	Player.gainExp(20);
         	Player.checkExp();
-        }       	
+        } 
+        
+        firstAttack = false;
     }
     
     private void enemyAttack() {
+    	// Increase attack counter for the Block Aura mastery
+    	if(!barrierActive && BerserkerSkillTree.blockAura == 1)
+    		eAttackCount++;
+    	
+    	if(eAttackCount == 3) {
+    		barrierActive = true;
+    		eAttackCount = 0;
+    	}    		
+    	
     	int temp = eDmg;
     	if(hardenActive) {
     		hardenActive = false;
     		temp = temp / 2;
     	}  		
+    	
+    	// Lower damage via damage resist stat
+    	temp -= Player.getDmgResist();
+    	if(temp <= 0)
+    		temp = 1;
     	
     	if(!barrierActive && !enemyStunned) {
     		Player.loseHP(temp);
@@ -297,9 +355,44 @@ public class FightScene implements Screen{
     	else if(barrierActive){
     		newLine();
     		combatLog.setText(combatText + "\n Player blocked the enemy's attack");
-    		barrierActive = false;
+    		switch(BerserkerSkillTree.blockEfficiency) {
+    		case 0:
+    			barrierActive = false;
+    			break;
+    		case 1:
+    			if(rand.nextInt(1, 100) <= 10)
+    				break;
+    			else
+    				barrierActive = false;
+    			break;
+    		case 2:
+    			if(rand.nextInt(1, 100) <= 15)
+    				break;
+    			else
+    				barrierActive = false;
+    			break;
+    		case 3:
+    			if(rand.nextInt(1, 100) <= 20)
+    				break;
+    			else
+    				barrierActive = false;
+    			break;
+    		case 4:
+    			if(rand.nextInt(1, 100) <= 25)
+    				break;
+    			else
+    				barrierActive = false;
+    			break;
+    		case 5:
+    			if(rand.nextInt(1, 100) <= 30)
+    				break;
+    			else
+    				barrierActive = false;
+    			break;    		
+    		} 
+    		System.out.println(barrierActive);
     	}
-    	else {
+    	else if(enemyStunned){
     		newLine();
     		combatLog.setText(combatText + "\n Enemy stunned and cannot attack");
     		enemyStunned = false;

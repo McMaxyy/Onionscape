@@ -1,4 +1,4 @@
-package player;
+package scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+
+import player.Player;
+import player.Storage;
 
 public class BerserkerSkillTree implements Screen{
 	Skin skin;
@@ -31,23 +34,23 @@ public class BerserkerSkillTree implements Screen{
 	private boolean pointUsed = false;
 	private static int skillPointsUsed = 0;
 
-	private static int twoHMastery = 0;
-	private static int oneHMastery = 0;
-	private static int thickSkin = 0;
-	private static int weaponMastery = 0;
-	private static int blockAura = 0;
-	private static int eleResist = 0;
-	private static int rendMastery = 0;
-	private static int lifeSteal = 0;
-	private static int poisonRend = 0;
-	private static int ironSkin = 0;
-	private static int bulkUp = 0;
-	private static int sharpenWeapons = 0;
-	private static int luckyStrike = 0;
-	private static int blockEfficiency = 0;
-	private static int bludgeonEnemy = 0;
-	private static int doubleSwing = 0;
-	private static int heavyArmor = 0;
+	public static int twoHMastery = 0;
+	public static int oneHMastery = 0;
+	public static int thickSkin = 0;
+	public static int weaponMastery = 0;
+	public static int blockAura = 0;
+	public static int eleResist = 0;
+	public static int rendMastery = 0;
+	public static int lifeSteal = 0;
+	public static int poisonRend = 0;
+	public static int ironSkin = 0;
+	public static int bulkUp = 0;
+	public static int sharpenWeapons = 0;
+	public static int luckyStrike = 0;
+	public static int blockEfficiency = 0;
+	public static int bludgeonEnemy = 0;
+	public static int doubleSwing = 0;
+	public static int heavyArmor = 0;
 	
 	public BerserkerSkillTree(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -428,9 +431,9 @@ public class BerserkerSkillTree implements Screen{
 		stage.addActor(doubleSwingLbl);
 		stage.addActor(heavyArmorLbl);
 	
-		hideUpgradeButtons();
-		lockUpgradeButtons();
+		hideUpgradeButtons();		
 		checkAvailableUpgrades();
+		lockUpgradeButtons();
 	}	
 	
 	private void resetTree() {
@@ -465,8 +468,8 @@ public class BerserkerSkillTree implements Screen{
 		skillPoints.setText("Skill points: " + Player.getSkillPoints());
 		
 		hideUpgradeButtons();
-		lockUpgradeButtons();
 		checkAvailableUpgrades();
+		lockUpgradeButtons();		
 		
 		// Reset text
 		twoHandLbl.setText("2H Mastery (" + twoHMastery + "/5)");

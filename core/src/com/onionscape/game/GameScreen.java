@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import gameplay.FightScene;
-import gameplay.Home;
-import player.BerserkerSkillTree;
+import scenes.BerserkerSkillTree;
+import scenes.FightScene;
+import scenes.Home;
 
 public class GameScreen implements Screen {
 	private Game game;
@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
 		this.game = game;
 		newGame = true;
 		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);
-	    setCurrentState(ZERKER_TREE);
+	    setCurrentState(HOME);
 	}
 	
 	public void setCurrentState(int newState) {
