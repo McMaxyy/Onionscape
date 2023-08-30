@@ -1,8 +1,8 @@
 package player;
 
 public abstract class Abilities {
-	private int attackPower, usesLeft,  ID;
-	private String abilityName, classID;
+	private int attackPower, usesLeft, ID;
+	private String abilityName;
 
 	public int getAttackPower() {
 		return attackPower;
@@ -34,14 +34,6 @@ public abstract class Abilities {
 
 	public void setAbilityName(String abilityName) {
 		this.abilityName = abilityName;
-	}
-
-	public String getClassID() {
-		return classID;
-	}
-
-	public void setClassID(String classID) {
-		this.classID = classID;
 	}
 }
 

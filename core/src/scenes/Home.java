@@ -22,8 +22,7 @@ public class Home implements Screen {
 	public Stage stage;
 	private Storage storage;
 	private Game game;
-	private TextButton fight, newGame, zerkerTreeBtn;
-	private TextButton oneHand, twoHand;
+	private TextButton fight, newGame, zerkerTreeBtn, inventory, greatAxe, axe;
 	private Label level, exp;
 	private GameScreen gameScreen;
 	
@@ -36,7 +35,6 @@ public class Home implements Screen {
 		storage = Storage.getInstance();
 		skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
 		storage.createFont();
-		Player.weaponState = 0;
 		
 		createComponents();	
 	}	
@@ -84,27 +82,38 @@ public class Home implements Screen {
 		exp.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.15f);
 		stage.addActor(exp);	
 		
-		oneHand = new TextButton("OneHand", storage.buttonStyle);
-		oneHand.setColor(Color.LIGHT_GRAY);
-		oneHand.addListener(new ClickListener() {
+		inventory = new TextButton("Bag", storage.buttonStyle);
+		inventory.setColor(Color.LIGHT_GRAY);
+		inventory.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			Player.weaponState = 1;
+    			gameScreen.setCurrentState(GameScreen.INVENTORY);
     	    }});
-		oneHand.setSize(150, 100);
-		oneHand.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 10f);
-		stage.addActor(oneHand);
+		inventory.setSize(150, 100);
+		inventory.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 3f);
+		stage.addActor(inventory);
 		
-		twoHand = new TextButton("TwoHand", storage.buttonStyle);
-		twoHand.setColor(Color.LIGHT_GRAY);
-		twoHand.addListener(new ClickListener() {
+		greatAxe = new TextButton("Greataxe", storage.buttonStyle);
+		greatAxe.setColor(Color.LIGHT_GRAY);
+		greatAxe.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			Player.weaponState = 2;
+    			storage.addWeapon(storage.ironGreatAxe);
     	    }});
-		twoHand.setSize(150, 100);
-		twoHand.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);
-		stage.addActor(twoHand);
+		greatAxe.setSize(150, 100);
+		greatAxe.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3f);
+		stage.addActor(greatAxe);
+		
+		axe = new TextButton("Axe", storage.buttonStyle);
+		axe.setColor(Color.LIGHT_GRAY);
+		axe.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			storage.addWeapon(storage.ironAxe);
+    	    }});
+		axe.setSize(150, 100);
+		axe.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);
+		stage.addActor(axe);
 	}
 	
 	public void dispose() {

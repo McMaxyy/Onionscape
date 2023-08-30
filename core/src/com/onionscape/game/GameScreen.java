@@ -7,15 +7,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import player.Storage;
 import scenes.BerserkerSkillTree;
 import scenes.FightScene;
 import scenes.Home;
+import scenes.Inventory;
+import scenes.LoadingScreen;
 
 public class GameScreen implements Screen {
 	private Game game;
 	private FightScene fightScene;
 	private Home home;
 	private BerserkerSkillTree zerkerTree;
+	private Inventory inventory;
+	private LoadingScreen loadingScreen;
 	private Viewport viewport;
 	public static boolean newGame;
 	
@@ -24,21 +29,27 @@ public class GameScreen implements Screen {
     private static final int MAX_WIDTH = 1920;
     private static final int MAX_HEIGHT = 1080;
     
-    public static final int FIGHT_SCENE = 0;
+    public static final int LOADING_SCREEN = 0;
     public static final int HOME = 1;
     public static final int ZERKER_TREE = 2;
+    public static final int INVENTORY = 3;
+    public static final int FIGHT_SCENE = 4;
     private int currentState;
 
 	public GameScreen(Game game) {		
 		this.game = game;
 		newGame = true;
 		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);
-	    setCurrentState(HOME);
+	    setCurrentState(LOADING_SCREEN);
 	}
 	
 	public void setCurrentState(int newState) {
 	    currentState = newState;
 	    switch (currentState) {
+		    case LOADING_SCREEN:
+	        	this.loadingScreen = new LoadingScreen(viewport, game, this);
+	            Gdx.input.setInputProcessor(loadingScreen.stage);
+	            break;
 	        case FIGHT_SCENE:
 	        	this.fightScene = new FightScene(viewport, game, this);
 	            Gdx.input.setInputProcessor(fightScene.stage);
@@ -51,6 +62,10 @@ public class GameScreen implements Screen {
 	        	this.zerkerTree = new BerserkerSkillTree(viewport, game, this);
 	            Gdx.input.setInputProcessor(zerkerTree.stage);
 	            break;
+	        case INVENTORY:
+	        	this.inventory = new Inventory(viewport, game, this);
+	            Gdx.input.setInputProcessor(inventory.stage);
+	            break;
 	    }
 	}
 
@@ -60,6 +75,9 @@ public class GameScreen implements Screen {
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 	    switch (currentState) {
+		    case LOADING_SCREEN:
+	            loadingScreen.render(delta);
+	            break;
 	        case FIGHT_SCENE:
 	            fightScene.render(delta);
 	            break;
@@ -68,6 +86,9 @@ public class GameScreen implements Screen {
 	            break;
 	        case ZERKER_TREE:
 	        	zerkerTree.render(delta);
+	            break;
+	        case INVENTORY:
+	        	inventory.render(delta);
 	            break;
 	    }
 	}

@@ -56,7 +56,10 @@ public class FightScene implements Screen{
         
         if(GameScreen.newGame) {
         	Player.newGame();
-        }        	
+        }
+        
+        if(Player.weaponState == 0)
+        	Player.setWeaponDmg(0);
         
         storage.createFont();       
         createComponents();
@@ -267,14 +270,15 @@ public class FightScene implements Screen{
     	if(Player.weaponState == 1) {
     		doubleSwingCount++;
     		temp += Player.getOneHandStr() + Player.getWeaponDmg();
-    		if(doubleSwingCount == 3) {
+    		if(doubleSwingCount == 3 && BerserkerSkillTree.doubleSwing == 1) {
     			doubleSwingCount = 0;
     			temp *= 2;
     		}
     	}   		
     	else if(Player.weaponState == 2) {
+    		bludgeonCount++;
     		temp += Player.getTwoHandStr() + Player.getWeaponDmg();
-    		if(bludgeonCount == 5) {
+    		if(bludgeonCount == 5  && BerserkerSkillTree.bludgeonEnemy == 1) {
     			bludgeonCount = 0;
     			enemyStunned = true;
     		}
