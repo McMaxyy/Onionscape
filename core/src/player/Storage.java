@@ -20,6 +20,7 @@ public class Storage {
 	public LabelStyle labelStyle;
 	public BitmapFont font;
 	private List<Weapons> playerWeapons = new ArrayList<>();
+	private List<Armor> playerArmor = new ArrayList<>();
 	public static AssetManager assetManager = new AssetManager();
 	private static boolean newLoad = true;
 	
@@ -48,6 +49,9 @@ public class Storage {
 		assetManager.load("enemies/Spider.png", Texture.class);
 		assetManager.load("enemies/Monkey.png", Texture.class);
 		assetManager.load("player/Onion.png", Texture.class);
+		assetManager.load("armor/IronHelmet.png", Texture.class);
+		assetManager.load("armor/IronChest.png", Texture.class);
+		assetManager.load("armor/IronBoots.png", Texture.class);
 	}
 	
 	// Load abilities
@@ -63,18 +67,35 @@ public class Storage {
 	public Weapons ironGreatAxe = new IronGreatAxe();
 	public Weapons ironAxe = new IronAxe();
 	
-	// Add amount
+	// Load armor
+	public Armor ironHelmet = new IronHelmet();
+	public Armor ironChest = new IronChest();
+	public Armor ironBoots = new IronBoots();
+	
 	public void addWeapon(Weapons weapon) {
 		weapon.setAmount(weapon.getAmount() + 1);
 		playerWeapons.add(weapon);
 	}
 	
 	public List<Weapons> getPlayerWeapons() {
-        return new ArrayList<>(playerWeapons); // Return a copy to prevent external modifications
+        return new ArrayList<>(playerWeapons);
     }
 	
 	public void removeWeapon(Weapons weapon) {
 	    playerWeapons.remove(weapon);
+	}
+	
+	public void addArmor(Armor armor) {
+		armor.setAmount(armor.getAmount() + 1);
+		playerArmor.add(armor);
+	}
+	
+	public List<Armor> getPlayerArmor() {
+        return new ArrayList<>(playerArmor);
+    }
+	
+	public void removeArmor(Armor armor) {
+		playerArmor.remove(armor);
 	}
 	
 	public void createFont() {

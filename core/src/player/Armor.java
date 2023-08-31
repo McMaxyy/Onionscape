@@ -1,7 +1,7 @@
 package player;
 
 public abstract class Armor {
-	private int defense, ID;
+	private int defense, ID, amount;
 	private String armorName, armorSlot;
 	
 	public int getDefense() {
@@ -28,6 +28,12 @@ public abstract class Armor {
 	public void setArmorSlot(String armorSlot) {
 		this.armorSlot = armorSlot;
 	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
 }
 
 class IronHelmet extends Armor{
@@ -41,7 +47,7 @@ class IronHelmet extends Armor{
 
 class IronChest extends Armor{
 	public IronChest() {
-		setArmorName("Iron Armor");
+		setArmorName("Iron Chest");
 		setArmorSlot("Chest");
 		setDefense(3);
 		setID(2);
