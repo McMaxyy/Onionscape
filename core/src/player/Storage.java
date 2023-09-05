@@ -21,6 +21,8 @@ public class Storage {
 	public BitmapFont font;
 	private List<Weapons> playerWeapons = new ArrayList<>();
 	private List<Armor> playerArmor = new ArrayList<>();
+	private List<Weapons> equippedWeapons = new ArrayList<>();
+	private List<Armor> equippedArmor = new ArrayList<>();
 	public static AssetManager assetManager = new AssetManager();
 	private static boolean newLoad = true;
 	
@@ -32,7 +34,7 @@ public class Storage {
     }
 	
 	public Storage() {
-		skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));	
+		skin = new Skin(Gdx.files.internal("buttons/newskin/newskin.json"));	
 		if(newLoad) {
 			newLoad = false;
 			loadAssets();
@@ -44,6 +46,7 @@ public class Storage {
 		assetManager.load("InventorySlot.png", Texture.class);
 		assetManager.load("weapons/IronGreataxe.png", Texture.class);
 		assetManager.load("weapons/IronAxe.png", Texture.class);
+		assetManager.load("weapons/WoodenShield.png", Texture.class);
 		assetManager.load("enemies/Wolfie.png", Texture.class);
 		assetManager.load("enemies/Bear.png", Texture.class);
 		assetManager.load("enemies/Spider.png", Texture.class);
@@ -64,38 +67,61 @@ public class Storage {
 	public Abilities harden = new Harden();
 	
 	// Load weapons
-	public Weapons ironGreatAxe = new IronGreatAxe();
+	public Weapons ironGreataxe = new IronGreatAxe();
 	public Weapons ironAxe = new IronAxe();
+	public Weapons woodenShield = new WoodenShield();
 	
 	// Load armor
 	public Armor ironHelmet = new IronHelmet();
 	public Armor ironChest = new IronChest();
 	public Armor ironBoots = new IronBoots();
 	
-	public void addWeapon(Weapons weapon) {
-		weapon.setAmount(weapon.getAmount() + 1);
-		playerWeapons.add(weapon);
+	public void inventoryWeapons(Weapons weapon, String action) {
+		if(action == "Add") {
+			weapon.setAmount(weapon.getAmount() + 1);
+			playerWeapons.add(weapon);
+		}
+		else if(action == "Remove")
+			playerWeapons.remove(weapon);
 	}
 	
 	public List<Weapons> getPlayerWeapons() {
         return new ArrayList<>(playerWeapons);
     }
 	
-	public void removeWeapon(Weapons weapon) {
-	    playerWeapons.remove(weapon);
-	}
-	
-	public void addArmor(Armor armor) {
-		armor.setAmount(armor.getAmount() + 1);
-		playerArmor.add(armor);
+	public void inventoryArmor(Armor armor, String action) {
+		if(action == "Add") {
+			armor.setAmount(armor.getAmount() + 1);
+			playerArmor.add(armor);
+		}
+		else if(action == "Remove")
+			playerArmor.remove(armor);
 	}
 	
 	public List<Armor> getPlayerArmor() {
         return new ArrayList<>(playerArmor);
     }
 	
-	public void removeArmor(Armor armor) {
-		playerArmor.remove(armor);
+	public List<Weapons> getEquippedWeapons(){
+		return new ArrayList<>(equippedWeapons);
+	}
+	
+	public void characterWeapons(Weapons weapon, String action) {
+		if(action == "Add")
+			equippedWeapons.add(weapon);
+		else if(action == "Remove")
+			equippedWeapons.remove(weapon);
+	}
+	
+	public List<Armor> getEquippedArmor(){
+		return new ArrayList<>(equippedArmor);
+	}
+	
+	public void characterArmor(Armor armor, String action) {
+		if(action == "Add")
+			equippedArmor.add(armor);
+		else if(action == "Remove")
+			equippedArmor.remove(armor);
 	}
 	
 	public void createFont() {

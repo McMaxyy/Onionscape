@@ -31,8 +31,8 @@ public class FightScene implements Screen{
     private Game game;
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
-    private Label playerHP, enemyHP, combatLog;
-    private int eHP = 50, eDmg = 2;
+    private Label playerHPLbl, enemyHPLbl, combatLog;
+    private int enemyHP = 50, eDmg = 20;
     private boolean pDead, eDead, btnClicked;
     private Storage storage;
     private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
@@ -88,8 +88,8 @@ public class FightScene implements Screen{
     
     public void update() {
     	if(!pDead && !eDead && btnClicked) {
-    		playerHP.setText("Player HP: " + Player.getHp() + "/" + Player.getMaxHP());
-        	enemyHP.setText("Enemy HP: " + eHP + "/" + 50); 
+    		playerHPLbl.setText("Player HP: " + Player.getHp() + "/" + Player.getMaxHP());
+        	enemyHPLbl.setText("Enemy HP: " + enemyHP + "/" + 50); 
         	btnClicked = false;
     	}
     	
@@ -288,7 +288,7 @@ public class FightScene implements Screen{
         if(hit) {
         	if(firstAttack)
         		temp *= 2;
-        	eHP -= temp;
+        	enemyHP -= temp;
         	if(x == 0)
         		combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
         	else if(x == 1 || x == 3 || x == 4 || x == 5)
@@ -307,13 +307,13 @@ public class FightScene implements Screen{
         // Bleed hits after a succesful attack
         if(rendLeft > 0 && x != 6 && x != 7) {
         	temp = storage.rend.getAttackPower() + BerserkerSkillTree.rendMastery;
-        	eHP -= temp;
+        	enemyHP -= temp;
         	newLine();
         	combatLog.setText(combatText + "\n Rend hit the enemy for " + temp + " damage");
         	
         	// Poison Rend mastery
         	if(BerserkerSkillTree.poisonRend == 1) {
-            	eHP -= storage.rend.getAttackPower();
+            	enemyHP -= storage.rend.getAttackPower();
         		newLine();
             	combatLog.setText(combatText + "\n Enemy hit with poison for " + storage.rend.getAttackPower() + " damage");
         	}
@@ -321,7 +321,7 @@ public class FightScene implements Screen{
         	rendLeft--;
         }        
         
-        if(eHP <= 0) {
+        if(enemyHP <= 0) {
         	eDead = true;
         	Player.gainExp(20);
         	Player.checkExp();
@@ -340,21 +340,28 @@ public class FightScene implements Screen{
     		eAttackCount = 0;
     	}    		
     	
-    	int temp = eDmg;
+    	int temp = eDmg;    	
+    	temp -= Player.getDmgResist(); // Lower damage via damage resist stat
+    	if(temp <= 0)
+    		temp = 1;
+    	
     	if(hardenActive) {
     		hardenActive = false;
     		temp = temp / 2;
     	}  		
-    	
-    	// Lower damage via damage resist stat
-    	temp -= Player.getDmgResist();
-    	if(temp <= 0)
-    		temp = 1;
-    	
+  	
     	if(!barrierActive && !enemyStunned) {
     		Player.loseHP(temp);
             newLine();
             combatLog.setText(combatText + "\n Enemy attacked for " + temp + " damage");
+            if(BerserkerSkillTree.thorns == 1) {
+            	temp /= 2;
+            	if(temp <= 0)
+            		temp = 1;
+            	enemyHP -= temp;
+            	newLine();
+                combatLog.setText(combatText + "\n Enemy hit with Thorns for " + temp + " damage");
+            }
     	}
     	else if(barrierActive){
     		newLine();
@@ -394,7 +401,6 @@ public class FightScene implements Screen{
     				barrierActive = false;
     			break;    		
     		} 
-    		System.out.println(barrierActive);
     	}
     	else if(enemyStunned){
     		newLine();
@@ -504,8 +510,8 @@ public class FightScene implements Screen{
     }
     
     private void createComponents() {
-    	playerHP = new Label("Player HP: " + Player.getHp() + "/" + Player.getMaxHP(), storage.labelStyle);
-    	enemyHP = new Label("Enemy HP: " + eHP + "/" + 50, storage.labelStyle);
+    	playerHPLbl = new Label("Player HP: " + Player.getHp() + "/" + Player.getMaxHP(), storage.labelStyle);
+    	enemyHPLbl = new Label("Enemy HP: " + enemyHP + "/" + 50, storage.labelStyle);
     	
     	combatLog = new Label("", storage.labelStyle);
     	
@@ -627,9 +633,9 @@ public class FightScene implements Screen{
     }
     
     private void componentParameters() {
-    	playerHP.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 2.5f);
+    	playerHPLbl.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 2.5f);
     	
-    	enemyHP.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 1.07f);
+    	enemyHPLbl.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 1.07f);
     	
     	homeBtn.setSize(150, 100);
     	homeBtn.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 5f);
@@ -661,8 +667,8 @@ public class FightScene implements Screen{
         
         stage.addActor(attackBtn);
         stage.addActor(endTurn);
-        stage.addActor(playerHP);
-        stage.addActor(enemyHP);
+        stage.addActor(playerHPLbl);
+        stage.addActor(enemyHPLbl);
         stage.addActor(container);
         stage.addActor(ability1);
         stage.addActor(ability2);

@@ -36,8 +36,17 @@ public class Player {
 			strength++;
 			break;
 		case 5:
-			dmgResist += 10;
+			maxHP += 3;
+			break;
 		}
+	}
+	
+	public static void gainDR(int x) {
+		dmgResist += x;
+	}
+	
+	public static void loseDR(int x) {
+		dmgResist -= x;
 	}
 	
 	public static void gainHP(int x) {

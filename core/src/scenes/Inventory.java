@@ -16,7 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+import java.util.HashMap;
+import java.util.Map;
 
+import player.Armor;
 import player.Player;
 import player.Storage;
 import player.Weapons;
@@ -31,10 +34,11 @@ public class Inventory implements Screen {
 	private TextButton backBtn;
 	Table characterTable = new Table();
 	Table inventoryTable = new Table();	
-	java.util.List<Weapons> playerWeapons;
-	private static String equippedHead = "", equippedChest = "", equippedLegs = "", 
-			equippedMainHand = "", equippedOffHand = "";
-	private static String equippedHand = "";
+	java.util.List<Weapons> inventoryWeapons;
+	java.util.List<Armor> inventoryArmor;
+	java.util.List<Weapons> equippedWeapons;
+	java.util.List<Armor> equippedArmor;
+	private static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0;
 	
 	// Get textures from storage
 	Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
@@ -43,14 +47,9 @@ public class Inventory implements Screen {
 	Texture ironHelmetTexture = Storage.assetManager.get("armor/IronHelmet.png", Texture.class);
 	Texture ironChestTexture = Storage.assetManager.get("armor/IronChest.png", Texture.class);
 	Texture ironBootsTexture = Storage.assetManager.get("armor/IronBoots.png", Texture.class);
-
-	// Create images of textures
+	Texture woodenShieldTexture = Storage.assetManager.get("weapons/WoodenShield.png", Texture.class);
+	
 	Image inventorySlotImg = new Image(inventorySlotTexture);
-	Image ironGreataxeImg = new Image(ironGreataxeTexture);
-	Image ironAxeImg = new Image(ironAxeTexture);
-	Image ironHelmetImg = new Image(ironHelmetTexture);
-	Image ironChestImg = new Image(ironChestTexture);
-	Image ironBootsImg = new Image(ironBootsTexture);
 	
 	public Inventory(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -62,21 +61,19 @@ public class Inventory implements Screen {
 		skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
 		storage.createFont();
 		
-		
 		createComponents();	
 		createInventoryGrid();
 		createCharacterGrid();
-		checkEquippedItems();
-		
-		equippedHead = equippedChest = equippedLegs =  equippedMainHand = equippedOffHand = "";
 	}
 	
 	private void createInventoryGrid() {    
-	    playerWeapons = storage.getPlayerWeapons(); 
+	    inventoryWeapons = storage.getPlayerWeapons();
+	    inventoryArmor = storage.getPlayerArmor();
 	    inventoryTable.defaults().size(100, 100); 
 	    inventoryTable.setName("inventoryTable");
 	    
 	    int weaponIndex = 0;
+	    int armorIndex = 0;
 	    
 	    for (int y = 0; y < 8; y++) {
 	        for (int x = 0; x < 5; x++) {                
@@ -85,12 +82,19 @@ public class Inventory implements Screen {
 	            Texture slotTexture = null;
 	            
 	            // Check if there's a weapon to display in this slot.
-	            if (weaponIndex < playerWeapons.size()) {
-	                Weapons weapon = playerWeapons.get(weaponIndex);
+	            if (weaponIndex < inventoryWeapons.size()) {
+	                Weapons weapon = inventoryWeapons.get(weaponIndex);
 	                slotTexture = setSlotImage(weapon.getWeaponName(), "Weapon");
 	                weaponIndex++;
 	                itemName = weapon.getWeaponName();
-	            } else {
+	            } 
+	            else if (armorIndex < inventoryArmor.size()) {
+	                Armor armor = inventoryArmor.get(armorIndex);
+	                slotTexture = setSlotImage(armor.getArmorName(), "Armor");
+	                armorIndex++;
+	                itemName = armor.getArmorName();
+	            }
+	            else {
 	                slotTexture = setSlotImage("", "");
 	                emptySlot = true;
 	            }
@@ -122,19 +126,94 @@ public class Inventory implements Screen {
 	    stage.addActor(inventoryTable);
 	}
 	
-	private void createCharacterGrid() {		
+	private void createCharacterGrid() {
+		equippedWeapons = storage.getEquippedWeapons();
+		equippedArmor = storage.getEquippedArmor();
 	    characterTable.defaults().size(100, 100);
 	    characterTable.setName("characterTable");
-		
-		for(int i = 0; i < 5; i++) {	    	
-	    	final Image characterSlotImage = new Image(inventorySlotTexture);
-	    	characterTable.add(characterSlotImage).pad(3);	
-	    	characterSlotImage.setName("Empty");
+	    
+	    // Create a map of armor type to armor for quick lookup
+	    Map<String, Armor> armorMap = new HashMap<>();
+	    for (Armor armor : equippedArmor) {
+	        if (armor.getArmorName().endsWith("Helmet")) {
+	            armorMap.put("Helmet", armor);
+	        } else if (armor.getArmorName().endsWith("Chest")) {
+	            armorMap.put("Chest", armor);
+	        } else if (armor.getArmorName().endsWith("Boots")) {
+	            armorMap.put("Boots", armor);
+	        }
+	    }
+	    
+	    Map<String, Weapons> weaponMap = new HashMap<>();
+	    for(Weapons weapon : equippedWeapons) {
+	    	if(weapon.getWeaponName().endsWith("Greataxe"))
+	    		weaponMap.put("Greataxe", weapon);
+	    	else if(weapon.getWeaponName().endsWith("Axe"))
+	    		weaponMap.put("Axe", weapon);
+	    	else if(weapon.getWeaponName().endsWith("Shield"))
+	    		weaponMap.put("Shield", weapon);
+	    }
+	    
+		for(int i = 0; i < 5; i++) {
+	        String itemName = "";
+	        Texture slotTexture = setSlotImage("", "");
+            boolean emptySlot = true;
+	        
+	        if (i <= 2) {  // Checking armor slots
+	            String armorType = (i == 0) ? "Helmet" : (i == 1) ? "Chest" : "Boots";
+	            if (armorMap.containsKey(armorType)) {
+	                Armor armor = armorMap.get(armorType);
+	                slotTexture = setSlotImage(armor.getArmorName(), "Armor");
+	                emptySlot = false;
+	                itemName = armor.getArmorName();
+	            }
+	        }
+	        else if(i >= 3) {
+	        	if(i == 3) {
+	        		if (weaponMap.containsKey("Greataxe")) {
+	                    Weapons weapon = weaponMap.get("Greataxe");
+	                    slotTexture = setSlotImage(weapon.getWeaponName(), "Weapon");
+	                    emptySlot = false;
+	                    itemName = weapon.getWeaponName();
+	                }
+	        		else if (weaponMap.containsKey("Axe")) {
+	                    Weapons weapon = weaponMap.get("Axe");
+	                    slotTexture = setSlotImage(weapon.getWeaponName(), "Weapon");
+	                    emptySlot = false;
+	                    itemName = weapon.getWeaponName();
+	                }
+	        	}
+	        	else if(i == 4) {
+	        		if (weaponMap.containsKey("Shield")) {
+	                    Weapons weapon = weaponMap.get("Shield");
+	                    slotTexture = setSlotImage(weapon.getWeaponName(), "Weapon");
+	                    emptySlot = false;
+	                    itemName = weapon.getWeaponName();
+	                }
+	        	}
+	        }	                  
+            else {
+                slotTexture = setSlotImage("", "");
+                emptySlot = true;
+            }	
+			 
+			final Image characterSlotImage = new Image(slotTexture);
+            characterTable.add(characterSlotImage).pad(3);
+            
+            if(emptySlot) {
+                emptySlot = false;
+                characterSlotImage.setName("Empty");
+            }
+            else {
+            	characterSlotImage.setName(itemName);                    
+            }                    
+
+            final String item = itemName;
 	    	
 	    	characterSlotImage.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                	handleCharacterSlotClick(characterSlotImage);
+                	handleCharacterSlotClick(characterSlotImage, item);
                 }
             });
 	    	characterTable.row();
@@ -150,6 +229,10 @@ public class Inventory implements Screen {
 				return ironGreataxeTexture;
 			case "Iron Axe":
 				return ironAxeTexture;
+			case "Wooden Shield":
+				return woodenShieldTexture;
+			case "":
+				return inventorySlotTexture;
 			default:
 				return inventorySlotTexture;
 			}
@@ -162,47 +245,15 @@ public class Inventory implements Screen {
 				return ironChestTexture;
 			case "Iron Boots":
 				return ironBootsTexture;
+			case "":
+				return inventorySlotTexture;
 			default:
 				return inventorySlotTexture;
 			}
 		}
 		else
 			return inventorySlotTexture;
-	}
-	
-	// Used upon entering Inventory scene
-	private void checkEquippedItems() {
-		characterTable = (Table) stage.getRoot().findActor("characterTable");
-		if (characterTable != null) {
-		    for (int i = 0; i < 5; i++) {
-		        Actor child = characterTable.getChildren().get(i);
-		        if (child instanceof Image) {
-		        	switch(i) {
-			    	case 0:
-			    		if(equippedHead != "")
-			    			setArmor(equippedHead, checkGearSlot(equippedHead));
-			    		break;
-			    	case 1:
-			    		if(equippedChest != "")
-			    			setArmor(equippedChest, checkGearSlot(equippedChest));
-			    		break;
-			    	case 2:
-			    		if(equippedLegs != "")
-			    			setArmor(equippedLegs, checkGearSlot(equippedLegs));
-			    		break;
-			    	case 3:
-			    		if(equippedMainHand != "")
-			    			setWeapon(equippedMainHand, checkGearSlot(equippedMainHand));
-			    		break;
-			    	case 4:
-			    		if(equippedOffHand != "")
-			    			setWeapon(equippedOffHand, checkGearSlot(equippedOffHand));
-			    		break;
-			    	}
-		        }
-		    }
-		}
-	}
+	}	
 	
 	private String checkGearSlot(String gearSlot) {
 		if(gearSlot.endsWith("Helmet"))
@@ -215,110 +266,77 @@ public class Inventory implements Screen {
 			return "TwoHanded";
 		else if(gearSlot.endsWith("Axe"))
 			return "OneHanded";
+		else if(gearSlot.endsWith("Shield"))
+			return "OffHand";
 		else
 			return null;
-	}
-
-	// For leaving the Inventory scene
-	private void checkEquippedGear() {
-		Table characterTable = (Table) stage.getRoot().findActor("characterTable");
-		if (characterTable != null) {
-		    for (int i = 0; i < 5; i++) {
-		        Actor child = characterTable.getChildren().get(i);
-		        if (child instanceof Image) {
-		        	Image slotImage = (Image) child;
-		        	
-		        	switch(i) {
-			    	case 0:
-			    		if(slotImage != inventorySlotImg)
-			    			setGearVariables(slotImage.getName(), "Helmet");
-			    		break;
-			    	case 1:
-			    		if(slotImage != inventorySlotImg)
-			    			setGearVariables(slotImage.getName(), "Chest");
-			    		break;
-			    	case 2:
-			    		if(slotImage != inventorySlotImg)
-			    			setGearVariables(slotImage.getName(), "Boots");
-			    		break;
-			    	case 3:
-			    		if(slotImage != inventorySlotImg)
-			    			setGearVariables(slotImage.getName(), "MainHand");
-			    		break;
-			    	case 4:
-			    		if(slotImage != inventorySlotImg)
-			    			setGearVariables(slotImage.getName(), "OffHand");
-			    		break;
-			    	}
-		        }
-		    }
-		}
-	}
-	
-	private void setGearVariables(String gearName, String gearSlot) {
-		switch(gearSlot) {
-		case "Helmet":
-			equippedHead = gearName;
-			break;
-		case "Chest":
-			equippedChest = gearName;
-			break;
-		case "Boots":
-			equippedLegs = gearName;
-			break;
-		case "MainHand":
-			equippedMainHand = gearName;
-			break;
-		case "OffHand":
-			equippedOffHand = gearName;
-			break;
-		}
 	}
 	
 	private void changeEquippedSlot(int slot, String gearSlot) {
 		Actor tableItem = characterTable.getChildren().get(slot);
-		Image slotImg = (Image)tableItem;
 		String gearPiece = tableItem.getName();
 		
 		if(gearSlot == "Helmet") {
 			switch(gearPiece) {
 			case "Iron Helmet":
-				storage.addArmor(storage.ironHelmet);				
+				storage.inventoryArmor(storage.ironHelmet, "Add");
+				storage.characterArmor(storage.ironHelmet, "Remove");
 				break;
 			}
 		}
 		else if(gearSlot == "Chest") {
 			switch(gearPiece) {
 			case "Iron Chest":
-				storage.addArmor(storage.ironChest);
+				storage.inventoryArmor(storage.ironChest, "Add");
+				storage.characterArmor(storage.ironChest, "Remove");
 				break;
 			}
 		}
 		else if(gearSlot == "Boots") {
 			switch(gearPiece) {
 			case "Iron Boots":
-				storage.addArmor(storage.ironBoots);
+				storage.inventoryArmor(storage.ironBoots, "Add");
+				storage.characterArmor(storage.ironBoots, "Remove");
 				break;
 			}
 		}
 		else if(gearSlot == "TwoHanded") {
 			switch(gearPiece) {
 			case "Iron Greataxe":
-				storage.addWeapon(storage.ironGreatAxe);
+				storage.inventoryWeapons(storage.ironGreataxe, "Add");
+				storage.characterWeapons(storage.ironGreataxe, "Remove");
 				break;
-			}
+			case "Iron Axe":
+				storage.inventoryWeapons(storage.ironAxe, "Add");
+				storage.characterWeapons(storage.ironAxe, "Remove");
+				break;
+			}		
 			if(slot == 4) {
-				slotImg = new Image(inventorySlotTexture);
-				slotImg.setName("Empty");
+				System.out.println("Removed offhand");
+				storage.inventoryWeapons(storage.woodenShield, "Add");
+				storage.characterWeapons(storage.woodenShield, "Remove");
+				
 			}			
 		}
 		else if(gearSlot == "OneHanded") {
 			switch(gearPiece) {
 			case "Iron Axe":
-				storage.addWeapon(storage.ironAxe);
+				storage.inventoryWeapons(storage.ironAxe, "Add");
+				storage.characterWeapons(storage.ironAxe, "Remove");
+				break;
+			case "Iron Greataxe":
+				storage.inventoryWeapons(storage.ironGreataxe, "Add");
+				storage.characterWeapons(storage.ironGreataxe, "Remove");
 				break;
 			}
-		}				
+		}
+		else if(gearSlot == "OffHand") {
+			switch(gearPiece) {
+			case "Wooden Shield":
+				storage.inventoryWeapons(storage.woodenShield, "Add");
+				storage.characterWeapons(storage.woodenShield, "Remove");
+			}
+		}
 	}
 	
 	private void setArmor(String armor, String gearSlot) {
@@ -329,35 +347,49 @@ public class Inventory implements Screen {
 		if(gearSlot == "Helmet") {
 			if(helmet.getName() != "Empty")
 		        changeEquippedSlot(0, "Helmet");
+			if(helmetDP != 0)
+				Player.loseDR(helmetDP);
 			
 			switch(armor) {
 			case "Iron Helmet":
-				addToCharacter(new Image(ironHelmetTexture), armor, 1);
-				storage.removeArmor(storage.ironHelmet);
+				storage.inventoryArmor(storage.ironHelmet, "Remove");
+				storage.characterArmor(storage.ironHelmet, "Add");
+				helmetDP = storage.ironHelmet.getDefense();
 				break;
 			}
+			Player.gainDR(helmetDP);
 		}
 		
 		if(gearSlot == "Chest") {
 			if(chest.getName() != "Empty")
 		        changeEquippedSlot(1, "Chest");
+			if(chestDP != 0)
+				Player.loseDR(chestDP);
 			
 			switch(armor) {
 			case "Iron Chest":
-				addToCharacter(new Image(ironChestTexture), armor, 2);
+				storage.inventoryArmor(storage.ironChest, "Remove");
+				storage.characterArmor(storage.ironChest, "Add");
+				chestDP = storage.ironChest.getDefense();				
 				break;
-			}
+			}			
+			Player.gainDR(chestDP);
 		}
 		
 		if(gearSlot == "Boots") {
 			if(boots.getName() != "Empty")
-		        changeEquippedSlot(0, "Boots");
+		        changeEquippedSlot(2, "Boots");
+			if(bootsDP != 0)
+				Player.loseDR(bootsDP);
 			
 			switch(armor) {
 			case "Iron Boots":
-				addToCharacter(new Image(ironBootsTexture), armor, 3);
+				storage.inventoryArmor(storage.ironBoots, "Remove");
+				storage.characterArmor(storage.ironBoots, "Add");
+				bootsDP = storage.ironBoots.getDefense();				
 				break;
 			}
+			Player.gainDR(bootsDP);
 		}
 	}
 	
@@ -366,96 +398,128 @@ public class Inventory implements Screen {
 		Actor offHand = characterTable.getChildren().get(4);
 
 		if(handed == "TwoHanded") {				
-			if (!mainHand.getName().equals("Empty")) {
+			if (mainHand.getName() != "Empty") {
 		        changeEquippedSlot(3, "TwoHanded");
 		    }
-		    if (!offHand.getName().equals("Empty")) {
+		    if (offHand.getName() != "Empty") {
 		        changeEquippedSlot(4, "TwoHanded");
 		    }
 			
 			switch(weapon) {
 			case "Iron Greataxe":
-				equippedHand = "TwoHand";
-				addToCharacter(new Image(ironGreataxeTexture), weapon, 4);							
+				storage.inventoryWeapons(storage.ironGreataxe, "Remove");
+				storage.characterWeapons(storage.ironGreataxe, "Add");
+				break;
+			}
+		}		
+		else if(handed == "OneHanded") {
+			if(mainHand.getName() != "Empty")
+				changeEquippedSlot(3, "OneHanded");
+
+			switch(weapon) {
+			case "Iron Axe":
+				storage.inventoryWeapons(storage.ironAxe, "Remove");
+				storage.characterWeapons(storage.ironAxe, "Add");
 				break;
 			}
 		}
-		
-		if(handed == "OneHanded") {
+		else if(handed == "OffHand") {
+			if(mainHand.getName() != "Empty" && mainHand.getName().endsWith("Greataxe"))
+				changeEquippedSlot(3, "OneHanded");
+			if (offHand.getName() != "Empty")
+		        changeEquippedSlot(4, "TwoHanded");
+
 			switch(weapon) {
-			case "Iron Axe":
-				if(equippedHand == "TwoHand" || equippedHand == "") {
-					changeEquippedSlot(3, handed);
-					addToCharacter(new Image(ironAxeTexture), weapon, 4);
-					equippedHand = "OneHand";
-				}
-				else {
-					addToCharacter(ironAxeImg, weapon, 5);
-				}			
+			case "Wooden Shield":
+				storage.inventoryWeapons(storage.woodenShield, "Remove");
+				storage.characterWeapons(storage.woodenShield, "Add");
 				break;
 			}
 		}
 	}	
 
-	private void addToCharacter(Image itemImg, String itemName, int slot) {
-	    int currentIndex = 0;
-
-	    // Directly fetch the characterTable using its unique name
-	    Table table = (Table) stage.getRoot().findActor("characterTable");
-	    
-	    if (table != null) {
-	        for (Actor child : table.getChildren()) {
-	            if (child instanceof Image) {
-	                currentIndex++;
-	                if (currentIndex == slot) {
-	                    Image image = (Image) child;	                    
-	                    image.setDrawable(itemImg.getDrawable());
-	                    image.setName(itemName);
-	                    return;
-	                }
-	            }
-	        }
-	    }
-	}
-	
-	private void handleCharacterSlotClick(Image slot) {
+	private void handleCharacterSlotClick(Image slot, String itemName) {
+		if(slot.getName() == "Empty")
+	    	System.out.println("Empty character slot clicked!");
+		else if(slot.getName().endsWith("Helmet")) {
+			changeEquippedSlot(0, "Helmet");
+			slot.setName("Empty");
+			Player.loseDR(helmetDP);
+			helmetDP = 0;
+		}
+		else if(slot.getName().endsWith("Chest")) {
+			changeEquippedSlot(1, "Chest");
+			slot.setName("Empty");
+			Player.loseDR(chestDP);
+			chestDP = 0;
+		}
+		else if(slot.getName().endsWith("Boots")) {
+			changeEquippedSlot(2, "Boots");
+			slot.setName("Empty");
+			Player.loseDR(bootsDP);
+			bootsDP = 0;
+		}
+		else if(slot.getName().endsWith("Greataxe")) {
+			changeEquippedSlot(3, "TwoHanded");
+			slot.setName("Empty");
+			Player.setWeaponDmg(0);
+			Player.weaponState = 0;
+		}
+		else if(slot.getName().endsWith("Axe")) {
+			changeEquippedSlot(3, "OneHanded");
+			slot.setName("Empty");
+			Player.setWeaponDmg(0);
+			Player.weaponState = 0;
+		}
+		else if(slot.getName().endsWith("Shield")) {
+			changeEquippedSlot(4, "OffHand");
+			slot.setName("Empty");
+			Player.loseDR(shieldDP);
+			shieldDP = 0;
+		}
 		
+		inventoryTable.clear();
+        createInventoryGrid();
+        characterTable.clear();
+        createCharacterGrid();
 	}
 
-	private void handleSlotClick(Image slot, String itemName) {	    
+	private void handleSlotClick(Image slot, String itemName) {	
+		 
 	    if(slot.getName() == "Empty")
 	    	System.out.println("Empty slot clicked!");
+	    else if(itemName.endsWith("Helmet"))
+	    	setArmor(itemName, "Helmet");
+	    else if(itemName.endsWith("Chest"))
+	    	setArmor(itemName, "Chest");
+	    else if(itemName.endsWith("Boots"))
+	    	setArmor(itemName, "Boots");
 	    else {
-	    	System.out.println("Clicked on " + itemName);
-	    	addWeaponDamage(itemName);
-	    	
-	    	setWeapon(itemName, checkGearSlot(itemName));
-	    	
-	    	Weapons weaponToRemove = null;
-	        for (Weapons weapon : storage.getPlayerWeapons()) {
-	            if (weapon.getWeaponName().equals(itemName)) {
-	                weaponToRemove = weapon;
-	                break;
-	            }
-	        }
-	        if (weaponToRemove != null) {
-	        	storage.removeWeapon(weaponToRemove);
-	        }
-	        	        
-	        inventoryTable.clear();
-	        createInventoryGrid();
-	    }	    	
+	    	addWeaponDamage(itemName);	    	
+	    	setWeapon(itemName, checkGearSlot(itemName));      
+	    }
+	    
+	    inventoryTable.clear();
+        createInventoryGrid();
+        characterTable.clear();
+        createCharacterGrid();
 	}
 	
 	private void addWeaponDamage(String weapon) {
 		switch(weapon) {
 		case "Iron Greataxe":
-			Player.setWeaponDmg(4);
+			Player.setWeaponDmg(storage.ironGreataxe.getWeaponDmg());
 			Player.weaponState = 2;
 			break;
 		case "Iron Axe":
-			Player.setWeaponDmg(2);
+			Player.setWeaponDmg(storage.ironAxe.getWeaponDmg());
 			Player.weaponState = 1;
+			break;
+		case "Wooden Shield":
+			if(shieldDP != 0)
+				Player.loseDR(shieldDP);
+			shieldDP = storage.woodenShield.getWeaponDmg();
+			Player.gainDR(shieldDP);
 			break;
 		}
 	}
@@ -465,9 +529,7 @@ public class Inventory implements Screen {
 		backBtn.setColor(Color.LIGHT_GRAY);
 		backBtn.addListener(new ClickListener() {
     		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			checkEquippedGear();
-    			equippedHand = "";
+    	    public void clicked(InputEvent event, float x, float y) {   			
     			gameScreen.setCurrentState(GameScreen.HOME);
     	    }});
 		backBtn.setSize(150, 100);

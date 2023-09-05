@@ -93,23 +93,27 @@ public class Home implements Screen {
 		inventory.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 3f);
 		stage.addActor(inventory);
 		
-		greatAxe = new TextButton("Greataxe", storage.buttonStyle);
+		greatAxe = new TextButton("Weapons", storage.buttonStyle);
 		greatAxe.setColor(Color.LIGHT_GRAY);
 		greatAxe.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			storage.addWeapon(storage.ironGreatAxe);
+    			storage.inventoryWeapons(storage.ironGreataxe, "Add");
+    			storage.inventoryWeapons(storage.ironAxe, "Add");
+    			storage.inventoryWeapons(storage.woodenShield, "Add");
     	    }});
 		greatAxe.setSize(150, 100);
 		greatAxe.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3f);
 		stage.addActor(greatAxe);
 		
-		axe = new TextButton("Axe", storage.buttonStyle);
+		axe = new TextButton("Armor", storage.buttonStyle);
 		axe.setColor(Color.LIGHT_GRAY);
 		axe.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			storage.addWeapon(storage.ironAxe);
+    			storage.inventoryArmor(storage.ironHelmet, "Add");
+    			storage.inventoryArmor(storage.ironChest, "Add");
+    			storage.inventoryArmor(storage.ironBoots, "Add");
     	    }});
 		axe.setSize(150, 100);
 		axe.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);

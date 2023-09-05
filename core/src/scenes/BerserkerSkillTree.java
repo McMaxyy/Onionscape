@@ -24,11 +24,11 @@ public class BerserkerSkillTree implements Screen{
 	private Game game;
 	private TextButton homeBtn, resetBtn;
 	private TextButton twoHandBtn, oneHandBtn, thickSkinBtn, weaponMasteryBtn, blockAuraBtn,
-	eleResistBtn, rendMasteryBtn, lifeStealBtn, poisonRendBtn, ironSkinBtn, bulkUpBtn,
-	sharpenWeaponsBtn, luckyStrikeBtn, blockEfficiencyBtn, bludgeonEnemyBtn, doubleSwingBtn, heavyArmorBtn;
+	eleResistBtn, rendMasteryBtn, lifeStealBtn, poisonRendBtn, ironSkinBtn, bulkUpBtn, healthyBtn,
+	sharpenWeaponsBtn, luckyStrikeBtn, blockEfficiencyBtn, bludgeonEnemyBtn, doubleSwingBtn, thornsBtn;
 	private Label twoHandLbl, oneHandLbl, thickSkinLbl, weaponMasteryLbl, blockAuraLbl, 
 	eleResistLbl, rendMasteryLbl, lifeStealLbl, poisonRendLbl, ironSkinLbl, bulkUpLbl,sharpenWeaponsLbl, 
-	luckyStrikeLbl, blockEfficiencyLbl, bludgeonEnemyLbl, doubleSwingLbl, heavyArmorLbl;
+	luckyStrikeLbl, blockEfficiencyLbl, bludgeonEnemyLbl, doubleSwingLbl, thornsLbl, healthyLbl;
 	private Label level, skillPoints;
 	private GameScreen gameScreen;
 	private boolean pointUsed = false;
@@ -50,7 +50,8 @@ public class BerserkerSkillTree implements Screen{
 	public static int blockEfficiency = 0;
 	public static int bludgeonEnemy = 0;
 	public static int doubleSwing = 0;
-	public static int heavyArmor = 0;
+	public static int thorns = 0;
+	public static int healthy = 0;
 	
 	public BerserkerSkillTree(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -119,16 +120,19 @@ public class BerserkerSkillTree implements Screen{
 		rendMasteryLbl.setPosition(vp.getWorldWidth() / 1.35f, vp.getWorldHeight() / 1.4f);
 		
 		poisonRendLbl = new Label("Poison Rend (" + poisonRend + "/1)", storage.labelStyle);
-		poisonRendLbl.setPosition(vp.getWorldWidth() / 7f, vp.getWorldHeight() / 1.9f);
+		poisonRendLbl.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.9f);
 		
 		lifeStealLbl = new Label("Life Steal (" + lifeSteal + "/1)", storage.labelStyle);
-		lifeStealLbl.setPosition(vp.getWorldWidth() / 2.9f, vp.getWorldHeight() / 1.9f);
+		lifeStealLbl.setPosition(vp.getWorldWidth() / 3.35f, vp.getWorldHeight() / 1.9f);
 		
 		ironSkinLbl = new Label("Iron Skin (" + ironSkin + "/5)", storage.labelStyle);
-		ironSkinLbl.setPosition(vp.getWorldWidth() / 1.8f, vp.getWorldHeight() / 1.9f);
+		ironSkinLbl.setPosition(vp.getWorldWidth() / 2.1f, vp.getWorldHeight() / 1.9f);
 		
 		bulkUpLbl = new Label("Bulk Up! (" + bulkUp + "/5)", storage.labelStyle);
-		bulkUpLbl.setPosition(vp.getWorldWidth() / 1.35f, vp.getWorldHeight() / 1.9f);
+		bulkUpLbl.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 1.9f);
+		
+		healthyLbl = new Label("Healthy (" + healthy + "/5)", storage.labelStyle);
+		healthyLbl.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.9f);
 		
 		sharpenWeaponsLbl = new Label("Sharpen Weapons (" + sharpenWeapons + "/5)", storage.labelStyle);
 		sharpenWeaponsLbl.setPosition(vp.getWorldWidth() / 5f, vp.getWorldHeight() / 2.9f);
@@ -145,8 +149,8 @@ public class BerserkerSkillTree implements Screen{
 		doubleSwingLbl = new Label("Double Swing (" + doubleSwing + "/1)", storage.labelStyle);
 		doubleSwingLbl.setPosition(vp.getWorldWidth() / 2.3f, vp.getWorldHeight() / 6.3f);
 		
-		heavyArmorLbl = new Label("Heavy Armor (" + heavyArmor + "/1)", storage.labelStyle);
-		heavyArmorLbl.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 6.3f);
+		thornsLbl = new Label("Thorns (" + thorns + "/1)", storage.labelStyle);
+		thornsLbl.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 6.3f);
 		
 		// Skill Tree buttons		
 		twoHandBtn = new TextButton("+", storage.buttonStyle);
@@ -309,6 +313,21 @@ public class BerserkerSkillTree implements Screen{
 		bulkUpBtn.setSize(50, 50);
 		bulkUpBtn.setPosition(bulkUpLbl.getX() + bulkUpLbl.getWidth() / 2.5f, bulkUpLbl.getY() - 65f);
 		
+		healthyBtn = new TextButton("+", storage.buttonStyle);
+		healthyBtn.setColor(Color.WHITE);
+		healthyBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			Player.skillTreeGains(5);
+    			healthy += 1;
+    			Player.skillPointUse();
+    			healthyLbl.setText("Healthy (" + healthy + "/5)");
+    			pointUsed = true;
+    			skillPointsUsed++;
+    	    }});
+		healthyBtn.setSize(50, 50);
+		healthyBtn.setPosition(healthyLbl.getX() + healthyLbl.getWidth() / 2.5f, healthyLbl.getY() - 65f);
+		
 		sharpenWeaponsBtn = new TextButton("+", storage.buttonStyle);
 		sharpenWeaponsBtn.setColor(Color.WHITE);
 		sharpenWeaponsBtn.addListener(new ClickListener() {
@@ -381,20 +400,19 @@ public class BerserkerSkillTree implements Screen{
 		doubleSwingBtn.setSize(50, 50);
 		doubleSwingBtn.setPosition(doubleSwingLbl.getX() + doubleSwingLbl.getWidth() / 2.5f, doubleSwingLbl.getY() - 65f);
 		
-		heavyArmorBtn = new TextButton("+", storage.buttonStyle);
-		heavyArmorBtn.setColor(Color.WHITE);
-		heavyArmorBtn.addListener(new ClickListener() {
+		thornsBtn = new TextButton("+", storage.buttonStyle);
+		thornsBtn.setColor(Color.WHITE);
+		thornsBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			Player.skillTreeGains(5);
-    			heavyArmor = 1;
+    			thorns = 1;
     			Player.skillPointUse();
-    			heavyArmorLbl.setText("Heavy Armor (" + heavyArmor + "/1)");
+    			thornsLbl.setText("Thorns (" + thorns + "/1)");
     			pointUsed = true;
     			skillPointsUsed++;
     	    }});
-		heavyArmorBtn.setSize(50, 50);
-		heavyArmorBtn.setPosition(heavyArmorLbl.getX() + heavyArmorLbl.getWidth() / 2.5f, heavyArmorLbl.getY() - 65f);		
+		thornsBtn.setSize(50, 50);
+		thornsBtn.setPosition(thornsLbl.getX() + thornsLbl.getWidth() / 2.5f, thornsLbl.getY() - 65f);		
 		
 		stage.addActor(twoHandBtn);
 		stage.addActor(oneHandBtn);
@@ -407,12 +425,13 @@ public class BerserkerSkillTree implements Screen{
 		stage.addActor(poisonRendBtn);
 		stage.addActor(ironSkinBtn);
 		stage.addActor(bulkUpBtn);
+		stage.addActor(healthyBtn);
 		stage.addActor(sharpenWeaponsBtn);
 		stage.addActor(luckyStrikeBtn);
 		stage.addActor(blockEfficiencyBtn);
 		stage.addActor(bludgeonEnemyBtn);
 		stage.addActor(doubleSwingBtn);
-		stage.addActor(heavyArmorBtn);		
+		stage.addActor(thornsBtn);		
 		stage.addActor(twoHandLbl);
 		stage.addActor(oneHandLbl);
 		stage.addActor(thickSkinLbl);
@@ -424,12 +443,13 @@ public class BerserkerSkillTree implements Screen{
 		stage.addActor(poisonRendLbl);
 		stage.addActor(ironSkinLbl);
 		stage.addActor(bulkUpLbl);
+		stage.addActor(healthyLbl);
 		stage.addActor(sharpenWeaponsLbl);
 		stage.addActor(luckyStrikeLbl);
 		stage.addActor(blockEfficiencyLbl);
 		stage.addActor(bludgeonEnemyLbl);
 		stage.addActor(doubleSwingLbl);
-		stage.addActor(heavyArmorLbl);
+		stage.addActor(thornsLbl);
 	
 		hideUpgradeButtons();		
 		checkAvailableUpgrades();
@@ -449,12 +469,13 @@ public class BerserkerSkillTree implements Screen{
 		poisonRend = 0;
 		ironSkin = 0;
 		bulkUp = 0;
+		healthy = 0;
 		sharpenWeapons = 0;
 		luckyStrike = 0;
 		blockEfficiency = 0;
 		bludgeonEnemy = 0;
 		doubleSwing = 0;
-		heavyArmor = 0;
+		thorns = 0;
 		
 		// Reset player stats from skill tree
 		Player.setTwoHandStr(0);
@@ -483,12 +504,13 @@ public class BerserkerSkillTree implements Screen{
 		poisonRendLbl.setText("Poison Rend (" + poisonRend + "/1)");
 		ironSkinLbl.setText("Thick Skin (" + ironSkin + "/5)");
 		bulkUpLbl.setText("Bulk Up! (" + bulkUp + "/5)");
+		healthyLbl.setText("Healthy (" + healthy + "/5");
 		sharpenWeaponsLbl.setText("Sharpen Weapons (" + sharpenWeapons + "/5)");
 		luckyStrikeLbl.setText("Lucky Strike (" + luckyStrike + "/1)");
 		blockEfficiencyLbl.setText("Block Efficiency (" + blockEfficiency + "/5)");
 		bludgeonEnemyLbl.setText("Bludgeon Enemy (" + bludgeonEnemy + "/1)");
 		doubleSwingLbl.setText("Double Swing (" + doubleSwing + "/1)");
-		heavyArmorLbl.setText("Heavy Armor (" + heavyArmor + "/1)");
+		thornsLbl.setText("Thorns (" + thorns + "/1)");
 	}
 	
 	private void hideUpgradeButtons() {
@@ -503,12 +525,13 @@ public class BerserkerSkillTree implements Screen{
 		poisonRendBtn.setVisible(false);
 		ironSkinBtn.setVisible(false);
 		bulkUpBtn.setVisible(false);	
+		healthyBtn.setVisible(false);
 		sharpenWeaponsBtn.setVisible(false);	
 		luckyStrikeBtn.setVisible(false);
 		blockEfficiencyBtn.setVisible(false);
 		bludgeonEnemyBtn.setVisible(false);
 		doubleSwingBtn.setVisible(false);
-		heavyArmorBtn.setVisible(false);
+		thornsBtn.setVisible(false);
 	}
 	
 	private void checkAvailableUpgrades() {
@@ -529,6 +552,7 @@ public class BerserkerSkillTree implements Screen{
 				poisonRendBtn.setVisible(true);
 				ironSkinBtn.setVisible(true);
 				bulkUpBtn.setVisible(true);	
+				healthyBtn.setVisible(true);
 			}
 			
 			if(skillPointsUsed >= 15) {
@@ -540,7 +564,7 @@ public class BerserkerSkillTree implements Screen{
 			if(skillPointsUsed >= 20) {
 				bludgeonEnemyBtn.setVisible(true);
 				doubleSwingBtn.setVisible(true);
-				heavyArmorBtn.setVisible(true);
+				thornsBtn.setVisible(true);
 			}		
 		}
 		
@@ -551,13 +575,13 @@ public class BerserkerSkillTree implements Screen{
 		
 		if(bludgeonEnemy == 1) {
 			doubleSwingBtn.setVisible(false);
-			heavyArmorBtn.setVisible(false);
+			thornsBtn.setVisible(false);
 		}
 		else if(doubleSwing == 1) {
 			bludgeonEnemyBtn.setVisible(false);
-			heavyArmorBtn.setVisible(false);
+			thornsBtn.setVisible(false);
 		}
-		else if(heavyArmor == 1) {
+		else if(thorns == 1) {
 			bludgeonEnemyBtn.setVisible(false);
 			doubleSwingBtn.setVisible(false);
 		}
@@ -567,9 +591,9 @@ public class BerserkerSkillTree implements Screen{
 		if(twoHMastery >= 5)
 			twoHandBtn.setVisible(false);		
 		if(oneHMastery >= 5)
-			twoHandBtn.setVisible(false);		
+			oneHandBtn.setVisible(false);		
 		if(thickSkin >= 5)
-			twoHandBtn.setVisible(false);		
+			thickSkinBtn.setVisible(false);		
 		if(weaponMastery >= 3)
 			weaponMasteryBtn.setVisible(false);		
 		if(blockAura >= 1)
@@ -585,7 +609,9 @@ public class BerserkerSkillTree implements Screen{
 		if(ironSkin >= 5)
 			ironSkinBtn.setVisible(false);	
 		if(bulkUp >= 5)
-			bulkUpBtn.setVisible(false);	
+			bulkUpBtn.setVisible(false);
+		if(healthy >= 5)
+			healthyBtn.setVisible(false);
 		if(sharpenWeapons >= 5)
 			sharpenWeaponsBtn.setVisible(false);	
 		if(luckyStrike >= 1)
@@ -596,8 +622,8 @@ public class BerserkerSkillTree implements Screen{
 			bludgeonEnemyBtn.setVisible(false);
 		if(doubleSwing >= 1)
 			doubleSwingBtn.setVisible(false);
-		if(heavyArmor >= 1)
-			heavyArmorBtn.setVisible(false);
+		if(thorns >= 1)
+			thornsBtn.setVisible(false);
 	}
 	
 	public void update() {

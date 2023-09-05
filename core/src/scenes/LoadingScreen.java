@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -20,6 +21,7 @@ public class LoadingScreen implements Screen {
     private ProgressBar progressBar;
     private GameScreen gameScreen;
     private Storage storage;
+    private Label loading;
     
     public LoadingScreen(Viewport viewport, Game game, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
@@ -35,7 +37,11 @@ public class LoadingScreen implements Screen {
         progressBar.setBounds(
         		vp.getScreenWidth()  / 2f, vp.getScreenHeight() /2f, Gdx.graphics.getWidth() / 2, 50);
 
+        loading = new Label("Loading..." + progressBar.getValue() * 100 + "%", storage.labelStyle);
+        loading.setPosition(progressBar.getX() + progressBar.getWidth() / 3f, progressBar.getY() + 70f);
+        
         stage.addActor(progressBar);
+        stage.addActor(loading);
     }
     
     @Override
@@ -46,8 +52,11 @@ public class LoadingScreen implements Screen {
         if (Storage.assetManager.update())
             // All assets are loaded
             gameScreen.setCurrentState(GameScreen.HOME);
-        else
-            progressBar.setValue(Storage.assetManager.getProgress());
+        else {
+        	progressBar.setValue(Storage.assetManager.getProgress());
+        	loading.setText("Loading..." + progressBar.getValue() * 100 + "%");
+        }
+            
         
         stage.act();
         stage.draw();

@@ -55,3 +55,13 @@ class IronAxe extends Weapons{
 		setID(2);
 	}
 }
+
+class WoodenShield extends Weapons{
+	public WoodenShield() {
+		setWeaponName("Wooden Shield");
+		setWeaponDmg(2);
+		setHanded("OffHand");
+		setAmount(0);
+		setID(3);
+	}
+}
