@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import player.Armor;
+import player.Items;
 import player.Player;
 import player.Storage;
 import player.Weapons;
@@ -34,10 +35,13 @@ public class Inventory implements Screen {
 	private TextButton backBtn;
 	Table characterTable = new Table();
 	Table inventoryTable = new Table();	
+	Table itemTable = new Table();
 	java.util.List<Weapons> inventoryWeapons;
 	java.util.List<Armor> inventoryArmor;
+	java.util.List<Items> inventoryItems;
 	java.util.List<Weapons> equippedWeapons;
 	java.util.List<Armor> equippedArmor;
+	java.util.List<Items> equippedItems;
 	private static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0;
 	
 	// Get textures from storage
@@ -48,7 +52,9 @@ public class Inventory implements Screen {
 	Texture ironChestTexture = Storage.assetManager.get("armor/IronChest.png", Texture.class);
 	Texture ironBootsTexture = Storage.assetManager.get("armor/IronBoots.png", Texture.class);
 	Texture woodenShieldTexture = Storage.assetManager.get("weapons/WoodenShield.png", Texture.class);
-	
+	Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
+	Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
+
 	Image inventorySlotImg = new Image(inventorySlotTexture);
 	
 	public Inventory(Viewport viewport, Game game, GameScreen gameScreen) {
@@ -64,16 +70,19 @@ public class Inventory implements Screen {
 		createComponents();	
 		createInventoryGrid();
 		createCharacterGrid();
+		createItemGrid();
 	}
 	
 	private void createInventoryGrid() {    
 	    inventoryWeapons = storage.getPlayerWeapons();
 	    inventoryArmor = storage.getPlayerArmor();
+	    inventoryItems = storage.getPlayerItems();
 	    inventoryTable.defaults().size(100, 100); 
 	    inventoryTable.setName("inventoryTable");
 	    
 	    int weaponIndex = 0;
 	    int armorIndex = 0;
+	    int itemIndex = 0;
 	    
 	    for (int y = 0; y < 8; y++) {
 	        for (int x = 0; x < 5; x++) {                
@@ -93,6 +102,12 @@ public class Inventory implements Screen {
 	                slotTexture = setSlotImage(armor.getArmorName(), "Armor");
 	                armorIndex++;
 	                itemName = armor.getArmorName();
+	            }
+	            else if (itemIndex < inventoryItems.size()) {
+	                Items item = inventoryItems.get(itemIndex);
+	                slotTexture = setSlotImage(item.getItemName(), "Item");
+	                itemIndex++;
+	                itemName = item.getItemName();
 	            }
 	            else {
 	                slotTexture = setSlotImage("", "");
@@ -115,7 +130,7 @@ public class Inventory implements Screen {
 	            inventorySlotImage.addListener(new ClickListener() {
 	                @Override
 	                public void clicked(InputEvent event, float x, float y) {
-	                    handleSlotClick(inventorySlotImage, item);
+	                    handleInventoryClick(inventorySlotImage, item);
 	                }
 	            });
 	        }
@@ -128,7 +143,7 @@ public class Inventory implements Screen {
 	
 	private void createCharacterGrid() {
 		equippedWeapons = storage.getEquippedWeapons();
-		equippedArmor = storage.getEquippedArmor();
+		equippedArmor = storage.getEquippedArmor();		
 	    characterTable.defaults().size(100, 100);
 	    characterTable.setName("characterTable");
 	    
@@ -218,8 +233,60 @@ public class Inventory implements Screen {
             });
 	    	characterTable.row();
         }
-		characterTable.setPosition(vp.getWorldWidth() / 5f, vp.getWorldHeight() / 2f, Align.center);
+		characterTable.setPosition(vp.getWorldWidth() / 5f, vp.getWorldHeight() / 1.55f, Align.center);
 	    stage.addActor(characterTable);
+	}
+	
+	private void createItemGrid() {    
+	    equippedItems = storage.getEquippedItems();
+	    itemTable.defaults().size(100, 100); 
+	    itemTable.setName("itemTable");
+
+	    int itemIndex = 0;
+	    
+	    for (int y = 0; y < 2; y++) {
+	        for (int x = 0; x < 7; x++) {                
+	            boolean emptySlot = false;
+	            String itemName = "";
+	            Texture slotTexture = null;
+	            
+	            // Check if there's a weapon to display in this slot.
+	            if (itemIndex < equippedItems.size()) {
+	                Items item = equippedItems.get(itemIndex);
+	                slotTexture = setSlotImage(item.getItemName(), "Item");
+	                itemIndex++;
+	                itemName = item.getItemName();
+	            }
+	            else {
+	                slotTexture = setSlotImage("", "");
+	                emptySlot = true;
+	            }
+
+	            final Image inventorySlotImage = new Image(slotTexture);
+	            itemTable.add(inventorySlotImage).pad(3);
+	            
+	            if(emptySlot) {
+	                emptySlot = false;
+	                inventorySlotImage.setName("Empty");
+	            }
+	            else {
+	                inventorySlotImage.setName(itemName);                    
+	            }                    
+
+	            final String item = itemName;
+
+	            inventorySlotImage.addListener(new ClickListener() {
+	                @Override
+	                public void clicked(InputEvent event, float x, float y) {
+	                    handleEquippedItemsClick(inventorySlotImage, item);
+	                }					
+	            });
+	        }
+	        itemTable.row();
+	    } 
+	    
+	    itemTable.setPosition(vp.getWorldWidth() / 2.73f, vp.getWorldHeight() / 5f, Align.center);
+	    stage.addActor(itemTable);
 	}
 	
 	private Texture setSlotImage(String itemName, String gearType) {
@@ -247,6 +314,16 @@ public class Inventory implements Screen {
 				return ironBootsTexture;
 			case "":
 				return inventorySlotTexture;
+			default:
+				return inventorySlotTexture;
+			}
+		}
+		else if(gearType == "Item") {
+			switch(itemName) {
+			case "Health Potion":
+				return healthPotionTexture;
+			case "Bomb":
+				return bombTexture;
 			default:
 				return inventorySlotTexture;
 			}
@@ -280,7 +357,7 @@ public class Inventory implements Screen {
 			switch(gearPiece) {
 			case "Iron Helmet":
 				storage.inventoryArmor(storage.ironHelmet, "Add");
-				storage.characterArmor(storage.ironHelmet, "Remove");
+				storage.equippedArmor(storage.ironHelmet, "Remove");
 				break;
 			}
 		}
@@ -288,7 +365,7 @@ public class Inventory implements Screen {
 			switch(gearPiece) {
 			case "Iron Chest":
 				storage.inventoryArmor(storage.ironChest, "Add");
-				storage.characterArmor(storage.ironChest, "Remove");
+				storage.equippedArmor(storage.ironChest, "Remove");
 				break;
 			}
 		}
@@ -296,7 +373,7 @@ public class Inventory implements Screen {
 			switch(gearPiece) {
 			case "Iron Boots":
 				storage.inventoryArmor(storage.ironBoots, "Add");
-				storage.characterArmor(storage.ironBoots, "Remove");
+				storage.equippedArmor(storage.ironBoots, "Remove");
 				break;
 			}
 		}
@@ -304,17 +381,17 @@ public class Inventory implements Screen {
 			switch(gearPiece) {
 			case "Iron Greataxe":
 				storage.inventoryWeapons(storage.ironGreataxe, "Add");
-				storage.characterWeapons(storage.ironGreataxe, "Remove");
+				storage.equippedWeapons(storage.ironGreataxe, "Remove");
 				break;
 			case "Iron Axe":
 				storage.inventoryWeapons(storage.ironAxe, "Add");
-				storage.characterWeapons(storage.ironAxe, "Remove");
+				storage.equippedWeapons(storage.ironAxe, "Remove");
 				break;
 			}		
 			if(slot == 4) {
 				System.out.println("Removed offhand");
 				storage.inventoryWeapons(storage.woodenShield, "Add");
-				storage.characterWeapons(storage.woodenShield, "Remove");
+				storage.equippedWeapons(storage.woodenShield, "Remove");
 				
 			}			
 		}
@@ -322,11 +399,11 @@ public class Inventory implements Screen {
 			switch(gearPiece) {
 			case "Iron Axe":
 				storage.inventoryWeapons(storage.ironAxe, "Add");
-				storage.characterWeapons(storage.ironAxe, "Remove");
+				storage.equippedWeapons(storage.ironAxe, "Remove");
 				break;
 			case "Iron Greataxe":
 				storage.inventoryWeapons(storage.ironGreataxe, "Add");
-				storage.characterWeapons(storage.ironGreataxe, "Remove");
+				storage.equippedWeapons(storage.ironGreataxe, "Remove");
 				break;
 			}
 		}
@@ -334,7 +411,7 @@ public class Inventory implements Screen {
 			switch(gearPiece) {
 			case "Wooden Shield":
 				storage.inventoryWeapons(storage.woodenShield, "Add");
-				storage.characterWeapons(storage.woodenShield, "Remove");
+				storage.equippedWeapons(storage.woodenShield, "Remove");
 			}
 		}
 	}
@@ -353,7 +430,7 @@ public class Inventory implements Screen {
 			switch(armor) {
 			case "Iron Helmet":
 				storage.inventoryArmor(storage.ironHelmet, "Remove");
-				storage.characterArmor(storage.ironHelmet, "Add");
+				storage.equippedArmor(storage.ironHelmet, "Add");
 				helmetDP = storage.ironHelmet.getDefense();
 				break;
 			}
@@ -369,7 +446,7 @@ public class Inventory implements Screen {
 			switch(armor) {
 			case "Iron Chest":
 				storage.inventoryArmor(storage.ironChest, "Remove");
-				storage.characterArmor(storage.ironChest, "Add");
+				storage.equippedArmor(storage.ironChest, "Add");
 				chestDP = storage.ironChest.getDefense();				
 				break;
 			}			
@@ -385,7 +462,7 @@ public class Inventory implements Screen {
 			switch(armor) {
 			case "Iron Boots":
 				storage.inventoryArmor(storage.ironBoots, "Remove");
-				storage.characterArmor(storage.ironBoots, "Add");
+				storage.equippedArmor(storage.ironBoots, "Add");
 				bootsDP = storage.ironBoots.getDefense();				
 				break;
 			}
@@ -408,7 +485,7 @@ public class Inventory implements Screen {
 			switch(weapon) {
 			case "Iron Greataxe":
 				storage.inventoryWeapons(storage.ironGreataxe, "Remove");
-				storage.characterWeapons(storage.ironGreataxe, "Add");
+				storage.equippedWeapons(storage.ironGreataxe, "Add");
 				break;
 			}
 		}		
@@ -419,7 +496,7 @@ public class Inventory implements Screen {
 			switch(weapon) {
 			case "Iron Axe":
 				storage.inventoryWeapons(storage.ironAxe, "Remove");
-				storage.characterWeapons(storage.ironAxe, "Add");
+				storage.equippedWeapons(storage.ironAxe, "Add");
 				break;
 			}
 		}
@@ -432,7 +509,7 @@ public class Inventory implements Screen {
 			switch(weapon) {
 			case "Wooden Shield":
 				storage.inventoryWeapons(storage.woodenShield, "Remove");
-				storage.characterWeapons(storage.woodenShield, "Add");
+				storage.equippedWeapons(storage.woodenShield, "Add");
 				break;
 			}
 		}
@@ -481,11 +558,12 @@ public class Inventory implements Screen {
 		inventoryTable.clear();
         createInventoryGrid();
         characterTable.clear();
-        createCharacterGrid();
+        createCharacterGrid();       
 	}
 
-	private void handleSlotClick(Image slot, String itemName) {	
-		 
+	private void handleInventoryClick(Image slot, String itemName) {	
+		boolean itemMoved = false; 
+		
 	    if(slot.getName() == "Empty")
 	    	System.out.println("Empty slot clicked!");
 	    else if(itemName.endsWith("Helmet"))
@@ -494,15 +572,60 @@ public class Inventory implements Screen {
 	    	setArmor(itemName, "Chest");
 	    else if(itemName.endsWith("Boots"))
 	    	setArmor(itemName, "Boots");
-	    else {
+	    else if(itemName.endsWith("xe") || itemName.endsWith("Shield")){
 	    	addWeaponDamage(itemName);	    	
 	    	setWeapon(itemName, checkGearSlot(itemName));      
+	    }
+	    else {
+	    	itemMoved = true;
+	    	switch(itemName) {
+	    	case "Health Potion":
+	    		storage.inventoryItems(storage.healthPot, "Remove");
+	    		storage.equippedItems(storage.healthPot, "Add");
+	    		break;
+	    	case "Bomb":
+	    		storage.inventoryItems(storage.bomb, "Remove");
+	    		storage.equippedItems(storage.bomb, "Add");
+	    		break;
+	    	}
 	    }
 	    
 	    inventoryTable.clear();
         createInventoryGrid();
         characterTable.clear();
         createCharacterGrid();
+        if(itemMoved) {
+        	itemTable.clear();
+            createItemGrid();
+        }        
+	}
+	
+	private void handleEquippedItemsClick(Image slot, String itemName) {
+		boolean itemMoved = false;
+		
+		if(slot.getName() == "Empty")
+	    	System.out.println("Empty item slot clicked!");
+		else {
+			itemMoved = true;
+			
+			switch(itemName) {
+	    	case "Health Potion":
+	    		storage.inventoryItems(storage.healthPot, "Add");
+	    		storage.equippedItems(storage.healthPot, "Remove");
+	    		break;
+	    	case "Bomb":
+	    		storage.inventoryItems(storage.bomb, "Add");
+	    		storage.equippedItems(storage.bomb, "Remove");
+	    		break;
+	    	}
+		}
+		
+		if(itemMoved) {
+			inventoryTable.clear();
+	        createInventoryGrid();
+	        itemTable.clear();
+	        createItemGrid();
+		}	
 	}
 	
 	private void addWeaponDamage(String weapon) {

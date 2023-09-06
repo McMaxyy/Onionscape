@@ -3,6 +3,7 @@ package scenes;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,8 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+import com.onionscape.game.SaveData;
 
 import player.Player;
 import player.Storage;
@@ -19,12 +22,15 @@ import player.Storage;
 public class Home implements Screen {
 	Skin skin;
 	Viewport vp;
+	Json json = new Json();
+	String jsonString;
 	public Stage stage;
 	private Storage storage;
 	private Game game;
-	private TextButton fight, newGame, zerkerTreeBtn, inventory, greatAxe, axe;
+	private TextButton fight, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
+	saveBtn, loadBtn;
 	private Label level, exp;
-	private GameScreen gameScreen;
+	private GameScreen gameScreen; 
 	
 	public Home(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -33,11 +39,39 @@ public class Home implements Screen {
 		vp = viewport;
 		Gdx.input.setInputProcessor(stage);
 		storage = Storage.getInstance();
-		skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
-		storage.createFont();
+		skin = storage.skin;
+		storage.createFont();		
 		
 		createComponents();	
-	}	
+	}
+	
+	private void saveGame() {
+		SaveData saveData = new SaveData();
+		saveData.maxHP = Player.getMaxHP();
+		saveData.strength = Player.getStrength();
+		saveData.playerArmor = storage.getPlayerArmor();
+		saveData.playerWeapons = storage.getPlayerWeapons();
+		
+		jsonString = json.toJson(saveData);		
+		FileHandle file = Gdx.files.local("saveData.json");
+		file.writeString(jsonString, false);
+	}
+	
+	private void loadGame() {
+		SaveData loadedData = null;
+		FileHandle file = Gdx.files.local("saveData.json");
+		if (file.exists()) {
+		    String readJson = file.readString();
+		    loadedData = json.fromJson(SaveData.class, readJson);
+		}
+		
+		if (loadedData != null) {
+		    Player.setMaxHP(loadedData.maxHP);
+		    Player.setStrength(loadedData.strength);
+		    storage.playerArmor = loadedData.playerArmor;
+		    storage.playerWeapons = loadedData.playerWeapons;
+		}
+	}
 	
 	private void createComponents() {
 		fight = new TextButton("Fight", storage.buttonStyle);
@@ -93,31 +127,65 @@ public class Home implements Screen {
 		inventory.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 3f);
 		stage.addActor(inventory);
 		
-		greatAxe = new TextButton("Weapons", storage.buttonStyle);
-		greatAxe.setColor(Color.LIGHT_GRAY);
-		greatAxe.addListener(new ClickListener() {
+		weaponsBtn = new TextButton("Weapons", storage.buttonStyle);
+		weaponsBtn.setColor(Color.LIGHT_GRAY);
+		weaponsBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryWeapons(storage.ironGreataxe, "Add");
     			storage.inventoryWeapons(storage.ironAxe, "Add");
     			storage.inventoryWeapons(storage.woodenShield, "Add");
     	    }});
-		greatAxe.setSize(150, 100);
-		greatAxe.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3f);
-		stage.addActor(greatAxe);
+		weaponsBtn.setSize(150, 100);
+		weaponsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3f);
+		stage.addActor(weaponsBtn);
 		
-		axe = new TextButton("Armor", storage.buttonStyle);
-		axe.setColor(Color.LIGHT_GRAY);
-		axe.addListener(new ClickListener() {
+		armorBtn = new TextButton("Armor", storage.buttonStyle);
+		armorBtn.setColor(Color.LIGHT_GRAY);
+		armorBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryArmor(storage.ironHelmet, "Add");
     			storage.inventoryArmor(storage.ironChest, "Add");
     			storage.inventoryArmor(storage.ironBoots, "Add");
     	    }});
-		axe.setSize(150, 100);
-		axe.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);
-		stage.addActor(axe);
+		armorBtn.setSize(150, 100);
+		armorBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);
+		stage.addActor(armorBtn);
+		
+		itemsBtn = new TextButton("Items", storage.buttonStyle);
+		itemsBtn.setColor(Color.LIGHT_GRAY);
+		itemsBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			storage.inventoryItems(storage.healthPot, "Add");
+    			storage.inventoryItems(storage.bomb, "Add");
+    	    }});
+		itemsBtn.setSize(150, 100);
+		itemsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 10f);
+		stage.addActor(itemsBtn);
+		
+		saveBtn = new TextButton("Save", storage.buttonStyle);
+		saveBtn.setColor(Color.LIGHT_GRAY);
+		saveBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			saveGame();
+    	    }});
+		saveBtn.setSize(150, 100);
+		saveBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.2f);
+		stage.addActor(saveBtn);
+		
+		loadBtn = new TextButton("Load", storage.buttonStyle);
+		loadBtn.setColor(Color.LIGHT_GRAY);
+		loadBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			loadGame();
+    	    }});
+		loadBtn.setSize(150, 100);
+		loadBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.4f);
+		stage.addActor(loadBtn);
 	}
 	
 	public void dispose() {

@@ -19,10 +19,12 @@ public class Storage {
 	public TextButton.TextButtonStyle buttonStyle;
 	public LabelStyle labelStyle;
 	public BitmapFont font;
-	private List<Weapons> playerWeapons = new ArrayList<>();
-	private List<Armor> playerArmor = new ArrayList<>();
-	private List<Weapons> equippedWeapons = new ArrayList<>();
-	private List<Armor> equippedArmor = new ArrayList<>();
+	public List<Weapons> playerWeapons = new ArrayList<>();
+	public List<Armor> playerArmor = new ArrayList<>();
+	public List<Items> playerItems = new ArrayList<>();
+	public List<Weapons> equippedWeapons = new ArrayList<>();
+	public List<Armor> equippedArmor = new ArrayList<>();
+	public List<Items> equippedItems = new ArrayList<>();
 	public static AssetManager assetManager = new AssetManager();
 	private static boolean newLoad = true;
 	
@@ -55,7 +57,13 @@ public class Storage {
 		assetManager.load("armor/IronHelmet.png", Texture.class);
 		assetManager.load("armor/IronChest.png", Texture.class);
 		assetManager.load("armor/IronBoots.png", Texture.class);
+		assetManager.load("items/HealthPotion.png", Texture.class);
+		assetManager.load("items/Bomb.png", Texture.class);
 	}
+	
+	// Load items
+	public Items healthPot = new HealthPot();
+	public Items bomb = new Bomb();
 	
 	// Load abilities
 	public Abilities swing = new Swing();
@@ -76,13 +84,16 @@ public class Storage {
 	public Armor ironChest = new IronChest();
 	public Armor ironBoots = new IronBoots();
 	
+	// Inventory arrays
 	public void inventoryWeapons(Weapons weapon, String action) {
 		if(action == "Add") {
 			weapon.setAmount(weapon.getAmount() + 1);
 			playerWeapons.add(weapon);
 		}
-		else if(action == "Remove")
+		else if(action == "Remove") {
+			weapon.setAmount(weapon.getAmount() - 1);
 			playerWeapons.remove(weapon);
+		}			
 	}
 	
 	public List<Weapons> getPlayerWeapons() {
@@ -94,19 +105,37 @@ public class Storage {
 			armor.setAmount(armor.getAmount() + 1);
 			playerArmor.add(armor);
 		}
-		else if(action == "Remove")
+		else if(action == "Remove") {
+			armor.setAmount(armor.getAmount() - 1);
 			playerArmor.remove(armor);
+		}			
 	}
 	
 	public List<Armor> getPlayerArmor() {
         return new ArrayList<>(playerArmor);
     }
 	
+	public void inventoryItems(Items item, String action) {
+		if(action == "Add") {
+			item.setAmount(item.getAmount() + 1);
+			playerItems.add(item);
+		}
+		else if(action == "Remove") {
+			item.setAmount(item.getAmount() - 1);
+			playerItems.remove(item);
+		}			
+	}
+	
+	public List<Items> getPlayerItems() {
+        return new ArrayList<>(playerItems);
+    }
+	
+	// Equiped inventory arrays
 	public List<Weapons> getEquippedWeapons(){
 		return new ArrayList<>(equippedWeapons);
 	}
 	
-	public void characterWeapons(Weapons weapon, String action) {
+	public void equippedWeapons(Weapons weapon, String action) {
 		if(action == "Add")
 			equippedWeapons.add(weapon);
 		else if(action == "Remove")
@@ -117,12 +146,24 @@ public class Storage {
 		return new ArrayList<>(equippedArmor);
 	}
 	
-	public void characterArmor(Armor armor, String action) {
+	public void equippedArmor(Armor armor, String action) {
 		if(action == "Add")
 			equippedArmor.add(armor);
 		else if(action == "Remove")
 			equippedArmor.remove(armor);
 	}
+	
+	public void equippedItems(Items item, String action) {
+		if(action == "Add") {
+			equippedItems.add(item);
+		}
+		else if(action == "Remove")
+			equippedItems.remove(item);
+	}
+	
+	public List<Items> getEquippedItems() {
+        return new ArrayList<>(equippedItems);
+    }
 	
 	public void createFont() {
     	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/RetroGaming.ttf"));
