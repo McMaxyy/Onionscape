@@ -1,5 +1,7 @@
 package player;
 
+import java.util.Objects;
+
 public abstract class Weapons {
 	private String weaponName, handed;
 	private int weaponDmg, ID, amount;
@@ -34,6 +36,11 @@ public abstract class Weapons {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}	
+	
+	@Override
+	public int hashCode() {
+	    return Objects.hash(weaponName, ID);
+	}
 }
 
 class IronGreatAxe extends Weapons{

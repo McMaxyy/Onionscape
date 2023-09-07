@@ -32,7 +32,7 @@ public class BerserkerSkillTree implements Screen{
 	private Label level, skillPoints;
 	private GameScreen gameScreen;
 	private boolean pointUsed = false;
-	private static int skillPointsUsed = 0;
+	public static int skillPointsUsed = 0;
 
 	public static int twoHMastery = 0;
 	public static int oneHMastery = 0;
@@ -53,6 +53,13 @@ public class BerserkerSkillTree implements Screen{
 	public static int thorns = 0;
 	public static int healthy = 0;
 	
+	public static int twoHandStr = 0;
+	public static int oneHandStr = 0;
+	public static int dmgResist = 0;
+	public static int weaponDmg = 0;
+	public static int strength = 0;
+	public static int maxHP = 0;
+	
 	public BerserkerSkillTree(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
 		this.game = game;
@@ -60,7 +67,7 @@ public class BerserkerSkillTree implements Screen{
 		vp = viewport;
 		Gdx.input.setInputProcessor(stage);
 		storage = Storage.getInstance();
-		skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+		skin = storage.skin;
 		storage.createFont();
 		
 		createComponents();	
@@ -164,6 +171,7 @@ public class BerserkerSkillTree implements Screen{
     			twoHandLbl.setText("2H Mastery (" + twoHMastery + "/5)");
     			pointUsed = true;
     			skillPointsUsed++;
+    			twoHandStr++;
     	    }});
 		twoHandBtn.setSize(50, 50);
 		twoHandBtn.setPosition(twoHandLbl.getX() + twoHandLbl.getWidth() / 2.5f, twoHandLbl.getY() - 65f);
@@ -179,6 +187,7 @@ public class BerserkerSkillTree implements Screen{
     			oneHandLbl.setText("1H Mastery (" + oneHMastery + "/5)");
     			pointUsed = true;
     			skillPointsUsed++;
+    			oneHandStr++;
     	    }});
 		oneHandBtn.setSize(50, 50);
 		oneHandBtn.setPosition(oneHandLbl.getX() + oneHandLbl.getWidth() / 2.5f, oneHandLbl.getY() - 65f);
@@ -194,6 +203,7 @@ public class BerserkerSkillTree implements Screen{
     			thickSkinLbl.setText("Thick Skin (" + thickSkin + "/5)");
     			pointUsed = true;
     			skillPointsUsed++;
+    			dmgResist++;
     	    }});
 		thickSkinBtn.setSize(50, 50);
 		thickSkinBtn.setPosition(thickSkinLbl.getX() + thickSkinLbl.getWidth() / 2.5f, thickSkinLbl.getY() - 65f);
@@ -209,6 +219,7 @@ public class BerserkerSkillTree implements Screen{
     			weaponMasteryLbl.setText("Weapon Mastery (" + weaponMastery + "/3)");
     			pointUsed = true;
     			skillPointsUsed++;
+    			weaponDmg++;
     	    }});
 		weaponMasteryBtn.setSize(50, 50);
 		weaponMasteryBtn.setPosition(weaponMasteryLbl.getX() + weaponMasteryLbl.getWidth() / 2.5f, weaponMasteryLbl.getY() - 65f);
@@ -294,6 +305,7 @@ public class BerserkerSkillTree implements Screen{
     			ironSkinLbl.setText("Thick Skin (" + ironSkin + "/5)");
     			pointUsed = true;
     			skillPointsUsed++;
+    			dmgResist++;
     	    }});
 		ironSkinBtn.setSize(50, 50);
 		ironSkinBtn.setPosition(ironSkinLbl.getX() + ironSkinLbl.getWidth() / 2.5f, ironSkinLbl.getY() - 65f);
@@ -309,6 +321,7 @@ public class BerserkerSkillTree implements Screen{
     			bulkUpLbl.setText("Bulk Up! (" + bulkUp + "/5)");
     			pointUsed = true;
     			skillPointsUsed++;
+    			strength++;
     	    }});
 		bulkUpBtn.setSize(50, 50);
 		bulkUpBtn.setPosition(bulkUpLbl.getX() + bulkUpLbl.getWidth() / 2.5f, bulkUpLbl.getY() - 65f);
@@ -324,6 +337,7 @@ public class BerserkerSkillTree implements Screen{
     			healthyLbl.setText("Healthy (" + healthy + "/5)");
     			pointUsed = true;
     			skillPointsUsed++;
+    			maxHP++;
     	    }});
 		healthyBtn.setSize(50, 50);
 		healthyBtn.setPosition(healthyLbl.getX() + healthyLbl.getWidth() / 2.5f, healthyLbl.getY() - 65f);
@@ -339,6 +353,7 @@ public class BerserkerSkillTree implements Screen{
     			sharpenWeaponsLbl.setText("Sharpen Weapons (" + sharpenWeapons + "/5)");
     			pointUsed = true;
     			skillPointsUsed++;
+    			weaponDmg++;
     	    }});
 		sharpenWeaponsBtn.setSize(50, 50);
 		sharpenWeaponsBtn.setPosition(sharpenWeaponsLbl.getX() + sharpenWeaponsLbl.getWidth() / 2.5f, sharpenWeaponsLbl.getY() - 65f);
@@ -362,7 +377,6 @@ public class BerserkerSkillTree implements Screen{
 		blockEfficiencyBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			Player.skillTreeGains(4);
     			blockEfficiency += 1;
     			Player.skillPointUse();
     			blockEfficiencyLbl.setText("Block Efficiency (" + blockEfficiency + "/5)");
@@ -478,10 +492,12 @@ public class BerserkerSkillTree implements Screen{
 		thorns = 0;
 		
 		// Reset player stats from skill tree
-		Player.setTwoHandStr(0);
-		Player.setOneHandStr(0);
-		Player.setDmgResist(0);
-		Player.setWeaponDmg(0);
+		Player.setTwoHandStr(Player.getTwoHandStr() - twoHandStr);
+		Player.setOneHandStr(Player.getOneHandStr() - oneHandStr);
+		Player.setDmgResist(Player.getDmgResist() - dmgResist);
+		Player.setWeaponDmg(Player.getWeaponDmg() - weaponDmg);
+		Player.setMaxHP(Player.getMaxHP() - maxHP);
+		Player.setStrength(Player.getStrength() - strength);
 		
 		// Reset points
 		Player.setSkillPoints(Player.getSkillPoints() + skillPointsUsed);

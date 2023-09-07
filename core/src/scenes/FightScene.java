@@ -38,17 +38,18 @@ public class FightScene implements Screen{
     private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
     private Label ab1UseLbl, ab2UseLbl, ab3UseLbl, ab4UseLbl;
     private GameScreen gameScreen;
-    private int rendLeft, attackCount = 3, eAttackCount = 0, bludgeonCount = 0, doubleSwingCount = 0;
-    private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false;
+    private int rendLeft, attackCount = 3, eAttackCount = 0, bludgeonCount = 0, doubleSwingCount = 0,
+    		weakenLeft, thornsLeft, enrageLeft;
+    private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false, riposteActive;
 
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
     	this.game = game;
         stage = new Stage(viewport);
         vp = viewport;
-        Gdx.input.setInputProcessor(stage);  // Set the stage to process inputs
-        skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+        Gdx.input.setInputProcessor(stage);  // Set the stage to process inputs      
         storage = Storage.getInstance();
+        skin = storage.skin;
         
         // Check if the player has the Lucky Strike mastery activated
         if(BerserkerSkillTree.luckyStrike == 1)
@@ -206,27 +207,80 @@ public class FightScene implements Screen{
     		}  			
     		break;
     	case "Barrier":
+    		newLine();
     		if(rand.nextInt(4) != 0) {
-    			barrierActive = true;
-    			newLine();
+    			barrierActive = true;    			
     			combatLog.setText(combatText + "\n Player activated Barrier");
     		}
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player failed to use Barrier");
-    		}  			
+    		else
+    			combatLog.setText(combatText + "\n Player failed to use Barrier"); 			
     		break;
     	case "Harden":
+    		newLine();
     		if(rand.nextInt(4) != 0) {
-    			hardenActive = true;
-    			newLine();
+    			hardenActive = true;    			
     			combatLog.setText(combatText + "\n Player activated Harden");
     		}
+    		else
+    			combatLog.setText(combatText + "\n Player failed to use Harden");			
+    		break;
+    	case "Mend":
+    		newLine();
+			combatLog.setText(combatText + "\n Player used heal");
+    		Player.gainHP(storage.mend.getAttackPower());
+			if(Player.getHp() > Player.getMaxHP())
+				Player.setHp(Player.getMaxHP());
+			break;
+    	case "Hilt Bash":
+    		newLine();
+    		if(rand.nextInt(3) != 0) {
+    			weakenLeft = 2;  			
+    			combatLog.setText(combatText + "\n Enemy weakened");
+    		}
+    		else
+    			combatLog.setText(combatText + "\n Failed to weaken enemy");
+    		break;
+    	case "Barbed Armor":
+    		newLine();
+    		if(rand.nextInt(3) != 0) {
+    			thornsLeft = 2;
+    			combatLog.setText(combatText + "\n Player activated Thorns");
+    		}
+    		else
+    			combatLog.setText(combatText + "\n Failed to activate Thorns");
+    		break;
+    	case "Enrage":
+    		newLine();
+    		if(rand.nextInt(4) != 0) {
+    			enrageLeft = 2;
+    			combatLog.setText(combatText + "\n Player enraged, increasing damage dealt");
+    		}
+    		else
+    			combatLog.setText(combatText + "\n Player failed to enrage");
+    		break;
+    	case "Riposte":
+    		newLine();
+    		if(rand.nextInt(4) != 0) {
+    			riposteActive = true;
+    			combatLog.setText(combatText + "\n Player will reflect the next attack");
+    		}
+    		else
+    			combatLog.setText(combatText + "\n Failed to activate Riposte");
+    		break;
+    	case "Stab":
+    		if(rand.nextInt(4) != 0)
+    			playerAttack(13);
     		else {
     			newLine();
-    			combatLog.setText(combatText + "\n Player failed to use Harden");
-    		}  			
-    		break;
+    			combatLog.setText(combatText + "\n Player's attack missed");
+    		}
+    	case "Decapitate":
+    		if(rand.nextInt(5) != 0)
+    			playerAttack(14);
+    		else {
+    			newLine();
+    			combatLog.setText(combatText + "\n Player's attack missed");
+    		}
     	}
     }
     
@@ -258,11 +312,13 @@ public class FightScene implements Screen{
     		temp += Player.getStrength() + rand.nextInt(1, storage.bash.getAttackPower() + 1);
     		hit = true;
     		break;
-    	case 6:
-    		barrierActive = true;
+    	case 13:
+    		temp += Player.getStrength() + rand.nextInt(1, storage.stab.getAttackPower() + 1);
+    		hit = true;
     		break;
-    	case 7:
-    		hardenActive = true;
+    	case 14:
+    		temp += Player.getStrength() + rand.nextInt(1, storage.decapitate.getAttackPower() + 1);
+    		hit = true;
     		break;
     	}
     	
@@ -282,16 +338,28 @@ public class FightScene implements Screen{
     			bludgeonCount = 0;
     			enemyStunned = true;
     		}
-    	}    		
+    	} 
     	
         newLine();
+        
         if(hit) {
+        	if(enrageLeft > 0) {
+        		temp += storage.enrage.getAttackPower();
+        		enrageLeft--;
+        	}        		
         	if(firstAttack)
-        		temp *= 2;
+        		temp *= 2;  
+        	if(weakenLeft > 0) {
+        		int weak = temp / 4;
+        		temp += weak;
+        		weakenLeft--;
+        	}
+        		
         	enemyHP -= temp;
+        	
         	if(x == 0)
         		combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
-        	else if(x == 1 || x == 3 || x == 4 || x == 5)
+        	else if(x == 1 || x == 3 || x == 4 || x == 5 || x == 13 || x == 14)
         		combatLog.setText(combatText + "\n " + getAbilityName(x) + " hit the enemy for " + temp + " damage");
         	
         	// Life steal mastery
@@ -333,35 +401,49 @@ public class FightScene implements Screen{
     private void enemyAttack() {
     	// Increase attack counter for the Block Aura mastery
     	if(!barrierActive && BerserkerSkillTree.blockAura == 1)
-    		eAttackCount++;
-    	
+    		eAttackCount++;    	
     	if(eAttackCount == 3) {
     		barrierActive = true;
     		eAttackCount = 0;
     	}    		
     	
     	int temp = eDmg;    	
-    	temp -= Player.getDmgResist(); // Lower damage via damage resist stat
-    	if(temp <= 0)
-    		temp = 1;
+    	temp -= Player.getDmgResist(); // Lower damage via damage resist stat    	
     	
     	if(hardenActive) {
     		hardenActive = false;
     		temp = temp / 2;
-    	}  		
+    	} 
+    	
+    	if(temp <= 0)
+    		temp = 1;
   	
     	if(!barrierActive && !enemyStunned) {
-    		Player.loseHP(temp);
-            newLine();
-            combatLog.setText(combatText + "\n Enemy attacked for " + temp + " damage");
-            if(BerserkerSkillTree.thorns == 1) {
-            	temp /= 2;
-            	if(temp <= 0)
-            		temp = 1;
-            	enemyHP -= temp;
-            	newLine();
-                combatLog.setText(combatText + "\n Enemy hit with Thorns for " + temp + " damage");
-            }
+    		if(!riposteActive) {
+    			Player.loseHP(temp);
+                newLine();
+                combatLog.setText(combatText + "\n Enemy attacked for " + temp + " damage");
+                
+                if(BerserkerSkillTree.thorns == 1 || thornsLeft > 0) {
+                	if(thornsLeft > 0) {
+                		temp -= storage.barbedArmor.getAttackPower();
+                		thornsLeft--;
+                	}
+                		
+                	temp /= 2;
+                	if(temp <= 0)
+                		temp = 1;
+                	enemyHP -= temp;
+                	newLine();
+                    combatLog.setText(combatText + "\n Enemy hit with Thorns for " + temp + " damage");
+                }
+    		}
+    		else {
+    			riposteActive = false;
+    			enemyHP -= temp;
+    			newLine();
+    			combatLog.setText(combatText + "\n Player reflected the attack and hit for " + temp + " damage");
+    		}
     	}
     	else if(barrierActive){
     		newLine();
@@ -409,7 +491,9 @@ public class FightScene implements Screen{
     	}
     		       
         if(Player.getHp() <= 0)
-        	pDead = true;   	
+        	pDead = true;  
+        if(enemyHP <= 0)
+        	eDead = true;
     }   
     
     private void setAbility(TextButton button, int abID, Label abUseLbl) {
@@ -456,6 +540,48 @@ public class FightScene implements Screen{
     		button.setName(storage.harden.getAbilityName());
     		button.getLabel().setAlignment(Align.center);
     		break;
+    	case 8:
+    		button.setLabel(abUseLbl);
+    		button.setText(storage.mend.getAbilityName() + "\n (" + button.getLabel() + ")");
+    		button.setName(storage.mend.getAbilityName());
+    		button.getLabel().setAlignment(Align.center);
+    		break;
+    	case 9:
+    		button.setLabel(abUseLbl);
+    		button.setText(storage.hiltBash.getAbilityName() + "\n (" + button.getLabel() + ")");
+    		button.setName(storage.hiltBash.getAbilityName());
+    		button.getLabel().setAlignment(Align.center);
+    		break;
+    	case 10:
+    		button.setLabel(abUseLbl);
+    		button.setText(storage.barbedArmor.getAbilityName() + "\n (" + button.getLabel() + ")");
+    		button.setName(storage.barbedArmor.getAbilityName());
+    		button.getLabel().setAlignment(Align.center);
+    		break;
+    	case 11:
+    		button.setLabel(abUseLbl);
+    		button.setText(storage.enrage.getAbilityName() + "\n (" + button.getLabel() + ")");
+    		button.setName(storage.enrage.getAbilityName());
+    		button.getLabel().setAlignment(Align.center);
+    		break;
+    	case 12:
+    		button.setLabel(abUseLbl);
+    		button.setText(storage.riposte.getAbilityName() + "\n (" + button.getLabel() + ")");
+    		button.setName(storage.riposte.getAbilityName());
+    		button.getLabel().setAlignment(Align.center);
+    		break;
+    	case 13:
+    		button.setLabel(abUseLbl);
+    		button.setText(storage.stab.getAbilityName() + "\n (" + button.getLabel() + ")");
+    		button.setName(storage.stab.getAbilityName());
+    		button.getLabel().setAlignment(Align.center);
+    		break;
+    	case 14:
+    		button.setLabel(abUseLbl);
+    		button.setText(storage.decapitate.getAbilityName() + "\n (" + button.getLabel() + ")");
+    		button.setName(storage.decapitate.getAbilityName());
+    		button.getLabel().setAlignment(Align.center);
+    		break;
     	}
     }
     
@@ -483,6 +609,27 @@ public class FightScene implements Screen{
     	case 7:
     		x = storage.harden.getUsesLeft();
     		break;
+    	case 8:
+    		x = storage.mend.getUsesLeft();
+    		break;
+    	case 9:
+    		x = storage.hiltBash.getUsesLeft();
+    		break;
+    	case 10:
+    		x = storage.barbedArmor.getUsesLeft();
+    		break;
+    	case 11:
+    		x = storage.enrage.getUsesLeft();
+    		break;
+    	case 12:
+    		x = storage.riposte.getUsesLeft();
+    		break;
+    	case 13:
+    		x = storage.stab.getUsesLeft();
+    		break;
+    	case 14:
+    		x = storage.decapitate.getUsesLeft();
+    		break;
     	}
     	
     	return x;
@@ -504,6 +651,20 @@ public class FightScene implements Screen{
     		return "Barrier";
     	case 7:
     		return "Harden";
+    	case 8:
+    		return "Mend";
+    	case 9:
+    		return "Hilt Bash";
+    	case 10:
+    		return "Barbed Armor";
+    	case 11:
+    		return "Enrage";
+    	case 12:
+    		return "Riposte";
+    	case 13:
+    		return "Stab";
+    	case 14:
+    		return "Decapitate";
     	default:
     		return "";
     	}

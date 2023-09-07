@@ -64,7 +64,7 @@ public class Inventory implements Screen {
 		vp = viewport;
 		Gdx.input.setInputProcessor(stage);
 		storage = Storage.getInstance();
-		skin = new Skin(Gdx.files.internal("buttons/uiskin.json"));
+		skin = storage.skin;
 		storage.createFont();
 		
 		createComponents();	
@@ -631,7 +631,7 @@ public class Inventory implements Screen {
 	private void addWeaponDamage(String weapon) {
 		switch(weapon) {
 		case "Iron Greataxe":
-			Player.setWeaponDmg(storage.ironGreataxe.getWeaponDmg());
+			Player.setWeaponDmg(Player.getWeaponDmg() + storage.ironGreataxe.getWeaponDmg());
 			Player.weaponState = 2;
 			break;
 		case "Iron Axe":
@@ -702,5 +702,37 @@ public class Inventory implements Screen {
 		skin.dispose();
 		storage.font.dispose();	
 		Storage.assetManager.dispose();
+	}
+
+	public static int getShieldDP() {
+		return shieldDP;
+	}
+
+	public static void setShieldDP(int shieldDP) {
+		Inventory.shieldDP = shieldDP;
+	}
+
+	public static int getHelmetDP() {
+		return helmetDP;
+	}
+
+	public static void setHelmetDP(int helmetDP) {
+		Inventory.helmetDP = helmetDP;
+	}
+
+	public static int getChestDP() {
+		return chestDP;
+	}
+
+	public static void setChestDP(int chestDP) {
+		Inventory.chestDP = chestDP;
+	}
+
+	public static int getBootsDP() {
+		return bootsDP;
+	}
+
+	public static void setBootsDP(int bootsDP) {
+		Inventory.bootsDP = bootsDP;
 	}
 }

@@ -3,7 +3,6 @@ package scenes;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.SaveData;
@@ -22,8 +20,6 @@ import player.Storage;
 public class Home implements Screen {
 	Skin skin;
 	Viewport vp;
-	Json json = new Json();
-	String jsonString;
 	public Stage stage;
 	private Storage storage;
 	private Game game;
@@ -31,6 +27,7 @@ public class Home implements Screen {
 	saveBtn, loadBtn;
 	private Label level, exp;
 	private GameScreen gameScreen; 
+	private SaveData saveData = new SaveData();
 	
 	public Home(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -45,35 +42,15 @@ public class Home implements Screen {
 		createComponents();	
 	}
 	
-	private void saveGame() {
-		SaveData saveData = new SaveData();
-		saveData.maxHP = Player.getMaxHP();
-		saveData.strength = Player.getStrength();
-		saveData.playerArmor = storage.getPlayerArmor();
-		saveData.playerWeapons = storage.getPlayerWeapons();
-		
-		jsonString = json.toJson(saveData);		
-		FileHandle file = Gdx.files.local("saveData.json");
-		file.writeString(jsonString, false);
-	}
-	
-	private void loadGame() {
-		SaveData loadedData = null;
-		FileHandle file = Gdx.files.local("saveData.json");
-		if (file.exists()) {
-		    String readJson = file.readString();
-		    loadedData = json.fromJson(SaveData.class, readJson);
-		}
-		
-		if (loadedData != null) {
-		    Player.setMaxHP(loadedData.maxHP);
-		    Player.setStrength(loadedData.strength);
-		    storage.playerArmor = loadedData.playerArmor;
-		    storage.playerWeapons = loadedData.playerWeapons;
-		}
-	}
-	
 	private void createComponents() {
+		level = new Label("Level: " + Player.getLevel(), storage.labelStyle);
+		level.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.1f);
+		stage.addActor(level);
+		
+		exp = new Label("Exp: " + Player.getExp(), storage.labelStyle);
+		exp.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.15f);
+		stage.addActor(exp);
+		
 		fight = new TextButton("Fight", storage.buttonStyle);
 		fight.setColor(Color.LIGHT_GRAY);
 		fight.addListener(new ClickListener() {
@@ -106,15 +83,7 @@ public class Home implements Screen {
     	    }});
 		zerkerTreeBtn.setSize(150, 100);
 		zerkerTreeBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 2f);
-		stage.addActor(zerkerTreeBtn);
-		
-		level = new Label("Level: " + Player.getLevel(), storage.labelStyle);
-		level.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.1f);
-		stage.addActor(level);
-		
-		exp = new Label("Exp: " + Player.getExp(), storage.labelStyle);
-		exp.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.15f);
-		stage.addActor(exp);	
+		stage.addActor(zerkerTreeBtn);			
 		
 		inventory = new TextButton("Bag", storage.buttonStyle);
 		inventory.setColor(Color.LIGHT_GRAY);
@@ -137,7 +106,7 @@ public class Home implements Screen {
     			storage.inventoryWeapons(storage.woodenShield, "Add");
     	    }});
 		weaponsBtn.setSize(150, 100);
-		weaponsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3f);
+		weaponsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3.35f);
 		stage.addActor(weaponsBtn);
 		
 		armorBtn = new TextButton("Armor", storage.buttonStyle);
@@ -170,7 +139,7 @@ public class Home implements Screen {
 		saveBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			saveGame();
+    			saveData.saveGame();
     	    }});
 		saveBtn.setSize(150, 100);
 		saveBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.2f);
@@ -181,7 +150,9 @@ public class Home implements Screen {
 		loadBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			loadGame();
+    			saveData.loadGame();
+    			level.setText("Level: " + Player.getLevel());
+    			exp.setText("Exp: " + Player.getExp());
     	    }});
 		loadBtn.setSize(150, 100);
 		loadBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.4f);

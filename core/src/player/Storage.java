@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -73,6 +74,13 @@ public class Storage {
 	public Abilities bash = new Bash();
 	public Abilities barrier = new Barrier();
 	public Abilities harden = new Harden();
+	public Abilities mend = new Mend();
+	public Abilities hiltBash = new HiltBash();
+	public Abilities barbedArmor = new BarbedArmor();
+	public Abilities enrage = new Enrage();
+	public Abilities riposte = new Riposte();
+	public Abilities stab = new Stab();
+	public Abilities decapitate = new Decapitate();
 	
 	// Load weapons
 	public Weapons ironGreataxe = new IronGreatAxe();
@@ -86,14 +94,17 @@ public class Storage {
 	
 	// Inventory arrays
 	public void inventoryWeapons(Weapons weapon, String action) {
-		if(action == "Add") {
+		if(action.equals("Add")) {
 			weapon.setAmount(weapon.getAmount() + 1);
-			playerWeapons.add(weapon);
+			playerWeapons.add(weapon);			
 		}
-		else if(action == "Remove") {
+		else if(action.equals("Remove")) {
 			weapon.setAmount(weapon.getAmount() - 1);
 			playerWeapons.remove(weapon);
-		}			
+		}	
+		else if(action.equals("Clear")) {
+			playerWeapons.clear();
+		}
 	}
 	
 	public List<Weapons> getPlayerWeapons() {
@@ -101,14 +112,17 @@ public class Storage {
     }
 	
 	public void inventoryArmor(Armor armor, String action) {
-		if(action == "Add") {
+		if(action.equals("Add")) {
 			armor.setAmount(armor.getAmount() + 1);
 			playerArmor.add(armor);
 		}
-		else if(action == "Remove") {
+		else if(action.equals("Remove")) {
 			armor.setAmount(armor.getAmount() - 1);
 			playerArmor.remove(armor);
-		}			
+		}
+		else if(action.equals("Clear")) {
+			playerArmor.clear();
+		}
 	}
 	
 	public List<Armor> getPlayerArmor() {
@@ -116,14 +130,17 @@ public class Storage {
     }
 	
 	public void inventoryItems(Items item, String action) {
-		if(action == "Add") {
+		if(action.equals("Add")) {
 			item.setAmount(item.getAmount() + 1);
 			playerItems.add(item);
 		}
-		else if(action == "Remove") {
+		else if(action.equals("Remove")) {
 			item.setAmount(item.getAmount() - 1);
 			playerItems.remove(item);
-		}			
+		}	
+		else if(action.equals("Clear")) {
+			playerItems.clear();
+		}
 	}
 	
 	public List<Items> getPlayerItems() {
@@ -136,10 +153,12 @@ public class Storage {
 	}
 	
 	public void equippedWeapons(Weapons weapon, String action) {
-		if(action == "Add")
+		if(action.equals("Add"))
 			equippedWeapons.add(weapon);
-		else if(action == "Remove")
+		else if(action.equals("Remove"))
 			equippedWeapons.remove(weapon);
+		else if(action.equals("Clear"))
+			equippedWeapons.clear();
 	}
 	
 	public List<Armor> getEquippedArmor(){
@@ -147,18 +166,21 @@ public class Storage {
 	}
 	
 	public void equippedArmor(Armor armor, String action) {
-		if(action == "Add")
+		if(action.equals("Add"))
 			equippedArmor.add(armor);
-		else if(action == "Remove")
+		else if(action.equals("Remove"))
 			equippedArmor.remove(armor);
+		else if(action.equals("Clear"))
+			equippedArmor.clear();
 	}
 	
 	public void equippedItems(Items item, String action) {
-		if(action == "Add") {
+		if(action.equals("Add"))
 			equippedItems.add(item);
-		}
-		else if(action == "Remove")
+		else if(action.equals("Remove"))
 			equippedItems.remove(item);
+		else if(action.equals("Clear"))
+			equippedItems.clear();
 	}
 	
 	public List<Items> getEquippedItems() {
@@ -174,7 +196,7 @@ public class Storage {
         
         // Create a new style for button
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
-        buttonStyle.font = font;   
+        buttonStyle.font = font; 
         
         labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyle.font = font;        

@@ -78,20 +78,20 @@ public class Player {
 		int id1, id2, id3, id4;
 		hp = maxHP;
 				
-    	id1 = rand.nextInt(1,8);   
-    	id2 = rand.nextInt(1,8);    
-    	id3 = rand.nextInt(1,8);    
-    	id4 = rand.nextInt(1,8);
+    	id1 = rand.nextInt(1,13);   
+    	id2 = rand.nextInt(1,13);    
+    	id3 = rand.nextInt(1,13);    
+    	id4 = rand.nextInt(1,13);
     	
     	abID1 = id1;
     	while(id1 == id2)
-    		id2 = rand.nextInt(1,8); 
+    		id2 = rand.nextInt(1,13); 
     	abID2 = id2;
     	while(id3 == id1 || id3 == id2)
-    		id3 = rand.nextInt(1,8); 
+    		id3 = rand.nextInt(1,13); 
     	abID3 = id3;
     	while(id4 == id1 || id4 == id2 || id4 == id3)
-    		id4 = rand.nextInt(1,8); 
+    		id4 = rand.nextInt(1,13); 
     	abID4 = id4;
 	}
 	
@@ -195,4 +195,7 @@ public class Player {
 	public static void setWeaponDmg(int weaponDmg) {
 		Player.weaponDmg = weaponDmg;
 	}
+	public static int getLevelCap() {
+		return levelCap;
+	}	
 }

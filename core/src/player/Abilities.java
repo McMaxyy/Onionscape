@@ -99,3 +99,66 @@ class Harden extends Abilities{
 		setID(7);
 	}
 }
+
+class Mend extends Abilities{
+	public Mend() {
+		setAbilityName("Mend");
+		setAttackPower(5);
+		setUsesLeft(4);
+		setID(8);
+	}
+}
+
+class HiltBash extends Abilities{
+	public HiltBash() {
+		setAbilityName("Hilt Bash");
+		setAttackPower(0);
+		setUsesLeft(4);
+		setID(9);
+	}
+}
+
+class BarbedArmor extends Abilities{
+	public BarbedArmor() {
+		setAbilityName("Barbed Armor");
+		setAttackPower(3);
+		setUsesLeft(3);
+		setID(10);
+	}
+}
+
+class Enrage extends Abilities{
+	public Enrage() {
+		setAbilityName("Enrage");
+		setAttackPower(3);
+		setUsesLeft(4);
+		setID(11);
+	}
+}
+
+class Riposte extends Abilities{
+	public Riposte() {
+		setAbilityName("Riposte");
+		setAttackPower(0);
+		setUsesLeft(5);
+		setID(12);
+	}
+}
+
+class Stab extends Abilities{
+	public Stab() {
+		setAbilityName("Stab");
+		setAttackPower(5);
+		setUsesLeft(7);
+		setID(13);
+	}
+}
+
+class Decapitate extends Abilities{
+	public Decapitate() {
+		setAbilityName("Decapitate");
+		setAttackPower(15);
+		setUsesLeft(4);
+		setID(14);
+	}
+}

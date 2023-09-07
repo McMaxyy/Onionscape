@@ -31,6 +31,7 @@ public class LoadingScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		storage = Storage.getInstance();
 		storage.createFont();
+		skin = storage.skin;
         
         // Create a progress bar using the default skin
 		progressBar = new ProgressBar(0, 1, 0.01f, false, storage.skin, "default-horizontal");
