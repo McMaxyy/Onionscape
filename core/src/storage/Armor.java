@@ -1,4 +1,4 @@
-package player;
+package storage;
 
 public abstract class Armor {
 	private int defense, ID, amount;

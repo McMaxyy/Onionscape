@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 
 import player.Player;
-import player.Storage;
+import storage.Storage;
 
 public class BerserkerSkillTree implements Screen{
 	Skin skin;

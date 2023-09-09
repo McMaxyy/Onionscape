@@ -15,7 +15,7 @@ import com.onionscape.game.GameScreen;
 import com.onionscape.game.SaveData;
 
 import player.Player;
-import player.Storage;
+import storage.Storage;
 
 public class Home implements Screen {
 	Skin skin;
@@ -101,7 +101,8 @@ public class Home implements Screen {
 		weaponsBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			storage.inventoryWeapons(storage.ironGreataxe, "Add");
+    			storage.inventoryWeapons(storage.healthyIronGA, "Add");
+    			storage.inventoryWeapons(storage.strongIronGA, "Add");
     			storage.inventoryWeapons(storage.ironAxe, "Add");
     			storage.inventoryWeapons(storage.woodenShield, "Add");
     	    }});

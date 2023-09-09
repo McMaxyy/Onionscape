@@ -1,10 +1,10 @@
-package player;
+package storage;
 
 import java.util.Objects;
 
 public abstract class Weapons {
 	private String weaponName, handed;
-	private int weaponDmg, ID, amount;
+	private int weaponDmg, ID, amount, bonusStat;
 	
 	public String getWeaponName() {
 		return weaponName;
@@ -35,20 +35,37 @@ public abstract class Weapons {
 	}
 	public void setAmount(int amount) {
 		this.amount = amount;
-	}	
-	
+	}		
+	public int getBonusStat() {
+		return bonusStat;
+	}
+	public void setBonusStat(int bonusStat) {
+		this.bonusStat = bonusStat;
+	}
 	@Override
 	public int hashCode() {
-	    return Objects.hash(weaponName, ID);
+	    return Objects.hash(weaponName, bonusStat);
 	}
 }
 
-class IronGreatAxe extends Weapons{
-	public IronGreatAxe() {
-		setWeaponName("Iron Greataxe");
+class HealthyIronGreatAxe extends Weapons{
+	public HealthyIronGreatAxe() {
+		setWeaponName("Healthy Iron Greataxe");
 		setWeaponDmg(4);
 		setHanded("TwoHanded");
 		setAmount(0);
+		setBonusStat(5);
+		setID(1);
+	}
+}
+
+class StrongIronGreatAxe extends Weapons{
+	public StrongIronGreatAxe() {
+		setWeaponName("Strong Iron Greataxe");
+		setWeaponDmg(4);
+		setHanded("TwoHanded");
+		setAmount(0);
+		setBonusStat(2);
 		setID(1);
 	}
 }

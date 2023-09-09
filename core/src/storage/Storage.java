@@ -1,4 +1,4 @@
-package player;
+package storage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -83,7 +82,8 @@ public class Storage {
 	public Abilities decapitate = new Decapitate();
 	
 	// Load weapons
-	public Weapons ironGreataxe = new IronGreatAxe();
+	public Weapons healthyIronGA = new HealthyIronGreatAxe();
+	public Weapons strongIronGA = new StrongIronGreatAxe();
 	public Weapons ironAxe = new IronAxe();
 	public Weapons woodenShield = new WoodenShield();
 	
@@ -91,6 +91,12 @@ public class Storage {
 	public Armor ironHelmet = new IronHelmet();
 	public Armor ironChest = new IronChest();
 	public Armor ironBoots = new IronBoots();
+	
+	// Load enemies
+	public Enemy wolf = new Wolf();
+	public Enemy spider = new Spider();
+	public Enemy bear = new Bear();
+	public Enemy monkey = new Monkey();
 	
 	// Inventory arrays
 	public void inventoryWeapons(Weapons weapon, String action) {

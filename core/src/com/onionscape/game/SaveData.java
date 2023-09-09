@@ -7,13 +7,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
-import player.Armor;
-import player.Items;
 import player.Player;
-import player.Storage;
-import player.Weapons;
 import scenes.BerserkerSkillTree;
 import scenes.Inventory;
+import storage.Armor;
+import storage.Items;
+import storage.Storage;
+import storage.Weapons;
 
 public class SaveData {	
 	Json json = new Json();
@@ -227,9 +227,9 @@ public class SaveData {
 	    	switch(weapon.getWeaponName()) {
 	    	case "Iron Greataxe":
 	    		if(inventory.equals("Bag"))
-	    			storage.inventoryWeapons(storage.ironGreataxe, "Add");	    
+	    			storage.inventoryWeapons(storage.healthyIronGA, "Add");	    
 	    		else
-	    			storage.equippedWeapons(storage.ironGreataxe, "Add");	
+	    			storage.equippedWeapons(storage.healthyIronGA, "Add");	
     			break;
 	    	case "Iron Axe":
 	    		if(inventory.equals("Bag"))

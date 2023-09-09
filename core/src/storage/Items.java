@@ -1,4 +1,4 @@
-package player;
+package storage;
 
 public abstract class Items {
 	private int amount, value, ID;

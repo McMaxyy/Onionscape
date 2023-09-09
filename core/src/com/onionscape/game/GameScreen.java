@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import player.Storage;
 import scenes.BerserkerSkillTree;
 import scenes.FightScene;
 import scenes.Home;
 import scenes.Inventory;
 import scenes.LoadingScreen;
+import storage.Storage;
 
 public class GameScreen implements Screen {
 	private Game game;

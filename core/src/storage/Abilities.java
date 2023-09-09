@@ -1,4 +1,4 @@
-package player;
+package storage;
 
 public abstract class Abilities {
 	private int attackPower, usesLeft, ID;

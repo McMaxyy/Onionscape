@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 
-import player.Storage;
+import storage.Storage;
 
 public class LoadingScreen implements Screen {
 	Viewport vp;

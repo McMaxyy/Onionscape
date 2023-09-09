@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -20,8 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
-import player.Storage;
+
 import player.Player;
+import storage.Enemy;
+import storage.Storage;
 
 public class FightScene implements Screen{
 	Skin skin;
@@ -32,7 +35,11 @@ public class FightScene implements Screen{
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
     private Label playerHPLbl, enemyHPLbl, combatLog;
-    private int enemyHP = 50, eDmg = 20;
+    private Texture charTexture, enemyTexture;
+    private SpriteBatch charBatch = new SpriteBatch();
+    private SpriteBatch enemyBatch = new SpriteBatch();
+    private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
+    private String enemyName, eAbility1, eAbility2, eAbility3;
     private boolean pDead, eDead, btnClicked;
     private Storage storage;
     private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
@@ -40,7 +47,10 @@ public class FightScene implements Screen{
     private GameScreen gameScreen;
     private int rendLeft, attackCount = 3, eAttackCount = 0, bludgeonCount = 0, doubleSwingCount = 0,
     		weakenLeft, thornsLeft, enrageLeft;
-    private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false, riposteActive;
+    private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false, 
+    		riposteActive, firstLoad = true;
+    private int eRendLeft, ePoisonLeft, eEnrageLeft;
+    private boolean eHardenActive, playerStunned;
 
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -50,6 +60,8 @@ public class FightScene implements Screen{
         Gdx.input.setInputProcessor(stage);  // Set the stage to process inputs      
         storage = Storage.getInstance();
         skin = storage.skin;
+        
+        charTexture = Storage.assetManager.get("player/Onion.png", Texture.class);
         
         // Check if the player has the Lucky Strike mastery activated
         if(BerserkerSkillTree.luckyStrike == 1)
@@ -87,12 +99,48 @@ public class FightScene implements Screen{
         GameScreen.newGame = false;
     }
     
+    private void newEnemy() {
+        int randomEnemy = rand.nextInt(4);
+        switch(randomEnemy) {
+            case 0:
+                setEnemyAttributes(storage.wolf, "enemies/Wolfie.png");
+                break;
+            case 1:
+                setEnemyAttributes(storage.spider, "enemies/Spider.png");
+                break;
+            case 2:
+                setEnemyAttributes(storage.bear, "enemies/Bear.png");
+                break;
+            case 3:
+                setEnemyAttributes(storage.monkey, "enemies/Monkey.png");
+                break;
+        }
+    }
+
+    private void setEnemyAttributes(Enemy enemy, String texturePath) {
+        enemyMaxHP = enemy.getMaxHP();
+        enemyName = enemy.getEnemyName();
+        enemyValue = enemy.getValue();
+        enemyDamage = enemy.getAttackPower();
+        expValue = enemy.getExp();
+        eAbility1 = enemy.getAbility1();
+        eAbility2 = enemy.getAbility2();
+        enemyHP = enemyMaxHP;
+        enemyTexture = Storage.assetManager.get(texturePath, Texture.class);
+    }
+    
     public void update() {
     	if(!pDead && !eDead && btnClicked) {
     		playerHPLbl.setText("Player HP: " + Player.getHp() + "/" + Player.getMaxHP());
-        	enemyHPLbl.setText("Enemy HP: " + enemyHP + "/" + 50); 
+        	enemyHPLbl.setText("Enemy HP: " + enemyHP + "/" + enemyMaxHP); 
         	btnClicked = false;
     	}
+    	
+    	if(firstLoad) {
+    		enemyHPLbl.setText("Enemy HP: " + enemyHP + "/" + enemyMaxHP);   
+    		firstLoad = false;
+    	}
+        	 		
     	
     	if(attackCount <= 0) {
     		attackBtn.setTouchable(Touchable.disabled);
@@ -144,9 +192,13 @@ public class FightScene implements Screen{
     		newLine();
 	        if(pDead)
 	        	combatLog.setText(combatText + "\n Player died");
-	        else
+	        else {
 	        	combatLog.setText(combatText + "\n Enemy died");
-	        
+	        	Player.setCoins(Player.getCoins() + enemyValue);
+	        	Player.gainExp(expValue);
+	        	Player.checkExp();
+	        }
+	        		        
 	        pDead = eDead = false; 		
     	} 		
     }
@@ -274,6 +326,7 @@ public class FightScene implements Screen{
     			newLine();
     			combatLog.setText(combatText + "\n Player's attack missed");
     		}
+    		break;
     	case "Decapitate":
     		if(rand.nextInt(5) != 0)
     			playerAttack(14);
@@ -281,6 +334,7 @@ public class FightScene implements Screen{
     			newLine();
     			combatLog.setText(combatText + "\n Player's attack missed");
     		}
+    		break;
     	}
     }
     
@@ -354,7 +408,12 @@ public class FightScene implements Screen{
         		temp += weak;
         		weakenLeft--;
         	}
-        		
+        	
+        	if(eHardenActive) {
+        		temp /= 2;
+        		eHardenActive = false;
+        	}
+        	
         	enemyHP -= temp;
         	
         	if(x == 0)
@@ -389,111 +448,202 @@ public class FightScene implements Screen{
         	rendLeft--;
         }        
         
-        if(enemyHP <= 0) {
-        	eDead = true;
-        	Player.gainExp(20);
-        	Player.checkExp();
-        } 
+        if(enemyHP <= 0)
+        	eDead = true;       	
         
         firstAttack = false;
     }
     
-    private void enemyAttack() {
+    private void enemyAttack(int attack) {
+    	String attackType = null;
+    	
     	// Increase attack counter for the Block Aura mastery
     	if(!barrierActive && BerserkerSkillTree.blockAura == 1)
     		eAttackCount++;    	
     	if(eAttackCount == 3) {
     		barrierActive = true;
     		eAttackCount = 0;
-    	}    		
+    	}  
+    	   	
+    	switch(attack) {
+    	case 0:
+    	case 1:
+    		attackType = "Attack";
+    		break;
+    	case 2:
+    		attackType = eAbility1;
+    		break;
+    	case 3:
+    		attackType = eAbility2;
+    		break;
+    	}
     	
-    	int temp = eDmg;    	
-    	temp -= Player.getDmgResist(); // Lower damage via damage resist stat    	
+    	if(!attackType.equals("Attack")) {
+    		switch(attackType) {
+    		case "Bleed":
+    			if(eRendLeft > 0)
+    				attackType = "Attack";
+    			break;
+    		case "Poison":
+    			if(ePoisonLeft > 0)
+    				attackType = "Attack";
+    			break;
+    		case "Enrage":
+    			if(eEnrageLeft > 0)
+    				attackType = "Attack";
+    			break;
+    		case "Harden":
+    			if(eHardenActive)
+    				attackType = "Attack";
+    			break;
+    		}
+    	}
     	
-    	if(hardenActive) {
-    		hardenActive = false;
-    		temp = temp / 2;
-    	} 
+    	System.out.println(attackType);
     	
-    	if(temp <= 0)
-    		temp = 1;
-  	
-    	if(!barrierActive && !enemyStunned) {
-    		if(!riposteActive) {
-    			Player.loseHP(temp);
-                newLine();
-                combatLog.setText(combatText + "\n Enemy attacked for " + temp + " damage");
-                
-                if(BerserkerSkillTree.thorns == 1 || thornsLeft > 0) {
-                	if(thornsLeft > 0) {
+    	if(attackType.equals("Attack")) {
+    		int temp = enemyDamage;
+    		if(eEnrageLeft > 0) {
+    			temp += temp / 3;
+    			eEnrageLeft--;
+    		}
+    			
+        	temp -= Player.getDmgResist(); // Lower damage via damage resist stat    	
+        	
+        	if(hardenActive) {
+        		hardenActive = false;
+        		temp = temp / 2;
+        	} 
+        	
+        	if(temp <= 0)
+        		temp = 1;
+      	
+        	if(!barrierActive && !enemyStunned) {
+        		if(!riposteActive) {
+        			if(thornsLeft > 0) {
                 		temp -= storage.barbedArmor.getAttackPower();
                 		thornsLeft--;
-                	}
-                		
-                	temp /= 2;
-                	if(temp <= 0)
-                		temp = 1;
-                	enemyHP -= temp;
-                	newLine();
-                    combatLog.setText(combatText + "\n Enemy hit with Thorns for " + temp + " damage");
-                }
-    		}
-    		else {
-    			riposteActive = false;
-    			enemyHP -= temp;
-    			newLine();
-    			combatLog.setText(combatText + "\n Player reflected the attack and hit for " + temp + " damage");
-    		}
+                	}        			
+        			
+        			Player.loseHP(temp);
+                    newLine();
+                    combatLog.setText(combatText + "\n Enemy attacked for " + temp + " damage");
+                    
+                    if(BerserkerSkillTree.thorns == 1 || thornsLeft > 0) {                	              		
+                    	temp /= 2;
+                    	if(temp <= 0)
+                    		temp = 1;
+                    	enemyHP -= temp;
+                    	newLine();
+                        combatLog.setText(combatText + "\n Enemy hit with Thorns for " + temp + " damage");
+                    }
+        		}
+        		else {
+        			riposteActive = false;
+        			enemyHP -= temp;
+        			newLine();
+        			combatLog.setText(combatText + "\n Player reflected the attack and hit for " + temp + " damage");
+        		}
+        	}
+        	else if(barrierActive){
+        		newLine();
+        		combatLog.setText(combatText + "\n Player blocked the enemy's attack");
+        		switch(BerserkerSkillTree.blockEfficiency) {
+        		case 0:
+        			barrierActive = false;
+        			break;
+        		case 1:
+        			if(rand.nextInt(1, 100) <= 10)
+        				break;
+        			else
+        				barrierActive = false;
+        			break;
+        		case 2:
+        			if(rand.nextInt(1, 100) <= 15)
+        				break;
+        			else
+        				barrierActive = false;
+        			break;
+        		case 3:
+        			if(rand.nextInt(1, 100) <= 20)
+        				break;
+        			else
+        				barrierActive = false;
+        			break;
+        		case 4:
+        			if(rand.nextInt(1, 100) <= 25)
+        				break;
+        			else
+        				barrierActive = false;
+        			break;
+        		case 5:
+        			if(rand.nextInt(1, 100) <= 30)
+        				break;
+        			else
+        				barrierActive = false;
+        			break;    		
+        		} 
+        	}
+        	else if(enemyStunned){
+        		newLine();
+        		combatLog.setText(combatText + "\n Enemy stunned and cannot attack");
+        		enemyStunned = false;
+        	}
     	}
-    	else if(barrierActive){
+    	else {
     		newLine();
-    		combatLog.setText(combatText + "\n Player blocked the enemy's attack");
-    		switch(BerserkerSkillTree.blockEfficiency) {
-    		case 0:
-    			barrierActive = false;
+    		switch(attackType) {
+    		case "Bleed":
+    			eRendLeft = 3;
+    			combatLog.setText(combatText + "\n Enemy hit the player with bleed");
     			break;
-    		case 1:
-    			if(rand.nextInt(1, 100) <= 10)
-    				break;
-    			else
-    				barrierActive = false;
+    		case "Enrage":
+    			eEnrageLeft = 3;
+    			combatLog.setText(combatText + "\n Enemy is enraged");
     			break;
-    		case 2:
-    			if(rand.nextInt(1, 100) <= 15)
-    				break;
-    			else
-    				barrierActive = false;
+    		case "Poison":
+    			ePoisonLeft = 3;
+    			combatLog.setText(combatText + "\n Enemy poisoned the player");
     			break;
-    		case 3:
-    			if(rand.nextInt(1, 100) <= 20)
-    				break;
-    			else
-    				barrierActive = false;
+    		case "Harden":
+    			eHardenActive = true;
+    			combatLog.setText(combatText + "\n Enemy increased its defenses");
     			break;
-    		case 4:
-    			if(rand.nextInt(1, 100) <= 25)
-    				break;
-    			else
-    				barrierActive = false;
+    		case "Stun":
+    			playerStunned = true;
+    			combatLog.setText(combatText + "\n Enemy stunned the player");
     			break;
-    		case 5:
-    			if(rand.nextInt(1, 100) <= 30)
-    				break;
-    			else
-    				barrierActive = false;
-    			break;    		
-    		} 
+    		}
     	}
-    	else if(enemyStunned){
-    		newLine();
-    		combatLog.setText(combatText + "\n Enemy stunned and cannot attack");
-    		enemyStunned = false;
+    	
+    	if(eRendLeft > 0 && eRendLeft < 3) {
+    		Player.loseHP(3);
+            newLine();
+            combatLog.setText(combatText + "\n Player hit with bleed for " + 3 + " damage");
+            eRendLeft--;
     	}
+    	
+    	if(ePoisonLeft > 0 && ePoisonLeft < 3) {
+    		Player.loseHP(3);
+            newLine();
+            combatLog.setText(combatText + "\n Player hit with poison for " + 3 + " damage");
+            ePoisonLeft--;
+    	}
+    	
+    	if(eRendLeft == 3)
+    		eRendLeft--;
+    	if(eEnrageLeft == 3)
+    		eEnrageLeft--;
+    	if(ePoisonLeft == 3)
+    		ePoisonLeft--;
     		       
         if(Player.getHp() <= 0)
         	pDead = true;  
         if(enemyHP <= 0)
         	eDead = true;
+        
+        if(playerStunned)
+        	enemyAttack(rand.nextInt(4));
     }   
     
     private void setAbility(TextButton button, int abID, Label abUseLbl) {
@@ -672,7 +822,7 @@ public class FightScene implements Screen{
     
     private void createComponents() {
     	playerHPLbl = new Label("Player HP: " + Player.getHp() + "/" + Player.getMaxHP(), storage.labelStyle);
-    	enemyHPLbl = new Label("Enemy HP: " + enemyHP + "/" + 50, storage.labelStyle);
+    	enemyHPLbl = new Label("Enemy HP: " + enemyHP + "/" + enemyMaxHP, storage.labelStyle);
     	
     	combatLog = new Label("", storage.labelStyle);
     	
@@ -778,8 +928,8 @@ public class FightScene implements Screen{
     	endTurn.addListener(new ClickListener() {
         	@Override
     	    public void clicked(InputEvent event, float x, float y) {
-        		attackCount = 3;
-        		enemyAttack();
+        		attackCount = 3;        		
+        		enemyAttack(rand.nextInt(4));
     	        btnClicked = true;
     	    }});
     	
@@ -852,16 +1002,31 @@ public class FightScene implements Screen{
         stage.dispose();
         skin.dispose();
         storage.font.dispose();
+        charTexture.dispose();
+        enemyTexture.dispose();
+        charBatch.dispose();
+        enemyBatch.dispose();
     }
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+				
 	}
 	
 	@Override
     public void render(float delta) {
+		if(firstLoad) {
+			newEnemy();
+		}
+		
+		charBatch.begin();
+		charBatch.draw(charTexture, vp.getWorldWidth() / 4f, vp.getWorldHeight() / 50f, 200, 350);
+		charBatch.end();
+		
+		enemyBatch.begin();
+		enemyBatch.draw(enemyTexture, vp.getWorldWidth() / 2.1f, vp.getWorldHeight() / 2.4f, 350, 250);
+		enemyBatch.end();
+		
     	update();
         stage.act();
         stage.draw();
