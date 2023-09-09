@@ -14,21 +14,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class Storage {
-	private static Storage instance = null;	
+	private static Storage instance = null;
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle;
 	public LabelStyle labelStyle;
 	public BitmapFont font;
-	public List<Weapons> playerWeapons = new ArrayList<>();
-	public List<Armor> playerArmor = new ArrayList<>();
-	public List<Items> playerItems = new ArrayList<>();
-	public List<Weapons> equippedWeapons = new ArrayList<>();
-	public List<Armor> equippedArmor = new ArrayList<>();
-	public List<Items> equippedItems = new ArrayList<>();
+	private List<Weapons> playerWeapons = new ArrayList<>();
+	private List<Armor> playerArmor = new ArrayList<>();
+	private List<Items> playerItems = new ArrayList<>();
+	private List<Weapons> equippedWeapons = new ArrayList<>();
+	private List<Armor> equippedArmor = new ArrayList<>();
+	private List<Items> equippedItems = new ArrayList<>();
+	private int[] bonusAP = {0, 0, 0, 0, 0};
+	private int[] bonusHP = {0, 0, 0, 0, 0};
+	private int[] bonusDP = {0, 0, 0, 0, 0};
 	public static AssetManager assetManager = new AssetManager();
 	private static boolean newLoad = true;
 	
-	public static Storage getInstance() {
+	public static synchronized Storage getInstance() {
         if (instance == null) {
             instance = new Storage();
         }
@@ -207,4 +210,28 @@ public class Storage {
         labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyle.font = font;        
     }
+
+	public int[] getBonusHP() {
+		return bonusHP;
+	}
+
+	public void setBonusHP(int index, int x) {
+		this.bonusHP[index] = x;
+	}
+
+	public int[] getBonusAP() {
+		return bonusAP;
+	}
+
+	public void setBonusAP(int index, int x) {
+		this.bonusAP[index] = x;
+	}
+	
+	public int[] getBonusDP() {
+		return bonusDP;
+	}
+
+	public void setBonusDP(int index, int x) {
+		this.bonusDP[index] = x;
+	}
 }

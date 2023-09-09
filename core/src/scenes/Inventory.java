@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -33,6 +35,7 @@ public class Inventory implements Screen {
 	private GameScreen gameScreen;
 	private Storage storage;
 	private TextButton backBtn;
+	private Label gearName;
 	Table characterTable = new Table();
 	Table inventoryTable = new Table();	
 	Table itemTable = new Table();
@@ -66,16 +69,19 @@ public class Inventory implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		storage = Storage.getInstance();
 		skin = storage.skin;
-		storage.createFont();
+		storage.createFont();	
 		
-		Player.loseDR(helmetDP + chestDP + bootsDP + shieldDP);
-		Player.loseMaxHP(bonusHP);
-		Player.loseWeaponDmg(weaponAP + bonusAP);
-		
+		removeBonusStats();
 		createComponents();	
 		createInventoryGrid();
 		createCharacterGrid();
 		createItemGrid();
+	}
+	
+	private void removeBonusStats() {		
+		Player.loseDR(helmetDP + chestDP + bootsDP + shieldDP);
+		Player.loseMaxHP(bonusHP);
+		Player.loseWeaponDmg(weaponAP + bonusAP);
 	}
 	
 	private void createInventoryGrid() {    
@@ -112,7 +118,7 @@ public class Inventory implements Screen {
 	                Items item = inventoryItems.get(itemIndex);
 	                slotTexture = setSlotImage(item.getItemName(), "Item");
 	                itemIndex++;
-	                itemName = item.getItemName();
+	                itemName = item.getItemName();	                
 	            }
 	            else {
 	                slotTexture = setSlotImage("", "");
@@ -129,13 +135,28 @@ public class Inventory implements Screen {
 	            else {
 	                inventorySlotImage.setName(itemName);                    
 	            }                    
-
+	            
 	            final String item = itemName;
 
 	            inventorySlotImage.addListener(new ClickListener() {
 	                @Override
 	                public void clicked(InputEvent event, float x, float y) {
 	                    handleInventoryClick(inventorySlotImage, item);
+	                }
+	            });
+	            
+	            inventorySlotImage.addListener(new InputListener() {
+	                @Override
+	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+	                    gearName.setText(item);
+	                    gearName.setAlignment(Align.center);
+	                	gearName.setVisible(true);	                  	                    
+	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
+	                }
+
+	                @Override
+	                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+	                    gearName.setVisible(false);
 	                }
 	            });
 	        }
@@ -236,6 +257,21 @@ public class Inventory implements Screen {
                 	handleCharacterSlotClick(characterSlotImage, item);
                 }
             });
+	    	characterSlotImage.addListener(new InputListener() {
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    gearName.setText(item);
+                    gearName.setAlignment(Align.center);
+                	gearName.setVisible(true);	                  	                    
+                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    gearName.setVisible(false);
+                }
+            });
+	    	
 	    	characterTable.row();
         }
 		characterTable.setPosition(vp.getWorldWidth() / 5f, vp.getWorldHeight() / 1.55f, Align.center);
@@ -285,6 +321,20 @@ public class Inventory implements Screen {
 	                public void clicked(InputEvent event, float x, float y) {
 	                    handleEquippedItemsClick(inventorySlotImage, item);
 	                }					
+	            });
+	            inventorySlotImage.addListener(new InputListener() {
+	                @Override
+	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+	                    gearName.setText(item);
+	                    gearName.setAlignment(Align.center);
+	                	gearName.setVisible(true);	                  	                    
+	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
+	                }
+
+	                @Override
+	                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+	                    gearName.setVisible(false);
+	                }
 	            });
 	        }
 	        itemTable.row();
@@ -359,6 +409,8 @@ public class Inventory implements Screen {
 		Actor tableItem = characterTable.getChildren().get(slot);
 		String gearPiece = tableItem.getName();
 		
+		weaponAP = 0;
+		
 		if(gearSlot == "Helmet") {
 			switch(gearPiece) {
 			case "Iron Helmet":
@@ -387,11 +439,13 @@ public class Inventory implements Screen {
 			switch(gearPiece) {
 			case "Healthy Iron Greataxe":
 				storage.inventoryWeapons(storage.healthyIronGA, "Add");
-				storage.equippedWeapons(storage.healthyIronGA, "Remove");				
+				storage.equippedWeapons(storage.healthyIronGA, "Remove");	
+				storage.setBonusHP(3, 0);
 				break;
 			case "Strong Iron Greataxe":
 				storage.inventoryWeapons(storage.strongIronGA, "Add");
 				storage.equippedWeapons(storage.strongIronGA, "Remove");
+				storage.setBonusAP(3, 0);
 				break;
 			case "Iron Axe":
 				storage.inventoryWeapons(storage.ironAxe, "Add");
@@ -401,9 +455,8 @@ public class Inventory implements Screen {
 			if(slot == 4) {
 				System.out.println("Removed offhand");
 				storage.inventoryWeapons(storage.woodenShield, "Add");
-				storage.equippedWeapons(storage.woodenShield, "Remove");
-				
-			}			
+				storage.equippedWeapons(storage.woodenShield, "Remove");			
+			}	
 		}
 		else if(gearSlot == "OneHanded") {
 			switch(gearPiece) {
@@ -414,10 +467,12 @@ public class Inventory implements Screen {
 			case "Healthy Iron Greataxe":
 				storage.inventoryWeapons(storage.healthyIronGA, "Add");
 				storage.equippedWeapons(storage.healthyIronGA, "Remove");
+				storage.setBonusHP(3, 0);
 				break;
 			case "Strong Iron Greataxe":
 				storage.inventoryWeapons(storage.strongIronGA, "Add");
 				storage.equippedWeapons(storage.strongIronGA, "Remove");
+				storage.setBonusAP(3, 0);
 				break;
 			}
 		}
@@ -429,7 +484,7 @@ public class Inventory implements Screen {
 			}
 		}
 	}
-	
+
 	private void setArmor(String armor, String gearSlot) {
 		Actor helmet = characterTable.getChildren().get(0);
 		Actor chest = characterTable.getChildren().get(1);
@@ -490,13 +545,13 @@ public class Inventory implements Screen {
 			switch(weapon) {
 			case "Healthy Iron Greataxe":
 				storage.inventoryWeapons(storage.healthyIronGA, "Remove");
-				storage.equippedWeapons(storage.healthyIronGA, "Add");
-				bonusHP = storage.healthyIronGA.getBonusStat();				
+				storage.equippedWeapons(storage.healthyIronGA, "Add");				
+				storage.setBonusHP(3, storage.healthyIronGA.getBonusStat());
 				break;
 			case "Strong Iron Greataxe":
 				storage.inventoryWeapons(storage.strongIronGA, "Remove");
 				storage.equippedWeapons(storage.strongIronGA, "Add");	
-				bonusAP = storage.strongIronGA.getBonusStat();
+				storage.setBonusAP(3, storage.strongIronGA.getBonusStat());
 				break;
 			}
 		}		
@@ -547,13 +602,17 @@ public class Inventory implements Screen {
 		else if(slot.getName().endsWith("Greataxe")) {
 			changeEquippedSlot(3, "TwoHanded");
 			slot.setName("Empty");
-			weaponAP = bonusAP = bonusHP = 0;
+			weaponAP = 0;
+			storage.setBonusAP(3, 0);
+			storage.setBonusHP(3, 0);
 			Player.weaponState = 0;
 		}
 		else if(slot.getName().endsWith("Axe")) {
 			changeEquippedSlot(3, "OneHanded");
 			slot.setName("Empty");
-			weaponAP = bonusAP = bonusHP = 0;
+			weaponAP = 0;
+			storage.setBonusAP(3, 0);
+			storage.setBonusHP(3, 0);
 			Player.weaponState = 0;
 		}
 		else if(slot.getName().endsWith("Shield")) {
@@ -658,6 +717,12 @@ public class Inventory implements Screen {
 		backBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {  
+    			bonusAP = bonusHP = 0;
+    			for(int ap : storage.getBonusAP())
+    				bonusAP += ap;
+    			for(int hp : storage.getBonusHP())
+    				bonusHP += hp;
+    			
     			Player.gainDR(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
     			Player.gainMaxHP(bonusHP);
     			Player.gainWeaponDmg(weaponAP + bonusAP);
@@ -666,6 +731,10 @@ public class Inventory implements Screen {
 		backBtn.setSize(150, 100);
 		backBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.25f);
 		stage.addActor(backBtn);	
+		
+		gearName = new Label("", storage.labelStyle);
+		gearName.setVisible(false);
+		stage.addActor(gearName);
 	}
 
 	@Override
