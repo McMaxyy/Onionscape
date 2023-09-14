@@ -103,6 +103,7 @@ public class Home implements Screen {
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryWeapons(storage.healthyIronGA, "Add");
     			storage.inventoryWeapons(storage.strongIronGA, "Add");
+    			storage.inventoryWeapons(storage.defensiveIronGA, "Add");
     			storage.inventoryWeapons(storage.ironAxe, "Add");
     			storage.inventoryWeapons(storage.woodenShield, "Add");
     	    }});
@@ -115,9 +116,15 @@ public class Home implements Screen {
 		armorBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			storage.inventoryArmor(storage.ironHelmet, "Add");
-    			storage.inventoryArmor(storage.ironChest, "Add");
-    			storage.inventoryArmor(storage.ironBoots, "Add");
+    			storage.inventoryArmor(storage.healthyIronHelmet, "Add");
+    			storage.inventoryArmor(storage.strongIronHelmet, "Add");
+    			storage.inventoryArmor(storage.defensiveIronHelmet, "Add");
+    			storage.inventoryArmor(storage.healthyIronChest, "Add");
+    			storage.inventoryArmor(storage.strongIronChest, "Add");
+    			storage.inventoryArmor(storage.defensiveIronChest, "Add");
+    			storage.inventoryArmor(storage.healthyIronBoots, "Add");
+    			storage.inventoryArmor(storage.strongIronBoots, "Add");
+    			storage.inventoryArmor(storage.defensiveIronBoots, "Add");
     	    }});
 		armorBtn.setSize(150, 100);
 		armorBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);

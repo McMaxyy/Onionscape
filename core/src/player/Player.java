@@ -86,6 +86,14 @@ public class Player {
 		weaponDmg -= x;
 	}
 	
+	public static void gainBonusStr(int x) {
+		strength += x;
+	}
+	
+	public static void loseBonusStr(int x) {
+		strength -= x;
+	}
+	
 	public static void skillPointUse() {
 		skillPoints--;
 	}

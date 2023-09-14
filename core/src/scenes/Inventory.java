@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+import com.onionscape.game.SaveData;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,10 +80,21 @@ public class Inventory implements Screen {
 		createItemGrid();
 	}
 	
-	private void removeBonusStats() {		
-		Player.loseDR(helmetDP + chestDP + bootsDP + shieldDP);
+	private void removeBonusStats() {
+		if(SaveData.loaded) {
+			bonusAP = bonusHP = bonusDP = 0;
+			for(int ap : storage.getBonusAP())
+				bonusAP += ap;
+			for(int hp : storage.getBonusHP())
+				bonusHP += hp;
+			for(int dp : storage.getBonusDP())
+				bonusDP += dp;
+		}
+		
+		Player.loseDR(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
 		Player.loseMaxHP(bonusHP);
-		Player.loseWeaponDmg(weaponAP + bonusAP);
+		Player.loseWeaponDmg(weaponAP);
+		Player.loseBonusStr(bonusAP);
 	}
 	
 	private void createInventoryGrid() {    
@@ -344,11 +357,43 @@ public class Inventory implements Screen {
 	    stage.addActor(itemTable);
 	}
 	
+	private void setArmorBonus(String bonus, int slot, Armor armor) {
+		switch(bonus) {
+		case "Healthy":
+			storage.setBonusHP(slot, armor.getBonusStat());
+			break;
+		case "Strong":
+			storage.setBonusAP(slot, armor.getBonusStat());
+			break;
+		case "Defensive":
+			storage.setBonusDP(slot, armor.getBonusStat());
+			break;
+		}
+	}
+	
+	private void setWeaponBonus(String bonus, int slot, Weapons weapon) {
+		switch(bonus) {
+		case "Healthy":
+			storage.setBonusHP(slot, weapon.getBonusStat());
+			break;
+		case "Strong":
+			storage.setBonusAP(slot, weapon.getBonusStat());
+			break;
+		case "Defensive":
+			storage.setBonusDP(slot, weapon.getBonusStat());
+			break;
+		}
+	}
+	
 	private Texture setSlotImage(String itemName, String gearType) {
+		String gearSlot = "";
+		String[] words = itemName.split(" ");
+		if(!itemName.equals("") && !gearType.equals("Item"))
+			gearSlot = words[words.length - 2] + " " + words[words.length - 1];
+		
 		if(gearType == "Weapon") {
-			switch(itemName) {
-			case "Healthy Iron Greataxe":
-			case "Strong Iron Greataxe":
+			switch(gearSlot) {
+			case "Iron Greataxe":
 				return ironGreataxeTexture;
 			case "Iron Axe":
 				return ironAxeTexture;
@@ -361,7 +406,7 @@ public class Inventory implements Screen {
 			}
 		}
 		else if(gearType == "Armor") {
-			switch(itemName) {
+			switch(gearSlot) {
 			case "Iron Helmet":
 				return ironHelmetTexture;
 			case "Iron Chest":
@@ -407,35 +452,70 @@ public class Inventory implements Screen {
 	
 	private void changeEquippedSlot(int slot, String gearSlot) {
 		Actor tableItem = characterTable.getChildren().get(slot);
-		String gearPiece = tableItem.getName();
-		
-		weaponAP = 0;
+		String gearPiece = tableItem.getName();				
 		
 		if(gearSlot == "Helmet") {
+			helmetDP = 0;
 			switch(gearPiece) {
-			case "Iron Helmet":
-				storage.inventoryArmor(storage.ironHelmet, "Add");
-				storage.equippedArmor(storage.ironHelmet, "Remove");
+			case "Healthy Iron Helmet":
+				storage.inventoryArmor(storage.healthyIronHelmet, "Add");
+				storage.equippedArmor(storage.healthyIronHelmet, "Remove");	
+				storage.setBonusHP(0, 0);
 				break;
-			}
+			case "Strong Iron Helmet":
+				storage.inventoryArmor(storage.strongIronHelmet, "Add");
+				storage.equippedArmor(storage.strongIronHelmet, "Remove");	
+				storage.setBonusAP(0, 0);
+				break;
+			case "Defensive Iron Helmet":
+				storage.inventoryArmor(storage.defensiveIronHelmet, "Add");
+				storage.equippedArmor(storage.defensiveIronHelmet, "Remove");	
+				storage.setBonusDP(0, 0);
+				break;
+			}		
 		}
 		else if(gearSlot == "Chest") {
+			chestDP = 0;
 			switch(gearPiece) {
-			case "Iron Chest":
-				storage.inventoryArmor(storage.ironChest, "Add");
-				storage.equippedArmor(storage.ironChest, "Remove");
+			case "Healthy Iron Chest":
+				storage.inventoryArmor(storage.healthyIronChest, "Add");
+				storage.equippedArmor(storage.healthyIronChest, "Remove");	
+				storage.setBonusHP(1, 0);
+				break;
+			case "Strong Iron Chest":
+				storage.inventoryArmor(storage.strongIronChest, "Add");
+				storage.equippedArmor(storage.strongIronChest, "Remove");	
+				storage.setBonusAP(1, 0);
+				break;
+			case "Defensive Iron Chest":
+				storage.inventoryArmor(storage.defensiveIronChest, "Add");
+				storage.equippedArmor(storage.defensiveIronChest, "Remove");	
+				storage.setBonusDP(1, 0);
 				break;
 			}
 		}
 		else if(gearSlot == "Boots") {
+			bootsDP = 0;
 			switch(gearPiece) {
-			case "Iron Boots":
-				storage.inventoryArmor(storage.ironBoots, "Add");
-				storage.equippedArmor(storage.ironBoots, "Remove");
+			case "Healthy Iron Boots":
+				storage.inventoryArmor(storage.healthyIronBoots, "Add");
+				storage.equippedArmor(storage.healthyIronBoots, "Remove");	
+				storage.setBonusHP(2, 0);
+				break;
+			case "Strong Iron Boots":
+				storage.inventoryArmor(storage.strongIronBoots, "Add");
+				storage.equippedArmor(storage.strongIronBoots, "Remove");	
+				storage.setBonusAP(2, 0);
+				break;
+			case "Defensive Iron Boots":
+				storage.inventoryArmor(storage.defensiveIronBoots, "Add");
+				storage.equippedArmor(storage.defensiveIronBoots, "Remove");	
+				storage.setBonusDP(2, 0);
 				break;
 			}
 		}
-		else if(gearSlot == "TwoHanded") {
+		else if(gearSlot == "Weapon") {
+			weaponAP = 0;
 			switch(gearPiece) {
 			case "Healthy Iron Greataxe":
 				storage.inventoryWeapons(storage.healthyIronGA, "Add");
@@ -447,34 +527,20 @@ public class Inventory implements Screen {
 				storage.equippedWeapons(storage.strongIronGA, "Remove");
 				storage.setBonusAP(3, 0);
 				break;
+			case "Defensive Iron Greataxe":
+				storage.inventoryWeapons(storage.defensiveIronGA, "Add");
+				storage.equippedWeapons(storage.defensiveIronGA, "Remove");
+				storage.setBonusDP(3, 0);
+				break;
 			case "Iron Axe":
 				storage.inventoryWeapons(storage.ironAxe, "Add");
 				storage.equippedWeapons(storage.ironAxe, "Remove");
 				break;
 			}		
 			if(slot == 4) {
-				System.out.println("Removed offhand");
 				storage.inventoryWeapons(storage.woodenShield, "Add");
 				storage.equippedWeapons(storage.woodenShield, "Remove");			
 			}	
-		}
-		else if(gearSlot == "OneHanded") {
-			switch(gearPiece) {
-			case "Iron Axe":
-				storage.inventoryWeapons(storage.ironAxe, "Add");
-				storage.equippedWeapons(storage.ironAxe, "Remove");
-				break;
-			case "Healthy Iron Greataxe":
-				storage.inventoryWeapons(storage.healthyIronGA, "Add");
-				storage.equippedWeapons(storage.healthyIronGA, "Remove");
-				storage.setBonusHP(3, 0);
-				break;
-			case "Strong Iron Greataxe":
-				storage.inventoryWeapons(storage.strongIronGA, "Add");
-				storage.equippedWeapons(storage.strongIronGA, "Remove");
-				storage.setBonusAP(3, 0);
-				break;
-			}
 		}
 		else if(gearSlot == "OffHand") {
 			switch(gearPiece) {
@@ -495,10 +561,20 @@ public class Inventory implements Screen {
 		        changeEquippedSlot(0, "Helmet");
 			
 			switch(armor) {
-			case "Iron Helmet":
-				storage.inventoryArmor(storage.ironHelmet, "Remove");
-				storage.equippedArmor(storage.ironHelmet, "Add");
-				helmetDP = storage.ironHelmet.getDefense();
+			case "Healthy Iron Helmet":
+				storage.inventoryArmor(storage.healthyIronHelmet, "Remove");
+				storage.equippedArmor(storage.healthyIronHelmet, "Add");	
+				setArmorBonus("Healthy", 0, storage.healthyIronHelmet);
+				break;
+			case "Strong Iron Helmet":
+				storage.inventoryArmor(storage.strongIronHelmet, "Remove");
+				storage.equippedArmor(storage.strongIronHelmet, "Add");	
+				setArmorBonus("Strong", 0, storage.strongIronHelmet);
+				break;
+			case "Defensive Iron Helmet":
+				storage.inventoryArmor(storage.defensiveIronHelmet, "Remove");
+				storage.equippedArmor(storage.defensiveIronHelmet, "Add");	
+				setArmorBonus("Defensive", 0, storage.defensiveIronHelmet);
 				break;
 			}
 		}
@@ -508,10 +584,20 @@ public class Inventory implements Screen {
 		        changeEquippedSlot(1, "Chest");
 			
 			switch(armor) {
-			case "Iron Chest":
-				storage.inventoryArmor(storage.ironChest, "Remove");
-				storage.equippedArmor(storage.ironChest, "Add");
-				chestDP = storage.ironChest.getDefense();				
+			case "Healthy Iron Chest":
+				storage.inventoryArmor(storage.healthyIronChest, "Remove");
+				storage.equippedArmor(storage.healthyIronChest, "Add");	
+				setArmorBonus("Healthy", 1, storage.healthyIronChest);
+				break;
+			case "Strong Iron Chest":
+				storage.inventoryArmor(storage.strongIronChest, "Remove");
+				storage.equippedArmor(storage.strongIronChest, "Add");	
+				setArmorBonus("Strong", 1, storage.strongIronChest);
+				break;
+			case "Defensive Iron Chest":
+				storage.inventoryArmor(storage.defensiveIronChest, "Remove");
+				storage.equippedArmor(storage.defensiveIronChest, "Add");	
+				setArmorBonus("Defensive", 1, storage.defensiveIronChest);
 				break;
 			}			
 		}
@@ -521,10 +607,20 @@ public class Inventory implements Screen {
 		        changeEquippedSlot(2, "Boots");
 			
 			switch(armor) {
-			case "Iron Boots":
-				storage.inventoryArmor(storage.ironBoots, "Remove");
-				storage.equippedArmor(storage.ironBoots, "Add");
-				bootsDP = storage.ironBoots.getDefense();				
+			case "Healthy Iron Boots":
+				storage.inventoryArmor(storage.healthyIronBoots, "Remove");
+				storage.equippedArmor(storage.healthyIronBoots, "Add");	
+				setArmorBonus("Healthy", 2, storage.healthyIronBoots);
+				break;
+			case "Strong Iron Boots":
+				storage.inventoryArmor(storage.strongIronBoots, "Remove");
+				storage.equippedArmor(storage.strongIronBoots, "Add");	
+				setArmorBonus("Strong", 2, storage.strongIronBoots);
+				break;
+			case "Defensive Iron Boots":
+				storage.inventoryArmor(storage.defensiveIronBoots, "Remove");
+				storage.equippedArmor(storage.defensiveIronBoots, "Add");	
+				setArmorBonus("Defensive", 2, storage.defensiveIronBoots);
 				break;
 			}
 		}
@@ -535,29 +631,32 @@ public class Inventory implements Screen {
 		Actor offHand = characterTable.getChildren().get(4);
 
 		if(handed == "TwoHanded") {				
-			if (mainHand.getName() != "Empty") {
-		        changeEquippedSlot(3, "TwoHanded");
-		    }
-		    if (offHand.getName() != "Empty") {
-		        changeEquippedSlot(4, "TwoHanded");
-		    }
+			if (mainHand.getName() != "Empty")
+		        changeEquippedSlot(3, "Weapon");
+		    if (offHand.getName() != "Empty")
+		        changeEquippedSlot(4, "Weapon");
 			
 			switch(weapon) {
 			case "Healthy Iron Greataxe":
 				storage.inventoryWeapons(storage.healthyIronGA, "Remove");
 				storage.equippedWeapons(storage.healthyIronGA, "Add");				
-				storage.setBonusHP(3, storage.healthyIronGA.getBonusStat());
+				setWeaponBonus("Healthy", 3, storage.healthyIronGA);
 				break;
 			case "Strong Iron Greataxe":
 				storage.inventoryWeapons(storage.strongIronGA, "Remove");
 				storage.equippedWeapons(storage.strongIronGA, "Add");	
-				storage.setBonusAP(3, storage.strongIronGA.getBonusStat());
+				setWeaponBonus("Strong", 3, storage.strongIronGA);
+				break;
+			case "Defensive Iron Greataxe":
+				storage.inventoryWeapons(storage.defensiveIronGA, "Remove");
+				storage.equippedWeapons(storage.defensiveIronGA, "Add");
+				setWeaponBonus("Defensive", 3, storage.defensiveIronGA);
 				break;
 			}
 		}		
 		else if(handed == "OneHanded") {
 			if(mainHand.getName() != "Empty")
-				changeEquippedSlot(3, "OneHanded");
+				changeEquippedSlot(3, "Weapon");
 
 			switch(weapon) {
 			case "Iron Axe":
@@ -568,9 +667,9 @@ public class Inventory implements Screen {
 		}
 		else if(handed == "OffHand") {
 			if(mainHand.getName() != "Empty" && mainHand.getName().endsWith("Greataxe"))
-				changeEquippedSlot(3, "OneHanded");
+				changeEquippedSlot(3, "Weapon");
 			if (offHand.getName() != "Empty")
-		        changeEquippedSlot(4, "TwoHanded");
+		        changeEquippedSlot(4, "Weapon");
 
 			switch(weapon) {
 			case "Wooden Shield":
@@ -587,37 +686,51 @@ public class Inventory implements Screen {
 		else if(slot.getName().endsWith("Helmet")) {
 			changeEquippedSlot(0, "Helmet");
 			slot.setName("Empty");
+			storage.setBonusAP(0, 0);
+			storage.setBonusHP(0, 0);
+			storage.setBonusDP(0, 0);
 			helmetDP = 0;
 		}
 		else if(slot.getName().endsWith("Chest")) {
 			changeEquippedSlot(1, "Chest");
-			slot.setName("Empty");;
+			slot.setName("Empty");
+			storage.setBonusAP(1, 0);
+			storage.setBonusHP(1, 0);
+			storage.setBonusDP(1, 0);
 			chestDP = 0;
 		}
 		else if(slot.getName().endsWith("Boots")) {
 			changeEquippedSlot(2, "Boots");
 			slot.setName("Empty");
+			storage.setBonusAP(2, 0);
+			storage.setBonusHP(2, 0);
+			storage.setBonusDP(2, 0);
 			bootsDP = 0;
 		}
 		else if(slot.getName().endsWith("Greataxe")) {
-			changeEquippedSlot(3, "TwoHanded");
+			changeEquippedSlot(3, "Weapon");
 			slot.setName("Empty");
 			weaponAP = 0;
 			storage.setBonusAP(3, 0);
 			storage.setBonusHP(3, 0);
+			storage.setBonusDP(3, 0);
 			Player.weaponState = 0;
 		}
 		else if(slot.getName().endsWith("Axe")) {
-			changeEquippedSlot(3, "OneHanded");
+			changeEquippedSlot(3, "Weapon");
 			slot.setName("Empty");
-			weaponAP = 0;
 			storage.setBonusAP(3, 0);
 			storage.setBonusHP(3, 0);
+			storage.setBonusDP(3, 0);
+			weaponAP = 0;
 			Player.weaponState = 0;
 		}
 		else if(slot.getName().endsWith("Shield")) {
 			changeEquippedSlot(4, "OffHand");
 			slot.setName("Empty");
+			storage.setBonusAP(4, 0);
+			storage.setBonusHP(4, 0);
+			storage.setBonusDP(4, 0);
 			shieldDP = 0;
 		}
 		
@@ -632,12 +745,18 @@ public class Inventory implements Screen {
 		
 	    if(slot.getName() == "Empty")
 	    	System.out.println("Empty slot clicked!");
-	    else if(itemName.endsWith("Helmet"))
+	    else if(itemName.endsWith("Helmet")) {
 	    	setArmor(itemName, "Helmet");
-	    else if(itemName.endsWith("Chest"))
+	    	addArmorDefenses(itemName);
+	    }
+	    else if(itemName.endsWith("Chest")) {
 	    	setArmor(itemName, "Chest");
-	    else if(itemName.endsWith("Boots"))
+	    	addArmorDefenses(itemName);
+	    }
+	    else if(itemName.endsWith("Boots")) {
 	    	setArmor(itemName, "Boots");
+	    	addArmorDefenses(itemName);
+	    }
 	    else if(itemName.endsWith("xe") || itemName.endsWith("Shield")){
 	    	setWeapon(itemName, checkGearSlot(itemName));
 	    	addWeaponDamage(itemName);	    		    	      
@@ -694,10 +813,31 @@ public class Inventory implements Screen {
 		}	
 	}
 	
+	private void addArmorDefenses(String armor) {
+		String gearSlot = "";
+		String[] words = armor.split(" ");
+		gearSlot = words[words.length - 2] + " " + words[words.length - 1];
+		
+		switch(gearSlot) {
+		case "Iron Helmet":
+			helmetDP = storage.healthyIronHelmet.getDefense();
+			break;
+		case "Iron Chest":
+			chestDP = storage.healthyIronChest.getDefense();
+			break;
+		case "Iron Boots":
+			bootsDP = storage.healthyIronBoots.getDefense();
+			break;
+		}
+	}
+	
 	private void addWeaponDamage(String weapon) {
-		switch(weapon) {
-		case "Healthy Iron Greataxe":
-		case "Strong Iron Greataxe":
+		String gearSlot = "";
+		String[] words = weapon.split(" ");
+		gearSlot = words[words.length - 2] + " " + words[words.length - 1];
+		
+		switch(gearSlot) {
+		case "Iron Greataxe":
 			weaponAP = storage.healthyIronGA.getWeaponDmg();
 			Player.weaponState = 2;
 			break;
@@ -717,15 +857,18 @@ public class Inventory implements Screen {
 		backBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {  
-    			bonusAP = bonusHP = 0;
+    			bonusAP = bonusHP = bonusDP = 0;
     			for(int ap : storage.getBonusAP())
     				bonusAP += ap;
     			for(int hp : storage.getBonusHP())
     				bonusHP += hp;
+    			for(int dp : storage.getBonusDP())
+    				bonusDP += dp;
     			
     			Player.gainDR(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
     			Player.gainMaxHP(bonusHP);
-    			Player.gainWeaponDmg(weaponAP + bonusAP);
+    			Player.gainWeaponDmg(weaponAP);
+    			Player.gainBonusStr(bonusAP);
     			gameScreen.setCurrentState(GameScreen.HOME);
     	    }});
 		backBtn.setSize(150, 100);

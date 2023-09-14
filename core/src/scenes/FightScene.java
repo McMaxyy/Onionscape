@@ -496,6 +496,10 @@ public class FightScene implements Screen{
     			if(eHardenActive)
     				attackType = "Attack";
     			break;
+    		case "Stun":
+    			if(playerStunned)
+    				attackType = "Attack";
+    			break;
     		}
     	}
     	

@@ -87,13 +87,20 @@ public class Storage {
 	// Load weapons
 	public Weapons healthyIronGA = new HealthyIronGreatAxe();
 	public Weapons strongIronGA = new StrongIronGreatAxe();
+	public Weapons defensiveIronGA = new DefensiveIronGreatAxe();
 	public Weapons ironAxe = new IronAxe();
 	public Weapons woodenShield = new WoodenShield();
 	
 	// Load armor
-	public Armor ironHelmet = new IronHelmet();
-	public Armor ironChest = new IronChest();
-	public Armor ironBoots = new IronBoots();
+	public Armor healthyIronHelmet = new HealthyIronHelmet();
+	public Armor strongIronHelmet = new StrongIronHelmet();
+	public Armor defensiveIronHelmet = new DefensiveIronHelmet();
+	public Armor healthyIronChest = new HealthyIronChest();
+	public Armor strongIronChest = new StrongIronChest();
+	public Armor defensiveIronChest = new DefensiveIronChest();
+	public Armor healthyIronBoots = new HealthyIronBoots();
+	public Armor strongIronBoots = new StrongIronBoots();
+	public Armor defensiveIronBoots = new DefensiveIronBoots();
 	
 	// Load enemies
 	public Enemy wolf = new Wolf();

@@ -70,6 +70,17 @@ class StrongIronGreatAxe extends Weapons{
 	}
 }
 
+class DefensiveIronGreatAxe extends Weapons{
+	public DefensiveIronGreatAxe() {
+		setWeaponName("Defensive Iron Greataxe");
+		setWeaponDmg(4);
+		setHanded("TwoHanded");
+		setAmount(0);
+		setBonusStat(2);
+		setID(1);
+	}
+}
+
 class IronAxe extends Weapons{
 	public IronAxe() {
 		setWeaponName("Iron Axe");

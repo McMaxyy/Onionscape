@@ -38,6 +38,9 @@ public class SaveData {
 	public List<Weapons> equippedWeapons = new ArrayList<>();
 	public List<Armor> equippedArmor = new ArrayList<>();
 	public List<Items> equippedItems = new ArrayList<>();
+	public int[] bonusHP = {0, 0, 0, 0, 0};
+	public int[] bonusAP = {0, 0, 0, 0, 0};
+	public int[] bonusDP = {0, 0, 0, 0, 0};
 	
 	public int twoHMastery;
 	public int oneHMastery;
@@ -64,6 +67,8 @@ public class SaveData {
 	public int weaponDmg2;
 	public int strength2;
 	public int maxHP2;
+	
+	public static boolean loaded = true;
 	
 	public SaveData() {
 		storage = Storage.getInstance();
@@ -95,6 +100,9 @@ public class SaveData {
 		saveData.equippedArmor = storage.getEquippedArmor();
 		saveData.equippedWeapons = storage.getEquippedWeapons();
 		saveData.equippedItems = storage.getEquippedItems();
+		saveData.bonusAP = storage.getBonusAP();
+		saveData.bonusHP = storage.getBonusHP();
+		saveData.bonusDP = storage.getBonusDP();
 		
 		saveData.twoHMastery = BerserkerSkillTree.twoHMastery;
 		saveData.oneHMastery = BerserkerSkillTree.oneHMastery;
@@ -128,6 +136,7 @@ public class SaveData {
 	}
 	
 	public void loadGame() {
+		
 		SaveData loadedData = null;
 		FileHandle file = Gdx.files.local("saveData.json");
 		if (file.exists()) {
@@ -158,6 +167,9 @@ public class SaveData {
 		    loadArmor(loadedData.equippedArmor, "Character");
 		    loadWeapons(loadedData.equippedWeapons, "Character");	
 		    loadItems(loadedData.equippedItems, "Character");
+		    loadBonusStats(loadedData.bonusAP, "AP");
+		    loadBonusStats(loadedData.bonusHP, "HP");
+		    loadBonusStats(loadedData.bonusDP, "DP");
 		    
 		    BerserkerSkillTree.twoHMastery = loadedData.twoHMastery;
 		    BerserkerSkillTree.oneHMastery = loadedData.oneHMastery;
@@ -187,6 +199,23 @@ public class SaveData {
 		}
 	}
 	
+	private void loadBonusStats(int[] bonus, String stat) {
+		switch(stat) {
+		case "AP":
+			for(int i = 0; i < 5; i++)
+				storage.setBonusAP(i, bonus[i]);
+			break;
+		case "HP":
+			for(int i = 0; i < 5; i++)
+				storage.setBonusHP(i, bonus[i]);	
+			break;
+		case "DP":
+			for(int i = 0; i < 5; i++)
+				storage.setBonusDP(i, bonus[i]);
+			break;
+		}
+	}
+	
 	private void loadArmor(List<Armor> playerArmor, String inventory) {
 		if(inventory.equals("Bag"))
 			storage.inventoryArmor(null, "Clear");
@@ -195,24 +224,60 @@ public class SaveData {
 		
 		for(Armor armor : playerArmor) {
 	    	switch(armor.getArmorName()) {
-	    	case "Iron Helmet":
+	    	case "Healthy Iron Helmet":
 	    		if(inventory.equals("Bag"))
-	    			storage.inventoryArmor(storage.ironHelmet, "Add");	
+	    			storage.inventoryArmor(storage.healthyIronHelmet, "Add");	
 	    		else
-	    			storage.equippedArmor(storage.ironHelmet, "Add");
+	    			storage.equippedArmor(storage.healthyIronHelmet, "Add");
     			break;
-	    	case "Iron Chest":
+	    	case "Strong Iron Helmet":
 	    		if(inventory.equals("Bag"))
-	    			storage.inventoryArmor(storage.ironChest, "Add");
+	    			storage.inventoryArmor(storage.strongIronHelmet, "Add");	
 	    		else
-	    			storage.equippedArmor(storage.ironChest, "Add");
-	    		break;
-	    	case "Iron Boots":
+	    			storage.equippedArmor(storage.strongIronHelmet, "Add");
+    			break;
+	    	case "Defensive Iron Helmet":
 	    		if(inventory.equals("Bag"))
-	    			storage.inventoryArmor(storage.ironBoots, "Add");
+	    			storage.inventoryArmor(storage.defensiveIronHelmet, "Add");	
 	    		else
-	    			storage.equippedArmor(storage.ironBoots, "Add");
-	    		break;
+	    			storage.equippedArmor(storage.defensiveIronHelmet, "Add");
+    			break;
+	    	case "Healthy Iron Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.healthyIronChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.healthyIronChest, "Add");
+    			break;
+	    	case "Strong Iron Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.strongIronChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.strongIronChest, "Add");
+    			break;
+	    	case "Defensive Iron Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.defensiveIronChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.defensiveIronChest, "Add");
+    			break;
+	    	case "Healthy Iron Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.healthyIronBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.healthyIronBoots, "Add");
+    			break;
+	    	case "Strong Iron Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.strongIronBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.strongIronBoots, "Add");
+    			break;
+	    	case "Defensive Iron Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.defensiveIronBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.defensiveIronBoots, "Add");
+    			break;
 	    	}
 	    }
 	}
@@ -225,11 +290,23 @@ public class SaveData {
 		
 		for(Weapons weapon : playerWeapons) {
 	    	switch(weapon.getWeaponName()) {
-	    	case "Iron Greataxe":
+	    	case "Healthy Iron Greataxe":
 	    		if(inventory.equals("Bag"))
 	    			storage.inventoryWeapons(storage.healthyIronGA, "Add");	    
 	    		else
 	    			storage.equippedWeapons(storage.healthyIronGA, "Add");	
+    			break;
+	    	case "Strong Iron Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.strongIronGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.strongIronGA, "Add");	
+    			break;
+	    	case "Defensive Iron Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.defensiveIronGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.defensiveIronGA, "Add");	
     			break;
 	    	case "Iron Axe":
 	    		if(inventory.equals("Bag"))
