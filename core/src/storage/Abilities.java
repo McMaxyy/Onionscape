@@ -37,11 +37,17 @@ public abstract class Abilities {
 	}
 }
 
+class EmptyAbility extends Abilities{
+	public EmptyAbility() {
+		setID(0);
+	}
+}
+
 class Swing extends Abilities{
 	public Swing() {
 		setAbilityName("Swing");
 		setAttackPower(6);
-		setUsesLeft(10);
+		setUsesLeft(8);
 		setID(1);
 	}
 }
@@ -158,7 +164,7 @@ class Decapitate extends Abilities{
 	public Decapitate() {
 		setAbilityName("Decapitate");
 		setAttackPower(15);
-		setUsesLeft(4);
+		setUsesLeft(3);
 		setID(14);
 	}
 }

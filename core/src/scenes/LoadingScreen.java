@@ -36,7 +36,7 @@ public class LoadingScreen implements Screen {
         // Create a progress bar using the default skin
 		progressBar = new ProgressBar(0, 1, 0.01f, false, storage.skin, "default-horizontal");
         progressBar.setBounds(
-        		vp.getScreenWidth()  / 2f, vp.getScreenHeight() /2f, Gdx.graphics.getWidth() / 2, 50);
+        		vp.getScreenWidth()  / 2f, vp.getScreenHeight() / 2f, Gdx.graphics.getWidth() / 2, 50);
 
         loading = new Label("Loading..." + progressBar.getValue() * 100 + "%", storage.labelStyle);
         loading.setPosition(progressBar.getX() + progressBar.getWidth() / 3f, progressBar.getY() + 70f);

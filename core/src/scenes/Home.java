@@ -137,6 +137,7 @@ public class Home implements Screen {
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryItems(storage.healthPot, "Add");
     			storage.inventoryItems(storage.bomb, "Add");
+    			storage.inventoryItems(storage.itemSwing, "Add");
     	    }});
 		itemsBtn.setSize(150, 100);
 		itemsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 10f);

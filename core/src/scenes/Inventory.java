@@ -51,15 +51,16 @@ public class Inventory implements Screen {
 			bonusHP = 0, bonusAP = 0, bonusDP = 0;
 	
 	// Get textures from storage
-	Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
-	Texture ironGreataxeTexture = Storage.assetManager.get("weapons/IronGreataxe.png", Texture.class);
-	Texture ironAxeTexture = Storage.assetManager.get("weapons/IronAxe.png", Texture.class);
-	Texture ironHelmetTexture = Storage.assetManager.get("armor/IronHelmet.png", Texture.class);
-	Texture ironChestTexture = Storage.assetManager.get("armor/IronChest.png", Texture.class);
-	Texture ironBootsTexture = Storage.assetManager.get("armor/IronBoots.png", Texture.class);
-	Texture woodenShieldTexture = Storage.assetManager.get("weapons/WoodenShield.png", Texture.class);
-	Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
-	Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
+	public static Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
+	public static Texture ironGreataxeTexture = Storage.assetManager.get("weapons/IronGreataxe.png", Texture.class);
+	public static Texture ironAxeTexture = Storage.assetManager.get("weapons/IronAxe.png", Texture.class);
+	public static Texture ironHelmetTexture = Storage.assetManager.get("armor/IronHelmet.png", Texture.class);
+	public static Texture ironChestTexture = Storage.assetManager.get("armor/IronChest.png", Texture.class);
+	public static Texture ironBootsTexture = Storage.assetManager.get("armor/IronBoots.png", Texture.class);
+	public static Texture woodenShieldTexture = Storage.assetManager.get("weapons/WoodenShield.png", Texture.class);
+	public static Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
+	public static Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
+	public static Texture swingTexture = Storage.assetManager.get("abilities/Swing.png", Texture.class);
 
 	Image inventorySlotImg = new Image(inventorySlotTexture);
 	
@@ -353,7 +354,7 @@ public class Inventory implements Screen {
 	        itemTable.row();
 	    } 
 	    
-	    itemTable.setPosition(vp.getWorldWidth() / 2.73f, vp.getWorldHeight() / 5f, Align.center);
+	    itemTable.setPosition(vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 4.85f, Align.center);
 	    stage.addActor(itemTable);
 	}
 	
@@ -425,6 +426,8 @@ public class Inventory implements Screen {
 				return healthPotionTexture;
 			case "Bomb":
 				return bombTexture;
+			case "Swing":
+				return swingTexture;
 			default:
 				return inventorySlotTexture;
 			}
@@ -683,56 +686,59 @@ public class Inventory implements Screen {
 	private void handleCharacterSlotClick(Image slot, String itemName) {
 		if(slot.getName() == "Empty")
 	    	System.out.println("Empty character slot clicked!");
-		else if(slot.getName().endsWith("Helmet")) {
-			changeEquippedSlot(0, "Helmet");
-			slot.setName("Empty");
-			storage.setBonusAP(0, 0);
-			storage.setBonusHP(0, 0);
-			storage.setBonusDP(0, 0);
-			helmetDP = 0;
-		}
-		else if(slot.getName().endsWith("Chest")) {
-			changeEquippedSlot(1, "Chest");
-			slot.setName("Empty");
-			storage.setBonusAP(1, 0);
-			storage.setBonusHP(1, 0);
-			storage.setBonusDP(1, 0);
-			chestDP = 0;
-		}
-		else if(slot.getName().endsWith("Boots")) {
-			changeEquippedSlot(2, "Boots");
-			slot.setName("Empty");
-			storage.setBonusAP(2, 0);
-			storage.setBonusHP(2, 0);
-			storage.setBonusDP(2, 0);
-			bootsDP = 0;
-		}
-		else if(slot.getName().endsWith("Greataxe")) {
-			changeEquippedSlot(3, "Weapon");
-			slot.setName("Empty");
-			weaponAP = 0;
-			storage.setBonusAP(3, 0);
-			storage.setBonusHP(3, 0);
-			storage.setBonusDP(3, 0);
-			Player.weaponState = 0;
-		}
-		else if(slot.getName().endsWith("Axe")) {
-			changeEquippedSlot(3, "Weapon");
-			slot.setName("Empty");
-			storage.setBonusAP(3, 0);
-			storage.setBonusHP(3, 0);
-			storage.setBonusDP(3, 0);
-			weaponAP = 0;
-			Player.weaponState = 0;
-		}
-		else if(slot.getName().endsWith("Shield")) {
-			changeEquippedSlot(4, "OffHand");
-			slot.setName("Empty");
-			storage.setBonusAP(4, 0);
-			storage.setBonusHP(4, 0);
-			storage.setBonusDP(4, 0);
-			shieldDP = 0;
-		}
+		else if(inventoryWeapons.size() + inventoryArmor.size() + inventoryItems.size() < 40) {
+			
+			if(slot.getName().endsWith("Helmet")) {
+				changeEquippedSlot(0, "Helmet");
+				slot.setName("Empty");
+				storage.setBonusAP(0, 0);
+				storage.setBonusHP(0, 0);
+				storage.setBonusDP(0, 0);
+				helmetDP = 0;
+			}
+			else if(slot.getName().endsWith("Chest")) {
+				changeEquippedSlot(1, "Chest");
+				slot.setName("Empty");
+				storage.setBonusAP(1, 0);
+				storage.setBonusHP(1, 0);
+				storage.setBonusDP(1, 0);
+				chestDP = 0;
+			}
+			else if(slot.getName().endsWith("Boots")) {
+				changeEquippedSlot(2, "Boots");
+				slot.setName("Empty");
+				storage.setBonusAP(2, 0);
+				storage.setBonusHP(2, 0);
+				storage.setBonusDP(2, 0);
+				bootsDP = 0;
+			}
+			else if(slot.getName().endsWith("Greataxe")) {
+				changeEquippedSlot(3, "Weapon");
+				slot.setName("Empty");
+				weaponAP = 0;
+				storage.setBonusAP(3, 0);
+				storage.setBonusHP(3, 0);
+				storage.setBonusDP(3, 0);
+				Player.weaponState = 0;
+			}
+			else if(slot.getName().endsWith("Axe")) {
+				changeEquippedSlot(3, "Weapon");
+				slot.setName("Empty");
+				storage.setBonusAP(3, 0);
+				storage.setBonusHP(3, 0);
+				storage.setBonusDP(3, 0);
+				weaponAP = 0;
+				Player.weaponState = 0;
+			}
+			else if(slot.getName().endsWith("Shield")) {
+				changeEquippedSlot(4, "OffHand");
+				slot.setName("Empty");
+				storage.setBonusAP(4, 0);
+				storage.setBonusHP(4, 0);
+				storage.setBonusDP(4, 0);
+				shieldDP = 0;
+			}
+		}		
 		
 		inventoryTable.clear();
         createInventoryGrid();
@@ -743,7 +749,7 @@ public class Inventory implements Screen {
 	private void handleInventoryClick(Image slot, String itemName) {	
 		boolean itemMoved = false; 
 		
-	    if(slot.getName() == "Empty")
+	    if(slot.getName().equals("Empty"))
 	    	System.out.println("Empty slot clicked!");
 	    else if(itemName.endsWith("Helmet")) {
 	    	setArmor(itemName, "Helmet");
@@ -761,7 +767,7 @@ public class Inventory implements Screen {
 	    	setWeapon(itemName, checkGearSlot(itemName));
 	    	addWeaponDamage(itemName);	    		    	      
 	    }
-	    else {
+	    else if(equippedItems.size() < 14){
 	    	itemMoved = true;
 	    	switch(itemName) {
 	    	case "Health Potion":
@@ -771,6 +777,10 @@ public class Inventory implements Screen {
 	    	case "Bomb":
 	    		storage.inventoryItems(storage.bomb, "Remove");
 	    		storage.equippedItems(storage.bomb, "Add");
+	    		break;
+	    	case "Swing":
+	    		storage.inventoryItems(storage.itemSwing, "Remove");
+	    		storage.equippedItems(storage.itemSwing, "Add");
 	    		break;
 	    	}
 	    }
@@ -790,9 +800,8 @@ public class Inventory implements Screen {
 		
 		if(slot.getName() == "Empty")
 	    	System.out.println("Empty item slot clicked!");
-		else {
-			itemMoved = true;
-			
+		else if(inventoryWeapons.size() + inventoryArmor.size() + inventoryItems.size() < 40){
+			itemMoved = true;		
 			switch(itemName) {
 	    	case "Health Potion":
 	    		storage.inventoryItems(storage.healthPot, "Add");
@@ -801,6 +810,10 @@ public class Inventory implements Screen {
 	    	case "Bomb":
 	    		storage.inventoryItems(storage.bomb, "Add");
 	    		storage.equippedItems(storage.bomb, "Remove");
+	    		break;
+	    	case "Swing":
+	    		storage.inventoryItems(storage.itemSwing, "Add");
+	    		storage.equippedItems(storage.itemSwing, "Remove");
 	    		break;
 	    	}
 		}

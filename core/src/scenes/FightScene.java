@@ -12,8 +12,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -24,6 +26,7 @@ import com.onionscape.game.GameScreen;
 
 import player.Player;
 import storage.Enemy;
+import storage.Items;
 import storage.Storage;
 
 public class FightScene implements Screen{
@@ -40,7 +43,7 @@ public class FightScene implements Screen{
     private SpriteBatch enemyBatch = new SpriteBatch();
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
     private String enemyName, eAbility1, eAbility2, eAbility3;
-    private boolean pDead, eDead, btnClicked;
+    private boolean pDead, eDead, btnClicked, playerTurn = true;
     private Storage storage;
     private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
     private Label ab1UseLbl, ab2UseLbl, ab3UseLbl, ab4UseLbl;
@@ -51,7 +54,10 @@ public class FightScene implements Screen{
     		riposteActive, firstLoad = true;
     private int eRendLeft, ePoisonLeft, eEnrageLeft;
     private boolean eHardenActive, playerStunned;
-
+    java.util.List<Items> equippedItems;
+    Table itemTable = new Table();
+    Table abilitySwapTable = new Table();
+    
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
     	this.game = game;
@@ -77,6 +83,7 @@ public class FightScene implements Screen{
         storage.createFont();       
         createComponents();
         componentParameters(); 
+        createInventoryGrid();
         
         // Check if coming to a raid with depleted ability
         if(ab1Uses <= 0) {
@@ -143,6 +150,8 @@ public class FightScene implements Screen{
         	 		
     	
     	if(attackCount <= 0) {
+    		playerTurn = false;
+    		
     		attackBtn.setTouchable(Touchable.disabled);
     		attackBtn.setColor(Color.GRAY);
     		ability1.setTouchable(Touchable.disabled);
@@ -172,7 +181,7 @@ public class FightScene implements Screen{
     		if(ab4Uses > 0) {
     			ability4.setTouchable(Touchable.enabled);
         		ability4.setColor(Color.LIGHT_GRAY);
-    		}    		
+    		}
     	}    		
     	  	
     	if(pDead || eDead) {
@@ -646,8 +655,12 @@ public class FightScene implements Screen{
         if(enemyHP <= 0)
         	eDead = true;
         
-        if(playerStunned)
-        	enemyAttack(rand.nextInt(4));
+        if(playerStunned) {
+        	playerStunned = false;
+        	enemyAttack(rand.nextInt(4));        	
+        }        	
+        else
+        	playerTurn = true;
     }   
     
     private void setAbility(TextButton button, int abID, Label abUseLbl) {
@@ -824,7 +837,7 @@ public class FightScene implements Screen{
     	}
     }
     
-    private void createComponents() {
+    private void createComponents() {    	    	
     	playerHPLbl = new Label("Player HP: " + Player.getHp() + "/" + Player.getMaxHP(), storage.labelStyle);
     	enemyHPLbl = new Label("Enemy HP: " + enemyHP + "/" + enemyMaxHP, storage.labelStyle);
     	
@@ -948,37 +961,37 @@ public class FightScene implements Screen{
     }
     
     private void componentParameters() {
-    	playerHPLbl.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 2.5f);
+    	playerHPLbl.setPosition(vp.getWorldWidth() / 3.7f, vp.getWorldHeight() / 1.07f);
     	
     	enemyHPLbl.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 1.07f);
     	
     	homeBtn.setSize(150, 100);
-    	homeBtn.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 5f);
+    	homeBtn.setPosition(vp.getWorldWidth() / 1.1f, vp.getWorldHeight() / 10f);
     	
     	combatLog.setColor(Color.BLACK);
     	Container<Label> container = new Container<Label>(combatLog);
     	container.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("white.png"))));
-    	container.setBounds(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 1.85f, 800, 450);
+    	container.setBounds(vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 2f, 800, 400);
     	container.align(Align.topLeft);
     	combatLog.setWidth(container.getWidth());
     	
-        attackBtn.setSize(550, 150); 
-        attackBtn.setPosition(vp.getWorldWidth() / 5.2f - attackBtn.getWidth() / 2f,  vp.getWorldHeight() / 2.3f - attackBtn.getHeight() / 2f);
+        attackBtn.setSize(550, 120); 
+        attackBtn.setPosition(vp.getWorldWidth() / 5.2f - attackBtn.getWidth() / 2f,  vp.getWorldHeight() / 2.4f - attackBtn.getHeight() / 2f);
         
         endTurn.setSize(200, 80); 
-        endTurn.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 3.3f);
+        endTurn.setPosition(container.getX() + container.getWidth() / 2f - endTurn.getWidth() / 2f, vp.getWorldHeight() / 2.65f);
         
         ability1.setSize(250, 150); 
-        ability1.setPosition(vp.getWorldWidth() / 8.7f - ability1.getWidth() / 2f, vp.getWorldHeight() / 3.7f - ability1.getHeight() / 2f);
+        ability1.setPosition(vp.getWorldWidth() / 8.7f - ability1.getWidth() / 2f, vp.getWorldHeight() / 3.8f - ability1.getHeight() / 2f);
         
         ability2.setSize(250, 150); 
-        ability2.setPosition(vp.getWorldWidth() / 3.7f - ability2.getWidth() / 2f, vp.getWorldHeight() / 3.7f - ability2.getHeight() / 2f);
+        ability2.setPosition(vp.getWorldWidth() / 3.7f - ability2.getWidth() / 2f, vp.getWorldHeight() / 3.8f - ability2.getHeight() / 2f);
         
         ability3.setSize(250, 150); 
-        ability3.setPosition(vp.getWorldWidth() / 8.7f - ability3.getWidth() / 2f, vp.getWorldHeight() / 9.7f - ability3.getHeight() / 2f);
+        ability3.setPosition(vp.getWorldWidth() / 8.7f - ability3.getWidth() / 2f, vp.getWorldHeight() / 9.8f - ability3.getHeight() / 2f);
         
         ability4.setSize(250, 150); 
-        ability4.setPosition(vp.getWorldWidth() / 3.7f - ability4.getWidth() / 2f, vp.getWorldHeight() / 9.7f - ability4.getHeight() / 2f);
+        ability4.setPosition(vp.getWorldWidth() / 3.7f - ability4.getWidth() / 2f, vp.getWorldHeight() / 9.8f - ability4.getHeight() / 2f);
         
         stage.addActor(attackBtn);
         stage.addActor(endTurn);
@@ -992,10 +1005,202 @@ public class FightScene implements Screen{
         stage.addActor(homeBtn);       
     }
     
+    private void createInventoryGrid() {
+    	equippedItems = storage.getEquippedItems();
+    	itemTable.defaults().size(100, 100);
+    	itemTable.setName("itemTable");
+    	
+    	int itemIndex = 0;
+    	
+    	for(int i = 0; i < 2; i++) {
+    		for(int j = 0; j < 7; j++) {
+    			boolean emptySlot = false;
+    			String itemName = "";
+    			Texture slotTexture = null;
+    			
+    			if (itemIndex < equippedItems.size()) {
+	                Items item = equippedItems.get(itemIndex);
+	                slotTexture = setSlotImage(item.getItemName(), "Item");
+	                itemIndex++;
+	                itemName = item.getItemName();	                
+	            }
+    			 else {
+ 	                slotTexture = setSlotImage("", "");
+ 	                emptySlot = true;
+ 	            }
+    			
+    			final Image inventorySlotImage = new Image(slotTexture);
+    			itemTable.add(inventorySlotImage).pad(3);
+    			
+    			if(emptySlot) {
+	                emptySlot = false;
+	                inventorySlotImage.setName("Empty");
+	            }
+	            else {
+	                inventorySlotImage.setName(itemName);                    
+	            } 
+    			
+    			final String item = itemName;
+    			
+    			inventorySlotImage.addListener(new ClickListener() {
+	                @Override
+	                public void clicked(InputEvent event, float x, float y) {
+	                    handleInventoryClick(inventorySlotImage, item);
+	                }				
+	            });   			
+    		}
+    		
+    		itemTable.row();
+    	}
+    	
+    	itemTable.setPosition(vp.getWorldWidth() / 1.8f, vp.getWorldHeight() / 5.5f, Align.center);
+	    stage.addActor(itemTable);
+    }
+    
+    private void handleInventoryClick(Image slot, String itemName) {
+    	if(playerTurn) {
+    		if(slot.getName().equals("Empty"))
+    	    	System.out.println("Empty slot clicked!");
+        	else {
+        		switch(itemName) {
+        		case "Health Potion":
+    	    		storage.equippedItems(storage.healthPot, "Remove");
+    	    		newLine();
+    				combatLog.setText(combatText + "\n Player used a Health potion");
+    	    		Player.gainHP(storage.healthPot.getValue());
+    				if(Player.getHp() > Player.getMaxHP())
+    					Player.setHp(Player.getMaxHP());
+    				attackCount--;
+    	    		break;
+    	    	case "Bomb":
+    	    		storage.equippedItems(storage.bomb, "Remove");
+    	    		newLine();
+    				combatLog.setText(combatText + "\n Player threw a Bomb which dealt " + storage.bomb.getValue() + " damage");
+    				enemyHP -= storage.bomb.getValue();
+    				attackCount--;
+    	    		break;
+    	    	case "Swing":    	       	    		
+    	    		createAbilityGrid(itemName);
+    	    		break;
+    	    	}
+        		
+        		btnClicked = true;        		
+        		itemTable.clear();
+        		createInventoryGrid();
+        	}
+    	}  	
+    }
+    
+    private void createAbilityGrid(final String ability) {
+    	abilitySwapTable.defaults().size(150, 100);
+    	abilitySwapTable.setName("abilitySwapTable");
+    	
+    	TextButton abilityLabel1 = new TextButton(ability1.getName(), skin);
+    	TextButton abilityLabel2 = new TextButton(ability2.getName(), skin);
+    	TextButton abilityLabel3 = new TextButton(ability3.getName(), skin);
+    	TextButton abilityLabel4 = new TextButton(ability4.getName(), skin);
+    	
+		abilitySwapTable.add(abilityLabel1).pad(3);
+		abilitySwapTable.add(abilityLabel2).pad(3);		
+		abilitySwapTable.row();
+		abilitySwapTable.add(abilityLabel3).pad(3);
+		abilitySwapTable.add(abilityLabel4).pad(3);	
+		
+		abilityLabel1.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				swapAbility(ability1, ability, ab1UseLbl);
+			}
+		});
+		abilityLabel2.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				swapAbility(ability2, ability, ab2UseLbl);
+			}
+		});
+		abilityLabel3.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				swapAbility(ability3, ability, ab3UseLbl);
+			}
+		});
+		abilityLabel4.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				swapAbility(ability4, ability, ab4UseLbl);
+			}
+		});
+    	
+    	abilitySwapTable.setPosition(vp.getWorldWidth() / 1.15f, vp.getWorldHeight() / 3f, Align.center);
+	    stage.addActor(abilitySwapTable);
+    }
+    
+    private void swapAbility(final TextButton button, String ability, final Label abilityLabel) {
+    	int uses = 0, ab = 0;
+    	
+    	if(button == ability1)
+    		ab = 1;
+    	else if(button == ability2)
+    		ab = 2;
+    	else if(button == ability3)
+    		ab = 3;
+    	else if(button == ability4)
+    		ab = 4;
+    		
+    	switch(ability) {
+    	case "Swing":
+    		storage.equippedItems(storage.itemSwing, "Remove");
+    		storage.swapAbilities(storage.swing);
+    		uses = setUsesLeft(storage.swing.getID());
+    		abilityLabel.setName("Uses left: " + uses);
+    		setAbility(button, storage.swing.getID(), abilityLabel);
+    	}
+    	
+    	switch(ab) {
+    	case 1:
+    		Player.setAbID1(storage.emptyAbility.getID());
+    		ab1Uses = uses;
+    		break;
+    	case 2:
+    		Player.setAbID2(storage.emptyAbility.getID());
+    		ab2Uses = uses;
+    		break;
+    	case 3:
+    		Player.setAbID3(storage.emptyAbility.getID());
+    		ab3Uses = uses;
+    		break;
+    	case 4:
+    		Player.setAbID4(storage.emptyAbility.getID());
+    		ab4Uses = uses;
+    		break;
+    	}
+    	
+    	itemTable.clear();
+    	createInventoryGrid();
+    	abilitySwapTable.clear();
+    }
+    
+    private Texture setSlotImage(String itemName, String type) {
+    	if(type == "Item") {
+			switch(itemName) {
+			case "Health Potion":
+				return Inventory.healthPotionTexture;
+			case "Bomb":
+				return Inventory.bombTexture;
+			case "Swing":
+				return Inventory.swingTexture;
+			default:
+				return Inventory.inventorySlotTexture;
+			}
+		}
+		else
+			return Inventory.inventorySlotTexture;
+    }
+    
     public void newLine() {
     	combatText = combatLog.getText().toString();
         int lines = combatText.split("\n").length;
-        if(lines >= 13) {
+        if(lines >= 11) {
             int index = combatText.indexOf("\n");
             combatText = combatText.substring(index+1);
         }        
@@ -1021,14 +1226,15 @@ public class FightScene implements Screen{
     public void render(float delta) {
 		if(firstLoad) {
 			newEnemy();
+			System.out.println(vp.getWorldHeight());
 		}
 		
 		charBatch.begin();
-		charBatch.draw(charTexture, vp.getWorldWidth() / 4f, vp.getWorldHeight() / 50f, 200, 350);
+		charBatch.draw(charTexture, vp.getWorldWidth() / 20f, vp.getWorldHeight() / 3f, 200, 350);
 		charBatch.end();
 		
 		enemyBatch.begin();
-		enemyBatch.draw(enemyTexture, vp.getWorldWidth() / 2.1f, vp.getWorldHeight() / 2.4f, 350, 250);
+		enemyBatch.draw(enemyTexture, vp.getWorldWidth() / 2.1f, vp.getWorldHeight() / 3f, 350, 250);
 		enemyBatch.end();
 		
     	update();

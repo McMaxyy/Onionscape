@@ -62,13 +62,16 @@ public class Storage {
 		assetManager.load("armor/IronBoots.png", Texture.class);
 		assetManager.load("items/HealthPotion.png", Texture.class);
 		assetManager.load("items/Bomb.png", Texture.class);
+		assetManager.load("abilities/Swing.png", Texture.class);
 	}
 	
 	// Load items
 	public Items healthPot = new HealthPot();
 	public Items bomb = new Bomb();
+	public Items itemSwing = new ItemSwing();
 	
 	// Load abilities
+	public Abilities emptyAbility = new EmptyAbility();
 	public Abilities swing = new Swing();
 	public Abilities rend = new Rend();
 	public Abilities whirlwind = new Whirlwind();
@@ -108,16 +111,18 @@ public class Storage {
 	public Enemy bear = new Bear();
 	public Enemy monkey = new Monkey();
 	
+	public void swapAbilities(Abilities ability) {
+		emptyAbility = ability;
+	}
+	
 	// Inventory arrays
 	public void inventoryWeapons(Weapons weapon, String action) {
 		if(action.equals("Add")) {
-			weapon.setAmount(weapon.getAmount() + 1);
-			playerWeapons.add(weapon);			
+			if(playerWeapons.size() + playerArmor.size() + playerItems.size() < 40)
+				playerWeapons.add(weapon);						
 		}
-		else if(action.equals("Remove")) {
-			weapon.setAmount(weapon.getAmount() - 1);
-			playerWeapons.remove(weapon);
-		}	
+		else if(action.equals("Remove")) 
+			playerWeapons.remove(weapon);	
 		else if(action.equals("Clear")) {
 			playerWeapons.clear();
 		}
@@ -129,16 +134,13 @@ public class Storage {
 	
 	public void inventoryArmor(Armor armor, String action) {
 		if(action.equals("Add")) {
-			armor.setAmount(armor.getAmount() + 1);
-			playerArmor.add(armor);
+			if(playerWeapons.size() + playerArmor.size() + playerItems.size() < 40)
+				playerArmor.add(armor);
 		}
-		else if(action.equals("Remove")) {
-			armor.setAmount(armor.getAmount() - 1);
+		else if(action.equals("Remove"))
 			playerArmor.remove(armor);
-		}
-		else if(action.equals("Clear")) {
+		else if(action.equals("Clear"))
 			playerArmor.clear();
-		}
 	}
 	
 	public List<Armor> getPlayerArmor() {
@@ -147,16 +149,13 @@ public class Storage {
 	
 	public void inventoryItems(Items item, String action) {
 		if(action.equals("Add")) {
-			item.setAmount(item.getAmount() + 1);
-			playerItems.add(item);
+			if(playerWeapons.size() + playerArmor.size() + playerItems.size() < 40)
+				playerItems.add(item);
 		}
-		else if(action.equals("Remove")) {
-			item.setAmount(item.getAmount() - 1);
+		else if(action.equals("Remove"))
 			playerItems.remove(item);
-		}	
-		else if(action.equals("Clear")) {
+		else if(action.equals("Clear"))
 			playerItems.clear();
-		}
 	}
 	
 	public List<Items> getPlayerItems() {
@@ -170,7 +169,7 @@ public class Storage {
 	
 	public void equippedWeapons(Weapons weapon, String action) {
 		if(action.equals("Add"))
-			equippedWeapons.add(weapon);
+			equippedWeapons.add(weapon);	
 		else if(action.equals("Remove"))
 			equippedWeapons.remove(weapon);
 		else if(action.equals("Clear"))
@@ -182,8 +181,8 @@ public class Storage {
 	}
 	
 	public void equippedArmor(Armor armor, String action) {
-		if(action.equals("Add"))
-			equippedArmor.add(armor);
+		if(action.equals("Add")) 
+			equippedArmor.add(armor);	
 		else if(action.equals("Remove"))
 			equippedArmor.remove(armor);
 		else if(action.equals("Clear"))
@@ -191,8 +190,10 @@ public class Storage {
 	}
 	
 	public void equippedItems(Items item, String action) {
-		if(action.equals("Add"))
-			equippedItems.add(item);
+		if(action.equals("Add")) {
+			if(equippedItems.size() < 14)
+				equippedItems.add(item);
+		}		
 		else if(action.equals("Remove"))
 			equippedItems.remove(item);
 		else if(action.equals("Clear"))
