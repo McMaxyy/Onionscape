@@ -52,17 +52,19 @@ public class Storage {
 		assetManager.load("weapons/IronGreataxe.png", Texture.class);
 		assetManager.load("weapons/IronAxe.png", Texture.class);
 		assetManager.load("weapons/WoodenShield.png", Texture.class);
+		assetManager.load("weapons/WoodenGreataxe.png", Texture.class);
 		assetManager.load("enemies/Wolfie.png", Texture.class);
 		assetManager.load("enemies/Bear.png", Texture.class);
 		assetManager.load("enemies/Spider.png", Texture.class);
 		assetManager.load("enemies/Monkey.png", Texture.class);
+		assetManager.load("enemies/Wasp.png", Texture.class);
 		assetManager.load("player/Onion.png", Texture.class);
 		assetManager.load("armor/IronHelmet.png", Texture.class);
 		assetManager.load("armor/IronChest.png", Texture.class);
 		assetManager.load("armor/IronBoots.png", Texture.class);
 		assetManager.load("items/HealthPotion.png", Texture.class);
 		assetManager.load("items/Bomb.png", Texture.class);
-		assetManager.load("abilities/Swing.png", Texture.class);
+		assetManager.load("abilities/SwingIcon.png", Texture.class);
 	}
 	
 	// Load items
@@ -91,6 +93,7 @@ public class Storage {
 	public Weapons healthyIronGA = new HealthyIronGreatAxe();
 	public Weapons strongIronGA = new StrongIronGreatAxe();
 	public Weapons defensiveIronGA = new DefensiveIronGreatAxe();
+	public Weapons woodenGA = new WoodenGreatAxe();
 	public Weapons ironAxe = new IronAxe();
 	public Weapons woodenShield = new WoodenShield();
 	
@@ -110,6 +113,7 @@ public class Storage {
 	public Enemy spider = new Spider();
 	public Enemy bear = new Bear();
 	public Enemy monkey = new Monkey();
+	public Enemy wasp = new Wasp();
 	
 	public void swapAbilities(Abilities ability) {
 		emptyAbility = ability;

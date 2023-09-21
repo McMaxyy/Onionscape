@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
 	public GameScreen(Game game) {		
 		this.game = game;
 		newGame = true;
-		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);
+		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);		
 	    setCurrentState(LOADING_SCREEN);
 	}
 	
@@ -109,6 +109,10 @@ public class GameScreen implements Screen {
         // Update the viewport with the adjusted width and height
         viewport.update(finalWidth, finalHeight, true);
         viewport.apply();
+        viewport.getCamera().update(); 
+        
+        if(fightScene != null)
+        	fightScene.resize(width, height);
 	}
 
 	@Override
@@ -132,6 +136,10 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		fightScene.dispose();
+		home.dispose();
+		inventory.dispose();
+		zerkerTree.dispose();
+		loadingScreen.dispose();
 	}
 
 }

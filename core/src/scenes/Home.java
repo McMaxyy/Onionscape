@@ -102,6 +102,7 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryWeapons(storage.healthyIronGA, "Add");
+    			storage.inventoryWeapons(storage.woodenGA, "Add");
     			storage.inventoryWeapons(storage.strongIronGA, "Add");
     			storage.inventoryWeapons(storage.defensiveIronGA, "Add");
     			storage.inventoryWeapons(storage.ironAxe, "Add");

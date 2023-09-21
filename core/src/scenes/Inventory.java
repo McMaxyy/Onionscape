@@ -54,13 +54,14 @@ public class Inventory implements Screen {
 	public static Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
 	public static Texture ironGreataxeTexture = Storage.assetManager.get("weapons/IronGreataxe.png", Texture.class);
 	public static Texture ironAxeTexture = Storage.assetManager.get("weapons/IronAxe.png", Texture.class);
+	public static Texture woodenGreataxeTexture = Storage.assetManager.get("weapons/WoodenGreataxe.png", Texture.class);
 	public static Texture ironHelmetTexture = Storage.assetManager.get("armor/IronHelmet.png", Texture.class);
 	public static Texture ironChestTexture = Storage.assetManager.get("armor/IronChest.png", Texture.class);
 	public static Texture ironBootsTexture = Storage.assetManager.get("armor/IronBoots.png", Texture.class);
 	public static Texture woodenShieldTexture = Storage.assetManager.get("weapons/WoodenShield.png", Texture.class);
 	public static Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
 	public static Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
-	public static Texture swingTexture = Storage.assetManager.get("abilities/Swing.png", Texture.class);
+	public static Texture swingTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
 
 	Image inventorySlotImg = new Image(inventorySlotTexture);
 	
@@ -394,6 +395,8 @@ public class Inventory implements Screen {
 		
 		if(gearType == "Weapon") {
 			switch(gearSlot) {
+			case "Wooden Greataxe":
+				return woodenGreataxeTexture;
 			case "Iron Greataxe":
 				return ironGreataxeTexture;
 			case "Iron Axe":
@@ -520,6 +523,10 @@ public class Inventory implements Screen {
 		else if(gearSlot == "Weapon") {
 			weaponAP = 0;
 			switch(gearPiece) {
+			case "Wooden Greataxe":
+				storage.inventoryWeapons(storage.woodenGA, "Add");
+				storage.equippedWeapons(storage.woodenGA, "Remove");	
+				break;
 			case "Healthy Iron Greataxe":
 				storage.inventoryWeapons(storage.healthyIronGA, "Add");
 				storage.equippedWeapons(storage.healthyIronGA, "Remove");	
@@ -640,6 +647,10 @@ public class Inventory implements Screen {
 		        changeEquippedSlot(4, "Weapon");
 			
 			switch(weapon) {
+			case "Wooden Greataxe":
+				storage.inventoryWeapons(storage.woodenGA, "Remove");
+				storage.equippedWeapons(storage.woodenGA, "Add");				
+				break;
 			case "Healthy Iron Greataxe":
 				storage.inventoryWeapons(storage.healthyIronGA, "Remove");
 				storage.equippedWeapons(storage.healthyIronGA, "Add");				
@@ -852,6 +863,10 @@ public class Inventory implements Screen {
 		switch(gearSlot) {
 		case "Iron Greataxe":
 			weaponAP = storage.healthyIronGA.getWeaponDmg();
+			Player.weaponState = 2;
+			break;
+		case "Wooden Greataxe":
+			weaponAP = storage.woodenGA.getWeaponDmg();
 			Player.weaponState = 2;
 			break;
 		case "Iron Axe":

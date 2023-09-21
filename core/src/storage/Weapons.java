@@ -48,6 +48,15 @@ public abstract class Weapons {
 	}
 }
 
+class WoodenGreatAxe extends Weapons{
+	public WoodenGreatAxe() {
+		setWeaponName("Wooden Greataxe");
+		setWeaponDmg(2);
+		setHanded("TwoHanded");
+		setID(0);
+	}
+}
+
 class HealthyIronGreatAxe extends Weapons{
 	public HealthyIronGreatAxe() {
 		setWeaponName("Healthy Iron Greataxe");

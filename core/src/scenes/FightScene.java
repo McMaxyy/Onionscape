@@ -107,7 +107,7 @@ public class FightScene implements Screen{
     }
     
     private void newEnemy() {
-        int randomEnemy = rand.nextInt(4);
+        int randomEnemy = rand.nextInt(5);
         switch(randomEnemy) {
             case 0:
                 setEnemyAttributes(storage.wolf, "enemies/Wolfie.png");
@@ -120,6 +120,9 @@ public class FightScene implements Screen{
                 break;
             case 3:
                 setEnemyAttributes(storage.monkey, "enemies/Monkey.png");
+                break;
+            case 4:
+            	setEnemyAttributes(storage.wasp, "enemies/Wasp.png");
                 break;
         }
     }
@@ -1059,10 +1062,8 @@ public class FightScene implements Screen{
     
     private void handleInventoryClick(Image slot, String itemName) {
     	if(playerTurn) {
-    		if(slot.getName().equals("Empty"))
-    	    	System.out.println("Empty slot clicked!");
-        	else {
-        		switch(itemName) {
+    		if(!slot.getName().equals("Empty")) {
+    			switch(itemName) {
         		case "Health Potion":
     	    		storage.equippedItems(storage.healthPot, "Remove");
     	    		newLine();
@@ -1079,7 +1080,7 @@ public class FightScene implements Screen{
     				enemyHP -= storage.bomb.getValue();
     				attackCount--;
     	    		break;
-    	    	case "Swing":    	       	    		
+    	    	default:   	       	    		
     	    		createAbilityGrid(itemName);
     	    		break;
     	    	}
@@ -1087,7 +1088,7 @@ public class FightScene implements Screen{
         		btnClicked = true;        		
         		itemTable.clear();
         		createInventoryGrid();
-        	}
+    		}	
     	}  	
     }
     
@@ -1224,17 +1225,18 @@ public class FightScene implements Screen{
 	
 	@Override
     public void render(float delta) {
-		if(firstLoad) {
+		if(firstLoad)
 			newEnemy();
-			System.out.println(vp.getWorldHeight());
-		}
+		
+		charBatch.setProjectionMatrix(vp.getCamera().combined);
+	    enemyBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 		charBatch.begin();
-		charBatch.draw(charTexture, vp.getWorldWidth() / 20f, vp.getWorldHeight() / 3f, 200, 350);
+		charBatch.draw(charTexture, vp.getWorldWidth() / 20f, vp.getWorldHeight() / 2f, 275, 450);
 		charBatch.end();
 		
 		enemyBatch.begin();
-		enemyBatch.draw(enemyTexture, vp.getWorldWidth() / 2.1f, vp.getWorldHeight() / 3f, 350, 250);
+		enemyBatch.draw(enemyTexture, vp.getWorldWidth() / 1.4f, vp.getWorldHeight() / 2f, 500, 500);
 		enemyBatch.end();
 		
     	update();
@@ -1244,8 +1246,8 @@ public class FightScene implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		charBatch.setProjectionMatrix(vp.getCamera().combined);
+	    enemyBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

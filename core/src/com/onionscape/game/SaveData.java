@@ -290,6 +290,12 @@ public class SaveData {
 		
 		for(Weapons weapon : playerWeapons) {
 	    	switch(weapon.getWeaponName()) {
+	    	case "Wooden Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.woodenGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.woodenGA, "Add");	
+    			break;
 	    	case "Healthy Iron Greataxe":
 	    		if(inventory.equals("Bag"))
 	    			storage.inventoryWeapons(storage.healthyIronGA, "Add");	    

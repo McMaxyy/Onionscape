@@ -107,3 +107,15 @@ class Monkey extends Enemy{
 		setAbility2("Stun");
 	}
 }
+
+class Wasp extends Enemy{
+	public Wasp() {
+		setEnemyName("Wasp");
+		setAttackPower(6);
+		setMaxHP(35);
+		setValue(10);
+		setExp(8);
+		setAbility1("Poison");
+		setAbility2("Stun");
+	}
+}
