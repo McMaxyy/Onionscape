@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -38,7 +40,7 @@ public class Inventory implements Screen {
 	private Storage storage;
 	private TextButton backBtn;
 	private Label gearName;
-	Table characterTable = new Table();
+	public static Table characterTable = new Table();
 	Table inventoryTable = new Table();	
 	Table itemTable = new Table();
 	java.util.List<Weapons> inventoryWeapons;
@@ -47,22 +49,31 @@ public class Inventory implements Screen {
 	java.util.List<Weapons> equippedWeapons;
 	java.util.List<Armor> equippedArmor;
 	java.util.List<Items> equippedItems;
+	private SpriteBatch onionBatch = new SpriteBatch();
+	private SpriteBatch weaponBatch = new SpriteBatch();
+	private SpriteBatch shieldBatch = new SpriteBatch();
+	private SpriteBatch helmetBatch = new SpriteBatch();
+	private SpriteBatch chestBatch = new SpriteBatch();
+	private SpriteBatch bootsBatch = new SpriteBatch();
 	private static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0, weaponAP = 0,
 			bonusHP = 0, bonusAP = 0, bonusDP = 0;
 	
 	// Get textures from storage
 	public static Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
-	public static Texture ironGreataxeTexture = Storage.assetManager.get("weapons/IronGreataxe.png", Texture.class);
-	public static Texture ironAxeTexture = Storage.assetManager.get("weapons/IronAxe.png", Texture.class);
-	public static Texture woodenGreataxeTexture = Storage.assetManager.get("weapons/WoodenGreataxe.png", Texture.class);
+	public static Texture ironGreataxeTexture = Storage.assetManager.get("weapons/inventory/IronGreataxe.png", Texture.class);
+	public static Texture ironAxeTexture = Storage.assetManager.get("weapons/inventory/IronAxe.png", Texture.class);
+	public static Texture woodenGreataxeTexture = Storage.assetManager.get("weapons/inventory/WoodenGreataxe.png", Texture.class);
 	public static Texture ironHelmetTexture = Storage.assetManager.get("armor/IronHelmet.png", Texture.class);
 	public static Texture ironChestTexture = Storage.assetManager.get("armor/IronChest.png", Texture.class);
 	public static Texture ironBootsTexture = Storage.assetManager.get("armor/IronBoots.png", Texture.class);
-	public static Texture woodenShieldTexture = Storage.assetManager.get("weapons/WoodenShield.png", Texture.class);
+	public static Texture woodenShieldTexture = Storage.assetManager.get("weapons/inventory/WoodenShield.png", Texture.class);
 	public static Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
 	public static Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
 	public static Texture swingTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-
+	public static Texture onionTexture = Storage.assetManager.get("player/Onion.png", Texture.class);
+	public static Texture ironGATexture = Storage.assetManager.get("weapons/equipped/IronGreataxe.png", Texture.class);
+	public static Texture woodenGATexture = Storage.assetManager.get("weapons/equipped/WoodenGreataxe.png", Texture.class);
+	
 	Image inventorySlotImg = new Image(inventorySlotTexture);
 	
 	public Inventory(Viewport viewport, Game game, GameScreen gameScreen) {
@@ -74,6 +85,7 @@ public class Inventory implements Screen {
 		storage = Storage.getInstance();
 		skin = storage.skin;
 		storage.createFont();	
+		characterTable.clear();
 		
 		removeBonusStats();
 		createComponents();	
@@ -542,21 +554,60 @@ public class Inventory implements Screen {
 				storage.equippedWeapons(storage.defensiveIronGA, "Remove");
 				storage.setBonusDP(3, 0);
 				break;
-			case "Iron Axe":
-				storage.inventoryWeapons(storage.ironAxe, "Add");
-				storage.equippedWeapons(storage.ironAxe, "Remove");
+			case "Healthy Iron Axe":
+				storage.inventoryWeapons(storage.healthyIronAxe, "Add");
+				storage.equippedWeapons(storage.healthyIronAxe, "Remove");
+				break;
+			case "Strong Iron Axe":
+				storage.inventoryWeapons(storage.strongIronAxe, "Add");
+				storage.equippedWeapons(storage.strongIronAxe, "Remove");
+				break;
+			case "Defensive Iron Axe":
+				storage.inventoryWeapons(storage.defensiveIronAxe, "Add");
+				storage.equippedWeapons(storage.defensiveIronAxe, "Remove");
 				break;
 			}		
 			if(slot == 4) {
-				storage.inventoryWeapons(storage.woodenShield, "Add");
-				storage.equippedWeapons(storage.woodenShield, "Remove");			
+				shieldDP = 0;
+				switch(gearPiece) {
+				case "Wooden Shield":
+					storage.inventoryWeapons(storage.woodenShield, "Add");
+					storage.equippedWeapons(storage.woodenShield, "Remove");
+					break;
+				case "Healthy Iron Shield":
+					storage.inventoryWeapons(storage.healthyIronShield, "Add");
+					storage.equippedWeapons(storage.healthyIronShield, "Remove");
+					break;
+				case "Strong Iron Shield":
+					storage.inventoryWeapons(storage.strongIronShield, "Add");
+					storage.equippedWeapons(storage.strongIronShield, "Remove");
+					break;
+				case "Defensive Iron Shield":
+					storage.inventoryWeapons(storage.defensiveIronShield, "Add");
+					storage.equippedWeapons(storage.defensiveIronShield, "Remove");
+					break;
+				}			
 			}	
 		}
 		else if(gearSlot == "OffHand") {
+			shieldDP = 0;
 			switch(gearPiece) {
 			case "Wooden Shield":
 				storage.inventoryWeapons(storage.woodenShield, "Add");
 				storage.equippedWeapons(storage.woodenShield, "Remove");
+				break;
+			case "Healthy Iron Shield":
+				storage.inventoryWeapons(storage.healthyIronShield, "Add");
+				storage.equippedWeapons(storage.healthyIronShield, "Remove");
+				break;
+			case "Strong Iron Shield":
+				storage.inventoryWeapons(storage.strongIronShield, "Add");
+				storage.equippedWeapons(storage.strongIronShield, "Remove");
+				break;
+			case "Defensive Iron Shield":
+				storage.inventoryWeapons(storage.defensiveIronShield, "Add");
+				storage.equippedWeapons(storage.defensiveIronShield, "Remove");
+				break;
 			}
 		}
 	}
@@ -667,15 +718,28 @@ public class Inventory implements Screen {
 				setWeaponBonus("Defensive", 3, storage.defensiveIronGA);
 				break;
 			}
+			
+//			mainHand.setName(weapon);
 		}		
 		else if(handed == "OneHanded") {
 			if(mainHand.getName() != "Empty")
 				changeEquippedSlot(3, "Weapon");
 
 			switch(weapon) {
-			case "Iron Axe":
-				storage.inventoryWeapons(storage.ironAxe, "Remove");
-				storage.equippedWeapons(storage.ironAxe, "Add");
+			case "Healthy Iron Axe":
+				storage.inventoryWeapons(storage.healthyIronAxe, "Remove");
+				storage.equippedWeapons(storage.healthyIronAxe, "Add");
+				setWeaponBonus("Healthy", 3, storage.healthyIronAxe);
+				break;
+			case "Strong Iron Axe":
+				storage.inventoryWeapons(storage.strongIronAxe, "Remove");
+				storage.equippedWeapons(storage.strongIronAxe, "Add");
+				setWeaponBonus("Strong", 3, storage.strongIronAxe);
+				break;
+			case "Defensive Iron Axe":
+				storage.inventoryWeapons(storage.defensiveIronAxe, "Remove");
+				storage.equippedWeapons(storage.defensiveIronAxe, "Add");
+				setWeaponBonus("Defensive", 3, storage.defensiveIronAxe);
 				break;
 			}
 		}
@@ -689,6 +753,21 @@ public class Inventory implements Screen {
 			case "Wooden Shield":
 				storage.inventoryWeapons(storage.woodenShield, "Remove");
 				storage.equippedWeapons(storage.woodenShield, "Add");
+				break;
+			case "Healthy Iron Shield":
+				storage.inventoryWeapons(storage.healthyIronShield, "Remove");
+				storage.equippedWeapons(storage.healthyIronShield, "Add");
+				setWeaponBonus("Healthy", 4, storage.healthyIronShield);
+				break;
+			case "Strong Iron Shield":
+				storage.inventoryWeapons(storage.strongIronShield, "Remove");
+				storage.equippedWeapons(storage.strongIronShield, "Add");
+				setWeaponBonus("Strong", 4, storage.strongIronShield);
+				break;
+			case "Defensive Iron Shield":
+				storage.inventoryWeapons(storage.defensiveIronShield, "Remove");
+				storage.equippedWeapons(storage.defensiveIronShield, "Add");
+				setWeaponBonus("Defensive", 4, storage.defensiveIronShield);
 				break;
 			}
 		}
@@ -870,11 +949,14 @@ public class Inventory implements Screen {
 			Player.weaponState = 2;
 			break;
 		case "Iron Axe":
-			weaponAP = storage.ironAxe.getWeaponDmg();
+			weaponAP = storage.healthyIronAxe.getWeaponDmg();
 			Player.weaponState = 1;
 			break;
 		case "Wooden Shield":
 			shieldDP = storage.woodenShield.getWeaponDmg();
+			break;
+		case "Iron Shield":
+			shieldDP = storage.healthyIronShield.getWeaponDmg();
 			break;
 		}
 	}
@@ -916,13 +998,56 @@ public class Inventory implements Screen {
 
 	@Override
 	public void render(float delta) {
+		Actor tableItem = characterTable.getChildren().get(3);
+		String gearPiece = tableItem.getName();
+		String gear = null;
+		Texture weaponTexture = null;		
+		Sprite weaponSprite;
+		
+		onionBatch.setProjectionMatrix(vp.getCamera().combined);
+		weaponBatch.setProjectionMatrix(vp.getCamera().combined);
+		
+		if(!gearPiece.equals("Empty")) {
+			String[] words = gearPiece.split(" ");
+			gear = words[words.length - 2] + " " + words[words.length - 1];				
+		}
+		
+		
+		onionBatch.begin();
+		onionBatch.draw(onionTexture, vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 3f, 310, 500);
+		onionBatch.end();
+		
+		if(!gearPiece.equals("Empty")) {
+			switch(gear) {
+			case "Iron Greataxe":
+				weaponTexture = ironGATexture;
+				break;
+			case "Wooden Greataxe":
+				weaponTexture = woodenGATexture;
+				break;
+			default:
+				weaponTexture = Inventory.ironGATexture;
+			}
+			
+			weaponSprite = new Sprite(weaponTexture);
+			weaponSprite.setPosition(vp.getWorldWidth() / 2.5f, vp.getWorldHeight() / 3f);
+			weaponSprite.setSize(350, 400);
+			weaponSprite.setOrigin(0, 0);
+			
+			weaponBatch.begin();
+			weaponSprite.setRotation(20f);
+			weaponSprite.draw(weaponBatch);		
+			weaponBatch.end();
+		}		
+		
 		stage.act();
 		stage.draw();		
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		onionBatch.setProjectionMatrix(vp.getCamera().combined);
+		weaponBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	}
 
@@ -950,6 +1075,7 @@ public class Inventory implements Screen {
 		skin.dispose();
 		storage.font.dispose();	
 		Storage.assetManager.dispose();
+		
 	}
 
 	public static int getShieldDP() {

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -25,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 
 import player.Player;
+import storage.Abilities;
 import storage.Enemy;
 import storage.Items;
 import storage.Storage;
@@ -37,13 +40,16 @@ public class FightScene implements Screen{
     private Game game;
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
-    private Label playerHPLbl, enemyHPLbl, combatLog;
-    private Texture charTexture, enemyTexture;
+    private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
+    private Texture charTexture, enemyTexture, gameOverTexture;
     private SpriteBatch charBatch = new SpriteBatch();
     private SpriteBatch enemyBatch = new SpriteBatch();
+    private SpriteBatch weaponBatch = new SpriteBatch();
+    private SpriteBatch gameOverBatch = new SpriteBatch();
+    private Sprite charSprite, enemySprite, weaponSprite;
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
     private String enemyName, eAbility1, eAbility2, eAbility3;
-    private boolean pDead, eDead, btnClicked, playerTurn = true;
+    private boolean pDead, eDead, btnClicked, turnEnded, playerTurn = true, gameOver, playerAttack;
     private Storage storage;
     private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
     private Label ab1UseLbl, ab2UseLbl, ab3UseLbl, ab4UseLbl;
@@ -57,6 +63,14 @@ public class FightScene implements Screen{
     java.util.List<Items> equippedItems;
     Table itemTable = new Table();
     Table abilitySwapTable = new Table();
+    private float time = 0, enemyClickTime = 0f, rotationTime = 0f;
+    private float scaleSpeed = 4f; 
+    private float heightChar, heightEnemy;
+    private float baseYChar, baseYEnemy;
+    private float weaponRotation = 20f; // starting rotation
+    private float rotationSpeed = -10f; // rotation speed per frame (adjust as needed)
+    private float rotationInterval = 0.018f;
+    private int timer = 0;
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -66,8 +80,16 @@ public class FightScene implements Screen{
         Gdx.input.setInputProcessor(stage);  // Set the stage to process inputs      
         storage = Storage.getInstance();
         skin = storage.skin;
+        gameOverTexture = Storage.assetManager.get("BattleOver.png", Texture.class);
         
-        charTexture = Storage.assetManager.get("player/Onion.png", Texture.class);
+        // Initialize sprite stuff
+        charTexture = Inventory.onionTexture;
+        charSprite = new Sprite(charTexture);
+        charSprite.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 2f);
+        heightChar = 450;
+        baseYChar = charSprite.getY();
+        charSprite.setSize(275, heightChar);
+        charSprite.setOrigin(0, 0);
         
         // Check if the player has the Lucky Strike mastery activated
         if(BerserkerSkillTree.luckyStrike == 1)
@@ -137,13 +159,22 @@ public class FightScene implements Screen{
         eAbility2 = enemy.getAbility2();
         enemyHP = enemyMaxHP;
         enemyTexture = Storage.assetManager.get(texturePath, Texture.class);
+        enemyNameLbl.setText(enemyName);
+        
+        enemySprite = new Sprite(enemyTexture);
+        enemySprite.setPosition(vp.getWorldWidth() / 1.4f, vp.getWorldHeight() / 2f);
+        heightEnemy = 500;
+        baseYEnemy = enemySprite.getY();
+        enemySprite.setSize(500, heightEnemy);
+        enemySprite.setOrigin(0, 0);
     }
     
     public void update() {
-    	if(!pDead && !eDead && btnClicked) {
+    	if(!pDead && !eDead && btnClicked || turnEnded) {
     		playerHPLbl.setText("Player HP: " + Player.getHp() + "/" + Player.getMaxHP());
         	enemyHPLbl.setText("Enemy HP: " + enemyHP + "/" + enemyMaxHP); 
         	btnClicked = false;
+//        	turnEnded = false;
     	}
     	
     	if(firstLoad) {
@@ -210,13 +241,19 @@ public class FightScene implements Screen{
 	        	Player.gainExp(expValue);
 	        	Player.checkExp();
 	        }
-	        		        
+	        
+	        gameOver = true;
 	        pDead = eDead = false; 		
     	} 		
     }
     
     private void onButtonClicked(TextButton button) {
+    	playerAttack = false;
+    	timer = 0;
+    	weaponRotation = 20f;
+    	
     	attackCount--;
+    	playerAttack = true;
     	
     	switch(button.getName().toString()) {
     	case "Attack":
@@ -558,7 +595,7 @@ public class FightScene implements Screen{
         			riposteActive = false;
         			enemyHP -= temp;
         			newLine();
-        			combatLog.setText(combatText + "\n Player reflected the attack and hit for " + temp + " damage");
+        			combatLog.setText(combatText + "\n Player reflected the attack \n and hit for " + temp + " damage");
         		}
         	}
         	else if(barrierActive){
@@ -843,6 +880,7 @@ public class FightScene implements Screen{
     private void createComponents() {    	    	
     	playerHPLbl = new Label("Player HP: " + Player.getHp() + "/" + Player.getMaxHP(), storage.labelStyle);
     	enemyHPLbl = new Label("Enemy HP: " + enemyHP + "/" + enemyMaxHP, storage.labelStyle);
+    	enemyNameLbl = new Label(enemyName, storage.labelStyle);
     	
     	combatLog = new Label("", storage.labelStyle);
     	
@@ -856,7 +894,7 @@ public class FightScene implements Screen{
     	    }});
     	
     	ability1 = new TextButton("Ability1", storage.buttonStyle);
-    	if(gameScreen.newGame)
+    	if(GameScreen.newGame)
     		ab1Uses = setUsesLeft(Player.getAbID1());
     	ab1UseLbl = new Label("", storage.labelStyle);
 		ab1UseLbl.setName("Uses left: " + ab1Uses);
@@ -878,7 +916,7 @@ public class FightScene implements Screen{
     	    }});
     	
     	ability2 = new TextButton("Ability2", storage.buttonStyle);
-    	if(gameScreen.newGame)
+    	if(GameScreen.newGame)
     		ab2Uses = setUsesLeft(Player.getAbID2());
     	ab2UseLbl = new Label("", storage.labelStyle);
 		ab2UseLbl.setName("Uses left: " + ab2Uses);
@@ -900,7 +938,7 @@ public class FightScene implements Screen{
     	    }});
     	
     	ability3 = new TextButton("Ability3", storage.buttonStyle);
-    	if(gameScreen.newGame)
+    	if(GameScreen.newGame)
     		ab3Uses = setUsesLeft(Player.getAbID3());
     	ab3UseLbl = new Label("", storage.labelStyle);
     	ab3UseLbl.setName("Uses left: " + ab3Uses);
@@ -922,7 +960,7 @@ public class FightScene implements Screen{
     	    }});
     	
     	ability4 = new TextButton("Ability4", storage.buttonStyle);
-    	if(gameScreen.newGame)
+    	if(GameScreen.newGame)
     		ab4Uses = setUsesLeft(Player.getAbID4());
     	ab4UseLbl = new Label("", storage.labelStyle);
     	ab4UseLbl.setName("Uses left: " + ab4Uses);
@@ -950,7 +988,7 @@ public class FightScene implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
         		attackCount = 3;        		
         		enemyAttack(rand.nextInt(4));
-    	        btnClicked = true;
+    	        turnEnded = true;
     	    }});
     	
     	homeBtn = new TextButton("Home", storage.buttonStyle);
@@ -968,13 +1006,15 @@ public class FightScene implements Screen{
     	
     	enemyHPLbl.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 1.07f);
     	
+    	enemyNameLbl.setPosition(enemyHPLbl.getX(), enemyHPLbl.getY() + 50f);
+    	
     	homeBtn.setSize(150, 100);
     	homeBtn.setPosition(vp.getWorldWidth() / 1.1f, vp.getWorldHeight() / 10f);
     	
     	combatLog.setColor(Color.BLACK);
     	Container<Label> container = new Container<Label>(combatLog);
     	container.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("white.png"))));
-    	container.setBounds(vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 2f, 800, 400);
+    	container.setBounds(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 2f, 600, 400);
     	container.align(Align.topLeft);
     	combatLog.setWidth(container.getWidth());
     	
@@ -1000,6 +1040,7 @@ public class FightScene implements Screen{
         stage.addActor(endTurn);
         stage.addActor(playerHPLbl);
         stage.addActor(enemyHPLbl);
+        stage.addActor(enemyNameLbl);
         stage.addActor(container);
         stage.addActor(ability1);
         stage.addActor(ability2);
@@ -1150,11 +1191,47 @@ public class FightScene implements Screen{
     		
     	switch(ability) {
     	case "Swing":
-    		storage.equippedItems(storage.itemSwing, "Remove");
-    		storage.swapAbilities(storage.swing);
-    		uses = setUsesLeft(storage.swing.getID());
-    		abilityLabel.setName("Uses left: " + uses);
-    		setAbility(button, storage.swing.getID(), abilityLabel);
+    		uses = handleAbility(ability, storage.itemSwing, storage.swing, abilityLabel, button);
+    		break;
+    	case "Rend":
+    		uses = handleAbility(ability, storage.itemRend, storage.rend, abilityLabel, button);
+    		break;
+    	case "Whirlwind":
+    		uses = handleAbility(ability, storage.itemWhirlwind, storage.whirlwind, abilityLabel, button);
+    		break;
+    	case "Ground Breaker":
+    		uses = handleAbility(ability, storage.itemGroundBreaker, storage.groundBreaker, abilityLabel, button);
+    		break;
+    	case "Bash":
+    		uses = handleAbility(ability, storage.itemBash, storage.bash, abilityLabel, button);
+    		break;
+    	case "Barrier":
+    		uses = handleAbility(ability, storage.itemBarrier, storage.barrier, abilityLabel, button);
+    		break;
+    	case "Harden":
+    		uses = handleAbility(ability, storage.itemHarden, storage.harden, abilityLabel, button);
+    		break;
+    	case "Mend":
+    		uses = handleAbility(ability, storage.itemMend, storage.mend, abilityLabel, button);
+    		break;
+    	case "Hilt Bash":
+    		uses = handleAbility(ability, storage.itemHiltBash, storage.hiltBash, abilityLabel, button);
+    		break;
+    	case "Barbed Armor":
+    		uses = handleAbility(ability, storage.itemBarbedArmor, storage.barbedArmor, abilityLabel, button);
+    		break;
+    	case "Enrage":
+    		uses = handleAbility(ability, storage.itemEnrage, storage.enrage, abilityLabel, button);
+    		break;
+    	case "Riposte":
+    		uses = handleAbility(ability, storage.itemRiposte, storage.riposte, abilityLabel, button);
+    		break;
+    	case "Stab":
+    		uses = handleAbility(ability, storage.itemStab, storage.stab, abilityLabel, button);
+    		break;
+    	case "Decapitate":
+    		uses = handleAbility(ability, storage.itemDecapitate, storage.decapitate, abilityLabel, button);
+    		break;
     	}
     	
     	switch(ab) {
@@ -1181,6 +1258,15 @@ public class FightScene implements Screen{
     	abilitySwapTable.clear();
     }
     
+    private int handleAbility(String ability, Items item, Abilities abilityObject, Label abilityLabel, TextButton button) {
+        storage.equippedItems(item, "Remove");
+        storage.swapAbilities(abilityObject);
+        int uses = setUsesLeft(abilityObject.getID());
+        abilityLabel.setName("Uses left: " + uses);
+        setAbility(button, abilityObject.getID(), abilityLabel);
+        return uses;
+    }
+    
     private Texture setSlotImage(String itemName, String type) {
     	if(type == "Item") {
 			switch(itemName) {
@@ -1201,7 +1287,7 @@ public class FightScene implements Screen{
     public void newLine() {
     	combatText = combatLog.getText().toString();
         int lines = combatText.split("\n").length;
-        if(lines >= 11) {
+        if(lines >= 8) {
             int index = combatText.indexOf("\n");
             combatText = combatText.substring(index+1);
         }        
@@ -1220,34 +1306,127 @@ public class FightScene implements Screen{
 
 	@Override
 	public void show() {
-				
+			
 	}
 	
 	@Override
-    public void render(float delta) {
+    public void render(float delta) {	
 		if(firstLoad)
 			newEnemy();
 		
+		String gear = null;
+		String gearPiece = "Empty";
+		Texture weaponTexture = null;
+		
+		
+		if(storage.getEquippedWeapons().size() > 0) {
+			Actor tableItem = Inventory.characterTable.getChildren().get(3);
+			gearPiece = tableItem.getName();			
+			
+			if(!gearPiece.equals("Empty")) {
+				String[] words = gearPiece.split(" ");
+				gear = words[words.length - 2] + " " + words[words.length - 1];				
+			}
+		}
+		
 		charBatch.setProjectionMatrix(vp.getCamera().combined);
 	    enemyBatch.setProjectionMatrix(vp.getCamera().combined);
+	    gameOverBatch.setProjectionMatrix(vp.getCamera().combined);
+	    weaponBatch.setProjectionMatrix(vp.getCamera().combined);
 		
-		charBatch.begin();
-		charBatch.draw(charTexture, vp.getWorldWidth() / 20f, vp.getWorldHeight() / 2f, 275, 450);
-		charBatch.end();
+	    time += delta; // Increment time by frame time
+	    rotationTime += delta;
+	    float scaleFactor = 1f + 0.03f * (float) Math.sin(time * scaleSpeed); // Adjust scaling factor and speed here
+	    float newHeightChar = heightChar * scaleFactor;
+	    float newHeightEnemy = heightEnemy * scaleFactor;
+	    if (rotationTime >= rotationInterval) { // check if it's time to rotate again
+	        weaponRotation += rotationSpeed;
+	        rotationTime = 0f;
+	        timer++;
+	        if(timer >= 6) {
+	        	playerAttack = false;
+	        	timer = 0;
+	        	weaponRotation = 20f;
+	        }	        	
+	    }
+
+	    charSprite.setSize(275, newHeightChar); // Set new height
+	    charSprite.setY(baseYChar); // Adjust Y to keep the sprite's bottom at the same position
+	    enemySprite.setSize(500,  newHeightEnemy);
+	    enemySprite.setY(baseYEnemy);
+	    
+	    // Character sprite
+    	charBatch.begin();
+	    charSprite.draw(charBatch); // Draw sprite with adjusted scale
+	    charBatch.end();    		
+	    
+	    // Weapon sprite
+	    if(!gearPiece.equals("Empty")) {
+			switch(gear) {
+			case "Iron Greataxe":
+				weaponTexture = Inventory.ironGATexture;
+				break;
+			case "Wooden Greataxe":
+				weaponTexture = Inventory.woodenGATexture;
+				break;
+			default:
+				weaponTexture = Inventory.ironGATexture;
+			}
+			
+			weaponSprite = new Sprite(weaponTexture);
+			weaponSprite.setPosition(vp.getWorldWidth() / 7f, vp.getWorldHeight() / 2f);
+			weaponSprite.setSize(310, 350);
+			weaponSprite.setOrigin(0, 0);		
+			
+			if(!playerAttack) {
+				weaponBatch.begin();	
+				weaponSprite.setRotation(20f);
+				weaponSprite.draw(weaponBatch);		
+				weaponBatch.end();
+			}
+			else {              
+	            weaponSprite.setRotation(weaponRotation);
+	            weaponBatch.begin();
+	            weaponSprite.draw(weaponBatch);
+	            weaponBatch.end();
+	        }			
+		}
 		
-		enemyBatch.begin();
-		enemyBatch.draw(enemyTexture, vp.getWorldWidth() / 1.4f, vp.getWorldHeight() / 2f, 500, 500);
-		enemyBatch.end();
-		
+	    // Enemy sprite
+	    if(!turnEnded) {
+	    	enemyClickTime = 0f;
+	    	enemyBatch.begin();
+			enemySprite.draw(enemyBatch);
+			enemyBatch.end();
+	    }
+	    else {
+	    	if(enemyClickTime < 0.1f) {
+	    		enemyBatch.begin();
+	    		enemyBatch.draw(enemyTexture, vp.getWorldWidth() / 1.45f, vp.getWorldHeight() / 2f, 500, 500);
+	    		enemyBatch.end();
+	    		enemyClickTime += delta;
+	    	}
+	    	else
+	    		turnEnded = false;	    		
+	    }
+	    		
     	update();
         stage.act();
         stage.draw();
+        
+        if(gameOver) {
+	    	gameOverBatch.begin();
+	    	gameOverBatch.draw(gameOverTexture, vp.getWorldWidth() / 100f, vp.getWorldHeight() / 4f, 1880, 770);
+	    	gameOverBatch.end();
+	    }
     }
 
 	@Override
 	public void resize(int width, int height) {
 		charBatch.setProjectionMatrix(vp.getCamera().combined);
 	    enemyBatch.setProjectionMatrix(vp.getCamera().combined);
+	    gameOverBatch.setProjectionMatrix(vp.getCamera().combined);
+	    weaponBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

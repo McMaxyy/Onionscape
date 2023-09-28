@@ -38,7 +38,7 @@ public class LoadingScreen implements Screen {
         progressBar.setBounds(
         		vp.getScreenWidth()  / 2f, vp.getScreenHeight() / 2f, Gdx.graphics.getWidth() / 2, 50);
 
-        loading = new Label("Loading..." + progressBar.getValue() * 100 + "%", storage.labelStyle);
+        loading = new Label("Loading..." + (int)(progressBar.getValue() * 100) + "%", storage.labelStyle);
         loading.setPosition(progressBar.getX() + progressBar.getWidth() / 3f, progressBar.getY() + 70f);
         
         stage.addActor(progressBar);
@@ -55,7 +55,7 @@ public class LoadingScreen implements Screen {
             gameScreen.setCurrentState(GameScreen.HOME);
         else {
         	progressBar.setValue(Storage.assetManager.getProgress());
-        	loading.setText("Loading..." + progressBar.getValue() * 100 + "%");
+        	loading.setText("Loading..." + (int)(progressBar.getValue() * 100) + "%");
         }
             
         

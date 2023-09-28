@@ -12,7 +12,6 @@ import scenes.FightScene;
 import scenes.Home;
 import scenes.Inventory;
 import scenes.LoadingScreen;
-import storage.Storage;
 
 public class GameScreen implements Screen {
 	private Game game;

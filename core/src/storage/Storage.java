@@ -29,7 +29,7 @@ public class Storage {
 	private int[] bonusHP = {0, 0, 0, 0, 0};
 	private int[] bonusDP = {0, 0, 0, 0, 0};
 	public static AssetManager assetManager = new AssetManager();
-	private static boolean newLoad = true;
+	private static boolean newLoad = true;	
 	
 	public static synchronized Storage getInstance() {
         if (instance == null) {
@@ -49,10 +49,13 @@ public class Storage {
 	// Load assets
 	public static void loadAssets() {
 		assetManager.load("InventorySlot.png", Texture.class);
-		assetManager.load("weapons/IronGreataxe.png", Texture.class);
-		assetManager.load("weapons/IronAxe.png", Texture.class);
-		assetManager.load("weapons/WoodenShield.png", Texture.class);
-		assetManager.load("weapons/WoodenGreataxe.png", Texture.class);
+		assetManager.load("weapons/inventory/IronGreataxe.png", Texture.class);
+		assetManager.load("weapons/inventory/IronAxe.png", Texture.class);
+		assetManager.load("weapons/inventory/WoodenShield.png", Texture.class);
+		assetManager.load("weapons/inventory/WoodenGreataxe.png", Texture.class);
+		assetManager.load("weapons/inventory/IronShield.png", Texture.class);
+		assetManager.load("weapons/equipped/IronGreataxe.png", Texture.class);
+		assetManager.load("weapons/equipped/WoodenGreataxe.png", Texture.class);
 		assetManager.load("enemies/Wolfie.png", Texture.class);
 		assetManager.load("enemies/Bear.png", Texture.class);
 		assetManager.load("enemies/Spider.png", Texture.class);
@@ -65,12 +68,26 @@ public class Storage {
 		assetManager.load("items/HealthPotion.png", Texture.class);
 		assetManager.load("items/Bomb.png", Texture.class);
 		assetManager.load("abilities/SwingIcon.png", Texture.class);
+		assetManager.load("BattleOver.png", Texture.class);
 	}
 	
 	// Load items
 	public Items healthPot = new HealthPot();
 	public Items bomb = new Bomb();
 	public Items itemSwing = new ItemSwing();
+	public Items itemRend = new ItemRend();
+	public Items itemWhirlwind = new ItemWhirlwind();
+	public Items itemGroundBreaker = new ItemGroundBreaker();
+	public Items itemBash = new ItemBash();
+	public Items itemBarrier = new ItemBarrier();
+	public Items itemHarden = new ItemHarden();
+	public Items itemMend = new ItemMend();
+	public Items itemHiltBash = new ItemHiltBash();
+	public Items itemBarbedArmor = new ItemBarbedArmor();
+	public Items itemEnrage = new ItemEnrage();
+	public Items itemRiposte = new ItemRiposte();
+	public Items itemStab = new ItemStab();
+	public Items itemDecapitate = new ItemDecapitate();
 	
 	// Load abilities
 	public Abilities emptyAbility = new EmptyAbility();
@@ -94,8 +111,13 @@ public class Storage {
 	public Weapons strongIronGA = new StrongIronGreatAxe();
 	public Weapons defensiveIronGA = new DefensiveIronGreatAxe();
 	public Weapons woodenGA = new WoodenGreatAxe();
-	public Weapons ironAxe = new IronAxe();
+	public Weapons healthyIronAxe = new HealthyIronAxe();
+	public Weapons strongIronAxe = new StrongIronAxe();
+	public Weapons defensiveIronAxe = new DefensiveIronAxe();
 	public Weapons woodenShield = new WoodenShield();
+	public Weapons healthyIronShield = new HealthyIronShield();
+	public Weapons strongIronShield = new StrongIronShield();
+	public Weapons defensiveIronShield = new DefensiveIronShield();
 	
 	// Load armor
 	public Armor healthyIronHelmet = new HealthyIronHelmet();

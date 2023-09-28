@@ -25,7 +25,7 @@ public class Home implements Screen {
 	private Game game;
 	private TextButton fight, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
 	saveBtn, loadBtn;
-	private Label level, exp;
+	private Label level, exp, coins;
 	private GameScreen gameScreen; 
 	private SaveData saveData = new SaveData();
 	
@@ -50,6 +50,10 @@ public class Home implements Screen {
 		exp = new Label("Exp: " + Player.getExp(), storage.labelStyle);
 		exp.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.15f);
 		stage.addActor(exp);
+		
+		coins = new Label("Coins: " + Player.getCoins(), storage.labelStyle);
+		coins.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.2f);
+		stage.addActor(coins);
 		
 		fight = new TextButton("Fight", storage.buttonStyle);
 		fight.setColor(Color.LIGHT_GRAY);
@@ -105,7 +109,7 @@ public class Home implements Screen {
     			storage.inventoryWeapons(storage.woodenGA, "Add");
     			storage.inventoryWeapons(storage.strongIronGA, "Add");
     			storage.inventoryWeapons(storage.defensiveIronGA, "Add");
-    			storage.inventoryWeapons(storage.ironAxe, "Add");
+    			storage.inventoryWeapons(storage.healthyIronAxe, "Add");
     			storage.inventoryWeapons(storage.woodenShield, "Add");
     	    }});
 		weaponsBtn.setSize(150, 100);
