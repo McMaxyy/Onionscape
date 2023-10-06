@@ -28,6 +28,7 @@ public class Home implements Screen {
 	private Label level, exp, coins;
 	private GameScreen gameScreen; 
 	private SaveData saveData = new SaveData();
+	public static boolean freshLoad = true;
 	
 	public Home(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -60,6 +61,10 @@ public class Home implements Screen {
 		fight.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
+    			if(freshLoad) {
+    				gameScreen.setCurrentState(GameScreen.INVENTORY);
+    				freshLoad = false;
+    			}
     			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
     	    }});
 		fight.setSize(150, 100);
@@ -72,6 +77,10 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			GameScreen.newGame = true;
+    			if(freshLoad) {
+    				gameScreen.setCurrentState(GameScreen.INVENTORY);
+    				freshLoad = false;
+    			}
     			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
     	    }});
 		newGame.setSize(150, 100);
@@ -111,6 +120,8 @@ public class Home implements Screen {
     			storage.inventoryWeapons(storage.defensiveIronGA, "Add");
     			storage.inventoryWeapons(storage.healthyIronAxe, "Add");
     			storage.inventoryWeapons(storage.woodenShield, "Add");
+    			storage.inventoryWeapons(storage.woodenAxe, "Add");
+    			storage.inventoryWeapons(storage.healthyIronShield, "Add");
     	    }});
 		weaponsBtn.setSize(150, 100);
 		weaponsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3.35f);

@@ -332,11 +332,35 @@ public class SaveData {
 	    		else
 	    			storage.equippedWeapons(storage.defensiveIronAxe, "Add");
 	    		break;
+	    	case "Wooden Axe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.woodenAxe, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.woodenAxe, "Add");
+	    		break;
 	    	case "Wooden Shield":
 	    		if(inventory.equals("Bag"))
 	    			storage.inventoryWeapons(storage.woodenShield, "Add");	
 	    		else
 	    			storage.equippedWeapons(storage.woodenShield, "Add");
+	    		break;
+	    	case "Healthy Iron Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.healthyIronShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.healthyIronShield, "Add");
+	    		break;
+	    	case "Strong Iron Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.strongIronShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.strongIronShield, "Add");
+	    		break;
+	    	case "Defensive Iron Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.defensiveIronShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.defensiveIronShield, "Add");
 	    		break;
 	    	}
 	    }

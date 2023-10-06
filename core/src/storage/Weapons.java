@@ -86,7 +86,7 @@ class HealthyIronAxe extends Weapons{
 		setWeaponName("Healthy Iron Axe");
 		setWeaponDmg(2);
 		setHanded("OneHanded");
-		setBonusStat(1);
+		setBonusStat(2);
 		setID(2);
 	}
 }
@@ -125,7 +125,7 @@ class HealthyIronShield extends Weapons{
 		setWeaponName("Healthy Iron Shield");
 		setWeaponDmg(3);
 		setHanded("OffHand");
-		setBonusStat(1);
+		setBonusStat(3);
 		setID(4);
 	}
 }
@@ -147,5 +147,14 @@ class DefensiveIronShield extends Weapons{
 		setHanded("OffHand");
 		setBonusStat(1);
 		setID(4);
+	}
+}
+
+class WoodenAxe extends Weapons{
+	public WoodenAxe() {
+		setWeaponName("Wooden Axe");
+		setWeaponDmg(1);
+		setHanded("OneHanded");
+		setID(5);
 	}
 }

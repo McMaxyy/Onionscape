@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -57,10 +58,12 @@ public class Inventory implements Screen {
 	private SpriteBatch bootsBatch = new SpriteBatch();
 	private static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0, weaponAP = 0,
 			bonusHP = 0, bonusAP = 0, bonusDP = 0;
+	boolean twoHand = false;
 	
 	// Get textures from storage
 	public static Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
 	public static Texture ironGreataxeTexture = Storage.assetManager.get("weapons/inventory/IronGreataxe.png", Texture.class);
+	public static Texture ironShieldTexture = Storage.assetManager.get("weapons/inventory/IronShield.png", Texture.class);
 	public static Texture ironAxeTexture = Storage.assetManager.get("weapons/inventory/IronAxe.png", Texture.class);
 	public static Texture woodenGreataxeTexture = Storage.assetManager.get("weapons/inventory/WoodenGreataxe.png", Texture.class);
 	public static Texture ironHelmetTexture = Storage.assetManager.get("armor/IronHelmet.png", Texture.class);
@@ -73,8 +76,11 @@ public class Inventory implements Screen {
 	public static Texture onionTexture = Storage.assetManager.get("player/Onion.png", Texture.class);
 	public static Texture ironGATexture = Storage.assetManager.get("weapons/equipped/IronGreataxe.png", Texture.class);
 	public static Texture woodenGATexture = Storage.assetManager.get("weapons/equipped/WoodenGreataxe.png", Texture.class);
-	
-	Image inventorySlotImg = new Image(inventorySlotTexture);
+	public static Texture woodenAxeTexture = Storage.assetManager.get("weapons/inventory/WoodenAxe.png", Texture.class);	
+	public static Texture woodenATexture = Storage.assetManager.get("weapons/equipped/WoodenAxe.png", Texture.class);
+	public static Texture ironATexture = Storage.assetManager.get("weapons/equipped/IronAxe.png", Texture.class);
+	public static Texture ironSTexture = Storage.assetManager.get("weapons/equipped/IronShield.png", Texture.class);
+	public static Texture woodenSTexture = Storage.assetManager.get("weapons/equipped/WoodenShield.png", Texture.class);		
 	
 	public Inventory(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -86,6 +92,29 @@ public class Inventory implements Screen {
 		skin = storage.skin;
 		storage.createFont();	
 		characterTable.clear();
+		Home.freshLoad = false;
+		
+		// Smooth filtering
+		inventorySlotTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironGATexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		woodenGATexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironATexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		woodenATexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		woodenSTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironSTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		onionTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		woodenAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		woodenGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		woodenShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		healthPotionTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		bombTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		swingTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironHelmetTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironChestTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		
 		removeBonusStats();
 		createComponents();	
@@ -413,8 +442,12 @@ public class Inventory implements Screen {
 				return ironGreataxeTexture;
 			case "Iron Axe":
 				return ironAxeTexture;
+			case "Wooden Axe":
+				return woodenAxeTexture;
 			case "Wooden Shield":
 				return woodenShieldTexture;
+			case "Iron Shield":
+				return ironShieldTexture;
 			case "":
 				return inventorySlotTexture;
 			default:
@@ -539,6 +572,10 @@ public class Inventory implements Screen {
 				storage.inventoryWeapons(storage.woodenGA, "Add");
 				storage.equippedWeapons(storage.woodenGA, "Remove");	
 				break;
+			case "Wooden Axe":
+				storage.inventoryWeapons(storage.woodenAxe, "Add");
+				storage.equippedWeapons(storage.woodenAxe, "Remove");	
+				break;
 			case "Healthy Iron Greataxe":
 				storage.inventoryWeapons(storage.healthyIronGA, "Add");
 				storage.equippedWeapons(storage.healthyIronGA, "Remove");	
@@ -577,14 +614,17 @@ public class Inventory implements Screen {
 				case "Healthy Iron Shield":
 					storage.inventoryWeapons(storage.healthyIronShield, "Add");
 					storage.equippedWeapons(storage.healthyIronShield, "Remove");
+					storage.setBonusHP(4, 0);
 					break;
 				case "Strong Iron Shield":
 					storage.inventoryWeapons(storage.strongIronShield, "Add");
 					storage.equippedWeapons(storage.strongIronShield, "Remove");
+					storage.setBonusAP(4, 0);
 					break;
 				case "Defensive Iron Shield":
 					storage.inventoryWeapons(storage.defensiveIronShield, "Add");
 					storage.equippedWeapons(storage.defensiveIronShield, "Remove");
+					storage.setBonusDP(4, 0);
 					break;
 				}			
 			}	
@@ -599,14 +639,17 @@ public class Inventory implements Screen {
 			case "Healthy Iron Shield":
 				storage.inventoryWeapons(storage.healthyIronShield, "Add");
 				storage.equippedWeapons(storage.healthyIronShield, "Remove");
+				storage.setBonusHP(4, 0);
 				break;
 			case "Strong Iron Shield":
 				storage.inventoryWeapons(storage.strongIronShield, "Add");
 				storage.equippedWeapons(storage.strongIronShield, "Remove");
+				storage.setBonusAP(4, 0);
 				break;
 			case "Defensive Iron Shield":
 				storage.inventoryWeapons(storage.defensiveIronShield, "Add");
 				storage.equippedWeapons(storage.defensiveIronShield, "Remove");
+				storage.setBonusDP(4, 0);
 				break;
 			}
 		}
@@ -726,6 +769,10 @@ public class Inventory implements Screen {
 				changeEquippedSlot(3, "Weapon");
 
 			switch(weapon) {
+			case "Wooden Axe":
+				storage.inventoryWeapons(storage.woodenAxe, "Remove");
+				storage.equippedWeapons(storage.woodenAxe, "Add");				
+				break;
 			case "Healthy Iron Axe":
 				storage.inventoryWeapons(storage.healthyIronAxe, "Remove");
 				storage.equippedWeapons(storage.healthyIronAxe, "Add");
@@ -952,6 +999,10 @@ public class Inventory implements Screen {
 			weaponAP = storage.healthyIronAxe.getWeaponDmg();
 			Player.weaponState = 1;
 			break;
+		case "Wooden Axe":
+			weaponAP = storage.woodenAxe.getWeaponDmg();
+			Player.weaponState = 1;
+			break;
 		case "Wooden Shield":
 			shieldDP = storage.woodenShield.getWeaponDmg();
 			break;
@@ -998,47 +1049,91 @@ public class Inventory implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Actor tableItem = characterTable.getChildren().get(3);
-		String gearPiece = tableItem.getName();
-		String gear = null;
-		Texture weaponTexture = null;		
-		Sprite weaponSprite;
+		Actor weaponTable = characterTable.getChildren().get(3);
+		Actor shieldTable = characterTable.getChildren().get(4);
+		String weaponPiece = weaponTable.getName();
+		String shieldPiece = shieldTable.getName();
+		String weapon = null;
+		String shield = null;
+		Texture weaponTexture = null;
+		Texture shieldTexture = null;
+		Sprite weaponSprite, shieldSprite;		
 		
 		onionBatch.setProjectionMatrix(vp.getCamera().combined);
 		weaponBatch.setProjectionMatrix(vp.getCamera().combined);
+		shieldBatch.setProjectionMatrix(vp.getCamera().combined);
 		
-		if(!gearPiece.equals("Empty")) {
-			String[] words = gearPiece.split(" ");
-			gear = words[words.length - 2] + " " + words[words.length - 1];				
+		if(!weaponPiece.equals("Empty")) {
+			String[] words = weaponPiece.split(" ");
+			weapon = words[words.length - 2] + " " + words[words.length - 1];				
 		}
-		
+		if(!shieldPiece.equals("Empty")) {
+			String[] words = shieldPiece.split(" ");
+			shield = words[words.length - 2] + " " + words[words.length - 1];				
+		}
 		
 		onionBatch.begin();
 		onionBatch.draw(onionTexture, vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 3f, 310, 500);
 		onionBatch.end();
 		
-		if(!gearPiece.equals("Empty")) {
-			switch(gear) {
+		if(!weaponPiece.equals("Empty")) {
+			switch(weapon) {
 			case "Iron Greataxe":
 				weaponTexture = ironGATexture;
+				twoHand = true;
 				break;
 			case "Wooden Greataxe":
 				weaponTexture = woodenGATexture;
+				twoHand = true;
 				break;
-			default:
-				weaponTexture = Inventory.ironGATexture;
+			case "Iron Axe":
+				weaponTexture = ironATexture;
+				twoHand = false;
+				break;
+			case "Wooden Axe":
+				weaponTexture = woodenATexture;
+				twoHand = false;
+				break;
 			}
 			
 			weaponSprite = new Sprite(weaponTexture);
-			weaponSprite.setPosition(vp.getWorldWidth() / 2.5f, vp.getWorldHeight() / 3f);
-			weaponSprite.setSize(350, 400);
 			weaponSprite.setOrigin(0, 0);
+			if(twoHand) {
+				weaponSprite.setPosition(vp.getWorldWidth() / 2.5f, vp.getWorldHeight() / 3f);				
+				weaponSprite.setSize(350, 400);
+			}			
+			else {
+				weaponSprite.setPosition(vp.getWorldWidth() / 2.35f, vp.getWorldHeight() / 2.5f);
+				weaponSprite.setSize(220, 220);
+			}
 			
 			weaponBatch.begin();
-			weaponSprite.setRotation(20f);
+			if(twoHand)
+				weaponSprite.setRotation(20f);
+			else
+				weaponSprite.setRotation(10f);
 			weaponSprite.draw(weaponBatch);		
 			weaponBatch.end();
-		}		
+		}
+		
+		if(!shieldPiece.equals("Empty")) {
+			switch(shield) {
+			case "Wooden Shield":
+				shieldTexture = woodenSTexture;
+				break;
+			case "Iron Shield":
+				shieldTexture = ironSTexture;
+				break;
+			}
+			
+			shieldSprite = new Sprite(shieldTexture);
+			shieldSprite.setPosition(vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 2.8f);				
+			shieldSprite.setSize(200, 250);
+			
+			shieldBatch.begin();
+			shieldSprite.draw(shieldBatch);		
+			shieldBatch.end();
+		}
 		
 		stage.act();
 		stage.draw();		
@@ -1048,7 +1143,7 @@ public class Inventory implements Screen {
 	public void resize(int width, int height) {
 		onionBatch.setProjectionMatrix(vp.getCamera().combined);
 		weaponBatch.setProjectionMatrix(vp.getCamera().combined);
-		
+		shieldBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

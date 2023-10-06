@@ -48,25 +48,38 @@ public class Storage {
 	
 	// Load assets
 	public static void loadAssets() {
+		// Inventory images
 		assetManager.load("InventorySlot.png", Texture.class);
 		assetManager.load("weapons/inventory/IronGreataxe.png", Texture.class);
 		assetManager.load("weapons/inventory/IronAxe.png", Texture.class);
+		assetManager.load("weapons/inventory/WoodenAxe.png", Texture.class);
 		assetManager.load("weapons/inventory/WoodenShield.png", Texture.class);
 		assetManager.load("weapons/inventory/WoodenGreataxe.png", Texture.class);
 		assetManager.load("weapons/inventory/IronShield.png", Texture.class);
+		
+		// Equipped gear images
 		assetManager.load("weapons/equipped/IronGreataxe.png", Texture.class);
 		assetManager.load("weapons/equipped/WoodenGreataxe.png", Texture.class);
+		assetManager.load("weapons/equipped/IronAxe.png", Texture.class);
+		assetManager.load("weapons/equipped/WoodenAxe.png", Texture.class);
+		assetManager.load("weapons/equipped/WoodenShield.png", Texture.class);
+		assetManager.load("weapons/equipped/IronShield.png", Texture.class);
+		
+		// Enemy images
 		assetManager.load("enemies/Wolfie.png", Texture.class);
 		assetManager.load("enemies/Bear.png", Texture.class);
 		assetManager.load("enemies/Spider.png", Texture.class);
 		assetManager.load("enemies/Monkey.png", Texture.class);
 		assetManager.load("enemies/Wasp.png", Texture.class);
 		assetManager.load("player/Onion.png", Texture.class);
+		
 		assetManager.load("armor/IronHelmet.png", Texture.class);
 		assetManager.load("armor/IronChest.png", Texture.class);
 		assetManager.load("armor/IronBoots.png", Texture.class);
 		assetManager.load("items/HealthPotion.png", Texture.class);
 		assetManager.load("items/Bomb.png", Texture.class);
+		
+		// Misc
 		assetManager.load("abilities/SwingIcon.png", Texture.class);
 		assetManager.load("BattleOver.png", Texture.class);
 	}
@@ -111,6 +124,7 @@ public class Storage {
 	public Weapons strongIronGA = new StrongIronGreatAxe();
 	public Weapons defensiveIronGA = new DefensiveIronGreatAxe();
 	public Weapons woodenGA = new WoodenGreatAxe();
+	public Weapons woodenAxe = new WoodenAxe();
 	public Weapons healthyIronAxe = new HealthyIronAxe();
 	public Weapons strongIronAxe = new StrongIronAxe();
 	public Weapons defensiveIronAxe = new DefensiveIronAxe();

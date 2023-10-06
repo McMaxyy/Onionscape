@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -45,11 +46,12 @@ public class FightScene implements Screen{
     private SpriteBatch charBatch = new SpriteBatch();
     private SpriteBatch enemyBatch = new SpriteBatch();
     private SpriteBatch weaponBatch = new SpriteBatch();
+    private SpriteBatch shieldBatch = new SpriteBatch();
     private SpriteBatch gameOverBatch = new SpriteBatch();
-    private Sprite charSprite, enemySprite, weaponSprite;
+    private Sprite charSprite, enemySprite, weaponSprite, shieldSprite;
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
     private String enemyName, eAbility1, eAbility2, eAbility3;
-    private boolean pDead, eDead, btnClicked, turnEnded, playerTurn = true, gameOver, playerAttack;
+    private boolean pDead, eDead, btnClicked, turnEnded, playerTurn = true, gameOver, playerAttack, twoHand;
     private Storage storage;
     private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
     private Label ab1UseLbl, ab2UseLbl, ab3UseLbl, ab4UseLbl;
@@ -65,11 +67,11 @@ public class FightScene implements Screen{
     Table abilitySwapTable = new Table();
     private float time = 0, enemyClickTime = 0f, rotationTime = 0f;
     private float scaleSpeed = 4f; 
-    private float heightChar, heightEnemy;
+    private float heightChar, heightEnemy, heightWeapon = 0, heightShield = 210;
     private float baseYChar, baseYEnemy;
     private float weaponRotation = 20f; // starting rotation
     private float rotationSpeed = -10f; // rotation speed per frame (adjust as needed)
-    private float rotationInterval = 0.018f;
+    private float rotationInterval = 0.017f;
     private int timer = 0;
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
@@ -159,6 +161,7 @@ public class FightScene implements Screen{
         eAbility2 = enemy.getAbility2();
         enemyHP = enemyMaxHP;
         enemyTexture = Storage.assetManager.get(texturePath, Texture.class);
+        enemyTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
         enemyNameLbl.setText(enemyName);
         
         enemySprite = new Sprite(enemyTexture);
@@ -392,7 +395,7 @@ public class FightScene implements Screen{
     	boolean hit = false;
     	switch(x) {
     	case 0:
-    		temp += Player.getStrength();    		 
+    		temp += rand.nextInt(1, Player.getStrength() + 1);  		 
     		hit = true;
     		break;
     	case 1:
@@ -1314,18 +1317,26 @@ public class FightScene implements Screen{
 		if(firstLoad)
 			newEnemy();
 		
-		String gear = null;
-		String gearPiece = "Empty";
-		Texture weaponTexture = null;
-		
+		String weapon = null;
+		String shield = null;
+		String weaponPiece = "Empty";
+		String shieldPiece = "Empty";
+		Texture weaponTexture = null;	
+		Texture shieldTexture = null;
 		
 		if(storage.getEquippedWeapons().size() > 0) {
-			Actor tableItem = Inventory.characterTable.getChildren().get(3);
-			gearPiece = tableItem.getName();			
+			Actor weaponItem = Inventory.characterTable.getChildren().get(3);
+			Actor shieldItem = Inventory.characterTable.getChildren().get(4);
+			weaponPiece = weaponItem.getName();
+			shieldPiece = shieldItem.getName();
 			
-			if(!gearPiece.equals("Empty")) {
-				String[] words = gearPiece.split(" ");
-				gear = words[words.length - 2] + " " + words[words.length - 1];				
+			if(!weaponPiece.equals("Empty")) {
+				String[] words = weaponPiece.split(" ");
+				weapon = words[words.length - 2] + " " + words[words.length - 1];				
+			}
+			if(!shieldPiece.equals("Empty")) {
+				String[] words = shieldPiece.split(" ");
+				shield = words[words.length - 2] + " " + words[words.length - 1];				
 			}
 		}
 		
@@ -1333,12 +1344,15 @@ public class FightScene implements Screen{
 	    enemyBatch.setProjectionMatrix(vp.getCamera().combined);
 	    gameOverBatch.setProjectionMatrix(vp.getCamera().combined);
 	    weaponBatch.setProjectionMatrix(vp.getCamera().combined);
+	    shieldBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	    time += delta; // Increment time by frame time
 	    rotationTime += delta;
-	    float scaleFactor = 1f + 0.03f * (float) Math.sin(time * scaleSpeed); // Adjust scaling factor and speed here
+	    float scaleFactor = 1f + 0.015f * (float) Math.sin(time * scaleSpeed); // Adjust scaling factor and speed here
 	    float newHeightChar = heightChar * scaleFactor;
 	    float newHeightEnemy = heightEnemy * scaleFactor;
+	    float newHeightWeapon = heightWeapon * scaleFactor;
+	    float newHeightShield = heightShield * scaleFactor;
 	    if (rotationTime >= rotationInterval) { // check if it's time to rotate again
 	        weaponRotation += rotationSpeed;
 	        rotationTime = 0f;
@@ -1361,26 +1375,48 @@ public class FightScene implements Screen{
 	    charBatch.end();    		
 	    
 	    // Weapon sprite
-	    if(!gearPiece.equals("Empty")) {
-			switch(gear) {
+	    if(!weaponPiece.equals("Empty")) {
+			switch(weapon) {
 			case "Iron Greataxe":
 				weaponTexture = Inventory.ironGATexture;
+				twoHand = true;
 				break;
 			case "Wooden Greataxe":
 				weaponTexture = Inventory.woodenGATexture;
+				twoHand = true;
 				break;
-			default:
-				weaponTexture = Inventory.ironGATexture;
+			case "Wooden Axe":
+				weaponTexture = Inventory.woodenATexture;
+				twoHand = false;
+				break;
+			case "Iron Axe":
+				weaponTexture = Inventory.ironATexture;
+				twoHand = false;
+				break;
 			}
 			
 			weaponSprite = new Sprite(weaponTexture);
-			weaponSprite.setPosition(vp.getWorldWidth() / 7f, vp.getWorldHeight() / 2f);
-			weaponSprite.setSize(310, 350);
-			weaponSprite.setOrigin(0, 0);		
+			weaponSprite.setOrigin(0, 0);
 			
+			if(twoHand) {
+				heightWeapon = 350;
+				weaponSprite.setPosition(vp.getWorldWidth() / 7f, vp.getWorldHeight() / 2f);
+				weaponSprite.setSize(310,  newHeightWeapon);
+				weaponSprite.setY(weaponSprite.getY());
+			}
+			else {
+				heightWeapon = 190;
+				weaponSprite.setPosition(vp.getWorldWidth() / 5.8f, vp.getWorldHeight() / 1.75f);
+				weaponSprite.setSize(190,  newHeightWeapon);
+				weaponSprite.setY(weaponSprite.getY());			
+			}
+					
 			if(!playerAttack) {
-				weaponBatch.begin();	
-				weaponSprite.setRotation(20f);
+				weaponBatch.begin();
+				if(twoHand)
+					weaponSprite.setRotation(20f);
+				else
+					weaponSprite.setRotation(10f);
 				weaponSprite.draw(weaponBatch);		
 				weaponBatch.end();
 			}
@@ -1391,6 +1427,27 @@ public class FightScene implements Screen{
 	            weaponBatch.end();
 	        }			
 		}
+	    
+	    if(!shieldPiece.equals("Empty")) {
+	    	switch(shield) {
+	    	case "Wooden Shield":
+				shieldTexture = Inventory.woodenSTexture;
+				break;
+			case "Iron Shield":
+				shieldTexture = Inventory.ironSTexture;
+				break;
+	    	}
+	    	
+	    	shieldSprite = new Sprite(shieldTexture);
+	    	shieldSprite.setOrigin(0, 0);
+	    	shieldSprite.setPosition(vp.getWorldWidth() / 18f, vp.getWorldHeight() / 1.9f);
+	    	shieldSprite.setSize(160, newHeightShield);
+	    	shieldSprite.setY(shieldSprite.getY());
+	    	
+	    	shieldBatch.begin();
+	    	shieldSprite.draw(shieldBatch);
+	    	shieldBatch.end();
+	    }
 		
 	    // Enemy sprite
 	    if(!turnEnded) {
@@ -1427,6 +1484,7 @@ public class FightScene implements Screen{
 	    enemyBatch.setProjectionMatrix(vp.getCamera().combined);
 	    gameOverBatch.setProjectionMatrix(vp.getCamera().combined);
 	    weaponBatch.setProjectionMatrix(vp.getCamera().combined);
+	    shieldBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override
