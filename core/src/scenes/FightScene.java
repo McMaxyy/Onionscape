@@ -1378,19 +1378,19 @@ public class FightScene implements Screen{
 	    if(!weaponPiece.equals("Empty")) {
 			switch(weapon) {
 			case "Iron Greataxe":
-				weaponTexture = Inventory.ironGATexture;
+				weaponTexture = Inventory.eIronGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Wooden Greataxe":
-				weaponTexture = Inventory.woodenGATexture;
+				weaponTexture = Inventory.eWoodenGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Wooden Axe":
-				weaponTexture = Inventory.woodenATexture;
+				weaponTexture = Inventory.eWoodenAxeTexture;
 				twoHand = false;
 				break;
 			case "Iron Axe":
-				weaponTexture = Inventory.ironATexture;
+				weaponTexture = Inventory.eIronAxeTexture;
 				twoHand = false;
 				break;
 			}
@@ -1431,10 +1431,10 @@ public class FightScene implements Screen{
 	    if(!shieldPiece.equals("Empty")) {
 	    	switch(shield) {
 	    	case "Wooden Shield":
-				shieldTexture = Inventory.woodenSTexture;
+				shieldTexture = Inventory.eWoodenShieldTexture;
 				break;
 			case "Iron Shield":
-				shieldTexture = Inventory.ironSTexture;
+				shieldTexture = Inventory.eIronShieldTexture;
 				break;
 	    	}
 	    	

@@ -48,7 +48,7 @@ public class Storage {
 	
 	// Load assets
 	public static void loadAssets() {
-		// Inventory images
+		// Inventory weapons
 		assetManager.load("InventorySlot.png", Texture.class);
 		assetManager.load("weapons/inventory/IronGreataxe.png", Texture.class);
 		assetManager.load("weapons/inventory/IronAxe.png", Texture.class);
@@ -57,7 +57,7 @@ public class Storage {
 		assetManager.load("weapons/inventory/WoodenGreataxe.png", Texture.class);
 		assetManager.load("weapons/inventory/IronShield.png", Texture.class);
 		
-		// Equipped gear images
+		// Equipped weapons
 		assetManager.load("weapons/equipped/IronGreataxe.png", Texture.class);
 		assetManager.load("weapons/equipped/WoodenGreataxe.png", Texture.class);
 		assetManager.load("weapons/equipped/IronAxe.png", Texture.class);
@@ -73,15 +73,36 @@ public class Storage {
 		assetManager.load("enemies/Wasp.png", Texture.class);
 		assetManager.load("player/Onion.png", Texture.class);
 		
-		assetManager.load("armor/IronHelmet.png", Texture.class);
-		assetManager.load("armor/IronChest.png", Texture.class);
-		assetManager.load("armor/IronBoots.png", Texture.class);
+		// Inventory armor
+		assetManager.load("armor/inventory/IronHelmet.png", Texture.class);
+		assetManager.load("armor/inventory/IronChest.png", Texture.class);
+		assetManager.load("armor/inventory/IronBoots.png", Texture.class);
+		assetManager.load("armor/inventory/SteelHelmet.png", Texture.class);
+		assetManager.load("armor/inventory/SteelChest.png", Texture.class);
+		assetManager.load("armor/inventory/SteelBoots.png", Texture.class);
+		assetManager.load("armor/inventory/BronzeHelmet.png", Texture.class);
+		assetManager.load("armor/inventory/BronzeChest.png", Texture.class);
+		assetManager.load("armor/inventory/BronzeBoots.png", Texture.class);
+		
+		// Equipped armor
+		assetManager.load("armor/equipped/IronHelmet.png", Texture.class);
+		assetManager.load("armor/equipped/IronChest.png", Texture.class);
+		assetManager.load("armor/equipped/IronBoots.png", Texture.class);
+		assetManager.load("armor/equipped/SteelHelmet.png", Texture.class);
+		assetManager.load("armor/equipped/SteelChest.png", Texture.class);
+		assetManager.load("armor/equipped/SteelBoots.png", Texture.class);
+		assetManager.load("armor/equipped/BronzeHelmet.png", Texture.class);
+		assetManager.load("armor/equipped/BronzeChest.png", Texture.class);
+		assetManager.load("armor/equipped/BronzeBoots.png", Texture.class);
+		
+		// Items
 		assetManager.load("items/HealthPotion.png", Texture.class);
 		assetManager.load("items/Bomb.png", Texture.class);
 		
 		// Misc
 		assetManager.load("abilities/SwingIcon.png", Texture.class);
 		assetManager.load("BattleOver.png", Texture.class);
+		assetManager.load("maps/ForestMap.png", Texture.class);
 	}
 	
 	// Load items

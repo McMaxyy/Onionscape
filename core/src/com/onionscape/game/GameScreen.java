@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import scenes.BerserkerSkillTree;
 import scenes.FightScene;
+import scenes.ForestMap;
 import scenes.Home;
 import scenes.Inventory;
 import scenes.LoadingScreen;
@@ -20,6 +21,7 @@ public class GameScreen implements Screen {
 	private BerserkerSkillTree zerkerTree;
 	private Inventory inventory;
 	private LoadingScreen loadingScreen;
+	private ForestMap forestMap;
 	private Viewport viewport;
 	public static boolean newGame;
 	
@@ -33,6 +35,7 @@ public class GameScreen implements Screen {
     public static final int ZERKER_TREE = 2;
     public static final int INVENTORY = 3;
     public static final int FIGHT_SCENE = 4;
+    public static final int FOREST_MAP = 5;
     private int currentState;
 
 	public GameScreen(Game game) {		
@@ -65,6 +68,10 @@ public class GameScreen implements Screen {
 	        	this.inventory = new Inventory(viewport, game, this);
 	            Gdx.input.setInputProcessor(inventory.stage);
 	            break;
+	        case FOREST_MAP:
+	        	this.forestMap = new ForestMap(viewport, game, this);
+	            Gdx.input.setInputProcessor(forestMap.stage);
+	            break;
 	    }
 	}
 
@@ -89,6 +96,9 @@ public class GameScreen implements Screen {
 	        case INVENTORY:
 	        	inventory.render(delta);
 	            break;
+	        case FOREST_MAP:
+	        	forestMap.render(delta);
+	        	break;
 	    }
 	}
 

@@ -24,7 +24,7 @@ public class Home implements Screen {
 	private Storage storage;
 	private Game game;
 	private TextButton fight, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
-	saveBtn, loadBtn;
+	saveBtn, loadBtn, forestBtn;
 	private Label level, exp, coins;
 	private GameScreen gameScreen; 
 	private SaveData saveData = new SaveData();
@@ -108,6 +108,17 @@ public class Home implements Screen {
 		inventory.setSize(150, 100);
 		inventory.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 3f);
 		stage.addActor(inventory);
+		
+		forestBtn = new TextButton("Forest", storage.buttonStyle);
+		forestBtn.setColor(Color.LIGHT_GRAY);
+		forestBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+    	    }});
+		forestBtn.setSize(150, 100);
+		forestBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 2f);
+		stage.addActor(forestBtn);
 		
 		weaponsBtn = new TextButton("Weapons", storage.buttonStyle);
 		weaponsBtn.setColor(Color.LIGHT_GRAY);
