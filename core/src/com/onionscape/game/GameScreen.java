@@ -23,7 +23,7 @@ public class GameScreen implements Screen {
 	private LoadingScreen loadingScreen;
 	private ForestMap forestMap;
 	private Viewport viewport;
-	public static boolean newGame;
+	public static boolean newGame = true;
 	
 	private static final int MIN_WIDTH = 1280;
     private static final int MIN_HEIGHT = 720;
@@ -40,7 +40,6 @@ public class GameScreen implements Screen {
 
 	public GameScreen(Game game) {		
 		this.game = game;
-		newGame = true;
 		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);		
 	    setCurrentState(LOADING_SCREEN);
 	}

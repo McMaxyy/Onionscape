@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -31,6 +32,7 @@ public class Storage {
 	public static AssetManager assetManager = new AssetManager();
 	private static boolean newLoad = true;	
 	
+	
 	public static synchronized Storage getInstance() {
         if (instance == null) {
             instance = new Storage();
@@ -48,61 +50,65 @@ public class Storage {
 	
 	// Load assets
 	public static void loadAssets() {
+		TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter(); 
+		textureParameter.genMipMaps = true; 
+		
 		// Inventory weapons
-		assetManager.load("InventorySlot.png", Texture.class);
-		assetManager.load("weapons/inventory/IronGreataxe.png", Texture.class);
-		assetManager.load("weapons/inventory/IronAxe.png", Texture.class);
-		assetManager.load("weapons/inventory/WoodenAxe.png", Texture.class);
-		assetManager.load("weapons/inventory/WoodenShield.png", Texture.class);
-		assetManager.load("weapons/inventory/WoodenGreataxe.png", Texture.class);
-		assetManager.load("weapons/inventory/IronShield.png", Texture.class);
+		assetManager.load("InventorySlot.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/IronGreataxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/IronAxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/WoodenAxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/WoodenShield.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/WoodenGreataxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/IronShield.png", Texture.class, textureParameter);
 		
 		// Equipped weapons
-		assetManager.load("weapons/equipped/IronGreataxe.png", Texture.class);
-		assetManager.load("weapons/equipped/WoodenGreataxe.png", Texture.class);
-		assetManager.load("weapons/equipped/IronAxe.png", Texture.class);
-		assetManager.load("weapons/equipped/WoodenAxe.png", Texture.class);
-		assetManager.load("weapons/equipped/WoodenShield.png", Texture.class);
-		assetManager.load("weapons/equipped/IronShield.png", Texture.class);
+		assetManager.load("weapons/equipped/IronGreataxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/WoodenGreataxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/IronAxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/WoodenAxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/WoodenShield.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/IronShield.png", Texture.class, textureParameter);
 		
 		// Enemy images
-		assetManager.load("enemies/Wolfie.png", Texture.class);
-		assetManager.load("enemies/Bear.png", Texture.class);
-		assetManager.load("enemies/Spider.png", Texture.class);
-		assetManager.load("enemies/Monkey.png", Texture.class);
-		assetManager.load("enemies/Wasp.png", Texture.class);
-		assetManager.load("player/Onion.png", Texture.class);
+		assetManager.load("enemies/Wolfie.png", Texture.class, textureParameter);
+		assetManager.load("enemies/Bear.png", Texture.class, textureParameter);
+		assetManager.load("enemies/Spider.png", Texture.class, textureParameter);
+		assetManager.load("enemies/Monkey.png", Texture.class, textureParameter);
+		assetManager.load("enemies/Wasp.png", Texture.class, textureParameter);		
 		
 		// Inventory armor
-		assetManager.load("armor/inventory/IronHelmet.png", Texture.class);
-		assetManager.load("armor/inventory/IronChest.png", Texture.class);
-		assetManager.load("armor/inventory/IronBoots.png", Texture.class);
-		assetManager.load("armor/inventory/SteelHelmet.png", Texture.class);
-		assetManager.load("armor/inventory/SteelChest.png", Texture.class);
-		assetManager.load("armor/inventory/SteelBoots.png", Texture.class);
-		assetManager.load("armor/inventory/BronzeHelmet.png", Texture.class);
-		assetManager.load("armor/inventory/BronzeChest.png", Texture.class);
-		assetManager.load("armor/inventory/BronzeBoots.png", Texture.class);
+		assetManager.load("armor/inventory/IronHelmet.png", Texture.class, textureParameter);
+		assetManager.load("armor/inventory/IronChest.png", Texture.class, textureParameter);
+		assetManager.load("armor/inventory/IronBoots.png", Texture.class, textureParameter);
+		assetManager.load("armor/inventory/SteelHelmet.png", Texture.class, textureParameter);
+		assetManager.load("armor/inventory/SteelChest.png", Texture.class, textureParameter);
+		assetManager.load("armor/inventory/SteelBoots.png", Texture.class, textureParameter);
+		assetManager.load("armor/inventory/BronzeHelmet.png", Texture.class, textureParameter);
+		assetManager.load("armor/inventory/BronzeChest.png", Texture.class, textureParameter);
+		assetManager.load("armor/inventory/BronzeBoots.png", Texture.class, textureParameter);
 		
 		// Equipped armor
-		assetManager.load("armor/equipped/IronHelmet.png", Texture.class);
-		assetManager.load("armor/equipped/IronChest.png", Texture.class);
-		assetManager.load("armor/equipped/IronBoots.png", Texture.class);
-		assetManager.load("armor/equipped/SteelHelmet.png", Texture.class);
-		assetManager.load("armor/equipped/SteelChest.png", Texture.class);
-		assetManager.load("armor/equipped/SteelBoots.png", Texture.class);
-		assetManager.load("armor/equipped/BronzeHelmet.png", Texture.class);
-		assetManager.load("armor/equipped/BronzeChest.png", Texture.class);
-		assetManager.load("armor/equipped/BronzeBoots.png", Texture.class);
+		assetManager.load("armor/equipped/IronHelmet.png", Texture.class, textureParameter);
+		assetManager.load("armor/equipped/IronChest.png", Texture.class, textureParameter);
+		assetManager.load("armor/equipped/IronBoots.png", Texture.class, textureParameter);
+		assetManager.load("armor/equipped/SteelHelmet.png", Texture.class, textureParameter);
+		assetManager.load("armor/equipped/SteelChest.png", Texture.class, textureParameter);
+		assetManager.load("armor/equipped/SteelBoots.png", Texture.class, textureParameter);
+		assetManager.load("armor/equipped/BronzeHelmet.png", Texture.class, textureParameter);
+		assetManager.load("armor/equipped/BronzeChest.png", Texture.class, textureParameter);
+		assetManager.load("armor/equipped/BronzeBoots.png", Texture.class, textureParameter);
 		
 		// Items
-		assetManager.load("items/HealthPotion.png", Texture.class);
-		assetManager.load("items/Bomb.png", Texture.class);
+		assetManager.load("items/HealthPotion.png", Texture.class, textureParameter);
+		assetManager.load("items/Bomb.png", Texture.class, textureParameter);
 		
 		// Misc
-		assetManager.load("abilities/SwingIcon.png", Texture.class);
-		assetManager.load("BattleOver.png", Texture.class);
-		assetManager.load("maps/ForestMap.png", Texture.class);
+		assetManager.load("abilities/SwingIcon.png", Texture.class, textureParameter);
+		assetManager.load("BattleOver.png", Texture.class, textureParameter);
+		assetManager.load("maps/ForestMap.png", Texture.class, textureParameter);
+		assetManager.load("player/Onion.png", Texture.class, textureParameter);
+		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);
 	}
 	
 	// Load items

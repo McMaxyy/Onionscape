@@ -97,15 +97,15 @@ public class Inventory implements Screen {
 		characterTable.clear();
 		Home.freshLoad = false;
 		
-		// Smooth filtering
+		// Smooth filtering		
 		inventorySlotTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eIronGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eWoodenGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eIronAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eWoodenAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eWoodenShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eIronShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		onionTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		eIronGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eWoodenGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eIronAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eWoodenAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eWoodenShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eIronShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		onionTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		ironAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		woodenAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		ironGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
@@ -118,9 +118,9 @@ public class Inventory implements Screen {
 		ironHelmetTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		ironChestTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		ironBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eIronHelmetTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eIronChestTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eIronBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		eIronHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eIronChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eIronBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		
 		removeBonusStats();
 		createComponents();	

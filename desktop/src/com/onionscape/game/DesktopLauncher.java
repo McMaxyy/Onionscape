@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle("Onionscape");
 		config.setWindowedMode(1280, 720);
-		int samples = 4; // you can also play around with hiher values like 4
+		int samples = 32;
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, samples);
 		new Lwjgl3Application(new Boot(), config);
 	}

@@ -114,6 +114,7 @@ public class Home implements Screen {
 		forestBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
+    			GameScreen.newGame = true;
     			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
     	    }});
 		forestBtn.setSize(150, 100);

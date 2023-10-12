@@ -48,7 +48,10 @@ public class FightScene implements Screen{
     private SpriteBatch weaponBatch = new SpriteBatch();
     private SpriteBatch shieldBatch = new SpriteBatch();
     private SpriteBatch gameOverBatch = new SpriteBatch();
-    private Sprite charSprite, enemySprite, weaponSprite, shieldSprite;
+    private SpriteBatch helmetBatch = new SpriteBatch();
+	private SpriteBatch chestBatch = new SpriteBatch();
+	private SpriteBatch bootsBatch = new SpriteBatch();
+    private Sprite charSprite, enemySprite, weaponSprite, shieldSprite, helmetSprite, chestSprite, bootsSprite;
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
     private String enemyName, eAbility1, eAbility2, eAbility3;
     private boolean pDead, eDead, btnClicked, turnEnded, playerTurn = true, gameOver, playerAttack, twoHand;
@@ -67,7 +70,7 @@ public class FightScene implements Screen{
     Table abilitySwapTable = new Table();
     private float time = 0, enemyClickTime = 0f, rotationTime = 0f;
     private float scaleSpeed = 4f; 
-    private float heightChar, heightEnemy, heightWeapon = 0, heightShield = 210;
+    private float heightChar, heightEnemy, heightWeapon = 0;
     private float baseYChar, baseYEnemy;
     private float weaponRotation = 20f; // starting rotation
     private float rotationSpeed = -10f; // rotation speed per frame (adjust as needed)
@@ -161,7 +164,7 @@ public class FightScene implements Screen{
         eAbility2 = enemy.getAbility2();
         enemyHP = enemyMaxHP;
         enemyTexture = Storage.assetManager.get(texturePath, Texture.class);
-        enemyTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+        enemyTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
         enemyNameLbl.setText(enemyName);
         
         enemySprite = new Sprite(enemyTexture);
@@ -1319,14 +1322,24 @@ public class FightScene implements Screen{
 		
 		String weapon = null;
 		String shield = null;
+		String helmet = null;
+		String chest = null;
+		String boots = null;
 		String weaponPiece = "Empty";
 		String shieldPiece = "Empty";
+		String helmetPiece = "Empty";
+		String chestPiece = "Empty";
+		String bootsPiece = "Empty";
 		Texture weaponTexture = null;	
 		Texture shieldTexture = null;
+		Texture helmetTexture = null;	
+		Texture chestTexture = null;
+		Texture bootsTexture = null;	
 		
-		if(storage.getEquippedWeapons().size() > 0) {
+		if(storage.getEquippedWeapons().size() > 0) {			
 			Actor weaponItem = Inventory.characterTable.getChildren().get(3);
 			Actor shieldItem = Inventory.characterTable.getChildren().get(4);
+						
 			weaponPiece = weaponItem.getName();
 			shieldPiece = shieldItem.getName();
 			
@@ -1337,6 +1350,29 @@ public class FightScene implements Screen{
 			if(!shieldPiece.equals("Empty")) {
 				String[] words = shieldPiece.split(" ");
 				shield = words[words.length - 2] + " " + words[words.length - 1];				
+			}			
+		}
+		
+		if(storage.getEquippedArmor().size() > 0) {
+			Actor helmetTable = Inventory.characterTable.getChildren().get(0);
+			Actor chestTable = Inventory.characterTable.getChildren().get(1);
+			Actor bootsTable = Inventory.characterTable.getChildren().get(2);
+			
+			helmetPiece = helmetTable.getName();
+			chestPiece = chestTable.getName();
+			bootsPiece = bootsTable.getName();
+			
+			if(!helmetPiece.equals("Empty")) {
+				String[] words = helmetPiece.split(" ");
+				helmet = words[words.length - 2] + " " + words[words.length - 1];				
+			}
+			if(!chestPiece.equals("Empty")) {
+				String[] words = chestPiece.split(" ");
+				chest = words[words.length - 2] + " " + words[words.length - 1];				
+			}
+			if(!bootsPiece.equals("Empty")) {
+				String[] words = bootsPiece.split(" ");
+				boots = words[words.length - 2] + " " + words[words.length - 1];				
 			}
 		}
 		
@@ -1345,6 +1381,9 @@ public class FightScene implements Screen{
 	    gameOverBatch.setProjectionMatrix(vp.getCamera().combined);
 	    weaponBatch.setProjectionMatrix(vp.getCamera().combined);
 	    shieldBatch.setProjectionMatrix(vp.getCamera().combined);
+	    helmetBatch.setProjectionMatrix(vp.getCamera().combined);
+		chestBatch.setProjectionMatrix(vp.getCamera().combined);
+		bootsBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	    time += delta; // Increment time by frame time
 	    rotationTime += delta;
@@ -1352,7 +1391,11 @@ public class FightScene implements Screen{
 	    float newHeightChar = heightChar * scaleFactor;
 	    float newHeightEnemy = heightEnemy * scaleFactor;
 	    float newHeightWeapon = heightWeapon * scaleFactor;
-	    float newHeightShield = heightShield * scaleFactor;
+	    float newHeightShield = 210 * scaleFactor;
+	    float newHeightHelmet = 290 * scaleFactor;
+	    float newHeightChest = 125 * scaleFactor;
+	    float newHeightBoots = 50 * scaleFactor;
+	    
 	    if (rotationTime >= rotationInterval) { // check if it's time to rotate again
 	        weaponRotation += rotationSpeed;
 	        rotationTime = 0f;
@@ -1373,6 +1416,56 @@ public class FightScene implements Screen{
     	charBatch.begin();
 	    charSprite.draw(charBatch); // Draw sprite with adjusted scale
 	    charBatch.end();    		
+	    
+	    if(!helmetPiece.equals("Empty")) {
+			switch(helmet) {
+			case "Iron Helmet":
+				helmetTexture = Inventory.eIronHelmetTexture;
+				break;
+			}			
+			
+			helmetSprite = new Sprite(helmetTexture);
+			helmetSprite.setOrigin(0, 0);
+			helmetSprite.setPosition(vp.getWorldWidth() / 29f, vp.getWorldHeight() / 1.37f);				
+			helmetSprite.setSize(290, newHeightHelmet);
+//			helmetSprite.setY(vp.getWorldHeight() / 1.37f);
+			
+			helmetBatch.begin();
+			helmetSprite.draw(helmetBatch);		
+			helmetBatch.end();
+		}
+		
+		if(!chestPiece.equals("Empty")) {
+			switch(chest) {
+			case "Iron Chest":
+				chestTexture = Inventory.eIronChestTexture;
+				break;
+			}
+			
+			chestSprite = new Sprite(chestTexture);
+			chestSprite.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 1.79f);				
+			chestSprite.setSize(275, newHeightChest);
+			
+			chestBatch.begin();
+			chestSprite.draw(chestBatch);		
+			chestBatch.end();
+		}
+		
+		if(!bootsPiece.equals("Empty")) {
+			switch(boots) {
+			case "Iron Boots":
+				bootsTexture = Inventory.eIronBootsTexture;
+				break;
+			}
+			
+			bootsSprite = new Sprite(bootsTexture);
+			bootsSprite.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.995f);				
+			bootsSprite.setSize(133, newHeightBoots);
+			
+			bootsBatch.begin();
+			bootsSprite.draw(bootsBatch);		
+			bootsBatch.end();
+		}
 	    
 	    // Weapon sprite
 	    if(!weaponPiece.equals("Empty")) {
@@ -1406,7 +1499,7 @@ public class FightScene implements Screen{
 			}
 			else {
 				heightWeapon = 190;
-				weaponSprite.setPosition(vp.getWorldWidth() / 5.8f, vp.getWorldHeight() / 1.75f);
+				weaponSprite.setPosition(vp.getWorldWidth() / 5.25f, vp.getWorldHeight() / 1.75f);
 				weaponSprite.setSize(190,  newHeightWeapon);
 				weaponSprite.setY(weaponSprite.getY());			
 			}
@@ -1416,7 +1509,7 @@ public class FightScene implements Screen{
 				if(twoHand)
 					weaponSprite.setRotation(20f);
 				else
-					weaponSprite.setRotation(10f);
+					weaponSprite.setRotation(15f);
 				weaponSprite.draw(weaponBatch);		
 				weaponBatch.end();
 			}
@@ -1485,6 +1578,9 @@ public class FightScene implements Screen{
 	    gameOverBatch.setProjectionMatrix(vp.getCamera().combined);
 	    weaponBatch.setProjectionMatrix(vp.getCamera().combined);
 	    shieldBatch.setProjectionMatrix(vp.getCamera().combined);
+	    helmetBatch.setProjectionMatrix(vp.getCamera().combined);
+		chestBatch.setProjectionMatrix(vp.getCamera().combined);
+		bootsBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override
