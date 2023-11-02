@@ -42,6 +42,7 @@ public class ForestMap implements Screen{
 	private static int location = 0, lastLocation = 0;
 	private Random rand = new Random();
 	private boolean moved = false;
+	public static int encounter = 0, ex;
 	
 	public ForestMap(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -54,14 +55,12 @@ public class ForestMap implements Screen{
 		mapTexture = Storage.assetManager.get("maps/ForestMap.png", Texture.class);
 		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		playerTexture = Storage.assetManager.get("player/MapIcon.png", Texture.class);
-		playerTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-					
-		createComponents();		
-		
-		if(GameScreen.newGame) {
+		playerTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);			
+				
+		if(GameScreen.newGame) {	
+			createComponents();	
 			location = 0;
-			GameScreen.newGame = false;
-			int ex = rand.nextInt(3);
+			ex = rand.nextInt(3);
 			
 			if(ex == 0)
 				exit1.setColor(Color.GREEN);
@@ -75,6 +74,148 @@ public class ForestMap implements Screen{
 		enableButtons();
 	}
 	
+	private String setEncounter(int loc, TextButton button) {
+		int x = rand.nextInt(1, 11);
+		
+		if(!button.getText().toString().equals("")) {
+			switch(loc) {
+			case 1:
+				return "F";
+			case 2:
+				if(x > 5)
+					return "R";
+				else
+					return "F";
+			case 3:
+				if(x > 7)
+					return "M";
+				else if (x > 4)
+					return "R";
+				else
+					return "F";
+			case 4:
+				if(x > 6)
+					return "T";
+				else if(x > 4)
+					return "R";
+				else if(x > 2)
+					return "E";
+				else
+					return "F";
+			case 5:
+				return "F";
+			case 6:
+				if(x > 5)
+					return "R";
+				else
+					return "F";
+			case 7:
+				if(x > 6)
+					return "T";
+				else if(x > 3)
+					return "R";
+				else
+					return "F";
+			case 8:
+				if(x > 5)
+					return "R";
+				else
+					return "F";
+			case 9:
+				return "";
+			case 10:
+				return "F";
+			case 11:
+				return "F";
+			case 12:
+				return "B";
+			case 13:
+				return "R";
+			case 14:
+				if(x > 5)
+					return "R";
+				else
+					return "F";
+			case 15:
+				if(x > 4)
+					return "T";
+				else
+					return "E";
+			case 16:
+				if(x > 5)
+					return "R";
+				else
+					return "F";
+			case 17:
+				if(x > 5)
+					return "R";
+				else
+					return "F";
+			case 18:
+				if(x > 5)
+					return "B";
+				else
+					return "R";
+			case 19:
+				return "R";
+			case 20:
+				return "F";
+			case 21:
+				return "R";
+			case 22:
+				if(x > 4)
+					return "M";
+				else
+					return "R";
+			case 23:
+				return "F";
+			case 24:
+				return "F";
+			case 25:
+				if(x > 4)
+					return "T";
+				else
+					return "E";
+			case 26:
+				return "F";
+			case 27:
+				if(x > 4)
+					return "M";
+				else
+					return "R";
+			case 28:
+				return "F";
+			case 29:
+				return "B";
+			case 30:
+				return "R";
+			case 31:
+				if(x > 8)
+					return "E";
+				else if (x > 4)
+					return "R";
+				else
+					return "F";
+			case 32:
+				return "R";
+			case 33:
+				if(x > 6)
+					return "E";
+				else
+					return "R";
+			case 34:
+				if(x > 5)
+					return "R";
+				else
+					return "F";
+			default:
+				return null;
+			}
+		}
+		else
+			return null;		
+	}
+	
 	private void createComponents() {
 		button1 = new TextButton("1", storage.buttonStyle);
 		button1.setColor(Color.LIGHT_GRAY);
@@ -84,9 +225,10 @@ public class ForestMap implements Screen{
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
 				lastLocation = location;
-				location = 1;
-				btnClick();
+				location = 1;				
+				btnClick(button1.getText().toString());
     	    }});
+		button1.setText(setEncounter(1, button1));
 		
 		button2 = new TextButton("2", storage.buttonStyle);
 		button2.setColor(Color.LIGHT_GRAY);
@@ -97,8 +239,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {   				
     			lastLocation = location;	
     			location = 2;
-    			btnClick();
+    			btnClick(button2.getText().toString());
     	    }});
+		button2.setText(setEncounter(2, button2));
 		
 		button3 = new TextButton("3", storage.buttonStyle);
 		button3.setColor(Color.LIGHT_GRAY);
@@ -109,8 +252,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 3;
-				btnClick();
+				btnClick(button3.getText().toString());
     	    }});
+		button3.setText(setEncounter(3, button3));
 		
 		button4 = new TextButton("4", storage.buttonStyle);
 		button4.setColor(Color.LIGHT_GRAY);
@@ -121,8 +265,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 4;
-				btnClick();
+				btnClick(button4.getText().toString());
     	    }});
+		button4.setText(setEncounter(4, button4));
 		
 		button5 = new TextButton("5", storage.buttonStyle);
 		button5.setColor(Color.LIGHT_GRAY);
@@ -133,8 +278,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 5;
-				btnClick();
+				btnClick(button5.getText().toString());
     	    }});
+		button5.setText(setEncounter(5, button5));
 		
 		button6 = new TextButton("6", storage.buttonStyle);
 		button6.setColor(Color.LIGHT_GRAY);
@@ -145,8 +291,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 6;
-				btnClick();
+				btnClick(button6.getText().toString());
     	    }});
+		button6.setText(setEncounter(6, button6));
 		
 		button7 = new TextButton("7", storage.buttonStyle);
 		button7.setColor(Color.LIGHT_GRAY);
@@ -157,8 +304,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 7;
-				btnClick();
+				btnClick(button7.getText().toString());
     	    }});
+		button7.setText(setEncounter(7, button7));
 		
 		button8 = new TextButton("8", storage.buttonStyle);
 		button8.setColor(Color.LIGHT_GRAY);
@@ -169,8 +317,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 8;
-				btnClick();
+				btnClick(button8.getText().toString());
     	    }});
+		button8.setText(setEncounter(8, button8));
 		
 		button9 = new TextButton("9", storage.buttonStyle);
 		button9.setColor(Color.LIGHT_GRAY);
@@ -181,8 +330,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 9;
-				btnClick();
+				btnClick(button9.getText().toString());
     	    }});
+		button9.setText(setEncounter(9, button9));
 		
 		button10 = new TextButton("10", storage.buttonStyle);
 		button10.setColor(Color.LIGHT_GRAY);
@@ -193,8 +343,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 10;
-				btnClick();
+				btnClick(button10.getText().toString());
     	    }});
+		button10.setText(setEncounter(10, button10));
 		
 		button11 = new TextButton("11", storage.buttonStyle);
 		button11.setColor(Color.LIGHT_GRAY);
@@ -205,8 +356,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 11;
-				btnClick();
+				btnClick(button11.getText().toString());
     	    }});
+		button11.setText(setEncounter(11, button11));
 		
 		button12 = new TextButton("12", storage.buttonStyle);
 		button12.setColor(Color.LIGHT_GRAY);
@@ -217,8 +369,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 12;
-				btnClick();
+				btnClick(button12.getText().toString());
     	    }});
+		button12.setText(setEncounter(12, button12));
 		
 		button13 = new TextButton("13", storage.buttonStyle);
 		button13.setColor(Color.LIGHT_GRAY);
@@ -229,8 +382,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 13;
-				btnClick();
+				btnClick(button13.getText().toString());
     	    }});
+		button13.setText(setEncounter(13, button13));
 		
 		button14 = new TextButton("14", storage.buttonStyle);
 		button14.setColor(Color.LIGHT_GRAY);
@@ -241,8 +395,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 14;
-				btnClick();
+				btnClick(button14.getText().toString());
     	    }});
+		button14.setText(setEncounter(14, button14));
 		
 		button15 = new TextButton("15", storage.buttonStyle);
 		button15.setColor(Color.LIGHT_GRAY);
@@ -253,8 +408,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 15;
-				btnClick();
+				btnClick(button15.getText().toString());
     	    }});
+		button15.setText(setEncounter(15, button15));
 		
 		button16 = new TextButton("16", storage.buttonStyle);
 		button16.setColor(Color.LIGHT_GRAY);
@@ -265,8 +421,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 16;
-				btnClick();
+				btnClick(button16.getText().toString());
     	    }});
+		button16.setText(setEncounter(16, button16));
 		
 		button17 = new TextButton("17", storage.buttonStyle);
 		button17.setColor(Color.LIGHT_GRAY);
@@ -277,8 +434,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 17;
-				btnClick();
+				btnClick(button17.getText().toString());
     	    }});
+		button17.setText(setEncounter(17, button17));
 		
 		button18 = new TextButton("18", storage.buttonStyle);
 		button18.setColor(Color.LIGHT_GRAY);
@@ -289,8 +447,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 18;
-				btnClick();
+				btnClick(button18.getText().toString());
     	    }});
+		button18.setText(setEncounter(18, button18));
 		
 		button19 = new TextButton("19", storage.buttonStyle);
 		button19.setColor(Color.LIGHT_GRAY);
@@ -301,8 +460,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 19;
-				btnClick();
+				btnClick(button19.getText().toString());
     	    }});
+		button19.setText(setEncounter(19, button19));
 		
 		button20 = new TextButton("20", storage.buttonStyle);
 		button20.setColor(Color.LIGHT_GRAY);
@@ -313,8 +473,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 20;
-				btnClick();
+				btnClick(button20.getText().toString());
     	    }});
+		button20.setText(setEncounter(20, button20));
 		
 		button21 = new TextButton("21", storage.buttonStyle);
 		button21.setColor(Color.LIGHT_GRAY);
@@ -325,8 +486,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 21;
-				btnClick();
+				btnClick(button21.getText().toString());
     	    }});
+		button21.setText(setEncounter(21, button21));
 		
 		button22 = new TextButton("22", storage.buttonStyle);
 		button22.setColor(Color.LIGHT_GRAY);
@@ -337,8 +499,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 22;
-				btnClick();
+				btnClick(button22.getText().toString());
     	    }});
+		button22.setText(setEncounter(22, button22));
 		
 		button23 = new TextButton("23", storage.buttonStyle);
 		button23.setColor(Color.LIGHT_GRAY);
@@ -349,8 +512,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 23;
-				btnClick();
+				btnClick(button23.getText().toString());
     	    }});
+		button23.setText(setEncounter(23, button23));
 		
 		button24 = new TextButton("24", storage.buttonStyle);
 		button24.setColor(Color.LIGHT_GRAY);
@@ -361,8 +525,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 24;
-				btnClick();
+				btnClick(button24.getText().toString());
     	    }});
+		button24.setText(setEncounter(24, button24));
 		
 		button25 = new TextButton("25", storage.buttonStyle);
 		button25.setColor(Color.LIGHT_GRAY);
@@ -373,8 +538,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 25;
-				btnClick();
+				btnClick(button25.getText().toString());
     	    }});
+		button25.setText(setEncounter(25, button25));
 		
 		button26 = new TextButton("26", storage.buttonStyle);
 		button26.setColor(Color.LIGHT_GRAY);
@@ -385,8 +551,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 26;
-				btnClick();
+				btnClick(button26.getText().toString());
     	    }});
+		button26.setText(setEncounter(26, button26));
 		
 		button27 = new TextButton("27", storage.buttonStyle);
 		button27.setColor(Color.LIGHT_GRAY);
@@ -397,8 +564,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 27;
-				btnClick();
+				btnClick(button27.getText().toString());
     	    }});
+		button27.setText(setEncounter(27, button27));
 		
 		button28 = new TextButton("28", storage.buttonStyle);
 		button28.setColor(Color.LIGHT_GRAY);
@@ -409,8 +577,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 28;
-				btnClick();
+				btnClick(button28.getText().toString());
     	    }});
+		button28.setText(setEncounter(28, button28));
 		
 		button29 = new TextButton("29", storage.buttonStyle);
 		button29.setColor(Color.LIGHT_GRAY);
@@ -421,8 +590,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 29;
-				btnClick();
+				btnClick(button29.getText().toString());
     	    }});
+		button29.setText(setEncounter(29, button29));
 		
 		button30 = new TextButton("30", storage.buttonStyle);
 		button30.setColor(Color.LIGHT_GRAY);
@@ -433,8 +603,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 30;
-				btnClick();
+				btnClick(button30.getText().toString());
     	    }});
+		button30.setText(setEncounter(30, button30));
 		
 		button31 = new TextButton("31", storage.buttonStyle);
 		button31.setColor(Color.LIGHT_GRAY);
@@ -445,8 +616,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 31;
-				btnClick();
+				btnClick(button31.getText().toString());
     	    }});
+		button31.setText(setEncounter(31, button31));
 		
 		button32 = new TextButton("32", storage.buttonStyle);
 		button32.setColor(Color.LIGHT_GRAY);
@@ -457,8 +629,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 32;
-				btnClick();
+				btnClick(button32.getText().toString());
     	    }});
+		button32.setText(setEncounter(32, button32));
 		
 		button33 = new TextButton("33", storage.buttonStyle);
 		button33.setColor(Color.LIGHT_GRAY);
@@ -469,8 +642,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 33;
-				btnClick();
+				btnClick(button33.getText().toString());
     	    }});
+		button33.setText(setEncounter(33, button33));
 		
 		button34 = new TextButton("34", storage.buttonStyle);
 		button34.setColor(Color.LIGHT_GRAY);
@@ -481,8 +655,9 @@ public class ForestMap implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			lastLocation = location;
 				location = 34;
-				btnClick();
+				btnClick(button34.getText().toString());
     	    }});
+		button34.setText(setEncounter(34, button34));
 		
 		exit1 = new TextButton("EX", storage.buttonStyle);
 		exit1.setColor(Color.RED);
@@ -556,10 +731,28 @@ public class ForestMap implements Screen{
 		stage.addActor(exit3);
 	}
 	
-	private void btnClick() {
+	private void btnClick(String action) {
 		disableButtons();
 		moved = true;
-		enableButtons();		
+		enableButtons();	
+		
+		switch(action) {
+		case "F":
+			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+			break;
+		case "R":
+			encounter = 1;
+			gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
+			break;
+		case "B":
+			break;
+		case "T":
+			encounter = 2;
+			gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
+			break;
+		case "M":
+			break;
+		}
 	}
 	
 	private void disableButtons() {
@@ -577,8 +770,10 @@ public class ForestMap implements Screen{
 		case 0:
 			button1.setTouchable(Touchable.enabled);
 			button2.setTouchable(Touchable.enabled);
+			button9.setTouchable(Touchable.enabled);
 			button1.setColor(Color.LIGHT_GRAY);
 			button2.setColor(Color.LIGHT_GRAY);
+			button9.setColor(Color.LIGHT_GRAY);
 			break;
 		case 1:
 			button9.setTouchable(Touchable.enabled);

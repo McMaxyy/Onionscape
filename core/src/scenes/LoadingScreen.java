@@ -52,7 +52,7 @@ public class LoadingScreen implements Screen {
         
         if (Storage.assetManager.update())
             // All assets are loaded
-            gameScreen.setCurrentState(GameScreen.HOME);
+            gameScreen.setCurrentState(GameScreen.START_SCREEN);
         else {
         	progressBar.setValue(Storage.assetManager.getProgress());
         	loading.setText("Loading..." + (int)(progressBar.getValue() * 100) + "%");

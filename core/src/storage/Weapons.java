@@ -158,3 +158,183 @@ class WoodenAxe extends Weapons{
 		setID(5);
 	}
 }
+
+class HealthyBronzeGreatAxe extends Weapons{
+	public HealthyBronzeGreatAxe() {
+		setWeaponName("Healthy Bronze Greataxe");
+		setWeaponDmg(5);
+		setHanded("TwoHanded");
+		setBonusStat(7);
+		setID(6);
+	}
+}
+
+class StrongBronzeGreatAxe extends Weapons{
+	public StrongBronzeGreatAxe() {
+		setWeaponName("Strong Bronze Greataxe");
+		setWeaponDmg(5);
+		setHanded("TwoHanded");
+		setBonusStat(3);
+		setID(6);
+	}
+}
+
+class DefensiveBronzeGreatAxe extends Weapons{
+	public DefensiveBronzeGreatAxe() {
+		setWeaponName("Defensive Bronze Greataxe");
+		setWeaponDmg(5);
+		setHanded("TwoHanded");
+		setBonusStat(3);
+		setID(6);
+	}
+}
+
+class HealthySteelGreatAxe extends Weapons{
+	public HealthySteelGreatAxe() {
+		setWeaponName("Healthy Steel Greataxe");
+		setWeaponDmg(7);
+		setHanded("TwoHanded");
+		setBonusStat(10);
+		setID(7);
+	}
+}
+
+class StrongSteelGreatAxe extends Weapons{
+	public StrongSteelGreatAxe() {
+		setWeaponName("Strong Steel Greataxe");
+		setWeaponDmg(7);
+		setHanded("TwoHanded");
+		setBonusStat(4);
+		setID(7);
+	}
+}
+
+class DefensiveSteelGreatAxe extends Weapons{
+	public DefensiveSteelGreatAxe() {
+		setWeaponName("Defensive Steel Greataxe");
+		setWeaponDmg(7);
+		setHanded("TwoHanded");
+		setBonusStat(4);
+		setID(7);
+	}
+}
+
+class HealthyBronzeAxe extends Weapons{
+	public HealthyBronzeAxe() {
+		setWeaponName("Healthy Bronze Axe");
+		setWeaponDmg(3);
+		setHanded("OneHanded");
+		setBonusStat(3);
+		setID(8);
+	}
+}
+
+class StrongBronzeAxe extends Weapons{
+	public StrongBronzeAxe() {
+		setWeaponName("Strong Bronze Axe");
+		setWeaponDmg(3);
+		setHanded("OneHanded");
+		setBonusStat(2);
+		setID(8);
+	}
+}
+
+class DefensiveBronzeAxe extends Weapons{
+	public DefensiveBronzeAxe() {
+		setWeaponName("Defensive Bronze Axe");
+		setWeaponDmg(3);
+		setHanded("OneHanded");
+		setBonusStat(2);
+		setID(8);
+	}
+}
+
+class HealthySteelAxe extends Weapons{
+	public HealthySteelAxe() {
+		setWeaponName("Healthy Steel Axe");
+		setWeaponDmg(4);
+		setHanded("OneHanded");
+		setBonusStat(5);
+		setID(9);
+	}
+}
+
+class StrongSteelAxe extends Weapons{
+	public StrongSteelAxe() {
+		setWeaponName("Strong Steel Axe");
+		setWeaponDmg(4);
+		setHanded("OneHanded");
+		setBonusStat(3);
+		setID(9);
+	}
+}
+
+class DefensiveSteelAxe extends Weapons{
+	public DefensiveSteelAxe() {
+		setWeaponName("Defensive Steel Axe");
+		setWeaponDmg(4);
+		setHanded("OneHanded");
+		setBonusStat(3);
+		setID(9);
+	}
+}
+
+class HealthyBronzeShield extends Weapons{
+	public HealthyBronzeShield() {
+		setWeaponName("Healthy Bronze Shield");
+		setWeaponDmg(4);
+		setHanded("OffHand");
+		setBonusStat(4);
+		setID(10);
+	}
+}
+
+class StrongBronzeShield extends Weapons{
+	public StrongBronzeShield() {
+		setWeaponName("Strong Bronze Shield");
+		setWeaponDmg(4);
+		setHanded("OffHand");
+		setBonusStat(1);
+		setID(10);
+	}
+}
+
+class DefensiveBronzeShield extends Weapons{
+	public DefensiveBronzeShield() {
+		setWeaponName("Defensive Bronze Shield");
+		setWeaponDmg(4);
+		setHanded("OffHand");
+		setBonusStat(1);
+		setID(10);
+	}
+}
+
+class HealthySteelShield extends Weapons{
+	public HealthySteelShield() {
+		setWeaponName("Healthy Steel Shield");
+		setWeaponDmg(5);
+		setHanded("OffHand");
+		setBonusStat(5);
+		setID(11);
+	}
+}
+
+class StrongSteelShield extends Weapons{
+	public StrongSteelShield() {
+		setWeaponName("Strong Steel Shield");
+		setWeaponDmg(5);
+		setHanded("OffHand");
+		setBonusStat(2);
+		setID(11);
+	}
+}
+
+class DefensiveSteelShield extends Weapons{
+	public DefensiveSteelShield() {
+		setWeaponName("Defensive Steel Shield");
+		setWeaponDmg(5);
+		setHanded("OffHand");
+		setBonusStat(2);
+		setID(11);
+	}
+}

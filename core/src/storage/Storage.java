@@ -18,8 +18,8 @@ public class Storage {
 	private static Storage instance = null;
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle;
-	public LabelStyle labelStyle;
-	public BitmapFont font;
+	public LabelStyle labelStyle, labelStyleBig;
+	public BitmapFont font, fontBig;
 	private List<Weapons> playerWeapons = new ArrayList<>();
 	private List<Armor> playerArmor = new ArrayList<>();
 	private List<Items> playerItems = new ArrayList<>();
@@ -61,6 +61,12 @@ public class Storage {
 		assetManager.load("weapons/inventory/WoodenShield.png", Texture.class, textureParameter);
 		assetManager.load("weapons/inventory/WoodenGreataxe.png", Texture.class, textureParameter);
 		assetManager.load("weapons/inventory/IronShield.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/BronzeShield.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/BronzeGreataxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/BronzeAxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/SteelShield.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/SteelGreataxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/inventory/SteelAxe.png", Texture.class, textureParameter);
 		
 		// Equipped weapons
 		assetManager.load("weapons/equipped/IronGreataxe.png", Texture.class, textureParameter);
@@ -69,6 +75,12 @@ public class Storage {
 		assetManager.load("weapons/equipped/WoodenAxe.png", Texture.class, textureParameter);
 		assetManager.load("weapons/equipped/WoodenShield.png", Texture.class, textureParameter);
 		assetManager.load("weapons/equipped/IronShield.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/BronzeShield.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/BronzeGreataxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/BronzeAxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/SteelShield.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/SteelGreataxe.png", Texture.class, textureParameter);
+		assetManager.load("weapons/equipped/SteelAxe.png", Texture.class, textureParameter);
 		
 		// Enemy images
 		assetManager.load("enemies/Wolfie.png", Texture.class, textureParameter);
@@ -103,10 +115,14 @@ public class Storage {
 		assetManager.load("items/HealthPotion.png", Texture.class, textureParameter);
 		assetManager.load("items/Bomb.png", Texture.class, textureParameter);
 		
+		// Maps
+		assetManager.load("maps/InventoryScreen.png", Texture.class, textureParameter);
+		assetManager.load("maps/StartScreen.png", Texture.class, textureParameter);
+		assetManager.load("maps/ForestMap.png", Texture.class, textureParameter);
+		
 		// Misc
 		assetManager.load("abilities/SwingIcon.png", Texture.class, textureParameter);
-		assetManager.load("BattleOver.png", Texture.class, textureParameter);
-		assetManager.load("maps/ForestMap.png", Texture.class, textureParameter);
+		assetManager.load("BattleOver.png", Texture.class, textureParameter);		
 		assetManager.load("player/Onion.png", Texture.class, textureParameter);
 		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);
 	}
@@ -159,6 +175,24 @@ public class Storage {
 	public Weapons healthyIronShield = new HealthyIronShield();
 	public Weapons strongIronShield = new StrongIronShield();
 	public Weapons defensiveIronShield = new DefensiveIronShield();
+	public Weapons healthyBronzeShield = new HealthyBronzeShield();
+	public Weapons strongBronzeShield = new StrongBronzeShield();
+	public Weapons defensiveBronzeShield = new DefensiveBronzeShield();
+	public Weapons healthySteelShield = new HealthySteelShield();
+	public Weapons strongSteelShield = new StrongSteelShield();
+	public Weapons defensiveSteelShield = new DefensiveSteelShield();
+	public Weapons healthyBronzeGA = new HealthyBronzeGreatAxe();
+	public Weapons strongBronzeGA = new StrongBronzeGreatAxe();
+	public Weapons defensiveBronzeGA = new DefensiveBronzeGreatAxe();
+	public Weapons healthyBronzeAxe = new HealthyBronzeAxe();
+	public Weapons strongBronzeAxe = new StrongBronzeAxe();
+	public Weapons defensiveBronzeAxe = new DefensiveBronzeAxe();
+	public Weapons healthySteelGA = new HealthySteelGreatAxe();
+	public Weapons strongSteelGA = new StrongSteelGreatAxe();
+	public Weapons defensiveSteelGA = new DefensiveSteelGreatAxe();
+	public Weapons healthySteelAxe = new HealthySteelAxe();
+	public Weapons strongSteelAxe = new StrongSteelAxe();
+	public Weapons defensiveSteelAxe = new DefensiveSteelAxe();
 	
 	// Load armor
 	public Armor healthyIronHelmet = new HealthyIronHelmet();
@@ -170,6 +204,24 @@ public class Storage {
 	public Armor healthyIronBoots = new HealthyIronBoots();
 	public Armor strongIronBoots = new StrongIronBoots();
 	public Armor defensiveIronBoots = new DefensiveIronBoots();
+	public Armor healthyBronzeHelmet = new HealthyBronzeHelmet();
+	public Armor strongBronzeHelmet = new StrongBronzeHelmet();
+	public Armor defensiveBronzeHelmet = new DefensiveBronzeHelmet();
+	public Armor healthyBronzeChest = new HealthyBronzeChest();
+	public Armor strongBronzeChest = new StrongBronzeChest();
+	public Armor defensiveBronzeChest = new DefensiveBronzeChest();
+	public Armor healthyBronzeBoots = new HealthyBronzeBoots();
+	public Armor strongBronzeBoots = new StrongBronzeBoots();
+	public Armor defensiveBronzeBoots = new DefensiveBronzeBoots();
+	public Armor healthySteelHelmet = new HealthySteelHelmet();
+	public Armor strongSteelHelmet = new StrongSteelHelmet();
+	public Armor defensiveSteelHelmet = new DefensiveSteelHelmet();
+	public Armor healthySteelChest = new HealthySteelChest();
+	public Armor strongSteelChest = new StrongSteelChest();
+	public Armor defensiveSteelChest = new DefensiveSteelChest();
+	public Armor healthySteelBoots = new HealthySteelBoots();
+	public Armor strongSteelBoots = new StrongSteelBoots();
+	public Armor defensiveSteelBoots = new DefensiveSteelBoots();
 	
 	// Load enemies
 	public Enemy wolf = new Wolf();
@@ -267,6 +319,12 @@ public class Storage {
 			equippedItems.clear();
 	}
 	
+	public String loseItem() {
+		String item = equippedItems.get(0).getItemName();
+		equippedItems.remove(0);
+		return item;
+	}
+	
 	public List<Items> getEquippedItems() {
         return new ArrayList<>(equippedItems);
     }
@@ -276,14 +334,18 @@ public class Storage {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 25;
         font = generator.generateFont(parameter);
-        generator.dispose();
+        parameter.size = 50;
+        fontBig = generator.generateFont(parameter);
         
         // Create a new style for button
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
         buttonStyle.font = font; 
         
         labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
-        labelStyle.font = font;        
+        labelStyle.font = font;  
+        
+        labelStyleBig = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
+        labelStyleBig.font = fontBig; 
     }
 
 	public int[] getBonusHP() {

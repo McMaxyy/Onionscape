@@ -75,7 +75,7 @@ public class FightScene implements Screen{
     private float weaponRotation = 20f; // starting rotation
     private float rotationSpeed = -10f; // rotation speed per frame (adjust as needed)
     private float rotationInterval = 0.017f;
-    private int timer = 0;
+    private int timer = 0;   
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -997,13 +997,13 @@ public class FightScene implements Screen{
     	        turnEnded = true;
     	    }});
     	
-    	homeBtn = new TextButton("Home", storage.buttonStyle);
+    	homeBtn = new TextButton("Return", storage.buttonStyle);
     	homeBtn.setColor(Color.RED);
     	homeBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			stage.clear();
-        		gameScreen.setCurrentState(GameScreen.HOME);
+        		gameScreen.setCurrentState(GameScreen.FOREST_MAP);
     	    }});
     }
     
@@ -1022,7 +1022,7 @@ public class FightScene implements Screen{
     	container.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("white.png"))));
     	container.setBounds(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 2f, 600, 400);
     	container.align(Align.topLeft);
-    	combatLog.setWidth(container.getWidth());
+    	combatLog.setSize(600, 400);
     	
         attackBtn.setSize(550, 120); 
         attackBtn.setPosition(vp.getWorldWidth() / 5.2f - attackBtn.getWidth() / 2f,  vp.getWorldHeight() / 2.4f - attackBtn.getHeight() / 2f);
@@ -1308,6 +1308,11 @@ public class FightScene implements Screen{
         enemyTexture.dispose();
         charBatch.dispose();
         enemyBatch.dispose();
+        weaponBatch.dispose();
+        shieldBatch.dispose();
+        helmetBatch.dispose();
+        chestBatch.dispose();
+        bootsBatch.dispose();
     }
 
 	@Override
@@ -1334,7 +1339,7 @@ public class FightScene implements Screen{
 		Texture shieldTexture = null;
 		Texture helmetTexture = null;	
 		Texture chestTexture = null;
-		Texture bootsTexture = null;	
+		Texture bootsTexture = null;			
 		
 		if(storage.getEquippedWeapons().size() > 0) {			
 			Actor weaponItem = Inventory.characterTable.getChildren().get(3);
@@ -1392,9 +1397,11 @@ public class FightScene implements Screen{
 	    float newHeightEnemy = heightEnemy * scaleFactor;
 	    float newHeightWeapon = heightWeapon * scaleFactor;
 	    float newHeightShield = 210 * scaleFactor;
-	    float newHeightHelmet = 290 * scaleFactor;
 	    float newHeightChest = 125 * scaleFactor;
-	    float newHeightBoots = 50 * scaleFactor;
+	    float newHeightBoots = 50 * scaleFactor;	 
+	    float helmetMoveSpeed = 4f;
+	    float helmetMoveAmount = 3f;
+	    float newHelmetY = (vp.getWorldHeight() / 1.37f) + helmetMoveAmount * (float) Math.sin(time * helmetMoveSpeed);
 	    
 	    if (rotationTime >= rotationInterval) { // check if it's time to rotate again
 	        weaponRotation += rotationSpeed;
@@ -1422,23 +1429,34 @@ public class FightScene implements Screen{
 			case "Iron Helmet":
 				helmetTexture = Inventory.eIronHelmetTexture;
 				break;
+			case "Bronze Helmet":
+				helmetTexture = Inventory.eBronzeHelmetTexture;
+				break;
+			case "Steel Helmet":
+				helmetTexture = Inventory.eSteelHelmetTexture;
+				break;
 			}			
 			
 			helmetSprite = new Sprite(helmetTexture);
-			helmetSprite.setOrigin(0, 0);
-			helmetSprite.setPosition(vp.getWorldWidth() / 29f, vp.getWorldHeight() / 1.37f);				
-			helmetSprite.setSize(290, newHeightHelmet);
-//			helmetSprite.setY(vp.getWorldHeight() / 1.37f);
-			
-			helmetBatch.begin();
-			helmetSprite.draw(helmetBatch);		
-			helmetBatch.end();
+		    helmetSprite.setOrigin(0, 0);
+		    helmetSprite.setPosition(vp.getWorldWidth() / 29f, newHelmetY);
+		    helmetSprite.setSize(290, 290);
+
+		    helmetBatch.begin();
+		    helmetSprite.draw(helmetBatch);
+		    helmetBatch.end();
 		}
 		
 		if(!chestPiece.equals("Empty")) {
 			switch(chest) {
 			case "Iron Chest":
 				chestTexture = Inventory.eIronChestTexture;
+				break;
+			case "Bronze Chest":
+				chestTexture = Inventory.eBronzeChestTexture;
+				break;
+			case "Steel Chest":
+				chestTexture = Inventory.eSteelChestTexture;
 				break;
 			}
 			
@@ -1455,6 +1473,12 @@ public class FightScene implements Screen{
 			switch(boots) {
 			case "Iron Boots":
 				bootsTexture = Inventory.eIronBootsTexture;
+				break;
+			case "Bronze Boots":
+				bootsTexture = Inventory.eBronzeBootsTexture;
+				break;
+			case "Steel Boots":
+				bootsTexture = Inventory.eSteelBootsTexture;
 				break;
 			}
 			
@@ -1484,6 +1508,22 @@ public class FightScene implements Screen{
 				break;
 			case "Iron Axe":
 				weaponTexture = Inventory.eIronAxeTexture;
+				twoHand = false;
+				break;
+			case "Bronze Greataxe":
+				weaponTexture = Inventory.eBronzeGreataxeTexture;
+				twoHand = true;
+				break;
+			case "Bronze Axe":
+				weaponTexture = Inventory.eBronzeAxeTexture;
+				twoHand = false;
+				break;
+			case "Steel Greataxe":
+				weaponTexture = Inventory.eSteelGreataxeTexture;
+				twoHand = true;
+				break;
+			case "Steel Axe":
+				weaponTexture = Inventory.eSteelAxeTexture;
 				twoHand = false;
 				break;
 			}
@@ -1528,6 +1568,12 @@ public class FightScene implements Screen{
 				break;
 			case "Iron Shield":
 				shieldTexture = Inventory.eIronShieldTexture;
+				break;
+			case "Bronze Shield":
+				shieldTexture = Inventory.eBronzeShieldTexture;
+				break;
+			case "Steel Shield":
+				shieldTexture = Inventory.eSteelShieldTexture;
 				break;
 	    	}
 	    	

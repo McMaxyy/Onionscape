@@ -56,9 +56,13 @@ public class Inventory implements Screen {
 	private SpriteBatch helmetBatch = new SpriteBatch();
 	private SpriteBatch chestBatch = new SpriteBatch();
 	private SpriteBatch bootsBatch = new SpriteBatch();
+	private SpriteBatch mapBatch = new SpriteBatch();
 	private static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0, weaponAP = 0,
 			bonusHP = 0, bonusAP = 0, bonusDP = 0;
 	boolean twoHand = false;
+	
+	// Map texture
+	private Texture mapTexture  = Storage.assetManager.get("maps/InventoryScreen.png", Texture.class);
 	
 	// Get textures from storage
 	public static Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
@@ -84,7 +88,31 @@ public class Inventory implements Screen {
 	public static Texture eIronHelmetTexture = Storage.assetManager.get("armor/equipped/IronHelmet.png", Texture.class);		
 	public static Texture eIronChestTexture = Storage.assetManager.get("armor/equipped/IronChest.png", Texture.class);		
 	public static Texture eIronBootsTexture = Storage.assetManager.get("armor/equipped/IronBoots.png", Texture.class);		
-
+	public static Texture eBronzeHelmetTexture = Storage.assetManager.get("armor/equipped/BronzeHelmet.png", Texture.class);		
+	public static Texture eBronzeChestTexture = Storage.assetManager.get("armor/equipped/BronzeChest.png", Texture.class);		
+	public static Texture eBronzeBootsTexture = Storage.assetManager.get("armor/equipped/BronzeBoots.png", Texture.class);	
+	public static Texture eSteelHelmetTexture = Storage.assetManager.get("armor/equipped/SteelHelmet.png", Texture.class);		
+	public static Texture eSteelChestTexture = Storage.assetManager.get("armor/equipped/SteelChest.png", Texture.class);		
+	public static Texture eSteelBootsTexture = Storage.assetManager.get("armor/equipped/SteelBoots.png", Texture.class);
+	public static Texture bronzeHelmetTexture = Storage.assetManager.get("armor/inventory/BronzeHelmet.png", Texture.class);
+	public static Texture bronzeChestTexture = Storage.assetManager.get("armor/inventory/BronzeChest.png", Texture.class);
+	public static Texture bronzeBootsTexture = Storage.assetManager.get("armor/inventory/BronzeBoots.png", Texture.class);
+	public static Texture steelHelmetTexture = Storage.assetManager.get("armor/inventory/SteelHelmet.png", Texture.class);
+	public static Texture steelChestTexture = Storage.assetManager.get("armor/inventory/SteelChest.png", Texture.class);
+	public static Texture steelBootsTexture = Storage.assetManager.get("armor/inventory/SteelBoots.png", Texture.class);
+	public static Texture bronzeGreataxeTexture = Storage.assetManager.get("weapons/inventory/BronzeGreataxe.png", Texture.class);
+	public static Texture bronzeShieldTexture = Storage.assetManager.get("weapons/inventory/BronzeShield.png", Texture.class);
+	public static Texture bronzeAxeTexture = Storage.assetManager.get("weapons/inventory/BronzeAxe.png", Texture.class);
+	public static Texture steelGreataxeTexture = Storage.assetManager.get("weapons/inventory/SteelGreataxe.png", Texture.class);
+	public static Texture steelShieldTexture = Storage.assetManager.get("weapons/inventory/SteelShield.png", Texture.class);
+	public static Texture steelAxeTexture = Storage.assetManager.get("weapons/inventory/SteelAxe.png", Texture.class);
+	public static Texture eBronzeAxeTexture = Storage.assetManager.get("weapons/equipped/BronzeAxe.png", Texture.class);
+	public static Texture eBronzeShieldTexture = Storage.assetManager.get("weapons/equipped/BronzeShield.png", Texture.class);
+	public static Texture eBronzeGreataxeTexture = Storage.assetManager.get("weapons/equipped/BronzeGreataxe.png", Texture.class);
+	public static Texture eSteelAxeTexture = Storage.assetManager.get("weapons/equipped/SteelAxe.png", Texture.class);
+	public static Texture eSteelShieldTexture = Storage.assetManager.get("weapons/equipped/SteelShield.png", Texture.class);
+	public static Texture eSteelGreataxeTexture = Storage.assetManager.get("weapons/equipped/SteelGreataxe.png", Texture.class);
+	
 	public Inventory(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
 		this.game = game;
@@ -97,7 +125,8 @@ public class Inventory implements Screen {
 		characterTable.clear();
 		Home.freshLoad = false;
 		
-		// Smooth filtering		
+		// Smooth filtering	
+		mapTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		inventorySlotTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		eIronGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eWoodenGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
@@ -120,7 +149,31 @@ public class Inventory implements Screen {
 		ironBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		eIronHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eIronChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eIronBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eIronBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);		
+		eBronzeHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);	
+		eBronzeChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eBronzeBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eSteelHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eSteelChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eSteelBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		bronzeHelmetTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		bronzeChestTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		bronzeBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		steelHelmetTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		steelChestTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		steelBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		bronzeGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		bronzeShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		bronzeAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		steelGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		steelShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		steelAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		eBronzeAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eBronzeShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eBronzeGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eSteelAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eSteelShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		eSteelGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		
 		removeBonusStats();
 		createComponents();	
@@ -454,6 +507,18 @@ public class Inventory implements Screen {
 				return woodenShieldTexture;
 			case "Iron Shield":
 				return ironShieldTexture;
+			case "Bronze Greataxe":
+				return bronzeGreataxeTexture;
+			case "Bronze Axe":
+				return bronzeAxeTexture;
+			case "Bronze Shield":
+				return bronzeShieldTexture;
+			case "Steel Greataxe":
+				return steelGreataxeTexture;
+			case "Steel Axe":
+				return steelAxeTexture;
+			case "Steel Shield":
+				return steelShieldTexture;
 			case "":
 				return inventorySlotTexture;
 			default:
@@ -468,6 +533,18 @@ public class Inventory implements Screen {
 				return ironChestTexture;
 			case "Iron Boots":
 				return ironBootsTexture;
+			case "Bronze Helmet":
+				return bronzeHelmetTexture;
+			case "Bronze Chest":
+				return bronzeChestTexture;
+			case "Bronze Boots":
+				return bronzeBootsTexture;
+			case "Steel Helmet":
+				return steelHelmetTexture;
+			case "Steel Chest":
+				return steelChestTexture;
+			case "Steel Boots":
+				return steelBootsTexture;
 			case "":
 				return inventorySlotTexture;
 			default:
@@ -529,6 +606,36 @@ public class Inventory implements Screen {
 				storage.equippedArmor(storage.defensiveIronHelmet, "Remove");	
 				storage.setBonusDP(0, 0);
 				break;
+			case "Healthy Bronze Helmet":
+				storage.inventoryArmor(storage.healthyBronzeHelmet, "Add");
+				storage.equippedArmor(storage.healthyBronzeHelmet, "Remove");	
+				storage.setBonusHP(0, 0);
+				break;
+			case "Strong Bronze Helmet":
+				storage.inventoryArmor(storage.strongBronzeHelmet, "Add");
+				storage.equippedArmor(storage.strongBronzeHelmet, "Remove");	
+				storage.setBonusAP(0, 0);
+				break;
+			case "Defensive Bronze Helmet":
+				storage.inventoryArmor(storage.defensiveBronzeHelmet, "Add");
+				storage.equippedArmor(storage.defensiveBronzeHelmet, "Remove");	
+				storage.setBonusDP(0, 0);
+				break;
+			case "Healthy Steel Helmet":
+				storage.inventoryArmor(storage.healthySteelHelmet, "Add");
+				storage.equippedArmor(storage.healthySteelHelmet, "Remove");	
+				storage.setBonusHP(0, 0);
+				break;
+			case "Strong Steel Helmet":
+				storage.inventoryArmor(storage.strongSteelHelmet, "Add");
+				storage.equippedArmor(storage.strongSteelHelmet, "Remove");	
+				storage.setBonusAP(0, 0);
+				break;
+			case "Defensive Steel Helmet":
+				storage.inventoryArmor(storage.defensiveSteelHelmet, "Add");
+				storage.equippedArmor(storage.defensiveSteelHelmet, "Remove");	
+				storage.setBonusDP(0, 0);
+				break;
 			}		
 		}
 		else if(gearSlot == "Chest") {
@@ -549,6 +656,36 @@ public class Inventory implements Screen {
 				storage.equippedArmor(storage.defensiveIronChest, "Remove");	
 				storage.setBonusDP(1, 0);
 				break;
+			case "Healthy Bronze Chest":
+				storage.inventoryArmor(storage.healthyBronzeChest, "Add");
+				storage.equippedArmor(storage.healthyBronzeChest, "Remove");	
+				storage.setBonusHP(1, 0);
+				break;
+			case "Strong Bronze Chest":
+				storage.inventoryArmor(storage.strongBronzeChest, "Add");
+				storage.equippedArmor(storage.strongBronzeChest, "Remove");	
+				storage.setBonusAP(1, 0);
+				break;
+			case "Defensive Bronze Chest":
+				storage.inventoryArmor(storage.defensiveBronzeChest, "Add");
+				storage.equippedArmor(storage.defensiveBronzeChest, "Remove");	
+				storage.setBonusDP(1, 0);
+				break;
+			case "Healthy Steel Chest":
+				storage.inventoryArmor(storage.healthySteelChest, "Add");
+				storage.equippedArmor(storage.healthySteelChest, "Remove");	
+				storage.setBonusHP(1, 0);
+				break;
+			case "Strong Steel Chest":
+				storage.inventoryArmor(storage.strongSteelChest, "Add");
+				storage.equippedArmor(storage.strongSteelChest, "Remove");	
+				storage.setBonusAP(1, 0);
+				break;
+			case "Defensive Steel Chest":
+				storage.inventoryArmor(storage.defensiveSteelChest, "Add");
+				storage.equippedArmor(storage.defensiveSteelChest, "Remove");	
+				storage.setBonusDP(1, 0);
+				break;
 			}
 		}
 		else if(gearSlot == "Boots") {
@@ -567,6 +704,36 @@ public class Inventory implements Screen {
 			case "Defensive Iron Boots":
 				storage.inventoryArmor(storage.defensiveIronBoots, "Add");
 				storage.equippedArmor(storage.defensiveIronBoots, "Remove");	
+				storage.setBonusDP(2, 0);
+				break;
+			case "Healthy Bronze Boots":
+				storage.inventoryArmor(storage.healthyBronzeBoots, "Add");
+				storage.equippedArmor(storage.healthyBronzeBoots, "Remove");	
+				storage.setBonusHP(2, 0);
+				break;
+			case "Strong Bronze Boots":
+				storage.inventoryArmor(storage.strongBronzeBoots, "Add");
+				storage.equippedArmor(storage.strongBronzeBoots, "Remove");	
+				storage.setBonusAP(2, 0);
+				break;
+			case "Defensive Bronze Boots":
+				storage.inventoryArmor(storage.defensiveBronzeBoots, "Add");
+				storage.equippedArmor(storage.defensiveBronzeBoots, "Remove");	
+				storage.setBonusDP(2, 0);
+				break;
+			case "Healthy Steel Boots":
+				storage.inventoryArmor(storage.healthySteelBoots, "Add");
+				storage.equippedArmor(storage.healthySteelBoots, "Remove");	
+				storage.setBonusHP(2, 0);
+				break;
+			case "Strong Steel Boots":
+				storage.inventoryArmor(storage.strongSteelBoots, "Add");
+				storage.equippedArmor(storage.strongSteelBoots, "Remove");	
+				storage.setBonusAP(2, 0);
+				break;
+			case "Defensive Steel Boots":
+				storage.inventoryArmor(storage.defensiveSteelBoots, "Add");
+				storage.equippedArmor(storage.defensiveSteelBoots, "Remove");	
 				storage.setBonusDP(2, 0);
 				break;
 			}
@@ -609,6 +776,60 @@ public class Inventory implements Screen {
 				storage.inventoryWeapons(storage.defensiveIronAxe, "Add");
 				storage.equippedWeapons(storage.defensiveIronAxe, "Remove");
 				break;
+			case "Healthy Bronze Greataxe":
+				storage.inventoryWeapons(storage.healthyBronzeGA, "Add");
+				storage.equippedWeapons(storage.healthyBronzeGA, "Remove");	
+				storage.setBonusHP(3, 0);
+				break;
+			case "Strong Bronze Greataxe":
+				storage.inventoryWeapons(storage.strongBronzeGA, "Add");
+				storage.equippedWeapons(storage.strongBronzeGA, "Remove");
+				storage.setBonusAP(3, 0);
+				break;
+			case "Defensive Bronze Greataxe":
+				storage.inventoryWeapons(storage.defensiveBronzeGA, "Add");
+				storage.equippedWeapons(storage.defensiveBronzeGA, "Remove");
+				storage.setBonusDP(3, 0);
+				break;
+			case "Healthy Bronze Axe":
+				storage.inventoryWeapons(storage.healthyBronzeAxe, "Add");
+				storage.equippedWeapons(storage.healthyBronzeAxe, "Remove");
+				break;
+			case "Strong Bronze Axe":
+				storage.inventoryWeapons(storage.strongBronzeAxe, "Add");
+				storage.equippedWeapons(storage.strongBronzeAxe, "Remove");
+				break;
+			case "Defensive Bronze Axe":
+				storage.inventoryWeapons(storage.defensiveBronzeAxe, "Add");
+				storage.equippedWeapons(storage.defensiveBronzeAxe, "Remove");
+				break;
+			case "Healthy Steel Greataxe":
+				storage.inventoryWeapons(storage.healthySteelGA, "Add");
+				storage.equippedWeapons(storage.healthySteelGA, "Remove");	
+				storage.setBonusHP(3, 0);
+				break;
+			case "Strong Steel Greataxe":
+				storage.inventoryWeapons(storage.strongSteelGA, "Add");
+				storage.equippedWeapons(storage.strongSteelGA, "Remove");
+				storage.setBonusAP(3, 0);
+				break;
+			case "Defensive Steel Greataxe":
+				storage.inventoryWeapons(storage.defensiveSteelGA, "Add");
+				storage.equippedWeapons(storage.defensiveSteelGA, "Remove");
+				storage.setBonusDP(3, 0);
+				break;
+			case "Healthy Steel Axe":
+				storage.inventoryWeapons(storage.healthySteelAxe, "Add");
+				storage.equippedWeapons(storage.healthySteelAxe, "Remove");
+				break;
+			case "Strong Steel Axe":
+				storage.inventoryWeapons(storage.strongSteelAxe, "Add");
+				storage.equippedWeapons(storage.strongSteelAxe, "Remove");
+				break;
+			case "Defensive Steel Axe":
+				storage.inventoryWeapons(storage.defensiveSteelAxe, "Add");
+				storage.equippedWeapons(storage.defensiveSteelAxe, "Remove");
+				break;
 			}		
 			if(slot == 4) {
 				shieldDP = 0;
@@ -630,6 +851,36 @@ public class Inventory implements Screen {
 				case "Defensive Iron Shield":
 					storage.inventoryWeapons(storage.defensiveIronShield, "Add");
 					storage.equippedWeapons(storage.defensiveIronShield, "Remove");
+					storage.setBonusDP(4, 0);
+					break;
+				case "Healthy Bronze Shield":
+					storage.inventoryWeapons(storage.healthyBronzeShield, "Add");
+					storage.equippedWeapons(storage.healthyBronzeShield, "Remove");
+					storage.setBonusHP(4, 0);
+					break;
+				case "Strong Bronze Shield":
+					storage.inventoryWeapons(storage.strongBronzeShield, "Add");
+					storage.equippedWeapons(storage.strongBronzeShield, "Remove");
+					storage.setBonusAP(4, 0);
+					break;
+				case "Defensive Bronze Shield":
+					storage.inventoryWeapons(storage.defensiveBronzeShield, "Add");
+					storage.equippedWeapons(storage.defensiveBronzeShield, "Remove");
+					storage.setBonusDP(4, 0);
+					break;
+				case "Healthy Steel Shield":
+					storage.inventoryWeapons(storage.healthySteelShield, "Add");
+					storage.equippedWeapons(storage.healthySteelShield, "Remove");
+					storage.setBonusHP(4, 0);
+					break;
+				case "Strong Steel Shield":
+					storage.inventoryWeapons(storage.strongSteelShield, "Add");
+					storage.equippedWeapons(storage.strongSteelShield, "Remove");
+					storage.setBonusAP(4, 0);
+					break;
+				case "Defensive Steel Shield":
+					storage.inventoryWeapons(storage.defensiveSteelShield, "Add");
+					storage.equippedWeapons(storage.defensiveSteelShield, "Remove");
 					storage.setBonusDP(4, 0);
 					break;
 				}			
@@ -655,6 +906,36 @@ public class Inventory implements Screen {
 			case "Defensive Iron Shield":
 				storage.inventoryWeapons(storage.defensiveIronShield, "Add");
 				storage.equippedWeapons(storage.defensiveIronShield, "Remove");
+				storage.setBonusDP(4, 0);
+				break;
+			case "Healthy Bronze Shield":
+				storage.inventoryWeapons(storage.healthyBronzeShield, "Add");
+				storage.equippedWeapons(storage.healthyBronzeShield, "Remove");
+				storage.setBonusHP(4, 0);
+				break;
+			case "Strong Bronze Shield":
+				storage.inventoryWeapons(storage.strongBronzeShield, "Add");
+				storage.equippedWeapons(storage.strongBronzeShield, "Remove");
+				storage.setBonusAP(4, 0);
+				break;
+			case "Defensive Bronze Shield":
+				storage.inventoryWeapons(storage.defensiveBronzeShield, "Add");
+				storage.equippedWeapons(storage.defensiveBronzeShield, "Remove");
+				storage.setBonusDP(4, 0);
+				break;
+			case "Healthy Steel Shield":
+				storage.inventoryWeapons(storage.healthySteelShield, "Add");
+				storage.equippedWeapons(storage.healthySteelShield, "Remove");
+				storage.setBonusHP(4, 0);
+				break;
+			case "Strong Steel Shield":
+				storage.inventoryWeapons(storage.strongSteelShield, "Add");
+				storage.equippedWeapons(storage.strongSteelShield, "Remove");
+				storage.setBonusAP(4, 0);
+				break;
+			case "Defensive Steel Shield":
+				storage.inventoryWeapons(storage.defensiveSteelShield, "Add");
+				storage.equippedWeapons(storage.defensiveSteelShield, "Remove");
 				storage.setBonusDP(4, 0);
 				break;
 			}
@@ -686,6 +967,36 @@ public class Inventory implements Screen {
 				storage.equippedArmor(storage.defensiveIronHelmet, "Add");	
 				setArmorBonus("Defensive", 0, storage.defensiveIronHelmet);
 				break;
+			case "Healthy Bronze Helmet":
+				storage.inventoryArmor(storage.healthyBronzeHelmet, "Remove");
+				storage.equippedArmor(storage.healthyBronzeHelmet, "Add");	
+				setArmorBonus("Healthy", 0, storage.healthyBronzeHelmet);
+				break;
+			case "Strong Bronze Helmet":
+				storage.inventoryArmor(storage.strongBronzeHelmet, "Remove");
+				storage.equippedArmor(storage.strongBronzeHelmet, "Add");	
+				setArmorBonus("Strong", 0, storage.strongBronzeHelmet);
+				break;
+			case "Defensive Bronze Helmet":
+				storage.inventoryArmor(storage.defensiveBronzeHelmet, "Remove");
+				storage.equippedArmor(storage.defensiveBronzeHelmet, "Add");	
+				setArmorBonus("Defensive", 0, storage.defensiveBronzeHelmet);
+				break;
+			case "Healthy Steel Helmet":
+				storage.inventoryArmor(storage.healthySteelHelmet, "Remove");
+				storage.equippedArmor(storage.healthySteelHelmet, "Add");	
+				setArmorBonus("Healthy", 0, storage.healthySteelHelmet);
+				break;
+			case "Strong Steel Helmet":
+				storage.inventoryArmor(storage.strongSteelHelmet, "Remove");
+				storage.equippedArmor(storage.strongSteelHelmet, "Add");	
+				setArmorBonus("Strong", 0, storage.strongSteelHelmet);
+				break;
+			case "Defensive Steel Helmet":
+				storage.inventoryArmor(storage.defensiveSteelHelmet, "Remove");
+				storage.equippedArmor(storage.defensiveSteelHelmet, "Add");	
+				setArmorBonus("Defensive", 0, storage.defensiveSteelHelmet);
+				break;
 			}
 		}
 		
@@ -709,6 +1020,36 @@ public class Inventory implements Screen {
 				storage.equippedArmor(storage.defensiveIronChest, "Add");	
 				setArmorBonus("Defensive", 1, storage.defensiveIronChest);
 				break;
+			case "Healthy Bronze Chest":
+				storage.inventoryArmor(storage.healthyBronzeChest, "Remove");
+				storage.equippedArmor(storage.healthyBronzeChest, "Add");	
+				setArmorBonus("Healthy", 1, storage.healthyBronzeChest);
+				break;
+			case "Strong Bronze Chest":
+				storage.inventoryArmor(storage.strongBronzeChest, "Remove");
+				storage.equippedArmor(storage.strongBronzeChest, "Add");	
+				setArmorBonus("Strong", 1, storage.strongBronzeChest);
+				break;
+			case "Defensive Bronze Chest":
+				storage.inventoryArmor(storage.defensiveBronzeChest, "Remove");
+				storage.equippedArmor(storage.defensiveBronzeChest, "Add");	
+				setArmorBonus("Defensive", 1, storage.defensiveBronzeChest);
+				break;
+			case "Healthy Steel Chest":
+				storage.inventoryArmor(storage.healthySteelChest, "Remove");
+				storage.equippedArmor(storage.healthySteelChest, "Add");	
+				setArmorBonus("Healthy", 1, storage.healthySteelChest);
+				break;
+			case "Strong Steel Chest":
+				storage.inventoryArmor(storage.strongSteelChest, "Remove");
+				storage.equippedArmor(storage.strongSteelChest, "Add");	
+				setArmorBonus("Strong", 1, storage.strongSteelChest);
+				break;
+			case "Defensive Steel Chest":
+				storage.inventoryArmor(storage.defensiveSteelChest, "Remove");
+				storage.equippedArmor(storage.defensiveSteelChest, "Add");	
+				setArmorBonus("Defensive", 1, storage.defensiveSteelChest);
+				break;
 			}			
 		}
 		
@@ -731,6 +1072,36 @@ public class Inventory implements Screen {
 				storage.inventoryArmor(storage.defensiveIronBoots, "Remove");
 				storage.equippedArmor(storage.defensiveIronBoots, "Add");	
 				setArmorBonus("Defensive", 2, storage.defensiveIronBoots);
+				break;
+			case "Healthy Bronze Boots":
+				storage.inventoryArmor(storage.healthyBronzeBoots, "Remove");
+				storage.equippedArmor(storage.healthyBronzeBoots, "Add");	
+				setArmorBonus("Healthy", 2, storage.healthyBronzeBoots);
+				break;
+			case "Strong Bronze Boots":
+				storage.inventoryArmor(storage.strongBronzeBoots, "Remove");
+				storage.equippedArmor(storage.strongBronzeBoots, "Add");	
+				setArmorBonus("Strong", 2, storage.strongBronzeBoots);
+				break;
+			case "Defensive Bronze Boots":
+				storage.inventoryArmor(storage.defensiveBronzeBoots, "Remove");
+				storage.equippedArmor(storage.defensiveBronzeBoots, "Add");	
+				setArmorBonus("Defensive", 2, storage.defensiveBronzeBoots);
+				break;
+			case "Healthy Steel Boots":
+				storage.inventoryArmor(storage.healthySteelBoots, "Remove");
+				storage.equippedArmor(storage.healthySteelBoots, "Add");	
+				setArmorBonus("Healthy", 2, storage.healthySteelBoots);
+				break;
+			case "Strong Steel Boots":
+				storage.inventoryArmor(storage.strongSteelBoots, "Remove");
+				storage.equippedArmor(storage.strongSteelBoots, "Add");	
+				setArmorBonus("Strong", 2, storage.strongSteelBoots);
+				break;
+			case "Defensive Steel Boots":
+				storage.inventoryArmor(storage.defensiveSteelBoots, "Remove");
+				storage.equippedArmor(storage.defensiveSteelBoots, "Add");	
+				setArmorBonus("Defensive", 2, storage.defensiveSteelBoots);
 				break;
 			}
 		}
@@ -766,6 +1137,36 @@ public class Inventory implements Screen {
 				storage.equippedWeapons(storage.defensiveIronGA, "Add");
 				setWeaponBonus("Defensive", 3, storage.defensiveIronGA);
 				break;
+			case "Healthy Bronze Greataxe":
+				storage.inventoryWeapons(storage.healthyBronzeGA, "Remove");
+				storage.equippedWeapons(storage.healthyBronzeGA, "Add");				
+				setWeaponBonus("Healthy", 3, storage.healthyBronzeGA);
+				break;
+			case "Strong Bronze Greataxe":
+				storage.inventoryWeapons(storage.strongBronzeGA, "Remove");
+				storage.equippedWeapons(storage.strongBronzeGA, "Add");	
+				setWeaponBonus("Strong", 3, storage.strongBronzeGA);
+				break;
+			case "Defensive Bronze Greataxe":
+				storage.inventoryWeapons(storage.defensiveBronzeGA, "Remove");
+				storage.equippedWeapons(storage.defensiveBronzeGA, "Add");
+				setWeaponBonus("Defensive", 3, storage.defensiveBronzeGA);
+				break;
+			case "Healthy Steel Greataxe":
+				storage.inventoryWeapons(storage.healthySteelGA, "Remove");
+				storage.equippedWeapons(storage.healthySteelGA, "Add");				
+				setWeaponBonus("Healthy", 3, storage.healthySteelGA);
+				break;
+			case "Strong Steel Greataxe":
+				storage.inventoryWeapons(storage.strongSteelGA, "Remove");
+				storage.equippedWeapons(storage.strongSteelGA, "Add");	
+				setWeaponBonus("Strong", 3, storage.strongSteelGA);
+				break;
+			case "Defensive Steel Greataxe":
+				storage.inventoryWeapons(storage.defensiveSteelGA, "Remove");
+				storage.equippedWeapons(storage.defensiveSteelGA, "Add");
+				setWeaponBonus("Defensive", 3, storage.defensiveSteelGA);
+				break;
 			}
 			
 //			mainHand.setName(weapon);
@@ -794,6 +1195,36 @@ public class Inventory implements Screen {
 				storage.equippedWeapons(storage.defensiveIronAxe, "Add");
 				setWeaponBonus("Defensive", 3, storage.defensiveIronAxe);
 				break;
+			case "Healthy Bronze Axe":
+				storage.inventoryWeapons(storage.healthyBronzeAxe, "Remove");
+				storage.equippedWeapons(storage.healthyBronzeAxe, "Add");
+				setWeaponBonus("Healthy", 3, storage.healthyBronzeAxe);
+				break;
+			case "Strong Bronze Axe":
+				storage.inventoryWeapons(storage.strongBronzeAxe, "Remove");
+				storage.equippedWeapons(storage.strongBronzeAxe, "Add");
+				setWeaponBonus("Strong", 3, storage.strongBronzeAxe);
+				break;
+			case "Defensive Bronze Axe":
+				storage.inventoryWeapons(storage.defensiveBronzeAxe, "Remove");
+				storage.equippedWeapons(storage.defensiveBronzeAxe, "Add");
+				setWeaponBonus("Defensive", 3, storage.defensiveBronzeAxe);
+				break;
+			case "Healthy Steel Axe":
+				storage.inventoryWeapons(storage.healthySteelAxe, "Remove");
+				storage.equippedWeapons(storage.healthySteelAxe, "Add");
+				setWeaponBonus("Healthy", 3, storage.healthySteelAxe);
+				break;
+			case "Strong Steel Axe":
+				storage.inventoryWeapons(storage.strongSteelAxe, "Remove");
+				storage.equippedWeapons(storage.strongSteelAxe, "Add");
+				setWeaponBonus("Strong", 3, storage.strongSteelAxe);
+				break;
+			case "Defensive Steel Axe":
+				storage.inventoryWeapons(storage.defensiveSteelAxe, "Remove");
+				storage.equippedWeapons(storage.defensiveSteelAxe, "Add");
+				setWeaponBonus("Defensive", 3, storage.defensiveSteelAxe);
+				break;
 			}
 		}
 		else if(handed == "OffHand") {
@@ -821,6 +1252,36 @@ public class Inventory implements Screen {
 				storage.inventoryWeapons(storage.defensiveIronShield, "Remove");
 				storage.equippedWeapons(storage.defensiveIronShield, "Add");
 				setWeaponBonus("Defensive", 4, storage.defensiveIronShield);
+				break;
+			case "Healthy Bronze Shield":
+				storage.inventoryWeapons(storage.healthyBronzeShield, "Remove");
+				storage.equippedWeapons(storage.healthyBronzeShield, "Add");
+				setWeaponBonus("Healthy", 4, storage.healthyBronzeShield);
+				break;
+			case "Strong Bronze Shield":
+				storage.inventoryWeapons(storage.strongBronzeShield, "Remove");
+				storage.equippedWeapons(storage.strongBronzeShield, "Add");
+				setWeaponBonus("Strong", 4, storage.strongBronzeShield);
+				break;
+			case "Defensive Bronze Shield":
+				storage.inventoryWeapons(storage.defensiveBronzeShield, "Remove");
+				storage.equippedWeapons(storage.defensiveBronzeShield, "Add");
+				setWeaponBonus("Defensive", 4, storage.defensiveBronzeShield);
+				break;
+			case "Healthy Steel Shield":
+				storage.inventoryWeapons(storage.healthySteelShield, "Remove");
+				storage.equippedWeapons(storage.healthySteelShield, "Add");
+				setWeaponBonus("Healthy", 4, storage.healthySteelShield);
+				break;
+			case "Strong Steel Shield":
+				storage.inventoryWeapons(storage.strongSteelShield, "Remove");
+				storage.equippedWeapons(storage.strongSteelShield, "Add");
+				setWeaponBonus("Strong", 4, storage.strongSteelShield);
+				break;
+			case "Defensive Steel Shield":
+				storage.inventoryWeapons(storage.defensiveSteelShield, "Remove");
+				storage.equippedWeapons(storage.defensiveSteelShield, "Add");
+				setWeaponBonus("Defensive", 4, storage.defensiveSteelShield);
 				break;
 			}
 		}
@@ -984,6 +1445,24 @@ public class Inventory implements Screen {
 		case "Iron Boots":
 			bootsDP = storage.healthyIronBoots.getDefense();
 			break;
+		case "Bronze Helmet":
+			helmetDP = storage.healthyBronzeHelmet.getDefense();
+			break;
+		case "Bronze Chest":
+			chestDP = storage.healthyBronzeChest.getDefense();
+			break;
+		case "Bronze Boots":
+			bootsDP = storage.healthyBronzeBoots.getDefense();
+			break;
+		case "Steel Helmet":
+			helmetDP = storage.healthySteelHelmet.getDefense();
+			break;
+		case "Steel Chest":
+			chestDP = storage.healthySteelChest.getDefense();
+			break;
+		case "Steel Boots":
+			bootsDP = storage.healthySteelBoots.getDefense();
+			break;
 		}
 	}
 	
@@ -1014,6 +1493,28 @@ public class Inventory implements Screen {
 			break;
 		case "Iron Shield":
 			shieldDP = storage.healthyIronShield.getWeaponDmg();
+			break;
+		case "Bronze Greataxe":
+			weaponAP = storage.healthyBronzeGA.getWeaponDmg();
+			Player.weaponState = 2;
+			break;
+		case "Bronze Axe":
+			weaponAP = storage.healthyBronzeAxe.getWeaponDmg();
+			Player.weaponState = 1;
+			break;
+		case "Bronze Shield":
+			shieldDP = storage.healthyBronzeShield.getWeaponDmg();
+			break;
+		case "Steel Greataxe":
+			weaponAP = storage.healthySteelGA.getWeaponDmg();
+			Player.weaponState = 2;
+			break;
+		case "Steel Axe":
+			weaponAP = storage.healthySteelAxe.getWeaponDmg();
+			Player.weaponState = 1;
+			break;
+		case "Steel Shield":
+			shieldDP = storage.healthySteelShield.getWeaponDmg();
 			break;
 		}
 	}
@@ -1055,6 +1556,12 @@ public class Inventory implements Screen {
 
 	@Override
 	public void render(float delta) {
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
+		
+		mapBatch.begin();
+		mapBatch.draw(mapTexture, 0, 0, 1920, 1080);
+		mapBatch.end();
+		
 		Actor helmetTable = characterTable.getChildren().get(0);
 		Actor chestTable = characterTable.getChildren().get(1);
 		Actor bootsTable = characterTable.getChildren().get(2);
@@ -1115,6 +1622,12 @@ public class Inventory implements Screen {
 			case "Iron Helmet":
 				helmetTexture = eIronHelmetTexture;
 				break;
+			case "Bronze Helmet":
+				helmetTexture = eBronzeHelmetTexture;
+				break;
+			case "Steel Helmet":
+				helmetTexture = eSteelHelmetTexture;
+				break;
 			}
 			
 			helmetSprite = new Sprite(helmetTexture);
@@ -1131,6 +1644,12 @@ public class Inventory implements Screen {
 			case "Iron Chest":
 				chestTexture = eIronChestTexture;
 				break;
+			case "Bronze Chest":
+				chestTexture = eBronzeChestTexture;
+				break;
+			case "Steel Chest":
+				chestTexture = eSteelChestTexture;
+				break;
 			}
 			
 			chestSprite = new Sprite(chestTexture);
@@ -1146,6 +1665,12 @@ public class Inventory implements Screen {
 			switch(boots) {
 			case "Iron Boots":
 				bootsTexture = eIronBootsTexture;
+				break;
+			case "Bronze Boots":
+				bootsTexture = eBronzeBootsTexture;
+				break;
+			case "Steel Boots":
+				bootsTexture = eSteelBootsTexture;
 				break;
 			}
 			
@@ -1174,6 +1699,22 @@ public class Inventory implements Screen {
 				break;
 			case "Wooden Axe":
 				weaponTexture = eWoodenAxeTexture;
+				twoHand = false;
+				break;
+			case "Bronze Greataxe":
+				weaponTexture = eBronzeGreataxeTexture;
+				twoHand = true;
+				break;
+			case "Bronze Axe":
+				weaponTexture = eBronzeAxeTexture;
+				twoHand = false;
+				break;
+			case "Steel Greataxe":
+				weaponTexture = eSteelGreataxeTexture;
+				twoHand = true;
+				break;
+			case "Steel Axe":
+				weaponTexture = eSteelAxeTexture;
 				twoHand = false;
 				break;
 			}
@@ -1206,6 +1747,12 @@ public class Inventory implements Screen {
 			case "Iron Shield":
 				shieldTexture = eIronShieldTexture;
 				break;
+			case "Bronze Shield":
+				shieldTexture = eBronzeShieldTexture;
+				break;
+			case "Steel Shield":
+				shieldTexture = eSteelShieldTexture;
+				break;
 			}
 			
 			shieldSprite = new Sprite(shieldTexture);
@@ -1229,6 +1776,7 @@ public class Inventory implements Screen {
 		helmetBatch.setProjectionMatrix(vp.getCamera().combined);
 		chestBatch.setProjectionMatrix(vp.getCamera().combined);
 		bootsBatch.setProjectionMatrix(vp.getCamera().combined);
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);	
 	}
 
 	@Override

@@ -98,6 +98,14 @@ public class Player {
 		skillPoints--;
 	}
 	
+	public static void gainCoins(int x) {
+		coins += x;
+	}
+	
+	public static void loseCoins(int x) {
+		coins -= x;
+	}
+	
 	public static void newGame() {
 		int id1, id2, id3, id4;
 		hp = maxHP;

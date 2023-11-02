@@ -38,7 +38,8 @@ public class Home implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		storage = Storage.getInstance();
 		skin = storage.skin;
-		storage.createFont();		
+		storage.createFont();	
+		gameScreen.forestMap = null;
 		
 		createComponents();	
 	}
@@ -128,12 +129,16 @@ public class Home implements Screen {
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryWeapons(storage.healthyIronGA, "Add");
     			storage.inventoryWeapons(storage.woodenGA, "Add");
-    			storage.inventoryWeapons(storage.strongIronGA, "Add");
-    			storage.inventoryWeapons(storage.defensiveIronGA, "Add");
+    			storage.inventoryWeapons(storage.healthyBronzeGA, "Add");
+    			storage.inventoryWeapons(storage.defensiveSteelGA, "Add");
     			storage.inventoryWeapons(storage.healthyIronAxe, "Add");
+    			storage.inventoryWeapons(storage.healthyBronzeAxe, "Add");
+    			storage.inventoryWeapons(storage.healthySteelAxe, "Add");
     			storage.inventoryWeapons(storage.woodenShield, "Add");
     			storage.inventoryWeapons(storage.woodenAxe, "Add");
     			storage.inventoryWeapons(storage.healthyIronShield, "Add");
+    			storage.inventoryWeapons(storage.healthyBronzeShield, "Add");
+    			storage.inventoryWeapons(storage.healthySteelShield, "Add");
     	    }});
 		weaponsBtn.setSize(150, 100);
 		weaponsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3.35f);
@@ -145,14 +150,14 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryArmor(storage.healthyIronHelmet, "Add");
-    			storage.inventoryArmor(storage.strongIronHelmet, "Add");
-    			storage.inventoryArmor(storage.defensiveIronHelmet, "Add");
     			storage.inventoryArmor(storage.healthyIronChest, "Add");
-    			storage.inventoryArmor(storage.strongIronChest, "Add");
-    			storage.inventoryArmor(storage.defensiveIronChest, "Add");
     			storage.inventoryArmor(storage.healthyIronBoots, "Add");
-    			storage.inventoryArmor(storage.strongIronBoots, "Add");
-    			storage.inventoryArmor(storage.defensiveIronBoots, "Add");
+    			storage.inventoryArmor(storage.healthyBronzeHelmet, "Add");
+    			storage.inventoryArmor(storage.healthyBronzeChest, "Add");
+    			storage.inventoryArmor(storage.healthyBronzeBoots, "Add");
+    			storage.inventoryArmor(storage.healthySteelHelmet, "Add");
+    			storage.inventoryArmor(storage.healthySteelChest, "Add");
+    			storage.inventoryArmor(storage.healthySteelBoots, "Add");
     	    }});
 		armorBtn.setSize(150, 100);
 		armorBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);

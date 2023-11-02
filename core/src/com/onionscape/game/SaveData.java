@@ -278,6 +278,114 @@ public class SaveData {
 	    		else
 	    			storage.equippedArmor(storage.defensiveIronBoots, "Add");
     			break;
+	    	case "Healthy Bronze Helmet":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.healthyBronzeHelmet, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.healthyBronzeHelmet, "Add");
+    			break;
+	    	case "Strong Bronze Helmet":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.strongBronzeHelmet, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.strongBronzeHelmet, "Add");
+    			break;
+	    	case "Defensive Bronze Helmet":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.defensiveBronzeHelmet, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.defensiveBronzeHelmet, "Add");
+    			break;
+	    	case "Healthy Bronze Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.healthyBronzeChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.healthyBronzeChest, "Add");
+    			break;
+	    	case "Strong Bronze Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.strongBronzeChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.strongBronzeChest, "Add");
+    			break;
+	    	case "Defensive Bronze Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.defensiveBronzeChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.defensiveBronzeChest, "Add");
+    			break;
+	    	case "Healthy Bronze Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.healthyBronzeBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.healthyBronzeBoots, "Add");
+    			break;
+	    	case "Strong Bronze Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.strongBronzeBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.strongBronzeBoots, "Add");
+    			break;
+	    	case "Defensive Bronze Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.defensiveBronzeBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.defensiveBronzeBoots, "Add");
+    			break;
+	    	case "Healthy Steel Helmet":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.healthySteelHelmet, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.healthySteelHelmet, "Add");
+    			break;
+	    	case "Strong Steel Helmet":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.strongSteelHelmet, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.strongSteelHelmet, "Add");
+    			break;
+	    	case "Defensive Steel Helmet":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.defensiveSteelHelmet, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.defensiveSteelHelmet, "Add");
+    			break;
+	    	case "Healthy Steel Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.healthySteelChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.healthySteelChest, "Add");
+    			break;
+	    	case "Strong Steel Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.strongSteelChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.strongSteelChest, "Add");
+    			break;
+	    	case "Defensive Steel Chest":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.defensiveSteelChest, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.defensiveSteelChest, "Add");
+    			break;
+	    	case "Healthy Steel Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.healthySteelBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.healthySteelBoots, "Add");
+    			break;
+	    	case "Strong Steel Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.strongSteelBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.strongSteelBoots, "Add");
+    			break;
+	    	case "Defensive Steel Boots":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryArmor(storage.defensiveSteelBoots, "Add");	
+	    		else
+	    			storage.equippedArmor(storage.defensiveSteelBoots, "Add");
+    			break;
 	    	}
 	    }
 	}
@@ -362,6 +470,114 @@ public class SaveData {
 	    		else
 	    			storage.equippedWeapons(storage.defensiveIronShield, "Add");
 	    		break;
+	    	case "Healthy Bronze Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.healthyBronzeGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.healthyBronzeGA, "Add");	
+    			break;
+	    	case "Strong Bronze Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.strongBronzeGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.strongBronzeGA, "Add");	
+    			break;
+	    	case "Defensive Bronze Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.defensiveBronzeGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.defensiveBronzeGA, "Add");	
+    			break;
+	    	case "Healthy Bronze Axe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.healthyBronzeAxe, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.healthyBronzeAxe, "Add");
+	    		break;
+	    	case "Strong Bronze Axe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.strongBronzeAxe, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.strongBronzeAxe, "Add");
+	    		break;
+	    	case "Defensive Bronze Axe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.defensiveBronzeAxe, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.defensiveBronzeAxe, "Add");
+	    		break;	    
+	    	case "Healthy Bronze Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.healthyBronzeShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.healthyBronzeShield, "Add");
+	    		break;
+	    	case "Strong Bronze Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.strongBronzeShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.strongBronzeShield, "Add");
+	    		break;
+	    	case "Defensive Bronze Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.defensiveBronzeShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.defensiveBronzeShield, "Add");
+	    		break;
+	    	case "Healthy Steel Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.healthySteelGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.healthySteelGA, "Add");	
+    			break;
+	    	case "Strong Steel Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.strongSteelGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.strongSteelGA, "Add");	
+    			break;
+	    	case "Defensive Steel Greataxe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.defensiveSteelGA, "Add");	    
+	    		else
+	    			storage.equippedWeapons(storage.defensiveSteelGA, "Add");	
+    			break;
+	    	case "Healthy Steel Axe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.healthySteelAxe, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.healthySteelAxe, "Add");
+	    		break;
+	    	case "Strong Steel Axe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.strongSteelAxe, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.strongSteelAxe, "Add");
+	    		break;
+	    	case "Defensive Steel Axe":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.defensiveSteelAxe, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.defensiveSteelAxe, "Add");
+	    		break;	    
+	    	case "Healthy Steel Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.healthySteelShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.healthySteelShield, "Add");
+	    		break;
+	    	case "Strong Steel Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.strongSteelShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.strongSteelShield, "Add");
+	    		break;
+	    	case "Defensive Steel Shield":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryWeapons(storage.defensiveSteelShield, "Add");
+	    		else
+	    			storage.equippedWeapons(storage.defensiveSteelShield, "Add");
+	    		break;
 	    	}
 	    }
 	}
@@ -385,6 +601,12 @@ public class SaveData {
 	    			storage.inventoryItems(storage.bomb, "Add");
 	    		else
 	    			storage.equippedItems(storage.bomb, "Add");
+	    		break;
+	    	case "Swing":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemSwing, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemSwing, "Add");
 	    		break;
 	    	}
 	    }

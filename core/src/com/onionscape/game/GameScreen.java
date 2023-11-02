@@ -13,6 +13,8 @@ import scenes.ForestMap;
 import scenes.Home;
 import scenes.Inventory;
 import scenes.LoadingScreen;
+import scenes.RaidTextScenes;
+import scenes.StartScreen;
 
 public class GameScreen implements Screen {
 	private Game game;
@@ -21,7 +23,9 @@ public class GameScreen implements Screen {
 	private BerserkerSkillTree zerkerTree;
 	private Inventory inventory;
 	private LoadingScreen loadingScreen;
-	private ForestMap forestMap;
+	public ForestMap forestMap;
+	private RaidTextScenes textScene;
+	private StartScreen startScreen;
 	private Viewport viewport;
 	public static boolean newGame = true;
 	
@@ -36,6 +40,8 @@ public class GameScreen implements Screen {
     public static final int INVENTORY = 3;
     public static final int FIGHT_SCENE = 4;
     public static final int FOREST_MAP = 5;
+    public static final int TEXT_SCENE = 6;
+    public static final int START_SCREEN = 7;
     private int currentState;
 
 	public GameScreen(Game game) {		
@@ -68,8 +74,17 @@ public class GameScreen implements Screen {
 	            Gdx.input.setInputProcessor(inventory.stage);
 	            break;
 	        case FOREST_MAP:
-	        	this.forestMap = new ForestMap(viewport, game, this);
+	        	if(this.forestMap == null)
+	        		this.forestMap = new ForestMap(viewport, game, this);
 	            Gdx.input.setInputProcessor(forestMap.stage);
+	            break;
+	        case TEXT_SCENE:
+	        	this.textScene = new RaidTextScenes(viewport, game, this);
+	            Gdx.input.setInputProcessor(textScene.stage);
+	            break;
+	        case START_SCREEN:
+	        	this.startScreen = new StartScreen(viewport, game, this);
+	            Gdx.input.setInputProcessor(startScreen.stage);
 	            break;
 	    }
 	}
@@ -97,6 +112,12 @@ public class GameScreen implements Screen {
 	            break;
 	        case FOREST_MAP:
 	        	forestMap.render(delta);
+	        	break;
+	        case TEXT_SCENE:
+	        	textScene.render(delta);
+	        	break;
+	        case START_SCREEN:
+	        	startScreen.render(delta);
 	        	break;
 	    }
 	}
@@ -148,6 +169,7 @@ public class GameScreen implements Screen {
 		inventory.dispose();
 		zerkerTree.dispose();
 		loadingScreen.dispose();
+		textScene.dispose();
 	}
 
 }
