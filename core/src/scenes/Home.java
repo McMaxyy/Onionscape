@@ -187,14 +187,13 @@ public class Home implements Screen {
 		saveBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.2f);
 		stage.addActor(saveBtn);
 		
-		loadBtn = new TextButton("Load", storage.buttonStyle);
+		loadBtn = new TextButton("Exit", storage.buttonStyle);
 		loadBtn.setColor(Color.LIGHT_GRAY);
 		loadBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			saveData.loadGame();
-    			level.setText("Level: " + Player.getLevel());
-    			exp.setText("Exp: " + Player.getExp());
+    			Gdx.app.exit();
+    			System.exit(0);
     	    }});
 		loadBtn.setSize(150, 100);
 		loadBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.4f);

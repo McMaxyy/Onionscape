@@ -126,7 +126,7 @@ public class Inventory implements Screen {
 		Home.freshLoad = false;
 		
 		// Smooth filtering	
-		mapTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		inventorySlotTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		eIronGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eWoodenGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
@@ -135,18 +135,18 @@ public class Inventory implements Screen {
 		eWoodenShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eIronShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		onionTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		ironAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		woodenAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		ironGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		woodenGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		ironShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		woodenShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		healthPotionTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		bombTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		swingTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		ironHelmetTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		ironChestTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		ironBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		ironAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		woodenAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		ironGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		woodenGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		ironShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		woodenShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		healthPotionTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		bombTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		swingTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		ironHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		ironChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		ironBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eIronHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eIronChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eIronBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);		

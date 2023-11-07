@@ -3,7 +3,6 @@ package scenes;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -40,12 +39,12 @@ public class StartScreen implements Screen{
 		storage = Storage.getInstance();
 		skin = storage.skin;
 		mapTexture = Storage.assetManager.get("maps/StartScreen.png", Texture.class);
-		mapTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		
 		createComponents();
 	}
 
-	private void createComponents() {
+	private void createComponents() {		
 		newGame = new TextButton("New Game", storage.buttonStyle);
 		newGame.setColor(Color.LIGHT_GRAY);
 		newGame.addListener(new ClickListener() {

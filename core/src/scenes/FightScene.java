@@ -129,8 +129,6 @@ public class FightScene implements Screen{
 			ability4.setTouchable(Touchable.disabled);
     		ability4.setColor(Color.GRAY);
 		}  
-        
-        GameScreen.newGame = false;
     }
     
     private void newEnemy() {
@@ -1003,6 +1001,7 @@ public class FightScene implements Screen{
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			stage.clear();
+//    			if()
         		gameScreen.setCurrentState(GameScreen.FOREST_MAP);
     	    }});
     }

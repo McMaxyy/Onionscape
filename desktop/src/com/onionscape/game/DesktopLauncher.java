@@ -8,11 +8,19 @@ import com.onionscape.game.Boot;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(60);
-		config.setTitle("Onionscape");
-		config.setWindowedMode(1280, 720);
-		int samples = 32;
-		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, samples);
-		new Lwjgl3Application(new Boot(), config);
+        config.setForegroundFPS(60);
+        config.setTitle("Onionscape");
+
+        // Set the windowed mode to the screen size
+        config.setWindowedMode(Lwjgl3ApplicationConfiguration.getDisplayMode().width,
+                               Lwjgl3ApplicationConfiguration.getDisplayMode().height);
+
+        // Hide window decorations to make it appear borderless
+        config.setDecorated(false);
+
+        int samples = 32;
+        config.setBackBufferConfig(8, 8, 8, 8, 16, 0, samples);
+
+        new Lwjgl3Application(new Boot(), config);
 	}
 }

@@ -25,40 +25,47 @@ public class LoadingScreen implements Screen {
     
     public LoadingScreen(Viewport viewport, Game game, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
-		this.game = game;
-		stage = new Stage(viewport);
-		vp = viewport;
-		Gdx.input.setInputProcessor(stage);
-		storage = Storage.getInstance();
-		storage.createFont();
-		skin = storage.skin;
-        
-        // Create a progress bar using the default skin
-		progressBar = new ProgressBar(0, 1, 0.01f, false, storage.skin, "default-horizontal");
-        progressBar.setBounds(
-        		vp.getScreenWidth()  / 2f, vp.getScreenHeight() / 2f, Gdx.graphics.getWidth() / 2, 50);
+        this.game = game;
+        stage = new Stage(viewport);
+        vp = viewport;
+        Gdx.input.setInputProcessor(stage);
+        storage = Storage.getInstance();
+        storage.createFont();
+        skin = storage.skin;
 
-        loading = new Label("Loading..." + (int)(progressBar.getValue() * 100) + "%", storage.labelStyle);
-        loading.setPosition(progressBar.getX() + progressBar.getWidth() / 3f, progressBar.getY() + 70f);
-        
+        // Create a progress bar using the default skin
+        float progressBarWidth = Gdx.graphics.getWidth() / 2f;
+        float progressBarHeight = 50f;
+        progressBar = new ProgressBar(0, 1, 0.01f, false, storage.skin, "default-horizontal");
+
+        // Calculate the position for the progress bar at the center of the screen
+        float progressBarX = (vp.getScreenWidth() - progressBarWidth) / 2f;
+        float progressBarY = (vp.getScreenHeight() - progressBarHeight) / 2f;
+        progressBar.setBounds(progressBarX, progressBarY, progressBarWidth, progressBarHeight);
+
+        // Create the loading label
+        loading = new Label("Loading...", storage.labelStyle);
+        float loadingX = progressBarX + progressBarWidth / 2.5f;
+        float loadingY = progressBarY - 70f;
+        loading.setPosition(loadingX, loadingY);
+
         stage.addActor(progressBar);
         stage.addActor(loading);
     }
     
     @Override
     public void render(float delta) {
-    	Gdx.gl.glClearColor(10 / 255f, 10 / 255f, 10 / 255f, 1);
+        Gdx.gl.glClearColor(10 / 255f, 10 / 255f, 10 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
-        if (Storage.assetManager.update())
+
+        if (Storage.assetManager.update()) {
             // All assets are loaded
             gameScreen.setCurrentState(GameScreen.START_SCREEN);
-        else {
-        	progressBar.setValue(Storage.assetManager.getProgress());
-        	loading.setText("Loading..." + (int)(progressBar.getValue() * 100) + "%");
+        } else {
+            progressBar.setValue(Storage.assetManager.getProgress());
+            loading.setText("Loading..." + (int) (progressBar.getValue() * 100) + "%");
         }
-            
-        
+
         stage.act();
         stage.draw();
     }
