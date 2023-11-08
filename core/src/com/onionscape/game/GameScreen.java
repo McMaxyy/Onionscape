@@ -13,6 +13,7 @@ import scenes.ForestMap;
 import scenes.Home;
 import scenes.Inventory;
 import scenes.LoadingScreen;
+import scenes.Merchant;
 import scenes.RaidTextScenes;
 import scenes.StartScreen;
 
@@ -26,6 +27,7 @@ public class GameScreen implements Screen {
 	public ForestMap forestMap;
 	private RaidTextScenes textScene;
 	private StartScreen startScreen;
+	private Merchant merchant;
 	private Viewport viewport;
 	public static boolean newGame = true;
 	
@@ -42,6 +44,7 @@ public class GameScreen implements Screen {
     public static final int FOREST_MAP = 5;
     public static final int TEXT_SCENE = 6;
     public static final int START_SCREEN = 7;
+    public static final int MERCHANT = 8;
     private int currentState;
 
 	public GameScreen(Game game) {		
@@ -86,6 +89,10 @@ public class GameScreen implements Screen {
 	        	this.startScreen = new StartScreen(viewport, game, this);
 	            Gdx.input.setInputProcessor(startScreen.stage);
 	            break;
+	        case MERCHANT:
+	        	this.merchant = new Merchant(viewport, game, this);
+	            Gdx.input.setInputProcessor(merchant.stage);
+	            break;
 	    }
 	}
 
@@ -118,6 +125,9 @@ public class GameScreen implements Screen {
 	        	break;
 	        case START_SCREEN:
 	        	startScreen.render(delta);
+	        	break;
+	        case MERCHANT:
+	        	merchant.render(delta);
 	        	break;
 	    }
 	}
@@ -170,6 +180,7 @@ public class GameScreen implements Screen {
 		zerkerTree.dispose();
 		loadingScreen.dispose();
 		textScene.dispose();
+		merchant.dispose();
 	}
 
 }

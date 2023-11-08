@@ -24,7 +24,7 @@ public class Home implements Screen {
 	private Storage storage;
 	private Game game;
 	private TextButton fight, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
-	saveBtn, loadBtn, forestBtn;
+	saveBtn, loadBtn, forestBtn, merchantBtn;
 	private Label level, exp, coins;
 	private GameScreen gameScreen; 
 	private SaveData saveData = new SaveData();
@@ -40,6 +40,7 @@ public class Home implements Screen {
 		skin = storage.skin;
 		storage.createFont();	
 		gameScreen.forestMap = null;
+		Merchant.raid = false;
 		
 		createComponents();	
 	}
@@ -121,6 +122,21 @@ public class Home implements Screen {
 		forestBtn.setSize(150, 100);
 		forestBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 2f);
 		stage.addActor(forestBtn);
+		
+		merchantBtn = new TextButton("Merchant", storage.buttonStyle);
+		merchantBtn.setColor(Color.LIGHT_GRAY);
+		merchantBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			if(freshLoad) {
+    				gameScreen.setCurrentState(GameScreen.INVENTORY);
+    				freshLoad = false;
+    			}
+    			gameScreen.setCurrentState(GameScreen.MERCHANT);
+    	    }});
+		merchantBtn.setSize(150, 100);
+		merchantBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 5f);
+		stage.addActor(merchantBtn);
 		
 		weaponsBtn = new TextButton("Weapons", storage.buttonStyle);
 		weaponsBtn.setColor(Color.LIGHT_GRAY);

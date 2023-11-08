@@ -1,7 +1,7 @@
 package storage;
 
 public abstract class Armor {
-	private int defense, ID, amount, bonusStat;
+	private int defense, ID, value, bonusStat;
 	private String armorName, armorSlot;
 	
 	public int getDefense() {
@@ -28,11 +28,11 @@ public abstract class Armor {
 	public void setArmorSlot(String armorSlot) {
 		this.armorSlot = armorSlot;
 	}
-	public int getAmount() {
-		return amount;
+	public int getValue() {
+		return value;
 	}
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public void setValue(int amount) {
+		this.value = amount;
 	}
 	public int getBonusStat() {
 		return bonusStat;
@@ -42,12 +42,23 @@ public abstract class Armor {
 	}
 }
 
+class IronHelmet extends Armor{
+	public IronHelmet() {
+		setArmorName("Iron Helmet");
+		setArmorSlot("Head");
+		setDefense(2);
+		setValue(2);
+		setID(0);
+	}
+}
+
 class HealthyIronHelmet extends Armor{
 	public HealthyIronHelmet() {
 		setArmorName("Healthy Iron Helmet");
 		setArmorSlot("Head");
 		setBonusStat(2);
 		setDefense(2);
+		setValue(2);
 		setID(1);
 	}
 }
@@ -58,6 +69,7 @@ class StrongIronHelmet extends Armor{
 		setArmorSlot("Head");
 		setBonusStat(1);
 		setDefense(2);
+		setValue(2);
 		setID(1);
 	}
 }
@@ -68,6 +80,7 @@ class DefensiveIronHelmet extends Armor{
 		setArmorSlot("Head");
 		setBonusStat(1);
 		setDefense(2);
+		setValue(2);
 		setID(1);
 	}
 }
@@ -77,6 +90,7 @@ class IronChest extends Armor{
 		setArmorName("Iron Chest");
 		setArmorSlot("Chest");
 		setDefense(3);
+		setValue(3);
 		setID(2);
 	}
 }
@@ -87,6 +101,7 @@ class HealthyIronChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(3);
 		setDefense(3);
+		setValue(3);
 		setID(2);
 	}
 }
@@ -97,6 +112,7 @@ class StrongIronChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(1);
 		setDefense(3);
+		setValue(3);
 		setID(2);
 	}
 }
@@ -107,6 +123,7 @@ class DefensiveIronChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(1);
 		setDefense(3);
+		setValue(3);
 		setID(2);
 	}
 }
@@ -116,6 +133,7 @@ class IronBoots extends Armor{
 		setArmorName("Iron Boots");
 		setArmorSlot("Feet");
 		setDefense(2);
+		setValue(2);
 		setID(3);
 	}
 }
@@ -126,6 +144,7 @@ class HealthyIronBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(2);
 		setDefense(2);
+		setValue(2);
 		setID(3);
 	}
 }
@@ -136,6 +155,7 @@ class StrongIronBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(1);
 		setDefense(2);
+		setValue(2);
 		setID(3);
 	}
 }
@@ -146,6 +166,7 @@ class DefensiveIronBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(1);
 		setDefense(2);
+		setValue(2);
 		setID(3);
 	}
 }
@@ -156,6 +177,7 @@ class HealthyBronzeHelmet extends Armor{
 		setArmorSlot("Head");
 		setBonusStat(3);
 		setDefense(3);
+		setValue(3);
 		setID(4);
 	}
 }
@@ -166,6 +188,7 @@ class StrongBronzeHelmet extends Armor{
 		setArmorSlot("Head");
 		setBonusStat(2);
 		setDefense(3);
+		setValue(3);
 		setID(4);
 	}
 }
@@ -176,6 +199,7 @@ class DefensiveBronzeHelmet extends Armor{
 		setArmorSlot("Head");
 		setBonusStat(2);
 		setDefense(3);
+		setValue(3);
 		setID(4);
 	}
 }
@@ -186,6 +210,7 @@ class HealthyBronzeChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(4);
 		setDefense(4);
+		setValue(4);
 		setID(5);
 	}
 }
@@ -196,6 +221,7 @@ class StrongBronzeChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(2);
 		setDefense(4);
+		setValue(4);
 		setID(5);
 	}
 }
@@ -206,6 +232,7 @@ class DefensiveBronzeChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(2);
 		setDefense(4);
+		setValue(4);
 		setID(5);
 	}
 }
@@ -216,6 +243,7 @@ class HealthyBronzeBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(3);
 		setDefense(3);
+		setValue(3);
 		setID(6);
 	}
 }
@@ -226,6 +254,7 @@ class StrongBronzeBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(2);
 		setDefense(3);
+		setValue(3);
 		setID(6);
 	}
 }
@@ -236,6 +265,7 @@ class DefensiveBronzeBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(2);
 		setDefense(3);
+		setValue(3);
 		setID(6);
 	}
 }
@@ -246,6 +276,7 @@ class HealthySteelHelmet extends Armor{
 		setArmorSlot("Head");
 		setBonusStat(4);
 		setDefense(4);
+		setValue(4);
 		setID(7);
 	}
 }
@@ -256,6 +287,7 @@ class StrongSteelHelmet extends Armor{
 		setArmorSlot("Head");
 		setBonusStat(3);
 		setDefense(4);
+		setValue(4);
 		setID(7);
 	}
 }
@@ -266,6 +298,7 @@ class DefensiveSteelHelmet extends Armor{
 		setArmorSlot("Head");
 		setBonusStat(3);
 		setDefense(4);
+		setValue(4);
 		setID(7);
 	}
 }
@@ -276,6 +309,7 @@ class HealthySteelChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(5);
 		setDefense(5);
+		setValue(5);
 		setID(8);
 	}
 }
@@ -286,6 +320,7 @@ class StrongSteelChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(3);
 		setDefense(5);
+		setValue(5);
 		setID(8);
 	}
 }
@@ -296,6 +331,7 @@ class DefensiveSteelChest extends Armor{
 		setArmorSlot("Chest");
 		setBonusStat(3);
 		setDefense(5);
+		setValue(5);
 		setID(8);
 	}
 }
@@ -306,6 +342,7 @@ class HealthySteelBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(4);
 		setDefense(4);
+		setValue(4);
 		setID(9);
 	}
 }
@@ -316,6 +353,7 @@ class StrongSteelBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(3);
 		setDefense(4);
+		setValue(4);
 		setID(9);
 	}
 }
@@ -326,6 +364,7 @@ class DefensiveSteelBoots extends Armor{
 		setArmorSlot("Feet");
 		setBonusStat(3);
 		setDefense(4);
+		setValue(4);
 		setID(9);
 	}
 }

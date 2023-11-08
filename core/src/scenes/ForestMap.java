@@ -55,7 +55,8 @@ public class ForestMap implements Screen{
 		mapTexture = Storage.assetManager.get("maps/ForestMap.png", Texture.class);
 		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		playerTexture = Storage.assetManager.get("player/MapIcon.png", Texture.class);
-		playerTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);			
+		playerTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		Merchant.raid = true;
 				
 		if(GameScreen.newGame) {	
 			createComponents();	
@@ -745,12 +746,14 @@ public class ForestMap implements Screen{
 			gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
 			break;
 		case "B":
+			gameScreen.setCurrentState(GameScreen.MERCHANT);
 			break;
 		case "T":
 			encounter = 2;
 			gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
 			break;
 		case "M":
+			gameScreen.setCurrentState(GameScreen.MERCHANT);
 			break;
 		}
 	}

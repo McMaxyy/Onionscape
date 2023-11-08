@@ -26,7 +26,7 @@ public abstract class Items {
 
 class HealthPot extends Items{
 	public HealthPot() {
-		setValue(5);
+		setValue(4);
 		setItemName("Health Potion");
 		setID(1);
 	}
@@ -34,7 +34,7 @@ class HealthPot extends Items{
 
 class Bomb extends Items{
 	public Bomb() {
-		setValue(5);
+		setValue(3);
 		setItemName("Bomb");
 		setID(2);
 	}
@@ -43,6 +43,7 @@ class Bomb extends Items{
 class ItemSwing extends Items{
 	public ItemSwing() {
 		setItemName("Swing");
+		setValue(5);
 		setID(3);
 	}
 }
@@ -50,6 +51,7 @@ class ItemSwing extends Items{
 class ItemRend extends Items{
 	public ItemRend() {
 		setItemName("Rend");
+		setValue(5);
 		setID(4);
 	}
 }
@@ -57,6 +59,7 @@ class ItemRend extends Items{
 class ItemWhirlwind extends Items{
 	public ItemWhirlwind() {
 		setItemName("Whirlwind");
+		setValue(5);
 		setID(5);
 	}
 }
@@ -64,6 +67,7 @@ class ItemWhirlwind extends Items{
 class ItemGroundBreaker extends Items{
 	public ItemGroundBreaker() {
 		setItemName("Ground Breaker");
+		setValue(5);
 		setID(6);
 	}
 }
@@ -71,6 +75,7 @@ class ItemGroundBreaker extends Items{
 class ItemBash extends Items{
 	public ItemBash() {
 		setItemName("Bash");
+		setValue(5);
 		setID(7);
 	}
 }
@@ -78,6 +83,7 @@ class ItemBash extends Items{
 class ItemBarrier extends Items{
 	public ItemBarrier() {
 		setItemName("Barrier");
+		setValue(5);
 		setID(8);
 	}
 }
@@ -85,6 +91,7 @@ class ItemBarrier extends Items{
 class ItemHarden extends Items{
 	public ItemHarden() {
 		setItemName("Harden");
+		setValue(5);
 		setID(9);
 	}
 }
@@ -92,6 +99,7 @@ class ItemHarden extends Items{
 class ItemMend extends Items{
 	public ItemMend() {
 		setItemName("Mend");
+		setValue(5);
 		setID(10);
 	}
 }
@@ -99,6 +107,7 @@ class ItemMend extends Items{
 class ItemHiltBash extends Items{
 	public ItemHiltBash() {
 		setItemName("Hilt Bash");
+		setValue(5);
 		setID(11);
 	}
 }
@@ -106,6 +115,7 @@ class ItemHiltBash extends Items{
 class ItemBarbedArmor extends Items{
 	public ItemBarbedArmor() {
 		setItemName("Barbed Armor");
+		setValue(5);
 		setID(12);
 	}
 }
@@ -113,6 +123,7 @@ class ItemBarbedArmor extends Items{
 class ItemEnrage extends Items{
 	public ItemEnrage() {
 		setItemName("Enrage");
+		setValue(5);
 		setID(13);
 	}
 }
@@ -120,6 +131,7 @@ class ItemEnrage extends Items{
 class ItemRiposte extends Items{
 	public ItemRiposte() {
 		setItemName("Riposte");
+		setValue(5);
 		setID(14);
 	}
 }
@@ -127,6 +139,7 @@ class ItemRiposte extends Items{
 class ItemStab extends Items{
 	public ItemStab() {
 		setItemName("Stab");
+		setValue(5);
 		setID(15);
 	}
 }
@@ -134,6 +147,39 @@ class ItemStab extends Items{
 class ItemDecapitate extends Items{
 	public ItemDecapitate() {
 		setItemName("Decapitate");
+		setValue(5);
 		setID(16);
+	}
+}
+
+class ExpBoost extends Items{
+	public ExpBoost() {
+		setValue(15);
+		setItemName("EXP Boost");
+		setID(17);
+	}
+}
+
+class APBoost extends Items{
+	public APBoost() {
+		setValue(10);
+		setItemName("Attack Boost");
+		setID(18);
+	}
+}
+
+class DPBoost extends Items{
+	public DPBoost() {
+		setValue(10);
+		setItemName("Defense Boost");
+		setID(19);
+	}
+}
+
+class HPBoost extends Items{
+	public HPBoost() {
+		setValue(10);
+		setItemName("Health Boost");
+		setID(20);
 	}
 }

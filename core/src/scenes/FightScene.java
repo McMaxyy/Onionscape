@@ -1001,8 +1001,10 @@ public class FightScene implements Screen{
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			stage.clear();
-//    			if()
-        		gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+    			if(Merchant.raid)
+    				gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+    			else
+    				gameScreen.setCurrentState(GameScreen.HOME);
     	    }});
     }
     

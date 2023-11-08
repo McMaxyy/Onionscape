@@ -73,7 +73,7 @@ public class RaidTextScenes implements Screen{
 			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
 		}			
 		else
-			encNum = rand.nextInt(11, 13);
+			encNum = rand.nextInt(11, 23);
 		
 		switch(encNum) {
 		case 1:
@@ -100,6 +100,84 @@ public class RaidTextScenes implements Screen{
 					+ "attempt to investigate what it is?");
 			option1.setText("Yes");
 			option2.setText("No");
+			option3.setVisible(false);
+			break;
+		case 13:
+			text.setText("You stumble upon a suspicious looking fella and he tells you he's a "
+					+ "travelling merchant, what will you do?");
+			option1.setText("Run away");
+			option2.setText("Ask him about his wares");
+			option3.setText("Kill him (stranger danger)");
+			break;
+		case 14:
+			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			text.setText("You notice that there's a light shining from a crevice, will you "
+					+ "attempt to investigate what it is?");
+			option1.setText("Yes");
+			option2.setText("No");
+			option3.setVisible(false);
+			break;
+		case 15:
+			text.setText("You don’t notice a pile of grass on the ground as you walk towards "
+					+ "it, resulting in the ground caving in and you falling into a spike trap.");
+			option1.setVisible(false);
+			option2.setVisible(false);
+			option3.setVisible(false);
+			break;
+		case 16:
+			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			text.setText("You hear shrieking in the distance, it sounded like someone in "
+					+ "distress. Will you go check it out?");
+			option1.setText("Yes");
+			option2.setText("No");
+			option3.setVisible(false);
+			break;
+		case 17:
+			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			text.setText("You hear shrieking in the distance, it sounded like someone in "
+					+ "distress. Will you go check it out?");
+			option1.setText("Yes");
+			option2.setText("No");
+			option3.setVisible(false);
+			break;
+		case 18:
+			text.setText("You find a box hanging from a tree - it certainly looks suspicious. "
+					+ "You ask yourself why a box would be hanging from a tree.");
+			option1.setText("Climb up and get the box");
+			option2.setText("Throw rocks at it");
+			option3.setText("Burn the tree");
+			break;
+		case 19:
+			text.setText("You find a box hanging from a tree - it certainly looks suspicious. "
+					+ "You ask yourself why a box would be hanging from a tree.");
+			option1.setText("Climb up and get the box");
+			option2.setText("Throw rocks at it");
+			option3.setText("Burn the tree");
+			break;
+		case 20:
+			text.setText("You find a box hanging from a tree - it certainly looks suspicious. "
+					+ "You ask yourself why a box would be hanging from a tree.");
+			option1.setText("Climb up and get the box");
+			option2.setText("Throw rocks at it");
+			option3.setText("Burn the tree");
+			break;
+		case 21:
+			option1.setPosition(vp.getWorldWidth() / 2f - option1.getWidth() / 2, vp.getWorldHeight() / 10f);
+			text.setText("You sit down to take a breather, falling asleep, only to be "
+					+ "rudely awoken by an angry figure standing in front of you");
+			option1.setText("Squint eyes to see who it is");
+			option2.setVisible(false);
+			option3.setVisible(false);
+			break;
+		case 22:
+			option1.setPosition(vp.getWorldWidth() / 2f - option1.getWidth() / 2, vp.getWorldHeight() / 10f);
+			text.setText("You sit down to take a breather, falling asleep, only to be "
+					+ "awoken by a figure standing in front of you");
+			option1.setText("Squint eyes to see who it is");
+			option2.setVisible(false);
 			option3.setVisible(false);
 			break;
 		}
@@ -213,6 +291,151 @@ public class RaidTextScenes implements Screen{
 				Player.gainCoins(10);
 				rewards.setText("+ 10 Coins");
 				break;
+			case 13:
+				option1.setVisible(true);
+				option2.setVisible(true);
+				option3.setVisible(true);
+				text.setText("The suspicious looking figure turned out to be telling the "
+						+ "truth and he offers you some items to buy");
+				option1.setText("Health Potion (3 gold)");
+				option1.clearListeners();
+				option1.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			if(Player.getCoins() >= 3) {
+		    				Player.loseCoins(3);
+		    				storage.equippedItems(storage.healthPot, "Add");
+		    				option1.setVisible(false);
+		    				option2.setVisible(false);
+		    				option3.setVisible(false);
+		    			}
+		    			else
+		    				rewards.setText("Insufficient funds");
+		    	    }});
+				option2.setText("Bomb (2 gold)");
+				option2.clearListeners();
+				option2.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			if(Player.getCoins() >= 2) {
+		    				Player.loseCoins(2);
+		    				storage.equippedItems(storage.bomb, "Add");
+		    				option1.setVisible(false);
+		    				option2.setVisible(false);
+		    				option3.setVisible(false);
+		    			}
+		    			else
+		    				rewards.setText("Insufficient funds");
+		    	    }});
+				option3.setText("EXP Potion (20 gold)");
+				option3.clearListeners();
+				option3.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			if(Player.getCoins() >= 20) {
+		    				Player.loseCoins(20);
+		    				storage.equippedItems(storage.expBoost, "Add");
+		    				option1.setVisible(false);
+		    				option2.setVisible(false);
+		    				option3.setVisible(false);
+		    			}
+		    			else
+		    				rewards.setText("Insufficient funds");
+		    	    }});				
+				break;
+			case 14:
+				text.setText("There was an enemy hiding in the crevice, good luck.");
+				backBtn.clearListeners();
+				backBtn.setText("To battle!");
+				backBtn.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				break;
+			case 15:
+				text.setText("ou don’t notice a pile of grass on the ground as you walk "
+						+ "towards it, resulting in the ground caving in and you falling "
+						+ "into a spike trap");
+				rewards.setText("- 5 Health Points");
+				break;
+			case 16:
+				option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+				option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+				text.setText("The loud sound came from someone screaming for help, will "
+						+ "you attempt to help them?");
+				option1.setVisible(true);
+				option2.setVisible(true);
+				option1.setText("Yes");
+				option2.setText("No");
+				option1.clearListeners();
+				option2.clearListeners();
+				option1.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				option2.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+		    	    }});
+				break;
+			case 17:
+				text.setText("The loud sounds were caused by a group of mutants having "
+						+ "a campfire party. You join them.");
+				rewards.setText("+ 5 Health Points");
+				Player.gainHP(5);
+				if(Player.getHp() > Player.getMaxHP())
+					Player.setHp(Player.getMaxHP());
+				break;
+			case 18:
+				text.setText("You climb up the tree to get the box, but the branch breaks, "
+						+ "causing you to fall down and hurt yourself");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				break;
+			case 19:
+				text.setText("You climb up the tree to get the box, but the branch breaks, "
+						+ "causing you to fall down and hurt yourself");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				break;
+			case 20:
+				text.setText("You climb up the tree, pick up the box and climb back down "
+						+ "before checking to see your rewards.");
+				rewards.setText("+ 5 Coins" + "\n+ 1 Bomb");
+				Player.gainCoins(5);
+				storage.equippedItems(storage.bomb, "Add");
+				break;
+			case 21:
+				text.setText("The angry figure turned out to be a monster, which attacks you");
+				backBtn.setText("To battle");
+				backBtn.clearListeners();
+				backBtn.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				break;
+			case 22:
+				text.setText("The person standing in front of you turned out to be "
+						+ "friendly. They proceed to give you a booster to help you on your path");
+				switch(rand.nextInt(3)) {
+				case 0:
+					rewards.setText("+ 1 Attack Boost");
+					storage.equippedItems(storage.apBoost, "Add");
+					break;
+				case 1:
+					rewards.setText("+ 1 Defense Boost");
+					storage.equippedItems(storage.dpBoost, "Add");
+					break;
+				case 2:
+					rewards.setText("+ 1 Health Boost");
+					storage.equippedItems(storage.hpBoost, "Add");
+					break;
+				}
+				break;				
 			}
 		}	
 		

@@ -77,6 +77,19 @@ public class Inventory implements Screen {
 	public static Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
 	public static Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
 	public static Texture swingTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture rendTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture whirlwindTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture groundBreakerTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture bashTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture barrierTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture hardenTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture mendTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture hiltBashTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture barbedArmorTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture enrageTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture riposteTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture stabTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
+	public static Texture decapitateTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
 	public static Texture onionTexture = Storage.assetManager.get("player/Onion.png", Texture.class);
 	public static Texture eIronGreataxeTexture = Storage.assetManager.get("weapons/equipped/IronGreataxe.png", Texture.class);
 	public static Texture eWoodenGreataxeTexture = Storage.assetManager.get("weapons/equipped/WoodenGreataxe.png", Texture.class);
@@ -144,6 +157,19 @@ public class Inventory implements Screen {
 		healthPotionTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		bombTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		swingTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		rendTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		whirlwindTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		groundBreakerTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		bashTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		barrierTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		hardenTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		mendTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		hiltBashTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		barbedArmorTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		enrageTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		riposteTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		stabTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		decapitateTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		ironHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		ironChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		ironBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
@@ -215,7 +241,7 @@ public class Inventory implements Screen {
 	            boolean emptySlot = false;
 	            String itemName = "";
 	            Texture slotTexture = null;
-	            
+	        	
 	            // Check if there's a weapon to display in this slot.
 	            if (weaponIndex < inventoryWeapons.size()) {
 	                Weapons weapon = inventoryWeapons.get(weaponIndex);
@@ -554,13 +580,39 @@ public class Inventory implements Screen {
 		else if(gearType == "Item") {
 			switch(itemName) {
 			case "Health Potion":
-				return healthPotionTexture;
+				return Inventory.healthPotionTexture;
 			case "Bomb":
-				return bombTexture;
+				return Inventory.bombTexture;
 			case "Swing":
-				return swingTexture;
+				return Inventory.swingTexture;
+			case "Rend":
+				return Inventory.rendTexture;
+			case "Whirlwind":
+				return Inventory.whirlwindTexture;
+			case "Ground Breaker":
+				return Inventory.groundBreakerTexture;
+			case "Bash":
+				return Inventory.bashTexture;
+			case "Barrier":
+				return Inventory.barrierTexture;
+			case "Harden":
+				return Inventory.hardenTexture;
+			case "Mend":
+				return Inventory.mendTexture;
+			case "Hilt Bash":
+				return Inventory.hiltBashTexture;
+			case "Barbed Armor":
+				return Inventory.barbedArmorTexture;
+			case "Enrage":
+				return Inventory.enrageTexture;
+			case "Riposte":
+				return Inventory.riposteTexture;
+			case "Stab":
+				return Inventory.stabTexture;
+			case "Decapitate":
+				return Inventory.decapitateTexture;
 			default:
-				return inventorySlotTexture;
+				return Inventory.inventorySlotTexture;
 			}
 		}
 		else
@@ -1353,9 +1405,7 @@ public class Inventory implements Screen {
 	private void handleInventoryClick(Image slot, String itemName) {	
 		boolean itemMoved = false; 
 		
-	    if(slot.getName().equals("Empty"))
-	    	System.out.println("Empty slot clicked!");
-	    else if(itemName.endsWith("Helmet")) {
+	    if(itemName.endsWith("Helmet")) {
 	    	setArmor(itemName, "Helmet");
 	    	addArmorDefenses(itemName);
 	    }
@@ -1802,8 +1852,7 @@ public class Inventory implements Screen {
 		stage.dispose();
 		skin.dispose();
 		storage.font.dispose();	
-		Storage.assetManager.dispose();
-		
+		Storage.assetManager.dispose();	
 	}
 
 	public static int getShieldDP() {

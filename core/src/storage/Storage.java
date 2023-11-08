@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -18,6 +20,7 @@ public class Storage {
 	private static Storage instance = null;
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle;
+	public ImageButtonStyle imgButtonStyle;
 	public LabelStyle labelStyle, labelStyleBig;
 	public BitmapFont font, fontBig;
 	private List<Weapons> playerWeapons = new ArrayList<>();
@@ -130,6 +133,10 @@ public class Storage {
 	// Load items
 	public Items healthPot = new HealthPot();
 	public Items bomb = new Bomb();
+	public Items expBoost = new ExpBoost();
+	public Items apBoost = new APBoost();
+	public Items dpBoost = new DPBoost();
+	public Items hpBoost = new HPBoost();
 	public Items itemSwing = new ItemSwing();
 	public Items itemRend = new ItemRend();
 	public Items itemWhirlwind = new ItemWhirlwind();
@@ -195,6 +202,9 @@ public class Storage {
 	public Weapons defensiveSteelAxe = new DefensiveSteelAxe();
 	
 	// Load armor
+	public Armor ironHelmet = new IronHelmet();
+	public Armor ironChest = new IronChest();
+	public Armor ironBoots = new IronBoots();
 	public Armor healthyIronHelmet = new HealthyIronHelmet();
 	public Armor strongIronHelmet = new StrongIronHelmet();
 	public Armor defensiveIronHelmet = new DefensiveIronHelmet();
@@ -340,6 +350,8 @@ public class Storage {
         // Create a new style for button
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
         buttonStyle.font = font; 
+        
+        imgButtonStyle = new ImageButton.ImageButtonStyle(skin.get(ImageButton.ImageButtonStyle.class));
         
         labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyle.font = font;  
