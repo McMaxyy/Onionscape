@@ -75,7 +75,7 @@ public class FightScene implements Screen{
     private float weaponRotation = 20f; // starting rotation
     private float rotationSpeed = -10f; // rotation speed per frame (adjust as needed)
     private float rotationInterval = 0.017f;
-    private int timer = 0;   
+    private int timer = 0;  
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -178,7 +178,6 @@ public class FightScene implements Screen{
     		playerHPLbl.setText("Player HP: " + Player.getHp() + "/" + Player.getMaxHP());
         	enemyHPLbl.setText("Enemy HP: " + enemyHP + "/" + enemyMaxHP); 
         	btnClicked = false;
-//        	turnEnded = false;
     	}
     	
     	if(firstLoad) {
@@ -242,7 +241,10 @@ public class FightScene implements Screen{
 	        else {
 	        	combatLog.setText(combatText + "\n Enemy died");
 	        	Player.setCoins(Player.getCoins() + enemyValue);
-	        	Player.gainExp(expValue);
+	        	if(Home.expBoost)
+	        		Player.gainExp(expValue * 2);
+	        	else
+	        		Player.gainExp(expValue);
 	        	Player.checkExp();
 	        }
 	        
@@ -886,7 +888,7 @@ public class FightScene implements Screen{
     	enemyHPLbl = new Label("Enemy HP: " + enemyHP + "/" + enemyMaxHP, storage.labelStyle);
     	enemyNameLbl = new Label(enemyName, storage.labelStyle);
     	
-    	combatLog = new Label("", storage.labelStyle);
+    	combatLog = new Label("", storage.labelStyleSmol);
     	
     	attackBtn = new TextButton("Attack", storage.buttonStyle);
     	attackBtn.setName("Attack");
@@ -1021,9 +1023,9 @@ public class FightScene implements Screen{
     	combatLog.setColor(Color.BLACK);
     	Container<Label> container = new Container<Label>(combatLog);
     	container.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("white.png"))));
-    	container.setBounds(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 2f, 600, 400);
+    	container.setBounds(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 1.8f, 600, 300);
     	container.align(Align.topLeft);
-    	combatLog.setSize(600, 400);
+    	combatLog.setSize(600, 300);
     	
         attackBtn.setSize(550, 120); 
         attackBtn.setPosition(vp.getWorldWidth() / 5.2f - attackBtn.getWidth() / 2f,  vp.getWorldHeight() / 2.4f - attackBtn.getHeight() / 2f);
@@ -1127,6 +1129,37 @@ public class FightScene implements Screen{
     				combatLog.setText(combatText + "\n Player threw a Bomb which dealt " + storage.bomb.getValue() + " damage");
     				enemyHP -= storage.bomb.getValue();
     				attackCount--;
+    	    		break;
+    	    	case "Attack Boost":
+    	    		storage.equippedItems(storage.apBoost, "Remove");
+    	    		Home.apBoost = true;
+    	    		Player.gainWeaponDmg(5);
+    	    		newLine();
+    	    		combatLog.setText(combatText + "\n Player boosted their attack");
+    	    		break;
+    	    	case "Defense Boost":
+    	    		storage.equippedItems(storage.dpBoost, "Remove");
+    	    		Home.dpBoost = true;
+    	    		Player.setDmgResist(Player.getDmgResist() + 5);
+    	    		newLine();
+    	    		combatLog.setText(combatText + "\n Player boosted their defenses");
+    	    		break;
+    	    	case "Health Boost":
+    	    		storage.equippedItems(storage.hpBoost, "Remove");
+    	    		Home.hpBoost = true;
+    	    		Player.gainMaxHP(10);
+    	    		if(Player.getHp() < Player.getMaxHP())
+    	    			Player.gainHP(10);
+    	    		if(Player.getHp() > Player.getMaxHP())
+    	    			Player.setHp(Player.getMaxHP());
+    	    		newLine();
+    	    		combatLog.setText(combatText + "\n Player gained additional Health Points");
+    	    		break;
+    	    	case "Experience Boost":
+    	    		storage.equippedItems(storage.expBoost, "Remove");
+    	    		Home.expBoost = true;
+    	    		newLine();
+    	    		combatLog.setText(combatText + "\n Player activated an Experience Boost");
     	    		break;
     	    	default:   	       	    		
     	    		createAbilityGrid(itemName);
@@ -1283,6 +1316,40 @@ public class FightScene implements Screen{
 				return Inventory.bombTexture;
 			case "Swing":
 				return Inventory.swingTexture;
+			case "Rend":
+				return Inventory.rendTexture;
+			case "Whirlwind":
+				return Inventory.whirlwindTexture;
+			case "Ground Breaker":
+				return Inventory.groundBreakerTexture;
+			case "Bash":
+				return Inventory.bashTexture;
+			case "Barrier":
+				return Inventory.barrierTexture;
+			case "Harden":
+				return Inventory.hardenTexture;
+			case "Mend":
+				return Inventory.mendTexture;
+			case "Hilt Bash":
+				return Inventory.hiltBashTexture;
+			case "Barbed Armor":
+				return Inventory.barbedArmorTexture;
+			case "Enrage":
+				return Inventory.enrageTexture;
+			case "Riposte":
+				return Inventory.riposteTexture;
+			case "Stab":
+				return Inventory.stabTexture;
+			case "Decapitate":
+				return Inventory.decapitateTexture;
+			case "Attack Boost":
+				return Inventory.apTexture;
+			case "Defense Boost":
+				return Inventory.dpTexture;
+			case "Health Boost":
+				return Inventory.hpTexture;
+			case "Experience Boost":
+				return Inventory.expTexture;
 			default:
 				return Inventory.inventorySlotTexture;
 			}
@@ -1294,7 +1361,7 @@ public class FightScene implements Screen{
     public void newLine() {
     	combatText = combatLog.getText().toString();
         int lines = combatText.split("\n").length;
-        if(lines >= 8) {
+        if(lines >= 10) {
             int index = combatText.indexOf("\n");
             combatText = combatText.substring(index+1);
         }        

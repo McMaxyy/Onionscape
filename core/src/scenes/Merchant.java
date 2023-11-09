@@ -1,6 +1,7 @@
 package scenes;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -42,12 +44,18 @@ public class Merchant implements Screen{
 	Table itemTable = new Table();
 	Table prefixTable = new Table();
 	Table gearTable = new Table();
+	Table discountTable = new Table();
+	Table standardTable = new Table();
+	private Image[] discountBtns = new Image[3];
+	private Image[] standardBtns = new Image[3];
 	private TextButton[] prefixBtns = new TextButton[11];
 	private Image[] gearBtns = new Image[18];
 	private Label gearName, coins;
 	private TextButton backBtn;
 	public static boolean raid;
 	private int itemValue;
+	private String itemName;
+	private Random rand = new Random();
 	
 	public Merchant(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -60,7 +68,7 @@ public class Merchant implements Screen{
 		storage.createFont();
 		
 		createComponents();	
-		if(!raid) {
+		if(raid) {
 			createInventoryGrid();
 		}			
 		else {
@@ -70,10 +78,21 @@ public class Merchant implements Screen{
 	
 	private void loadPrefixGear(String prefix) {
 	    String[] gearTypes = {"Helmet", "Chest", "Boots", "Axe", "Greataxe", "Shield"};
-	    String[] materials = {"Iron", "Bronze", "Steel"};
+	    String[] t1Mats = {"Iron", "Bronze", "Steel"};
+	    String[] t2Mats = {"Silver", "Gold", "Platinum"};
+	    String[] t3Mats = {"Obsidian", "Molten", "Starmetal"};	    
+	    String[] chosenPrefix;
+	    
+	    if(prefix.equals("Healthy") || prefix.equals("Strong") || prefix.equals("Defensive"))
+	    	chosenPrefix = t1Mats;
+	    else if(prefix.equals("Valkyrie") || prefix.equals("Ravager") || prefix.equals("Protector"))
+	    	chosenPrefix = t2Mats;
+	    else
+	    	chosenPrefix = t3Mats;
 	    
 	    int index = 0;
-	    for (String material : materials) {
+	    
+	    for (String material : chosenPrefix) {
 	        for (String type : gearTypes) {
 	            gearBtns[index] = new Image(getTextureByTypeAndMaterial(type, material));
 	            gearBtns[index].setName(prefix + " " + material + " " + type);
@@ -121,47 +140,49 @@ public class Merchant implements Screen{
 	    switch (material) {
 	        case "Iron":
 	            switch (type) {
-                case "Helmet": 
-                	itemValue = storage.healthyIronHelmet.getValue();
-                	return Inventory.ironHelmetTexture;
-                case "Chest": 
-                	itemValue = storage.healthyIronChest.getValue();
-                	return Inventory.ironChestTexture;
-                case "Boots": 
-                	itemValue = storage.healthyIronBoots.getValue();
-                	return Inventory.ironBootsTexture;
-                case "Axe": 
-                	itemValue = storage.healthyIronAxe.getValue();
-                	return Inventory.ironAxeTexture;
-                case "Greataxe": 
-                	itemValue = storage.healthyIronGA.getValue();
-                	return Inventory.ironGreataxeTexture;
-                case "Shield": 
-                	itemValue = storage.healthyIronShield.getValue();
-                	return Inventory.ironShieldTexture;
-	                default: return null;
+	            case "Helmet": 
+	            	itemValue = storage.healthyIronHelmet.getValue();
+	            	return Inventory.ironHelmetTexture;
+	            case "Chest": 
+	            	itemValue = storage.healthyIronChest.getValue();
+	            	return Inventory.ironChestTexture;
+	            case "Boots": 
+	            	itemValue = storage.healthyIronBoots.getValue();
+	            	return Inventory.ironBootsTexture;
+	            case "Axe": 
+	            	itemValue = storage.healthyIronAxe.getValue();
+	            	return Inventory.ironAxeTexture;
+	            case "Greataxe": 
+	            	itemValue = storage.healthyIronGA.getValue();
+	            	return Inventory.ironGreataxeTexture;
+	            case "Shield": 
+	            	itemValue = storage.healthyIronShield.getValue();
+	            	return Inventory.ironShieldTexture;
+	            default: 
+	            	return Inventory.inventorySlotTexture;
 	            }
 	        case "Bronze":
 	            switch (type) {
 	            case "Helmet": 
-                	itemValue = storage.healthyBronzeHelmet.getValue();
-                	return Inventory.bronzeHelmetTexture;
-                case "Chest": 
-                	itemValue = storage.healthyBronzeChest.getValue();
-                	return Inventory.bronzeChestTexture;
-                case "Boots": 
-                	itemValue = storage.healthyBronzeBoots.getValue();
-                	return Inventory.bronzeBootsTexture;
-                case "Axe": 
-                	itemValue = storage.healthyBronzeAxe.getValue();
-                	return Inventory.bronzeAxeTexture;
-                case "Greataxe": 
-                	itemValue = storage.healthyBronzeGA.getValue();
-                	return Inventory.bronzeGreataxeTexture;
-                case "Shield": 
-                	itemValue = storage.healthyBronzeShield.getValue();
-                	return Inventory.bronzeShieldTexture;
-	                default: return null;
+	            	itemValue = storage.healthyBronzeHelmet.getValue();
+	            	return Inventory.bronzeHelmetTexture;
+	            case "Chest": 
+	            	itemValue = storage.healthyBronzeChest.getValue();
+	            	return Inventory.bronzeChestTexture;
+	            case "Boots": 
+	            	itemValue = storage.healthyBronzeBoots.getValue();
+	            	return Inventory.bronzeBootsTexture;
+	            case "Axe": 
+	            	itemValue = storage.healthyBronzeAxe.getValue();
+	            	return Inventory.bronzeAxeTexture;
+	            case "Greataxe": 
+	            	itemValue = storage.healthyBronzeGA.getValue();
+	            	return Inventory.bronzeGreataxeTexture;
+	            case "Shield": 
+	            	itemValue = storage.healthyBronzeShield.getValue();
+	            	return Inventory.bronzeShieldTexture;
+		        default: 
+		        	return Inventory.inventorySlotTexture;
 	            }
 	        case "Steel":
 	            switch (type) {
@@ -183,10 +204,11 @@ public class Merchant implements Screen{
                 case "Shield": 
                 	itemValue = storage.healthySteelShield.getValue();
                 	return Inventory.steelShieldTexture;
-	                default: return null;
+                default: 
+                	return Inventory.inventorySlotTexture;
 	            }
 	        default:
-	            return null;
+	        	return Inventory.inventorySlotTexture;
 	    }
 	}
 	
@@ -240,10 +262,14 @@ public class Merchant implements Screen{
 	            inventorySlotImage.addListener(new InputListener() {
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-	                    gearName.setText(item + "\nCost: " + cost/2);
-	                    gearName.setAlignment(Align.center);
-	                	gearName.setVisible(true);	                  	                    
-	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
+	                    if(!item.equals("")) {
+	                    	gearName.setText(item + "\nCost: " + cost / 2);
+		                    if(cost / 2 == 0)
+		                    	gearName.setText(item + "\nCost: " + cost);
+		                    gearName.setAlignment(Align.center);
+		                	gearName.setVisible(true);	                  	                    
+		                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
+	                    }	                    	            
 	                }
 
 	                @Override
@@ -328,7 +354,9 @@ public class Merchant implements Screen{
 	            inventorySlotImage.addListener(new InputListener() {
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-	                    gearName.setText(item + "\nCost: " + cost/2);
+	                	gearName.setText(item + "\nCost: " + cost / 2);
+	                    if(cost / 2 == 0)
+	                    	gearName.setText(item + "\nCost: " + cost);
 	                    gearName.setAlignment(Align.center);
 	                	gearName.setVisible(true);	                  	                    
 	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
@@ -445,6 +473,14 @@ public class Merchant implements Screen{
 				return Inventory.stabTexture;
 			case "Decapitate":
 				return Inventory.decapitateTexture;
+			case "Attack Boost":
+				return Inventory.apTexture;
+			case "Defense Boost":
+				return Inventory.dpTexture;
+			case "Health Boost":
+				return Inventory.hpTexture;
+			case "Experience Boost":
+				return Inventory.expTexture;
 			default:
 				return Inventory.inventorySlotTexture;
 			}
@@ -477,7 +513,8 @@ public class Merchant implements Screen{
 		coins.setPosition(vp.getWorldWidth() / 7f, vp.getWorldHeight() / 1.25f);
 		stage.addActor(coins);
 		
-		if(!raid) {
+		// Normal merchant
+		if(raid) {
 			// Prefix table (non-raid)		
 			prefixBtns[0] = new TextButton("Healthy", storage.buttonStyle);
 			prefixBtns[1] = new TextButton("Strong", storage.buttonStyle);
@@ -531,16 +568,251 @@ public class Merchant implements Screen{
 			gearTable.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 2.3f, Align.center);
 			stage.addActor(gearTable);
 		}
-		else {
-			// Raid merchant
+		// Raid merchant
+		else {	
+			// Discounted prices table
+			for (int i = 0; i < discountBtns.length; i++) {
+				if(i == 0)
+					discountBtns[i] = new Image(chooseItem(rand.nextInt(1, 7)));					
+				else 
+					discountBtns[i] = new Image(chooseItem(rand.nextInt(7, 21)));
+					
+				discountBtns[i].setName(itemName);
+				
+				final int cost = itemValue;
+				final String item = discountBtns[i].getName().toString();
+				
+				discountBtns[i].addListener(new InputListener() {
+	                @Override
+	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+	                	gearName.setText(item + "\nCost: " + cost / 2);
+	                    if(cost / 2 == 0)
+	                    	gearName.setText(item + "\nCost: " + cost);
+	                    gearName.setAlignment(Align.center);
+	                	gearName.setVisible(true);	                  	                    
+	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
+	                }
+
+	                @Override
+	                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+	                    gearName.setVisible(false);
+	                }
+	            });
+			}
+			discountTable.defaults().size(200, 200);
+			
+			int index = 0;
+			for(int y = 0; y < 3; y++) {
+				if (index < discountBtns.length) {
+					discountTable.add(discountBtns[index]).pad(0);
+		            index++;
+		        }
+				
+				final String item = discountBtns[y].getName().toString();
+				final int loc = y;
+				
+				discountBtns[y].addListener(new ClickListener() {
+	                @Override
+	                public void clicked(InputEvent event, float x, float y) {
+	                    handleRaidPurchases(true, item, loc);	                    
+	                }				
+	            });
+			}
+			
+			discountTable.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 1.9f, Align.center);
+			stage.addActor(discountTable);
+			
+			// Normal prices table
+			for (int i = 0; i < standardBtns.length; i++) {
+				if(i == 0)
+					standardBtns[i] = new Image(chooseItem(rand.nextInt(1, 7)));
+				else
+					standardBtns[i] = new Image(chooseItem(rand.nextInt(7, 21)));
+				standardBtns[i].setName(itemName);
+				
+				final int cost = itemValue;
+				final String item = standardBtns[i].getName().toString();
+				
+				standardBtns[i].addListener(new InputListener() {
+	                @Override
+	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+	                	gearName.setText(item + "\nCost: " + cost);
+	                    gearName.setAlignment(Align.center);
+	                	gearName.setVisible(true);	                  	                    
+	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
+	                }
+
+	                @Override
+	                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+	                    gearName.setVisible(false);
+	                }
+	            });
+			}
+			standardTable.defaults().size(200, 200);
+			
+			index = 0;
+			for(int y = 0; y < 3; y++) {
+				if (index < standardBtns.length) {
+					standardTable.add(standardBtns[index]).pad(0);
+		            index++;
+		        }
+				
+				final String item = standardBtns[y].getName().toString();
+				final int loc = y;
+				
+				standardBtns[y].addListener(new ClickListener() {
+	                @Override
+	                public void clicked(InputEvent event, float x, float y) {
+	                    handleRaidPurchases(false, item, loc);
+	                }				
+	            });
+			}
+			
+			standardTable.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 4.4f, Align.center);
+			stage.addActor(standardTable);
 		}
+	}
+	
+	private Texture chooseItem(int x) {
+		switch(x) {
+		case 1:
+			itemName = storage.healthPot.getItemName().toString();
+			itemValue = storage.healthPot.getValue();
+			return Inventory.healthPotionTexture;
+		case 2:
+			itemName = storage.bomb.getItemName().toString();
+			itemValue = storage.bomb.getValue();
+			return Inventory.bombTexture;
+		case 3:
+			itemName = storage.apBoost.getItemName().toString();
+			itemValue = storage.apBoost.getValue();
+			return Inventory.apTexture;
+		case 4:
+			itemName = storage.dpBoost.getItemName().toString();
+			itemValue = storage.dpBoost.getValue();
+			return Inventory.dpTexture;
+		case 5:
+			itemName = storage.hpBoost.getItemName().toString();
+			itemValue = storage.hpBoost.getValue();
+			return Inventory.hpTexture;
+		case 6:
+			itemName = storage.expBoost.getItemName().toString();
+			itemValue = storage.expBoost.getValue();
+			return Inventory.expTexture;
+		case 7:
+			itemName = storage.itemSwing.getItemName().toString();
+			itemValue = storage.itemSwing.getValue();
+			return Inventory.swingTexture;
+		case 8:
+			itemName = storage.itemRend.getItemName().toString();
+			itemValue = storage.itemRend.getValue();
+			return Inventory.rendTexture;
+		case 9:
+			itemName = storage.itemWhirlwind.getItemName().toString();
+			itemValue = storage.itemWhirlwind.getValue();
+			return Inventory.whirlwindTexture;
+		case 10:
+			itemName = storage.itemGroundBreaker.getItemName().toString();
+			itemValue = storage.itemGroundBreaker.getValue();
+			return Inventory.groundBreakerTexture;
+		case 11:
+			itemName = storage.itemBash.getItemName().toString();
+			itemValue = storage.itemBash.getValue();
+			return Inventory.bashTexture;
+		case 12:
+			itemName = storage.itemBarrier.getItemName().toString();
+			itemValue = storage.itemBarrier.getValue();
+			return Inventory.barrierTexture;
+		case 13:
+			itemName = storage.itemHarden.getItemName().toString();
+			itemValue = storage.itemHarden.getValue();
+			return Inventory.hardenTexture;
+		case 14:
+			itemName = storage.itemMend.getItemName().toString();
+			itemValue = storage.itemMend.getValue();
+			return Inventory.mendTexture;
+		case 15:
+			itemName = storage.itemHiltBash.getItemName().toString();
+			itemValue = storage.itemHiltBash.getValue();
+			return Inventory.hiltBashTexture;
+		case 16:
+			itemName = storage.itemBarbedArmor.getItemName().toString();
+			itemValue = storage.itemBarbedArmor.getValue();
+			return Inventory.barbedArmorTexture;
+		case 17:
+			itemName = storage.itemRiposte.getItemName().toString();
+			itemValue = storage.itemRiposte.getValue();
+			return Inventory.riposteTexture;
+		case 18:
+			itemName = storage.itemStab.getItemName().toString();
+			itemValue = storage.itemStab.getValue();
+			return Inventory.stabTexture;
+		case 19:
+			itemName = storage.itemDecapitate.getItemName().toString();
+			itemValue = storage.itemDecapitate.getValue();
+			return Inventory.decapitateTexture;
+		case 20:
+			itemName = storage.itemEnrage.getItemName().toString();
+			itemValue = storage.itemEnrage.getValue();
+			return Inventory.enrageTexture;
+		default:
+			return Inventory.inventorySlotTexture;
+		}		
+	}
+	
+	private void handleRaidPurchases(boolean discount, String itemName, int loc) {
+		HashMap<String, Items> itemMap = new HashMap<>();
+		itemMap.put("Health Potion", storage.healthPot);
+		itemMap.put("Bomb", storage.bomb);
+		itemMap.put("Experience Boost", storage.expBoost);
+		itemMap.put("Attack Boost", storage.apBoost);
+		itemMap.put("Defense Boost", storage.dpBoost);
+		itemMap.put("Health Boost", storage.hpBoost);
+		itemMap.put("Swing", storage.itemSwing);
+		itemMap.put("Rend", storage.itemRend);
+		itemMap.put("Whirlwind", storage.itemWhirlwind);
+		itemMap.put("Ground Breaker", storage.itemGroundBreaker);
+		itemMap.put("Bash", storage.itemBash);
+		itemMap.put("Barrier", storage.itemBarrier);
+		itemMap.put("Harden", storage.itemHarden);
+		itemMap.put("Mend", storage.itemMend);
+		itemMap.put("Hilt Bash", storage.itemHiltBash);
+		itemMap.put("Barbed Armor", storage.itemBarbedArmor);
+		itemMap.put("Enrage", storage.itemEnrage);
+		itemMap.put("Riposte", storage.itemRiposte);
+		itemMap.put("Stab", storage.itemStab);
+		itemMap.put("Decapitate", storage.itemDecapitate);
+		
+		if (itemMap.containsKey(itemName)){
+			Items item = itemMap.get(itemName);
+			if(Player.getCoins() >= item.getValue() && storage.getEquippedItems().size() < 14 && !discount) {
+				Player.loseCoins(item.getValue());
+				standardBtns[loc].setTouchable(Touchable.disabled);
+					
+				storage.equippedItems(item, "Add");				
+				itemTable.clear();
+				createItemGrid();
+				coins.setText("Coins: " + Player.getCoins());
+			}
+			else if(Player.getCoins() >= item.getValue() / 2 && storage.getEquippedItems().size() < 14 && discount) {
+				Player.loseCoins(item.getValue() / 2);
+				discountBtns[loc].setTouchable(Touchable.disabled);
+				
+				storage.equippedItems(item, "Add");				
+				itemTable.clear();
+				createItemGrid();
+				coins.setText("Coins: " + Player.getCoins());
+			}
+		}		
 	}
 	
 	private void handlePrefixClick(String prefix) {
 		loadPrefixGear(prefix);
 	}
 	
-	private void handleInventoryClick(String itemName, int tr) {	
+	private void handleInventoryClick(String itemName, int tr) {
+		int finalCost = 0;
+		
 		HashMap<String, Armor> armorMap = new HashMap<>();
 		armorMap.put("Iron Helmet", storage.ironHelmet);
 		armorMap.put("Healthy Iron Helmet", storage.healthyIronHelmet);
@@ -574,6 +846,9 @@ public class Merchant implements Screen{
 		armorMap.put("Defensive Steel Boots", storage.defensiveSteelBoots);
 		
 		HashMap<String, Weapons> weaponMap = new HashMap<>();
+		weaponMap.put("Wooden Axe", storage.woodenAxe);
+		weaponMap.put("Wooden Greataxe", storage.woodenGA);
+		weaponMap.put("Wooden Shield", storage.woodenShield);
 		weaponMap.put("Healthy Iron Axe", storage.healthyIronAxe);
 		weaponMap.put("Strong Iron Axe", storage.strongIronAxe);
 		weaponMap.put("Defensive Iron Axe", storage.defensiveIronAxe);
@@ -605,28 +880,51 @@ public class Merchant implements Screen{
 		HashMap<String, Items> itemMap = new HashMap<>();
 		itemMap.put("Health Potion", storage.healthPot);
 		itemMap.put("Bomb", storage.bomb);
-		itemMap.put("EXP Boost", storage.expBoost);
-		itemMap.put("AP Boost", storage.apBoost);
-		itemMap.put("DP Boost", storage.dpBoost);
-		itemMap.put("HP Boost", storage.hpBoost);
+		itemMap.put("Experience Boost", storage.expBoost);
+		itemMap.put("Attack Boost", storage.apBoost);
+		itemMap.put("Defense Boost", storage.dpBoost);
+		itemMap.put("Health Boost", storage.hpBoost);
+		itemMap.put("Swing", storage.itemSwing);
+		itemMap.put("Rend", storage.itemRend);
+		itemMap.put("Whirlwind", storage.itemWhirlwind);
+		itemMap.put("Ground Breaker", storage.itemGroundBreaker);
+		itemMap.put("Bash", storage.itemBash);
+		itemMap.put("Barrier", storage.itemBarrier);
+		itemMap.put("Harden", storage.itemHarden);
+		itemMap.put("Mend", storage.itemMend);
+		itemMap.put("Hilt Bash", storage.itemHiltBash);
+		itemMap.put("Barbed Armor", storage.itemBarbedArmor);
+		itemMap.put("Enrage", storage.itemEnrage);
+		itemMap.put("Riposte", storage.itemRiposte);
+		itemMap.put("Stab", storage.itemStab);
+		itemMap.put("Decapitate", storage.itemDecapitate);
 		
 		if(tr == 1) {
 			if (armorMap.containsKey(itemName)) {
 			    Armor armor = armorMap.get(itemName);
-			    Player.gainCoins(armor.getValue() / 2);
+			    finalCost = armor.getValue() / 2;
+			    if (finalCost == 0)
+			    	finalCost = 1;
+			    Player.gainCoins(finalCost);
 			    if (itemName.endsWith("Helmet") || itemName.endsWith("Chest") || itemName.endsWith("Boots"))
 			        storage.inventoryArmor(armor, "Remove");		    
 			}
 			else if (weaponMap.containsKey(itemName)) {
 				Weapons weapon = weaponMap.get(itemName);
-				Player.gainCoins(weapon.getValue() / 2);
+				finalCost = weapon.getValue() / 2;
+			    if (finalCost == 0)
+			    	finalCost = 1;
+			    Player.gainCoins(finalCost);
 				if (itemName.endsWith("Axe") || itemName.endsWith("Greataxe") || itemName.endsWith("Shield"))
 			        storage.inventoryWeapons(weapon, "Remove");
 			}
 			else if (itemMap.containsKey(itemName)){
 				Items item = itemMap.get(itemName);
-				Player.gainCoins(item.getValue() / 2);
-				if(!raid)
+				finalCost = item.getValue() / 2;
+			    if (finalCost == 0)
+			    	finalCost = 1;
+			    Player.gainCoins(finalCost);
+				if(raid)
 					storage.inventoryItems(item, "Remove");
 				else
 					storage.equippedItems(item, "Remove");
@@ -653,7 +951,7 @@ public class Merchant implements Screen{
 				Items item = itemMap.get(itemName);
 				if(Player.getCoins() >= item.getValue()) {
 					Player.loseCoins(item.getValue());
-					if(!raid)
+					if(raid)
 						storage.inventoryItems(item, "Add");
 					else
 						storage.equippedItems(item, "Add");
@@ -663,7 +961,7 @@ public class Merchant implements Screen{
 		
 		coins.setText("Coins: " + Player.getCoins());
 		
-		if(!raid) {
+		if(raid) {
 			inventoryTable.clear();
 		    createInventoryGrid();
 		}
