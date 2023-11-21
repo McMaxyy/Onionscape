@@ -91,6 +91,10 @@ public class Storage {
 		assetManager.load("enemies/Spider.png", Texture.class, textureParameter);
 		assetManager.load("enemies/Monkey.png", Texture.class, textureParameter);
 		assetManager.load("enemies/Wasp.png", Texture.class, textureParameter);		
+		assetManager.load("enemies/Boar.png", Texture.class, textureParameter);	
+		assetManager.load("enemies/MimicTree.png", Texture.class, textureParameter);	
+		assetManager.load("enemies/ForestGuardian.png", Texture.class, textureParameter);	
+		assetManager.load("enemies/Vulture.png", Texture.class, textureParameter);	
 		
 		// Inventory armor
 		assetManager.load("armor/inventory/IronHelmet.png", Texture.class, textureParameter);
@@ -122,6 +126,7 @@ public class Storage {
 		assetManager.load("maps/InventoryScreen.png", Texture.class, textureParameter);
 		assetManager.load("maps/StartScreen.png", Texture.class, textureParameter);
 		assetManager.load("maps/ForestMap.png", Texture.class, textureParameter);
+		assetManager.load("maps/ForestFight.png", Texture.class, textureParameter);
 		
 		// Misc
 		assetManager.load("abilities/SwingIcon.png", Texture.class, textureParameter);
@@ -239,6 +244,10 @@ public class Storage {
 	public Enemy bear = new Bear();
 	public Enemy monkey = new Monkey();
 	public Enemy wasp = new Wasp();
+	public Enemy forestGuardian = new ForestGuardian();
+	public Enemy mimicTree = new MimicTree();
+	public Enemy boar = new BoarBoss();
+	public Enemy vulture = new Vulture();
 	
 	public void swapAbilities(Abilities ability) {
 		emptyAbility = ability;
@@ -340,7 +349,7 @@ public class Storage {
     }
 	
 	public void createFont() {
-    	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/RetroGaming.ttf"));
+    	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Cascadia.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 25;
         font = generator.generateFont(parameter);

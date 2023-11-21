@@ -41,6 +41,13 @@ default
   orig: 254, 77
   offset: 0, 0
   index: -1
+default
+  rotate: false
+  xy: 1, 176
+  size: 254, 77
+  orig: 254, 77
+  offset: 0, 0
+  index: -1
 default-pane
   rotate: false
   xy: 23, 118
@@ -189,6 +196,13 @@ tree-plus
   xy: 68, 160
   size: 14, 14
   orig: 14, 14
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 40, 133
+  size: 3, 3
+  orig: 3, 3
   offset: 0, 0
   index: -1
 white

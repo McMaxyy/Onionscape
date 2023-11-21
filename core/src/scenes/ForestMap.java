@@ -15,6 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+
+import player.Player;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -57,6 +60,7 @@ public class ForestMap implements Screen{
 		playerTexture = Storage.assetManager.get("player/MapIcon.png", Texture.class);
 		playerTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		Merchant.raid = true;
+		FightScene.normal = FightScene.elite = FightScene.boss = false;
 				
 		if(GameScreen.newGame) {	
 			createComponents();	
@@ -660,37 +664,46 @@ public class ForestMap implements Screen{
     	    }});
 		button34.setText(setEncounter(34, button34));
 		
-		exit1 = new TextButton("EX", storage.buttonStyle);
+		exit1 = new TextButton("", storage.buttonStyle);
 		exit1.setColor(Color.RED);
 		exit1.setTouchable(Touchable.disabled);
 		exit1.setBounds(vp.getWorldWidth() / 1.865f, vp.getWorldHeight() / 1.03f, 70, 30);
 		exit1.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			if(exit1.getColor().equals(Color.GREEN))
+    			if(exit1.getColor().equals(Color.GREEN)) {
+    				Player.gainCoins(Player.getRaidCoins());
+    				Player.setRaidCoins(0);
     				gameScreen.setCurrentState(GameScreen.HOME);
+    			}  				
     	    }});
 		
-		exit2 = new TextButton("EX", storage.buttonStyle);
+		exit2 = new TextButton("", storage.buttonStyle);
 		exit2.setColor(Color.RED);
 		exit2.setTouchable(Touchable.disabled);
 		exit2.setBounds(vp.getWorldWidth() / 500f, vp.getWorldHeight() / 1.075f, 50, 70);
 		exit2.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			if(exit2.getColor().equals(Color.GREEN))
+    			if(exit2.getColor().equals(Color.GREEN)) {
+    				Player.gainCoins(Player.getRaidCoins());
+    				Player.setRaidCoins(0);
     				gameScreen.setCurrentState(GameScreen.HOME);
+    			}  
     	    }});
 		
-		exit3 = new TextButton("EX", storage.buttonStyle);
+		exit3 = new TextButton("", storage.buttonStyle);
 		exit3.setColor(Color.RED);
 		exit3.setTouchable(Touchable.disabled);
 		exit3.setBounds(vp.getWorldWidth() / 1.029f, vp.getWorldHeight() / 1.655f, 50, 70);
 		exit3.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			if(exit3.getColor().equals(Color.GREEN))
+    			if(exit3.getColor().equals(Color.GREEN)) {
+    				Player.gainCoins(Player.getRaidCoins());
+    				Player.setRaidCoins(0);
     				gameScreen.setCurrentState(GameScreen.HOME);
+    			}  
     	    }});
 		
 		stage.addActor(button1);
@@ -739,14 +752,18 @@ public class ForestMap implements Screen{
 		
 		switch(action) {
 		case "F":
-			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+			FightScene.elite = FightScene.boss = false;
+			FightScene.normal = true;
+			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);			
 			break;
 		case "R":
 			encounter = 1;
 			gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
 			break;
 		case "B":
-			gameScreen.setCurrentState(GameScreen.MERCHANT);
+			FightScene.normal = FightScene.elite = false;
+			FightScene.boss = true;
+			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
 			break;
 		case "T":
 			encounter = 2;
@@ -754,6 +771,11 @@ public class ForestMap implements Screen{
 			break;
 		case "M":
 			gameScreen.setCurrentState(GameScreen.MERCHANT);
+			break;
+		case "E":
+			FightScene.normal = FightScene.boss = false;
+			FightScene.elite = true;
+			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);			
 			break;
 		}
 	}

@@ -121,7 +121,7 @@ public class RaidTextScenes implements Screen{
 		case 15:
 			text.setText("You don’t notice a pile of grass on the ground as you walk towards "
 					+ "it, resulting in the ground caving in and you falling into a spike trap.");
-			option1.setVisible(false);
+			option1.setText("Fall");
 			option2.setVisible(false);
 			option3.setVisible(false);
 			break;
@@ -268,7 +268,7 @@ public class RaidTextScenes implements Screen{
 			switch(encNum) {
 			case 1:
 				text.setText("You found 5 gold and a Health potion in the chest!");
-				Player.gainCoins(5);
+				Player.gainRaidCoins(5);
 				if(storage.getEquippedItems().size() < 14) {
 					storage.equippedItems(storage.healthPot, "Add");
 					rewards.setText("+ 5 Coins \n" + "+ 1 Health Potion");
@@ -288,60 +288,12 @@ public class RaidTextScenes implements Screen{
 			case 12:
 				text.setText("You move to the crevice to investigate it and find a pile of gold "
 						+ "hidden there, looks like your detective instinct paid off!");
-				Player.gainCoins(10);
+				Player.gainRaidCoins(10);
 				rewards.setText("+ 10 Coins");
 				break;
 			case 13:
-				option1.setVisible(true);
-				option2.setVisible(true);
-				option3.setVisible(true);
-				text.setText("The suspicious looking figure turned out to be telling the "
-						+ "truth and he offers you some items to buy");
-				option1.setText("Health Potion (3 gold)");
-				option1.clearListeners();
-				option1.addListener(new ClickListener() {
-		    		@Override
-		    	    public void clicked(InputEvent event, float x, float y) {
-		    			if(Player.getCoins() >= 3) {
-		    				Player.loseCoins(3);
-		    				storage.equippedItems(storage.healthPot, "Add");
-		    				option1.setVisible(false);
-		    				option2.setVisible(false);
-		    				option3.setVisible(false);
-		    			}
-		    			else
-		    				rewards.setText("Insufficient funds");
-		    	    }});
-				option2.setText("Bomb (2 gold)");
-				option2.clearListeners();
-				option2.addListener(new ClickListener() {
-		    		@Override
-		    	    public void clicked(InputEvent event, float x, float y) {
-		    			if(Player.getCoins() >= 2) {
-		    				Player.loseCoins(2);
-		    				storage.equippedItems(storage.bomb, "Add");
-		    				option1.setVisible(false);
-		    				option2.setVisible(false);
-		    				option3.setVisible(false);
-		    			}
-		    			else
-		    				rewards.setText("Insufficient funds");
-		    	    }});
-				option3.setText("EXP Potion (20 gold)");
-				option3.clearListeners();
-				option3.addListener(new ClickListener() {
-		    		@Override
-		    	    public void clicked(InputEvent event, float x, float y) {
-		    			if(Player.getCoins() >= 20) {
-		    				Player.loseCoins(20);
-		    				storage.equippedItems(storage.expBoost, "Add");
-		    				option1.setVisible(false);
-		    				option2.setVisible(false);
-		    				option3.setVisible(false);
-		    			}
-		    			else
-		    				rewards.setText("Insufficient funds");
-		    	    }});				
+				text.setText("The suspicious looking person is yelling that he's not "
+						+ "a bandit, but you've rushed away too quickly to hear it.");
 				break;
 			case 14:
 				text.setText("There was an enemy hiding in the crevice, good luck.");
@@ -354,10 +306,13 @@ public class RaidTextScenes implements Screen{
 		    	    }});
 				break;
 			case 15:
-				text.setText("ou don’t notice a pile of grass on the ground as you walk "
+				text.setText("You don’t notice a pile of grass on the ground as you walk "
 						+ "towards it, resulting in the ground caving in and you falling "
 						+ "into a spike trap");
 				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
 				break;
 			case 16:
 				option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
@@ -366,6 +321,7 @@ public class RaidTextScenes implements Screen{
 						+ "you attempt to help them?");
 				option1.setVisible(true);
 				option2.setVisible(true);
+				backBtn.setVisible(false);
 				option1.setText("Yes");
 				option2.setText("No");
 				option1.clearListeners();
@@ -394,18 +350,22 @@ public class RaidTextScenes implements Screen{
 						+ "causing you to fall down and hurt yourself");
 				rewards.setText("- 5 Health Points");
 				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
 				break;
 			case 19:
 				text.setText("You climb up the tree to get the box, but the branch breaks, "
 						+ "causing you to fall down and hurt yourself");
 				rewards.setText("- 5 Health Points");
 				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
 				break;
 			case 20:
 				text.setText("You climb up the tree, pick up the box and climb back down "
 						+ "before checking to see your rewards.");
 				rewards.setText("+ 5 Coins" + "\n+ 1 Bomb");
-				Player.gainCoins(5);
+				Player.gainRaidCoins(5);
 				storage.equippedItems(storage.bomb, "Add");
 				break;
 			case 21:
@@ -452,7 +412,11 @@ public class RaidTextScenes implements Screen{
 				text.setText("The suspicious person turned out to be a bandit. He proceeds"
 						+ " to stab you and steal 5 gold from you before you run away");
 				Player.loseHP(5);
-				Player.loseCoins(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				Player.loseRaidCoins(5);
+				if(Player.getRaidCoins() < 0)
+					Player.setRaidCoins(0);
 				if(storage.getEquippedItems().size() > 0) {
 					lostItem = storage.loseItem();
 					rewards.setText("- 5 Health Points \n" + "- 5 Coins \n" + "- " + lostItem);
@@ -463,6 +427,97 @@ public class RaidTextScenes implements Screen{
 			case 12:
 				text.setText("You quickly walk past the crevice, who knows what could be hiding there");
 				break;
+			case 13:
+				option1.setVisible(true);
+				option2.setVisible(true);
+				option3.setVisible(true);
+				text.setText("The suspicious looking figure turned out to be telling the "
+						+ "truth and he offers you some items to buy");
+				option1.setText("Health Potion (3 gold)");
+				option1.clearListeners();
+				option1.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			if(Player.getRaidCoins() >= 3) {
+		    				Player.loseRaidCoins(3);
+		    				storage.equippedItems(storage.healthPot, "Add");
+		    				option1.setVisible(false);
+		    				option2.setVisible(false);
+		    				option3.setVisible(false);
+		    			}
+		    			else
+		    				rewards.setText("Insufficient funds");
+		    	    }});
+				option2.setText("Bomb (2 gold)");
+				option2.clearListeners();
+				option2.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			if(Player.getRaidCoins() >= 2) {
+		    				Player.loseRaidCoins(2);
+		    				storage.equippedItems(storage.bomb, "Add");
+		    				option1.setVisible(false);
+		    				option2.setVisible(false);
+		    				option3.setVisible(false);
+		    			}
+		    			else
+		    				rewards.setText("Insufficient funds");
+		    	    }});
+				option3.setText("EXP Potion (20 gold)");
+				option3.clearListeners();
+				option3.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			if(Player.getRaidCoins() >= 20) {
+		    				Player.loseRaidCoins(20);
+		    				storage.equippedItems(storage.expBoost, "Add");
+		    				option1.setVisible(false);
+		    				option2.setVisible(false);
+		    				option3.setVisible(false);
+		    			}
+		    			else
+		    				rewards.setText("Insufficient funds");
+		    	    }});				
+				break;
+			case 14:
+				text.setText("You walk away from the hole in the wall, not willing to "
+						+ "risk finding out what's hiding there");
+				break;
+			case 16:
+				text.setText("You hastly walk in the other direction, not willing to "
+						+ "risk finding out who or what made such a sound");
+				break;
+			case 17:
+				text.setText("You run away from there, losing an item in the process");
+				if(storage.getEquippedItems().size() > 0)
+					storage.loseItem();
+				break;
+			case 18:
+				text.setText("You throw rocks at the box, causing it to fall on the "
+						+ "ground. You find coins and a Health Potion inside");
+				rewards.setText("+ 5 Coins \n" + "+ 1 Health Potion");
+				Player.gainRaidCoins(5);
+				if(storage.getEquippedItems().size() < 14)
+					storage.equippedItems(storage.healthPot, "Add");
+				break;
+			case 19:
+				text.setText("You throw rocks at the box, causing it to fall on the "
+						+ "ground. As you attempt to see what's inside, the box suddenly "
+						+ "explodes, hurting you in the process");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 20:
+				text.setText("You throw rocks at the box, causing it to fall on the "
+						+ "ground. As you attempt to see what's inside, the box suddenly "
+						+ "explodes, hurting you in the process");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
 			}
 		}
 		
@@ -471,7 +526,7 @@ public class RaidTextScenes implements Screen{
 			switch(encNum) {
 			case 11:
 				text.setText("You kill the suspicious person, stealing their belongings");
-				Player.gainCoins(10);
+				Player.gainRaidCoins(10);
 				if(storage.getEquippedItems().size() < 14) {
 					storage.equippedItems(storage.bomb, "Add");
 					rewards.setText("+ 10 Coins \n" + "+ 1 Bomb");
@@ -482,6 +537,38 @@ public class RaidTextScenes implements Screen{
 				}	
 				else
 					rewards.setText("+ 10 Coins");
+				break;
+			case 13:
+				text.setText("The suspicious looking person turned out to be a merchant, "
+						+ "but you mercilessly killed them and their belongings "
+						+ "disappear as their life slowly fades away");
+				break;
+			case 18:
+				text.setText("You burn the tree, but as you're clumsy, you burn "
+						+ "yourself as well.");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 19:
+				text.setText("You set the tree on fire. You stand next to it, to "
+						+ "warm yourself up, leading to regaining some of your lost health");
+				Player.gainHP(5);
+				if(Player.getHp() > Player.getMaxHP())
+					Player.setHp(Player.getMaxHP());
+				rewards.setText("+ 5 Health Points");
+				break;
+			case 20:
+				text.setText("You burn the tree. It turns out the tree is actually "
+						+ "a Mimic Tree. Good luck");
+				backBtn.setText("To battle");
+				backBtn.clearListeners();
+				backBtn.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    	    }});
 				break;
 			}
 		}

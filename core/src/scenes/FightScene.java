@@ -42,7 +42,7 @@ public class FightScene implements Screen{
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
     private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
-    private Texture charTexture, enemyTexture, gameOverTexture;
+    private Texture charTexture, enemyTexture, gameOverTexture, mapTexture;
     private SpriteBatch charBatch = new SpriteBatch();
     private SpriteBatch enemyBatch = new SpriteBatch();
     private SpriteBatch weaponBatch = new SpriteBatch();
@@ -51,6 +51,7 @@ public class FightScene implements Screen{
     private SpriteBatch helmetBatch = new SpriteBatch();
 	private SpriteBatch chestBatch = new SpriteBatch();
 	private SpriteBatch bootsBatch = new SpriteBatch();
+	private SpriteBatch mapBatch = new SpriteBatch();
     private Sprite charSprite, enemySprite, weaponSprite, shieldSprite, helmetSprite, chestSprite, bootsSprite;
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
     private String enemyName, eAbility1, eAbility2, eAbility3;
@@ -64,7 +65,7 @@ public class FightScene implements Screen{
     private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false, 
     		riposteActive, firstLoad = true;
     private int eRendLeft, ePoisonLeft, eEnrageLeft;
-    private boolean eHardenActive, playerStunned;
+    private boolean eHardenActive, playerStunned, eBarrierActive;
     java.util.List<Items> equippedItems;
     Table itemTable = new Table();
     Table abilitySwapTable = new Table();
@@ -76,6 +77,7 @@ public class FightScene implements Screen{
     private float rotationSpeed = -10f; // rotation speed per frame (adjust as needed)
     private float rotationInterval = 0.017f;
     private int timer = 0;   
+    public static boolean normal, elite, boss;
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -86,6 +88,8 @@ public class FightScene implements Screen{
         storage = Storage.getInstance();
         skin = storage.skin;
         gameOverTexture = Storage.assetManager.get("BattleOver.png", Texture.class);
+        mapTexture = Storage.assetManager.get("maps/ForestFight.png", Texture.class);
+        mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);       
         
         // Initialize sprite stuff
         charTexture = Inventory.onionTexture;
@@ -131,9 +135,11 @@ public class FightScene implements Screen{
 		}  
     }
     
-    private void newEnemy() {
-        int randomEnemy = rand.nextInt(5);
-        switch(randomEnemy) {
+    private void newEnemy() {    	
+        int randomEnemy;
+        if(normal) {
+        	randomEnemy = rand.nextInt(5);
+        	switch(randomEnemy) {
             case 0:
                 setEnemyAttributes(storage.wolf, "enemies/Wolfie.png");
                 break;
@@ -149,6 +155,21 @@ public class FightScene implements Screen{
             case 4:
             	setEnemyAttributes(storage.wasp, "enemies/Wasp.png");
                 break;
+        	}
+        }
+        else if(elite) {
+        	randomEnemy = rand.nextInt(2);
+        	switch(randomEnemy) {
+            case 0:
+                setEnemyAttributes(storage.forestGuardian, "enemies/ForestGuardian.png");
+                break;
+            case 1:
+                setEnemyAttributes(storage.mimicTree, "enemies/MimicTree.png");
+                break;
+        	}
+    	}
+        else {
+            setEnemyAttributes(storage.boar, "enemies/Boar.png");
         }
     }
 
@@ -237,11 +258,20 @@ public class FightScene implements Screen{
     		ability4.setText("");
     		
     		newLine();
-	        if(pDead)
+	        if(pDead) {
 	        	combatLog.setText(combatText + "\n Player died");
+	        	homeBtn.clearListeners();
+	        	homeBtn.addListener(new ClickListener() {
+	        		@Override
+	        	    public void clicked(InputEvent event, float x, float y) {
+	    				Player.setRaidCoins(0);
+	        			stage.clear();
+	        			gameScreen.setCurrentState(GameScreen.HOME);
+	        	    }});
+	        }	        	
 	        else {
 	        	combatLog.setText(combatText + "\n Enemy died");
-	        	Player.setCoins(Player.getCoins() + enemyValue);
+	        	Player.gainRaidCoins(enemyValue);
 	        	Player.gainExp(expValue);
 	        	Player.checkExp();
 	        }
@@ -467,12 +497,15 @@ public class FightScene implements Screen{
         		eHardenActive = false;
         	}
         	
-        	enemyHP -= temp;
+        	if(!eBarrierActive)
+        		enemyHP -= temp;
         	
-        	if(x == 0)
+        	if(x == 0 && !eBarrierActive)
         		combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
-        	else if(x == 1 || x == 3 || x == 4 || x == 5 || x == 13 || x == 14)
+        	else if(x == 1 || x == 3 || x == 4 || x == 5 || x == 13 || x == 14 && eBarrierActive)
         		combatLog.setText(combatText + "\n " + getAbilityName(x) + " hit the enemy for " + temp + " damage");
+        	else if(eBarrierActive)
+        		combatLog.setText(combatText + "\n Enemy blocked the attack");
         	
         	// Life steal mastery
         	if(BerserkerSkillTree.lifeSteal == 1) {
@@ -485,7 +518,7 @@ public class FightScene implements Screen{
         }
         
         // Bleed hits after a succesful attack
-        if(rendLeft > 0 && x != 6 && x != 7) {
+        if(rendLeft > 0 && x != 6 && x != 7 && !eBarrierActive) {
         	temp = storage.rend.getAttackPower() + BerserkerSkillTree.rendMastery;
         	enemyHP -= temp;
         	newLine();
@@ -502,7 +535,9 @@ public class FightScene implements Screen{
         }        
         
         if(enemyHP <= 0)
-        	eDead = true;       	
+        	eDead = true;  
+        if(eBarrierActive)
+        	eBarrierActive = false;
         
         firstAttack = false;
     }
@@ -521,12 +556,13 @@ public class FightScene implements Screen{
     	switch(attack) {
     	case 0:
     	case 1:
+    	case 2:
     		attackType = "Attack";
     		break;
-    	case 2:
+    	case 3:
     		attackType = eAbility1;
     		break;
-    	case 3:
+    	case 4:
     		attackType = eAbility2;
     		break;
     	}
@@ -551,6 +587,10 @@ public class FightScene implements Screen{
     			break;
     		case "Stun":
     			if(playerStunned)
+    				attackType = "Attack";
+    			break;
+    		case "Barrier":
+    			if(eBarrierActive)
     				attackType = "Attack";
     			break;
     		}
@@ -670,6 +710,10 @@ public class FightScene implements Screen{
     			playerStunned = true;
     			combatLog.setText(combatText + "\n Enemy stunned the player");
     			break;
+    		case "Barrier":
+    			eBarrierActive = true;
+    			combatLog.setText(combatText + "\n Enemy activated Barrier");
+    			break;
     		}
     	}
     	
@@ -701,7 +745,7 @@ public class FightScene implements Screen{
         
         if(playerStunned) {
         	playerStunned = false;
-        	enemyAttack(rand.nextInt(4));        	
+        	enemyAttack(rand.nextInt(5));        	
         }        	
         else
         	playerTurn = true;
@@ -991,7 +1035,7 @@ public class FightScene implements Screen{
         	@Override
     	    public void clicked(InputEvent event, float x, float y) {
         		attackCount = 3;        		
-        		enemyAttack(rand.nextInt(4));
+        		enemyAttack(rand.nextInt(5));
     	        turnEnded = true;
     	    }});
     	
@@ -1414,6 +1458,10 @@ public class FightScene implements Screen{
 	        	weaponRotation = 20f;
 	        }	        	
 	    }
+	    
+	    mapBatch.begin();
+		mapBatch.draw(mapTexture, 0, 0, 1920, 1080);
+		mapBatch.end();
 
 	    charSprite.setSize(275, newHeightChar); // Set new height
 	    charSprite.setY(baseYChar); // Adjust Y to keep the sprite's bottom at the same position
@@ -1606,16 +1654,10 @@ public class FightScene implements Screen{
 	    	else
 	    		turnEnded = false;	    		
 	    }
-	    		
+	    
     	update();
         stage.act();
         stage.draw();
-        
-        if(gameOver) {
-	    	gameOverBatch.begin();
-	    	gameOverBatch.draw(gameOverTexture, vp.getWorldWidth() / 100f, vp.getWorldHeight() / 4f, 1880, 770);
-	    	gameOverBatch.end();
-	    }
     }
 
 	@Override
@@ -1628,6 +1670,7 @@ public class FightScene implements Screen{
 	    helmetBatch.setProjectionMatrix(vp.getCamera().combined);
 		chestBatch.setProjectionMatrix(vp.getCamera().combined);
 		bootsBatch.setProjectionMatrix(vp.getCamera().combined);
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

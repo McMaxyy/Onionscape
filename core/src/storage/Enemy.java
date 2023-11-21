@@ -119,3 +119,51 @@ class Wasp extends Enemy{
 		setAbility2("Stun");
 	}
 }
+
+class ForestGuardian extends Enemy{
+	public ForestGuardian() {
+		setEnemyName("Forest Guardian");
+		setAttackPower(10);
+		setMaxHP(100);
+		setValue(25);
+		setExp(20);
+		setAbility1("Bleed");
+		setAbility2("Enrage");
+	}
+}
+
+class MimicTree extends Enemy{
+	public MimicTree() {
+		setEnemyName("Mimic Tree");
+		setAttackPower(7);
+		setMaxHP(125);
+		setValue(25);
+		setExp(20);
+		setAbility1("Harden");
+		setAbility2("Barrier");
+	}
+}
+
+class BoarBoss extends Enemy{
+	public BoarBoss() {
+		setEnemyName("Angry Boar");
+		setAttackPower(10);
+		setMaxHP(150);
+		setValue(40);
+		setExp(40);
+		setAbility1("Bleed");
+		setAbility2("Poison");
+	}
+}
+
+class Vulture extends Enemy{
+	public Vulture() {
+		setEnemyName("Vulture");
+		setAttackPower(10);
+		setMaxHP(75);
+		setValue(20);
+		setExp(15);
+		setAbility1("Stun");
+		setAbility2("Enrage");
+	}
+}

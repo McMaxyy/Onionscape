@@ -473,7 +473,10 @@ public class Merchant implements Screen{
 		gearName.setVisible(false);
 		stage.addActor(gearName);
 		
-		coins = new Label("Coins: " + Player.getCoins(), storage.labelStyle);
+		if(!raid)
+			coins = new Label("Coins: " + Player.getCoins(), storage.labelStyle);
+		else
+			coins = new Label("Coins: " + Player.getRaidCoins(), storage.labelStyle);
 		coins.setPosition(vp.getWorldWidth() / 7f, vp.getWorldHeight() / 1.25f);
 		stage.addActor(coins);
 		
@@ -625,11 +628,15 @@ public class Merchant implements Screen{
 			}
 			else if (itemMap.containsKey(itemName)){
 				Items item = itemMap.get(itemName);
-				Player.gainCoins(item.getValue() / 2);
-				if(!raid)
-					storage.inventoryItems(item, "Remove");
-				else
+				
+				if(!raid) {
+					Player.gainCoins(item.getValue() / 2);
+					storage.inventoryItems(item, "Remove");				
+				}				
+				else {
+					Player.gainRaidCoins(item.getValue() / 2);
 					storage.equippedItems(item, "Remove");
+				}					
 			}
 		}
 		else {
@@ -651,23 +658,28 @@ public class Merchant implements Screen{
 			}
 			else if (itemMap.containsKey(itemName)){
 				Items item = itemMap.get(itemName);
-				if(Player.getCoins() >= item.getValue()) {
-					Player.loseCoins(item.getValue());
-					if(!raid)
+				if(!raid) {
+					if(Player.getCoins() >= item.getValue()) {
+						Player.loseCoins(item.getValue());
 						storage.inventoryItems(item, "Add");
-					else
+					}
+				}
+				else {
+					if(Player.getRaidCoins() >= item.getValue()) {
+						Player.loseCoins(item.getValue());
 						storage.equippedItems(item, "Add");
+					}
 				}			
 			}
 		}
 		
-		coins.setText("Coins: " + Player.getCoins());
-		
 		if(!raid) {
+			coins.setText("Coins: " + Player.getCoins());
 			inventoryTable.clear();
 		    createInventoryGrid();
 		}
 		else {
+			coins.setText("Coins: " + Player.getRaidCoins());
 			itemTable.clear();
 			createItemGrid();
 		}

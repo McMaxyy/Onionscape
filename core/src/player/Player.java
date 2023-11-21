@@ -3,6 +3,7 @@ package player;
 import java.util.Random;
 
 public class Player {
+	private static int raidCoins = 0;
 	private static int maxHP = 60;
 	private static int hp;
 	private static int strength = 3;
@@ -104,6 +105,14 @@ public class Player {
 	
 	public static void loseCoins(int x) {
 		coins -= x;
+	}
+	
+	public static void gainRaidCoins(int x) {
+		raidCoins += x;
+	}
+	
+	public static void loseRaidCoins(int x) {
+		raidCoins -= x;
 	}
 	
 	public static void newGame() {
@@ -229,5 +238,13 @@ public class Player {
 	}
 	public static int getLevelCap() {
 		return levelCap;
+	}
+	
+	public static int getRaidCoins() {
+		return raidCoins;
+	}
+
+	public static void setRaidCoins(int raidCoins) {
+		Player.raidCoins = raidCoins;
 	}	
 }
