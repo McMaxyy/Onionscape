@@ -154,8 +154,8 @@ class ItemDecapitate extends Items{
 
 class ExpBoost extends Items{
 	public ExpBoost() {
-		setValue(15);
-		setItemName("EXP Boost");
+		setValue(20);
+		setItemName("Experience Boost");
 		setID(17);
 	}
 }

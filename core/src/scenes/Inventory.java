@@ -76,6 +76,10 @@ public class Inventory implements Screen {
 	public static Texture woodenShieldTexture = Storage.assetManager.get("weapons/inventory/WoodenShield.png", Texture.class);
 	public static Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
 	public static Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
+	public static Texture apTexture = Storage.assetManager.get("items/AttackBoost.png", Texture.class);
+	public static Texture dpTexture = Storage.assetManager.get("items/DefenseBoost.png", Texture.class);
+	public static Texture hpTexture = Storage.assetManager.get("items/HealthBoost.png", Texture.class);
+	public static Texture expTexture = Storage.assetManager.get("items/ExperienceBoost.png", Texture.class);
 	public static Texture swingTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
 	public static Texture rendTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
 	public static Texture whirlwindTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
@@ -137,8 +141,16 @@ public class Inventory implements Screen {
 		storage.createFont();	
 		characterTable.clear();
 		Home.freshLoad = false;
-		
-		// Smooth filtering	
+
+		smoothFilter();		
+		removeBonusStats();
+		createComponents();	
+		createInventoryGrid();
+		createCharacterGrid();
+		createItemGrid();
+	}
+	
+	private void smoothFilter(){
 		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		inventorySlotTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
 		eIronGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
@@ -156,6 +168,10 @@ public class Inventory implements Screen {
 		woodenShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		healthPotionTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		bombTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		apTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		dpTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		hpTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		expTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		swingTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		rendTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		whirlwindTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
@@ -182,30 +198,24 @@ public class Inventory implements Screen {
 		eSteelHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eSteelChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eSteelBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bronzeHelmetTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		bronzeChestTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		bronzeBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		steelHelmetTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		steelChestTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		steelBootsTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		bronzeGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		bronzeShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		bronzeAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		steelGreataxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		steelShieldTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		steelAxeTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		bronzeHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		bronzeChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		bronzeBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		steelHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		steelChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		steelBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		bronzeGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		bronzeShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		bronzeAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		steelGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		steelShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		steelAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eBronzeAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eBronzeShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eBronzeGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eSteelAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eSteelShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eSteelGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		
-		removeBonusStats();
-		createComponents();	
-		createInventoryGrid();
-		createCharacterGrid();
-		createItemGrid();
 	}
 	
 	private void removeBonusStats() {
@@ -580,39 +590,47 @@ public class Inventory implements Screen {
 		else if(gearType == "Item") {
 			switch(itemName) {
 			case "Health Potion":
-				return Inventory.healthPotionTexture;
+				return healthPotionTexture;
 			case "Bomb":
-				return Inventory.bombTexture;
+				return bombTexture;
 			case "Swing":
-				return Inventory.swingTexture;
+				return swingTexture;
 			case "Rend":
-				return Inventory.rendTexture;
+				return rendTexture;
 			case "Whirlwind":
-				return Inventory.whirlwindTexture;
+				return whirlwindTexture;
 			case "Ground Breaker":
-				return Inventory.groundBreakerTexture;
+				return groundBreakerTexture;
 			case "Bash":
-				return Inventory.bashTexture;
+				return bashTexture;
 			case "Barrier":
-				return Inventory.barrierTexture;
+				return barrierTexture;
 			case "Harden":
-				return Inventory.hardenTexture;
+				return hardenTexture;
 			case "Mend":
-				return Inventory.mendTexture;
+				return mendTexture;
 			case "Hilt Bash":
-				return Inventory.hiltBashTexture;
+				return hiltBashTexture;
 			case "Barbed Armor":
-				return Inventory.barbedArmorTexture;
+				return barbedArmorTexture;
 			case "Enrage":
-				return Inventory.enrageTexture;
+				return enrageTexture;
 			case "Riposte":
-				return Inventory.riposteTexture;
+				return riposteTexture;
 			case "Stab":
-				return Inventory.stabTexture;
+				return stabTexture;
 			case "Decapitate":
-				return Inventory.decapitateTexture;
+				return decapitateTexture;
+			case "Attack Boost":
+				return apTexture;
+			case "Defense Boost":
+				return dpTexture;
+			case "Health Boost":
+				return hpTexture;
+			case "Experience Boost":
+				return expTexture;
 			default:
-				return Inventory.inventorySlotTexture;
+				return inventorySlotTexture;
 			}
 		}
 		else
@@ -1432,9 +1450,77 @@ public class Inventory implements Screen {
 	    		storage.inventoryItems(storage.bomb, "Remove");
 	    		storage.equippedItems(storage.bomb, "Add");
 	    		break;
+	    	case "Attack Boost":
+	    		storage.inventoryItems(storage.apBoost, "Remove");
+	    		storage.equippedItems(storage.apBoost, "Add");
+	    		break;
+	    	case "Defense Boost":
+	    		storage.inventoryItems(storage.dpBoost, "Remove");
+	    		storage.equippedItems(storage.dpBoost, "Add");
+	    		break;
+	    	case "Health Boost":
+	    		storage.inventoryItems(storage.hpBoost, "Remove");
+	    		storage.equippedItems(storage.hpBoost, "Add");
+	    		break;
+	    	case "Experience Boost":
+	    		storage.inventoryItems(storage.expBoost, "Remove");
+	    		storage.equippedItems(storage.expBoost, "Add");
+	    		break;
 	    	case "Swing":
 	    		storage.inventoryItems(storage.itemSwing, "Remove");
 	    		storage.equippedItems(storage.itemSwing, "Add");
+	    		break;
+	    	case "Rend":
+	    		storage.inventoryItems(storage.itemRend, "Remove");
+	    		storage.equippedItems(storage.itemRend, "Add");
+	    		break;
+	    	case "Whirlwind":
+	    		storage.inventoryItems(storage.itemWhirlwind, "Remove");
+	    		storage.equippedItems(storage.itemWhirlwind, "Add");
+	    		break;
+	    	case "Ground Breaker":
+	    		storage.inventoryItems(storage.itemGroundBreaker, "Remove");
+	    		storage.equippedItems(storage.itemGroundBreaker, "Add");
+	    		break;
+	    	case "Bash":
+	    		storage.inventoryItems(storage.itemBash, "Remove");
+	    		storage.equippedItems(storage.itemBash, "Add");
+	    		break;
+	    	case "Barrier":
+	    		storage.inventoryItems(storage.itemBarrier, "Remove");
+	    		storage.equippedItems(storage.itemBarrier, "Add");
+	    		break;
+	    	case "Harden":
+	    		storage.inventoryItems(storage.itemHarden, "Remove");
+	    		storage.equippedItems(storage.itemHarden, "Add");
+	    		break;
+	    	case "Mend":
+	    		storage.inventoryItems(storage.itemMend, "Remove");
+	    		storage.equippedItems(storage.itemMend, "Add");
+	    		break;
+	    	case "Hilt Bash":
+	    		storage.inventoryItems(storage.itemHiltBash, "Remove");
+	    		storage.equippedItems(storage.itemHiltBash, "Add");
+	    		break;
+	    	case "Barbed Armor":
+	    		storage.inventoryItems(storage.itemBarbedArmor, "Remove");
+	    		storage.equippedItems(storage.itemBarbedArmor, "Add");
+	    		break;
+	    	case "Enrage":
+	    		storage.inventoryItems(storage.itemEnrage, "Remove");
+	    		storage.equippedItems(storage.itemEnrage, "Add");
+	    		break;
+	    	case "Riposte":
+	    		storage.inventoryItems(storage.itemRiposte, "Remove");
+	    		storage.equippedItems(storage.itemRiposte, "Add");
+	    		break;
+	    	case "Stab":
+	    		storage.inventoryItems(storage.itemStab, "Remove");
+	    		storage.equippedItems(storage.itemStab, "Add");
+	    		break;
+	    	case "Decapitate":
+	    		storage.inventoryItems(storage.itemDecapitate, "Remove");
+	    		storage.equippedItems(storage.itemDecapitate, "Add");
 	    		break;
 	    	}
 	    }
@@ -1465,9 +1551,77 @@ public class Inventory implements Screen {
 	    		storage.inventoryItems(storage.bomb, "Add");
 	    		storage.equippedItems(storage.bomb, "Remove");
 	    		break;
+	    	case "Attack Boost":
+	    		storage.inventoryItems(storage.apBoost, "Add");
+	    		storage.equippedItems(storage.apBoost, "Remove");
+	    		break;
+	    	case "Defense Boost":
+	    		storage.inventoryItems(storage.dpBoost, "Add");
+	    		storage.equippedItems(storage.dpBoost, "Remove");
+	    		break;
+	    	case "Health Boost":
+	    		storage.inventoryItems(storage.hpBoost, "Add");
+	    		storage.equippedItems(storage.hpBoost, "Remove");
+	    		break;
+	    	case "Experience Boost":
+	    		storage.inventoryItems(storage.expBoost, "Add");
+	    		storage.equippedItems(storage.expBoost, "Remove");
+	    		break;
 	    	case "Swing":
 	    		storage.inventoryItems(storage.itemSwing, "Add");
 	    		storage.equippedItems(storage.itemSwing, "Remove");
+	    		break;
+	    	case "Rend":
+	    		storage.inventoryItems(storage.itemRend, "Add");
+	    		storage.equippedItems(storage.itemRend, "Remove");
+	    		break;
+	    	case "Whirlwind":
+	    		storage.inventoryItems(storage.itemWhirlwind, "Add");
+	    		storage.equippedItems(storage.itemWhirlwind, "Remove");
+	    		break;
+	    	case "Ground Breaker":
+	    		storage.inventoryItems(storage.itemGroundBreaker, "Add");
+	    		storage.equippedItems(storage.itemGroundBreaker, "Remove");
+	    		break;
+	    	case "Bash":
+	    		storage.inventoryItems(storage.itemBash, "Add");
+	    		storage.equippedItems(storage.itemBash, "Remove");
+	    		break;
+	    	case "Barrier":
+	    		storage.inventoryItems(storage.itemBarrier, "Add");
+	    		storage.equippedItems(storage.itemBarrier, "Remove");
+	    		break;
+	    	case "Harden":
+	    		storage.inventoryItems(storage.itemHarden, "Add");
+	    		storage.equippedItems(storage.itemHarden, "Remove");
+	    		break;
+	    	case "Mend":
+	    		storage.inventoryItems(storage.itemMend, "Add");
+	    		storage.equippedItems(storage.itemMend, "Remove");
+	    		break;
+	    	case "Hilt Bash":
+	    		storage.inventoryItems(storage.itemHiltBash, "Add");
+	    		storage.equippedItems(storage.itemHiltBash, "Remove");
+	    		break;
+	    	case "Barbed Armor":
+	    		storage.inventoryItems(storage.itemBarbedArmor, "Add");
+	    		storage.equippedItems(storage.itemBarbedArmor, "Remove");
+	    		break;
+	    	case "Enrage":
+	    		storage.inventoryItems(storage.itemEnrage, "Add");
+	    		storage.equippedItems(storage.itemEnrage, "Remove");
+	    		break;
+	    	case "Riposte":
+	    		storage.inventoryItems(storage.itemRiposte, "Add");
+	    		storage.equippedItems(storage.itemRiposte, "Remove");
+	    		break;
+	    	case "Stab":
+	    		storage.inventoryItems(storage.itemStab, "Add");
+	    		storage.equippedItems(storage.itemStab, "Remove");
+	    		break;
+	    	case "Decapitate":
+	    		storage.inventoryItems(storage.itemDecapitate, "Add");
+	    		storage.equippedItems(storage.itemDecapitate, "Remove");
 	    		break;
 	    	}
 		}

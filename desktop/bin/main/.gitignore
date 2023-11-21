@@ -1,4 +1,9 @@
 /com/
 /buttons/
 /enemies/
+<<<<<<< HEAD
 /fonts/
+=======
+/player/
+/items/
+>>>>>>> e89eb4e93e285b1d971fbcdd757ee66ad6006144

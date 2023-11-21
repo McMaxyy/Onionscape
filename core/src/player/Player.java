@@ -2,6 +2,8 @@ package player;
 
 import java.util.Random;
 
+import com.onionscape.game.GameScreen;
+
 public class Player {
 	private static int raidCoins = 0;
 	private static int maxHP = 60;
@@ -9,7 +11,7 @@ public class Player {
 	private static int strength = 3;
 	private static int weaponDmg = 0;
 	private static int dmgResist = 0;
-	private static int coins = 0;
+	private static int coins = 30;
 	private static int level = 1;
 	private static int exp = 0;
 	private static int levelCap = 20;

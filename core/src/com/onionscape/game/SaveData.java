@@ -602,11 +602,113 @@ public class SaveData {
 	    		else
 	    			storage.equippedItems(storage.bomb, "Add");
 	    		break;
+	    	case "Attack Boost":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.apBoost, "Add");
+	    		else
+	    			storage.equippedItems(storage.apBoost, "Add");
+	    		break;
+	    	case "Defense Boost":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.dpBoost, "Add");
+	    		else
+	    			storage.equippedItems(storage.dpBoost, "Add");
+	    		break;
+	    	case "Health Boost":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.hpBoost, "Add");
+	    		else
+	    			storage.equippedItems(storage.hpBoost, "Add");
+	    		break;
+	    	case "Experience Boost":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.expBoost, "Add");
+	    		else
+	    			storage.equippedItems(storage.expBoost, "Add");
+	    		break;
 	    	case "Swing":
 	    		if(inventory.equals("Bag"))
 	    			storage.inventoryItems(storage.itemSwing, "Add");
 	    		else
 	    			storage.equippedItems(storage.itemSwing, "Add");
+	    		break;
+	    	case "Rend":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemRend, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemRend, "Add");
+	    		break;
+	    	case "Whirlwind":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemWhirlwind, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemWhirlwind, "Add");
+	    		break;
+	    	case "Ground Breaker":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemGroundBreaker, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemGroundBreaker, "Add");
+	    		break;
+	    	case "Bash":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemBash, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemBash, "Add");
+	    		break;
+	    	case "Barrier":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemBarrier, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemBarrier, "Add");
+	    		break;
+	    	case "Harden":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemHarden, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemHarden, "Add");
+	    		break;
+	    	case "Mend":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemMend, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemMend, "Add");
+	    		break;
+	    	case "Hilt Bash":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemHiltBash, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemHiltBash, "Add");
+	    		break;
+	    	case "Barbed Armor":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemBarbedArmor, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemBarbedArmor, "Add");
+	    		break;
+	    	case "Enrage":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemEnrage, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemEnrage, "Add");
+	    		break;
+	    	case "Riposte":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemRiposte, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemRiposte, "Add");
+	    		break;
+	    	case "Stab":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemStab, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemStab, "Add");
+	    		break;
+	    	case "Decapitate":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.itemDecapitate, "Add");
+	    		else
+	    			storage.equippedItems(storage.itemDecapitate, "Add");
 	    		break;
 	    	}
 	    }

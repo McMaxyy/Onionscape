@@ -29,6 +29,7 @@ public class Home implements Screen {
 	private GameScreen gameScreen; 
 	private SaveData saveData = new SaveData();
 	public static boolean freshLoad = true;
+	public static boolean apBoost, dpBoost, hpBoost, expBoost;
 	
 	public Home(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -41,6 +42,15 @@ public class Home implements Screen {
 		storage.createFont();	
 		gameScreen.forestMap = null;
 		Merchant.raid = false;
+		
+		if(hpBoost)
+			Player.setMaxHP(Player.getMaxHP() - 10);
+		if(dpBoost)
+			Player.setDmgResist(Player.getDmgResist() - 5);
+		if(apBoost)
+			Player.setWeaponDmg(Player.getWeaponDmg() - 5);
+			
+		apBoost = dpBoost = hpBoost = expBoost = false;
 		
 		createComponents();	
 	}
@@ -187,6 +197,10 @@ public class Home implements Screen {
     			storage.inventoryItems(storage.healthPot, "Add");
     			storage.inventoryItems(storage.bomb, "Add");
     			storage.inventoryItems(storage.itemSwing, "Add");
+    			storage.inventoryItems(storage.apBoost, "Add");
+    			storage.inventoryItems(storage.dpBoost, "Add");
+    			storage.inventoryItems(storage.hpBoost, "Add");
+    			storage.inventoryItems(storage.expBoost, "Add");
     	    }});
 		itemsBtn.setSize(150, 100);
 		itemsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 10f);

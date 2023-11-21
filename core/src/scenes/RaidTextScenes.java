@@ -32,6 +32,7 @@ public class RaidTextScenes implements Screen{
 	private Random rand = new Random();
 	private int encNum, btnSelected;
 	private float centerX;
+	public static boolean mimic;
 	
 	public RaidTextScenes(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -121,7 +122,10 @@ public class RaidTextScenes implements Screen{
 		case 15:
 			text.setText("You don’t notice a pile of grass on the ground as you walk towards "
 					+ "it, resulting in the ground caving in and you falling into a spike trap.");
-			option1.setText("Fall");
+			rewards.setText("- 5 Health Points");
+			Player.loseHP(5);
+			backBtn.setVisible(true);
+			option1.setVisible(false);
 			option2.setVisible(false);
 			option3.setVisible(false);
 			break;
@@ -280,6 +284,8 @@ public class RaidTextScenes implements Screen{
 				text.setText("It turned out to be a mimic chest, you lost 5HP");
 				Player.loseHP(5);
 				rewards.setText("- 5 Health Points");
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
 				break;
 			case 11:
 				text.setText("The suspicious person turned out to be a bandit, good thing you're "
@@ -304,15 +310,6 @@ public class RaidTextScenes implements Screen{
 		    	    public void clicked(InputEvent event, float x, float y) {
 		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
 		    	    }});
-				break;
-			case 15:
-				text.setText("You don’t notice a pile of grass on the ground as you walk "
-						+ "towards it, resulting in the ground caving in and you falling "
-						+ "into a spike trap");
-				rewards.setText("- 5 Health Points");
-				Player.loseHP(5);
-				if(Player.getHp() <= 0)
-					Player.setHp(1);
 				break;
 			case 16:
 				option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
@@ -369,7 +366,7 @@ public class RaidTextScenes implements Screen{
 				storage.equippedItems(storage.bomb, "Add");
 				break;
 			case 21:
-				text.setText("The angry figure turned out to be a monster, which attacks you");
+				text.setText("The angry figure turned out to be a monster, which attacks you.");
 				backBtn.setText("To battle");
 				backBtn.clearListeners();
 				backBtn.addListener(new ClickListener() {
@@ -380,21 +377,26 @@ public class RaidTextScenes implements Screen{
 				break;
 			case 22:
 				text.setText("The person standing in front of you turned out to be "
-						+ "friendly. They proceed to give you a booster to help you on your path");
-				switch(rand.nextInt(3)) {
-				case 0:
-					rewards.setText("+ 1 Attack Boost");
-					storage.equippedItems(storage.apBoost, "Add");
-					break;
-				case 1:
-					rewards.setText("+ 1 Defense Boost");
-					storage.equippedItems(storage.dpBoost, "Add");
-					break;
-				case 2:
-					rewards.setText("+ 1 Health Boost");
-					storage.equippedItems(storage.hpBoost, "Add");
-					break;
+						+ "friendly. They proceed to give you a booster to help you on your journey.");
+				if(storage.getEquippedItems().size() < 14) {
+					switch(rand.nextInt(3)) {
+					case 0:
+						rewards.setText("+ 1 Attack Boost");
+						if(storage.getEquippedItems().size() < 14)
+						storage.equippedItems(storage.apBoost, "Add");
+						break;
+					case 1:
+						rewards.setText("+ 1 Defense Boost");
+						storage.equippedItems(storage.dpBoost, "Add");
+						break;
+					case 2:
+						rewards.setText("+ 1 Health Boost");
+						storage.equippedItems(storage.hpBoost, "Add");
+						break;
+					}
 				}
+				else
+					rewards.setText("No space in inventory");
 				break;				
 			}
 		}	
@@ -423,6 +425,8 @@ public class RaidTextScenes implements Screen{
 				}
 				else	
 					rewards.setText("- 5 Health Points \n" + "- 5 Coins");
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
 				break;
 			case 12:
 				text.setText("You quickly walk past the crevice, who knows what could be hiding there");
@@ -488,17 +492,24 @@ public class RaidTextScenes implements Screen{
 						+ "risk finding out who or what made such a sound");
 				break;
 			case 17:
-				text.setText("You run away from there, losing an item in the process");
-				if(storage.getEquippedItems().size() > 0)
-					storage.loseItem();
+				text.setText("The loud shrieks send a shiver down your spine and you "
+						+ "choose to run away, losing an item in the process.");
+				if(storage.getEquippedItems().size() > 0) {
+					lostItem = storage.loseItem();
+					rewards.setText("- 1 " + lostItem);
+				}
+				else
+					rewards.setText("Nothing to lose");
 				break;
 			case 18:
-				text.setText("You throw rocks at the box, causing it to fall on the "
-						+ "ground. You find coins and a Health Potion inside");
-				rewards.setText("+ 5 Coins \n" + "+ 1 Health Potion");
-				Player.gainRaidCoins(5);
-				if(storage.getEquippedItems().size() < 14)
+				text.setText("You throw rocks at the box, causing it to fall down.");				
+				Player.gainCoins(5);
+				if(storage.getEquippedItems().size() < 14) {
 					storage.equippedItems(storage.healthPot, "Add");
+					rewards.setText("+ 5 Coins" + "\n+ 1 Health Potion");
+				}
+				else
+					rewards.setText("+ 5 Coins");
 				break;
 			case 19:
 				text.setText("You throw rocks at the box, causing it to fall on the "
@@ -508,7 +519,7 @@ public class RaidTextScenes implements Screen{
 				Player.loseHP(5);
 				if(Player.getHp() <= 0)
 					Player.setHp(1);
-				break;
+				break;					
 			case 20:
 				text.setText("You throw rocks at the box, causing it to fall on the "
 						+ "ground. As you attempt to see what's inside, the box suddenly "
@@ -517,7 +528,7 @@ public class RaidTextScenes implements Screen{
 				Player.loseHP(5);
 				if(Player.getHp() <= 0)
 					Player.setHp(1);
-				break;
+				break;	
 			}
 		}
 		
@@ -562,14 +573,16 @@ public class RaidTextScenes implements Screen{
 			case 20:
 				text.setText("You burn the tree. It turns out the tree is actually "
 						+ "a Mimic Tree. Good luck");
-				backBtn.setText("To battle");
 				backBtn.clearListeners();
+				backBtn.setText("To battle!");
 				backBtn.addListener(new ClickListener() {
 		    		@Override
 		    	    public void clicked(InputEvent event, float x, float y) {
+		    			FightScene.boss = FightScene.normal = false;
+		    			FightScene.elite = true;
+		    			mimic = true;
 		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
 		    	    }});
-				break;
 			}
 		}
 		

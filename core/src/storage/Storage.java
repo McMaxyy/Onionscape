@@ -21,8 +21,8 @@ public class Storage {
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle;
 	public ImageButtonStyle imgButtonStyle;
-	public LabelStyle labelStyle, labelStyleBig;
-	public BitmapFont font, fontBig;
+	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol;
+	public BitmapFont font, fontBig, fontSmol;
 	private List<Weapons> playerWeapons = new ArrayList<>();
 	private List<Armor> playerArmor = new ArrayList<>();
 	private List<Items> playerItems = new ArrayList<>();
@@ -121,6 +121,10 @@ public class Storage {
 		// Items
 		assetManager.load("items/HealthPotion.png", Texture.class, textureParameter);
 		assetManager.load("items/Bomb.png", Texture.class, textureParameter);
+		assetManager.load("items/AttackBoost.png", Texture.class, textureParameter);
+		assetManager.load("items/DefenseBoost.png", Texture.class, textureParameter);
+		assetManager.load("items/HealthBoost.png", Texture.class, textureParameter);
+		assetManager.load("items/ExperienceBoost.png", Texture.class, textureParameter);
 		
 		// Maps
 		assetManager.load("maps/InventoryScreen.png", Texture.class, textureParameter);
@@ -355,6 +359,8 @@ public class Storage {
         font = generator.generateFont(parameter);
         parameter.size = 50;
         fontBig = generator.generateFont(parameter);
+        parameter.size = 18;
+        fontSmol = generator.generateFont(parameter);
         
         // Create a new style for button
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
@@ -367,6 +373,9 @@ public class Storage {
         
         labelStyleBig = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyleBig.font = fontBig; 
+        
+        labelStyleSmol = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
+        labelStyleSmol.font = fontSmol; 
     }
 
 	public int[] getBonusHP() {
