@@ -42,7 +42,7 @@ public class FightScene implements Screen{
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
     private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
-    private Texture charTexture, enemyTexture, gameOverTexture, mapTexture;
+    private Texture charTexture, enemyTexture, mapTexture;
     private SpriteBatch charBatch = new SpriteBatch();
     private SpriteBatch enemyBatch = new SpriteBatch();
     private SpriteBatch weaponBatch = new SpriteBatch();
@@ -87,7 +87,6 @@ public class FightScene implements Screen{
         Gdx.input.setInputProcessor(stage);  // Set the stage to process inputs      
         storage = Storage.getInstance();
         skin = storage.skin;
-        gameOverTexture = Storage.assetManager.get("BattleOver.png", Texture.class);
         mapTexture = Storage.assetManager.get("maps/ForestFight.png", Texture.class);
         mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);       
         

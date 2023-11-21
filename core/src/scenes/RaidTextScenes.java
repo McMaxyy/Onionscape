@@ -503,7 +503,7 @@ public class RaidTextScenes implements Screen{
 				break;
 			case 18:
 				text.setText("You throw rocks at the box, causing it to fall down.");				
-				Player.gainCoins(5);
+				Player.gainRaidCoins(5);
 				if(storage.getEquippedItems().size() < 14) {
 					storage.equippedItems(storage.healthPot, "Add");
 					rewards.setText("+ 5 Coins" + "\n+ 1 Health Potion");
