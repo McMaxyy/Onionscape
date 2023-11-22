@@ -41,6 +41,7 @@ public class FightScene implements Screen{
     private Game game;
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
+    private TextButton reward1, reward2, reward3;
     private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
     private Texture charTexture, enemyTexture, mapTexture;
     private SpriteBatch charBatch = new SpriteBatch();
@@ -54,7 +55,7 @@ public class FightScene implements Screen{
 	private SpriteBatch mapBatch = new SpriteBatch();
     private Sprite charSprite, enemySprite, weaponSprite, shieldSprite, helmetSprite, chestSprite, bootsSprite;
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
-    private String enemyName, eAbility1, eAbility2, eAbility3;
+    private String enemyName, eAbility1, eAbility2, eAbility3, loot;
     private boolean pDead, eDead, btnClicked, turnEnded, playerTurn = true, gameOver, playerAttack, twoHand;
     private Storage storage;
     private static int ab1Uses, ab2Uses, ab3Uses, ab4Uses;
@@ -136,54 +137,65 @@ public class FightScene implements Screen{
     
     private void newEnemy() {    	
         int randomEnemy;
-        if(normal) {
-        	randomEnemy = rand.nextInt(5);
-        	switch(randomEnemy) {
-            case 0:
-                setEnemyAttributes(storage.wolf, "enemies/Wolfie.png");
-                break;
-            case 1:
-                setEnemyAttributes(storage.spider, "enemies/Spider.png");
-                break;
-            case 2:
-                setEnemyAttributes(storage.bear, "enemies/Bear.png");
-                break;
-            case 3:
-                setEnemyAttributes(storage.monkey, "enemies/Monkey.png");
-                break;
-            case 4:
-            	setEnemyAttributes(storage.wasp, "enemies/Wasp.png");
-                break;
+        if(Home.stageLvl == 1) {
+        	if(normal) {
+            	randomEnemy = rand.nextInt(5);
+            	switch(randomEnemy) {
+                case 0:
+                    setEnemyAttributes(storage.wolf, "enemies/Wolfie.png");
+                    break;
+                case 1:
+                    setEnemyAttributes(storage.spider, "enemies/Spider.png");
+                    break;
+                case 2:
+                    setEnemyAttributes(storage.bear, "enemies/Bear.png");
+                    break;
+                case 3:
+                    setEnemyAttributes(storage.monkey, "enemies/Monkey.png");
+                    break;
+                case 4:
+                	setEnemyAttributes(storage.wasp, "enemies/Wasp.png");
+                    break;
+            	}
+            }
+            else if(elite && !RaidTextScenes.mimic) {
+            	randomEnemy = rand.nextInt(2);
+            	switch(randomEnemy) {
+                case 0:
+                    setEnemyAttributes(storage.forestGuardian, "enemies/ForestGuardian.png");
+                    break;
+                case 1:
+                    setEnemyAttributes(storage.mimicTree, "enemies/MimicTree.png");
+                    break;
+            	}
         	}
-        }
-        else if(elite && !RaidTextScenes.mimic) {
-        	randomEnemy = rand.nextInt(2);
-        	switch(randomEnemy) {
-            case 0:
-                setEnemyAttributes(storage.forestGuardian, "enemies/ForestGuardian.png");
-                break;
-            case 1:
-                setEnemyAttributes(storage.mimicTree, "enemies/MimicTree.png");
-                break;
-        	}
-    	}
-        else if(RaidTextScenes.mimic) {
-        	setEnemyAttributes(storage.mimicTree, "enemies/MimicTree.png");
-        	RaidTextScenes.mimic = false;
-        }       	
-        else {
-            setEnemyAttributes(storage.boar, "enemies/Boar.png");
-        }
+            else if(RaidTextScenes.mimic) {
+            	setEnemyAttributes(storage.mimicTree, "enemies/MimicTree.png");
+            	RaidTextScenes.mimic = false;
+            }       	
+            else {
+                setEnemyAttributes(storage.boar, "enemies/Boar.png");
+            }
+        }       
     }
 
     private void setEnemyAttributes(Enemy enemy, String texturePath) {
-        enemyMaxHP = enemy.getMaxHP();
-        enemyName = enemy.getEnemyName();
-        enemyValue = enemy.getValue();
-        enemyDamage = enemy.getAttackPower();
+    	if(!Home.story) {
+    		enemyMaxHP = enemy.getMaxHP() / Home.stageLvl;
+    		enemyValue = enemy.getValue() / Home.stageLvl;
+    		enemyDamage = enemy.getAttackPower() / Home.stageLvl;
+    	}
+    	else {
+    		enemyMaxHP = enemy.getMaxHP();
+    		enemyValue = enemy.getValue();
+    		enemyDamage = enemy.getAttackPower();
+    	}
+        enemyName = enemy.getEnemyName();    
         expValue = enemy.getExp();
         eAbility1 = enemy.getAbility1();
         eAbility2 = enemy.getAbility2();
+        if(enemy.getAbility3() != null)
+        	eAbility3 = enemy.getAbility3();
         enemyHP = enemyMaxHP;
         enemyTexture = Storage.assetManager.get(texturePath, Texture.class);
         enemyTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
@@ -272,20 +284,181 @@ public class FightScene implements Screen{
 	        	    }});
 	        }	        	
 	        else {
-	        	combatLog.setText(combatText + "\n Enemy died");
-	        	Player.gainRaidCoins(enemyValue);
-	        	Player.gainExp(expValue);
-	        	Player.setCoins(Player.getCoins() + enemyValue);
-	        	if(Home.expBoost)
-	        		Player.gainExp(expValue * 2);
-	        	else
+	        	combatLog.setText("\n Enemy died");	
+	        	chooseReward();	
+	        	if(Home.story) {
 	        		Player.gainExp(expValue);
-	        	Player.checkExp();
+		        	if(Home.expBoost) {
+		        		expValue *= 2;
+		        		Player.gainExp(expValue * 2);
+		        	}	        		
+		        	else
+		        		Player.gainExp(expValue);
+		        	newLine();
+		        	combatLog.setText(combatText + "\n Gained " + expValue + "exp");
+		        	Player.checkExp();
+	        	}        	
 	        }
 	        
 	        gameOver = true;
 	        pDead = eDead = false; 		
     	} 		
+    }
+    
+    private void chooseReward() {
+    	int x;
+    	
+    	x = rand.nextInt(1, 11);
+    	switch(x) {
+    	case 1:
+    	case 2:
+    	case 3:
+    		reward1.setText("Health Potion");
+    		break;
+    	case 4:
+    	case 5:
+    	case 6:
+    		reward1.setText("Bomb");
+    		break;
+    	case 7:
+    		reward1.setText("Attack Boost");
+    		break;
+    	case 8:
+    		reward1.setText("Defense Boost");
+    		break;
+    	case 9:
+    		reward1.setText("Health Boost");
+    		break;
+    	case 10:
+    		reward1.setText("Experience Boost");
+    		break;
+    	}
+    	
+    	x = rand.nextInt(1, 15);
+    	switch(x) {
+    	case 1:
+    		reward2.setText("Swing");
+    		break;
+    	case 2:
+    		reward2.setText("Rend");
+    		break;
+    	case 3:
+    		reward2.setText("Whirlwind");
+    		break;
+    	case 4:
+    		reward2.setText("Ground Breaker");
+    		break;
+    	case 5:
+    		reward2.setText("Bash");
+    		break;
+    	case 6:
+    		reward2.setText("Barrier");
+    		break;
+    	case 7:
+    		reward2.setText("Harden");
+    		break;
+    	case 8:
+    		reward2.setText("Mend");
+    		break;
+    	case 9:
+    		reward2.setText("Hilt Bash");
+    		break;
+    	case 10:
+    		reward2.setText("Barbed Armor");
+    		break;
+    	case 11:
+    		reward2.setText("Enrage");
+    		break;
+    	case 12:
+    		reward2.setText("Riposte");
+    		break;
+    	case 13:
+    		reward2.setText("Stab");
+    		break;
+    	case 14:
+    		reward2.setText("Decapitate");
+    		break;
+    	}
+    	
+    	reward3.setText(enemyValue + " Coins");
+    	
+    	stage.addActor(reward1);
+    	stage.addActor(reward2);
+    	stage.addActor(reward3);
+    }
+    
+    private void rewardClick(TextButton button) {
+    	if(storage.getEquippedItems().size() < 14) {
+    		switch(button.getText().toString()) {
+        	case "Swing":
+        		storage.equippedItems(storage.itemSwing, "Add");
+        		break;
+        	case "Rend":
+        		storage.equippedItems(storage.itemRend, "Add");
+        		break;
+        	case "Whirlwind":
+        		storage.equippedItems(storage.itemWhirlwind, "Add");
+        		break;
+        	case "Ground Breaker":
+        		storage.equippedItems(storage.itemGroundBreaker, "Add");
+        		break;
+        	case "Bash":
+        		storage.equippedItems(storage.itemBash, "Add");
+        		break;
+        	case "Barrier":
+        		storage.equippedItems(storage.itemBarrier, "Add");
+        		break;
+        	case "Harden":
+        		storage.equippedItems(storage.itemHarden, "Add");
+        		break;
+        	case "Mend":
+        		storage.equippedItems(storage.itemMend, "Add");
+        		break;
+        	case "Hilt Bash":
+        		storage.equippedItems(storage.itemHiltBash, "Add");
+        		break;
+        	case "Barbed Armor":
+        		storage.equippedItems(storage.itemBarbedArmor, "Add");
+        		break;
+        	case "Enrage":
+        		storage.equippedItems(storage.itemEnrage, "Add");
+        		break;
+        	case "Riposte":
+        		storage.equippedItems(storage.itemRiposte, "Add");
+        		break;
+        	case "Stab":
+        		storage.equippedItems(storage.itemStab, "Add");
+        		break;
+        	case "Decapitate":
+        		storage.equippedItems(storage.itemDecapitate, "Add");
+        		break;
+        	case "Health Potion":
+        		storage.equippedItems(storage.healthPot, "Add");
+        		break;
+			case "Bomb":
+				storage.equippedItems(storage.bomb, "Add");
+        		break;		
+			case "Attack Boost":
+				storage.equippedItems(storage.apBoost, "Add");
+        		break;
+			case "Defense Boost":
+				storage.equippedItems(storage.dpBoost, "Add");
+        		break;
+			case "Health Boost":
+				storage.equippedItems(storage.hpBoost, "Add");
+        		break;
+			case "Experience Boost":
+				storage.equippedItems(storage.expBoost, "Add");
+        		break;
+        	}
+    		
+    		itemTable.clear();
+    		createInventoryGrid();
+    	}   	
+
+    	reward1.setVisible(false);
+    	reward2.setVisible(false);
+    	reward3.setVisible(false);
     }
     
     private void onButtonClicked(TextButton button) {
@@ -940,6 +1113,7 @@ public class FightScene implements Screen{
     	combatLog = new Label("", storage.labelStyleSmol);
     	
     	attackBtn = new TextButton("Attack", storage.buttonStyle);
+    	attackBtn.setColor(Color.GRAY);
     	attackBtn.setName("Attack");
     	attackBtn.addListener(new ClickListener() {
     	    @Override
@@ -1047,15 +1221,52 @@ public class FightScene implements Screen{
     	    }});
     	
     	homeBtn = new TextButton("Return", storage.buttonStyle);
-    	homeBtn.setColor(Color.RED);
+    	homeBtn.setColor(Color.LIGHT_GRAY);
     	homeBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			stage.clear();
     			if(Merchant.raid)
     				gameScreen.setCurrentState(GameScreen.FOREST_MAP);
-    			else
+    			else {
+    				Player.gainCoins(Player.getRaidCoins());
+    				Player.setRaidCoins(0);
     				gameScreen.setCurrentState(GameScreen.HOME);
+    			}    				
+    	    }});
+    	
+    	reward1 = new TextButton("", storage.buttonStyle);
+    	reward1.setColor(Color.LIGHT_GRAY);
+    	reward1.addListener(new ClickListener() {
+    	    @Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    	    	rewardClick((TextButton) event.getListenerActor());
+    	    	loot = reward1.getText().toString();
+    	    	combatLog.setText(combatText + "\n Gained " + loot);
+    	    }});
+    	
+    	reward2 = new TextButton("", storage.buttonStyle);
+    	reward2.setColor(Color.LIGHT_GRAY);
+    	reward2.addListener(new ClickListener() {
+    	    @Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    	    	rewardClick((TextButton) event.getListenerActor()); 
+    	    	loot = reward2.getText().toString();
+    	    	combatLog.setText(combatText + "\n Gained " + loot);
+    	    }});
+    	
+    	reward3 = new TextButton("", storage.buttonStyle);
+    	reward3.setColor(Color.LIGHT_GRAY);
+    	reward3.addListener(new ClickListener() {
+    	    @Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    	    	Player.gainRaidCoins(enemyValue);  
+    	    	loot = enemyValue + " Coins";
+    	    	newLine();
+	        	combatLog.setText(combatText + "\n Gained " + loot);
+	        	reward1.setVisible(false);
+	        	reward2.setVisible(false);
+	        	reward3.setVisible(false);
     	    }});
     }
     
@@ -1093,6 +1304,15 @@ public class FightScene implements Screen{
         
         ability4.setSize(250, 150); 
         ability4.setPosition(vp.getWorldWidth() / 3.7f - ability4.getWidth() / 2f, vp.getWorldHeight() / 9.8f - ability4.getHeight() / 2f);
+        
+        reward1.setSize(250, 250);
+        reward1.setPosition(vp.getWorldWidth() / 5f - reward1.getWidth() / 2f, vp.getWorldHeight() / 2f - reward1.getHeight() / 2f);
+        
+        reward2.setSize(250, 250);
+        reward2.setPosition(vp.getWorldWidth() / 2f - reward2.getWidth() / 2f, vp.getWorldHeight() / 2f - reward2.getHeight() / 2f);
+        
+        reward3.setSize(250, 250);
+        reward3.setPosition(vp.getWorldWidth() / 1.4f - reward3.getWidth() / 2f, vp.getWorldHeight() / 2f - reward3.getHeight() / 2f);
         
         stage.addActor(attackBtn);
         stage.addActor(endTurn);
@@ -1147,7 +1367,8 @@ public class FightScene implements Screen{
     			inventorySlotImage.addListener(new ClickListener() {
 	                @Override
 	                public void clicked(InputEvent event, float x, float y) {
-	                    handleInventoryClick(inventorySlotImage, item);
+	                	if(!gameOver)
+	                		handleInventoryClick(inventorySlotImage, item);
 	                }				
 	            });   			
     		}
@@ -1266,7 +1487,7 @@ public class FightScene implements Screen{
 	    stage.addActor(abilitySwapTable);
     }
     
-    private void swapAbility(final TextButton button, String ability, final Label abilityLabel) {
+    private void swapAbility(final TextButton button, String ability, final Label abilityLabel) {    	
     	int uses = 0, ab = 0;
     	
     	if(button == ability1)
@@ -1532,13 +1753,20 @@ public class FightScene implements Screen{
 	    }
 	    
 	    mapBatch.begin();
-		mapBatch.draw(mapTexture, 0, 0, 1920, 1080);
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.MAX_WIDTH, GameScreen.MAX_HEIGHT);
 		mapBatch.end();
-
-	    charSprite.setSize(275, newHeightChar); // Set new height
-	    charSprite.setY(baseYChar); // Adjust Y to keep the sprite's bottom at the same position
-	    enemySprite.setSize(500,  newHeightEnemy);
-	    enemySprite.setY(baseYEnemy);
+		
+		if(!gameOver) {
+			charSprite.setSize(275, newHeightChar); // Set new height
+		    charSprite.setY(baseYChar); // Adjust Y to keep the sprite's bottom at the same position
+		    enemySprite.setSize(500,  newHeightEnemy);
+		    enemySprite.setY(baseYEnemy);
+		}
+		else {
+			charSprite.setSize(275, 450); // Set new height
+		    enemySprite.setSize(500,  500);
+		}
+	    
 	    
 	    // Character sprite
     	charBatch.begin();
@@ -1560,7 +1788,10 @@ public class FightScene implements Screen{
 			
 			helmetSprite = new Sprite(helmetTexture);
 		    helmetSprite.setOrigin(0, 0);
-		    helmetSprite.setPosition(vp.getWorldWidth() / 29f, newHelmetY);
+		    if(!gameOver)
+		    	helmetSprite.setPosition(vp.getWorldWidth() / 29f, newHelmetY);
+		    else
+		    	helmetSprite.setPosition(vp.getWorldWidth() / 29f, vp.getWorldHeight() / 1.37f);		    	
 		    helmetSprite.setSize(290, 290);
 
 		    helmetBatch.begin();
@@ -1583,8 +1814,10 @@ public class FightScene implements Screen{
 			
 			chestSprite = new Sprite(chestTexture);
 			chestSprite.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 1.79f);				
-			chestSprite.setSize(275, newHeightChest);
-			
+			if(!gameOver)
+				chestSprite.setSize(275, newHeightChest);
+			else
+				chestSprite.setSize(275, 125);			
 			chestBatch.begin();
 			chestSprite.draw(chestBatch);		
 			chestBatch.end();
@@ -1605,8 +1838,10 @@ public class FightScene implements Screen{
 			
 			bootsSprite = new Sprite(bootsTexture);
 			bootsSprite.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.995f);				
-			bootsSprite.setSize(133, newHeightBoots);
-			
+			if(!gameOver)
+				bootsSprite.setSize(133, newHeightBoots);
+			else
+				bootsSprite.setSize(133, 50);		
 			bootsBatch.begin();
 			bootsSprite.draw(bootsBatch);		
 			bootsBatch.end();
@@ -1655,13 +1890,19 @@ public class FightScene implements Screen{
 			if(twoHand) {
 				heightWeapon = 350;
 				weaponSprite.setPosition(vp.getWorldWidth() / 7f, vp.getWorldHeight() / 2f);
-				weaponSprite.setSize(310,  newHeightWeapon);
+				if(!gameOver)
+					weaponSprite.setSize(310,  newHeightWeapon);
+				else
+					weaponSprite.setSize(310,  heightWeapon);
 				weaponSprite.setY(weaponSprite.getY());
 			}
 			else {
 				heightWeapon = 190;
 				weaponSprite.setPosition(vp.getWorldWidth() / 5.25f, vp.getWorldHeight() / 1.75f);
-				weaponSprite.setSize(190,  newHeightWeapon);
+				if(!gameOver)
+					weaponSprite.setSize(190,  newHeightWeapon);
+				else
+					weaponSprite.setSize(190,  heightWeapon);
 				weaponSprite.setY(weaponSprite.getY());			
 			}
 					
@@ -1701,7 +1942,10 @@ public class FightScene implements Screen{
 	    	shieldSprite = new Sprite(shieldTexture);
 	    	shieldSprite.setOrigin(0, 0);
 	    	shieldSprite.setPosition(vp.getWorldWidth() / 18f, vp.getWorldHeight() / 1.9f);
-	    	shieldSprite.setSize(160, newHeightShield);
+	    	if(!gameOver)
+	    		shieldSprite.setSize(160, newHeightShield);
+	    	else
+	    		shieldSprite.setSize(160, 210);
 	    	shieldSprite.setY(shieldSprite.getY());
 	    	
 	    	shieldBatch.begin();

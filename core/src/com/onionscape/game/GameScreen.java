@@ -2,6 +2,8 @@ package com.onionscape.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -15,6 +17,7 @@ import scenes.Inventory;
 import scenes.LoadingScreen;
 import scenes.Merchant;
 import scenes.RaidTextScenes;
+import scenes.Settings;
 import scenes.StartScreen;
 
 public class GameScreen implements Screen {
@@ -28,13 +31,14 @@ public class GameScreen implements Screen {
 	private RaidTextScenes textScene;
 	private StartScreen startScreen;
 	private Merchant merchant;
+	private Settings settings;
 	private Viewport viewport;
 	public static boolean newGame = true;
 	
 	private static final int MIN_WIDTH = 1280;
     private static final int MIN_HEIGHT = 720;
-    private static final int MAX_WIDTH = 1920;
-    private static final int MAX_HEIGHT = 1080;
+    public static final int MAX_WIDTH = Gdx.graphics.getWidth();
+    public static final int MAX_HEIGHT = Gdx.graphics.getHeight();
     
     public static final int LOADING_SCREEN = 0;
     public static final int HOME = 1;
@@ -45,6 +49,7 @@ public class GameScreen implements Screen {
     public static final int TEXT_SCENE = 6;
     public static final int START_SCREEN = 7;
     public static final int MERCHANT = 8;
+    public static final int SETTINGS = 9;
     private int currentState;
 
 	public GameScreen(Game game) {		
@@ -93,6 +98,10 @@ public class GameScreen implements Screen {
 	        	this.merchant = new Merchant(viewport, game, this);
 	            Gdx.input.setInputProcessor(merchant.stage);
 	            break;
+	        case SETTINGS:
+	        	this.settings = new Settings(viewport, game, this);
+	            Gdx.input.setInputProcessor(settings.stage);
+	            break;
 	    }
 	}
 
@@ -128,6 +137,9 @@ public class GameScreen implements Screen {
 	        	break;
 	        case MERCHANT:
 	        	merchant.render(delta);
+	        	break;
+	        case SETTINGS:
+	        	settings.render(delta);
 	        	break;
 	    }
 	}
@@ -181,6 +193,7 @@ public class GameScreen implements Screen {
 		loadingScreen.dispose();
 		textScene.dispose();
 		merchant.dispose();
+		settings.dispose();
 	}
 
 }

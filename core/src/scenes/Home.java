@@ -28,8 +28,8 @@ public class Home implements Screen {
 	private Label level, exp, coins;
 	private GameScreen gameScreen; 
 	private SaveData saveData = new SaveData();
-	public static boolean freshLoad = true;
-	public static boolean apBoost, dpBoost, hpBoost, expBoost;
+	public static boolean apBoost, dpBoost, hpBoost, expBoost, freshLoad = true, story;
+	public static int stageLvl;
 	
 	public Home(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -42,6 +42,9 @@ public class Home implements Screen {
 		storage.createFont();	
 		gameScreen.forestMap = null;
 		Merchant.raid = false;
+		
+		if(!story)
+			saveData.loadGame();
 		
 		if(hpBoost)
 			Player.setMaxHP(Player.getMaxHP() - 10);
@@ -73,6 +76,12 @@ public class Home implements Screen {
 		fight.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
+    			saveData.saveGame();
+    			story = false;
+    			storage.equippedArmor(null, "Clear");
+    			storage.equippedWeapons(null, "Clear");
+    			storage.equippedItems(null, "Clear");
+    			stageLvl = 1;
     			if(freshLoad) {
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
     				freshLoad = false;
@@ -88,6 +97,12 @@ public class Home implements Screen {
 		newGame.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
+    			saveData.saveGame();
+    			story = false;
+    			storage.equippedArmor(null, "Clear");
+    			storage.equippedWeapons(null, "Clear");
+    			storage.equippedItems(null, "Clear");
+    			stageLvl = 1;
     			GameScreen.newGame = true;
     			if(freshLoad) {
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
@@ -127,6 +142,8 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			GameScreen.newGame = true;
+    			story = true;
+    			stageLvl = 1;
     			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
     	    }});
 		forestBtn.setSize(150, 100);

@@ -68,7 +68,7 @@ public class Merchant implements Screen{
 		storage.createFont();
 		
 		createComponents();	
-		if(raid) {
+		if(!raid) {
 			createInventoryGrid();
 		}			
 		else {
@@ -108,10 +108,10 @@ public class Merchant implements Screen{
 	            gearBtns[index].addListener(new InputListener() {
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-	                    gearName.setText(gearBtns[num].getName() + "\nCost: " + cost);
+                    	gearName.setText(gearBtns[num].getName() + "\nCost: " + cost);
 	                    gearName.setAlignment(Align.center);
 	                	gearName.setVisible(true);	                  	                    
-	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
+	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);            	
 	                }
 
 	                @Override
@@ -263,9 +263,9 @@ public class Merchant implements Screen{
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 	                    if(!item.equals("")) {
-	                    	gearName.setText(item + "\nCost: " + cost / 2);
+	                    	gearName.setText(item + "\nValue: " + cost / 2);
 		                    if(cost / 2 == 0)
-		                    	gearName.setText(item + "\nCost: " + cost);
+		                    	gearName.setText(item + "\nValue: " + cost);
 		                    gearName.setAlignment(Align.center);
 		                	gearName.setVisible(true);	                  	                    
 		                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
@@ -354,12 +354,14 @@ public class Merchant implements Screen{
 	            inventorySlotImage.addListener(new InputListener() {
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-	                	gearName.setText(item + "\nCost: " + cost / 2);
-	                    if(cost / 2 == 0)
-	                    	gearName.setText(item + "\nCost: " + cost);
-	                    gearName.setAlignment(Align.center);
-	                	gearName.setVisible(true);	                  	                    
-	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
+	                	if(!item.equals("")) {
+	                		gearName.setText(item + "\nValue: " + cost / 2);
+		                    if(cost / 2 == 0)
+		                    	gearName.setText(item + "\nValue: " + cost);
+		                    gearName.setAlignment(Align.center);
+		                	gearName.setVisible(true);	                  	                    
+		                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
+	                	}
 	                }
 
 	                @Override
@@ -368,7 +370,7 @@ public class Merchant implements Screen{
 	                }
 	            });
 	        }
-	        inventoryTable.row(); // To move to the next row after 5 items
+	        inventoryTable.row();
 	    } 
 	    
 	    inventoryTable.setPosition(vp.getWorldWidth() / 1.25f, vp.getWorldHeight() / 2f, Align.center);
@@ -517,7 +519,7 @@ public class Merchant implements Screen{
 		stage.addActor(coins);
 		
 		// Normal merchant
-		if(raid) {
+		if(!raid) {
 			// Prefix table (non-raid)		
 			prefixBtns[0] = new TextButton("Healthy", storage.buttonStyle);
 			prefixBtns[1] = new TextButton("Strong", storage.buttonStyle);
@@ -571,6 +573,7 @@ public class Merchant implements Screen{
 			gearTable.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 2.3f, Align.center);
 			stage.addActor(gearTable);
 		}
+		
 		// Raid merchant
 		else {	
 			// Discounted prices table
@@ -617,7 +620,8 @@ public class Merchant implements Screen{
 				discountBtns[y].addListener(new ClickListener() {
 	                @Override
 	                public void clicked(InputEvent event, float x, float y) {
-	                    handleRaidPurchases(true, item, loc);	                    
+	                    handleRaidPurchases(true, item, loc);
+	                    discountBtns[loc] = new Image(Inventory.inventorySlotTexture);
 	                }				
 	            });
 			}
@@ -667,6 +671,7 @@ public class Merchant implements Screen{
 	                @Override
 	                public void clicked(InputEvent event, float x, float y) {
 	                    handleRaidPurchases(false, item, loc);
+	                    standardBtns[loc] = new Image(Inventory.inventorySlotTexture);
 	                }				
 	            });
 			}
@@ -788,23 +793,23 @@ public class Merchant implements Screen{
 		
 		if (itemMap.containsKey(itemName)){
 			Items item = itemMap.get(itemName);
-			if(Player.getCoins() >= item.getValue() && storage.getEquippedItems().size() < 14 && !discount) {
-				Player.loseCoins(item.getValue());
+			if(Player.getRaidCoins() >= item.getValue() && storage.getEquippedItems().size() < 14 && !discount) {
+				Player.loseRaidCoins(item.getValue());
 				standardBtns[loc].setTouchable(Touchable.disabled);
 					
 				storage.equippedItems(item, "Add");				
 				itemTable.clear();
 				createItemGrid();
-				coins.setText("Coins: " + Player.getCoins());
+				coins.setText("Coins: " + Player.getRaidCoins());
 			}
-			else if(Player.getCoins() >= item.getValue() / 2 && storage.getEquippedItems().size() < 14 && discount) {
-				Player.loseCoins(item.getValue() / 2);
+			else if(Player.getRaidCoins() >= item.getValue() / 2 && storage.getEquippedItems().size() < 14 && discount) {
+				Player.loseRaidCoins(item.getValue() / 2);
 				discountBtns[loc].setTouchable(Touchable.disabled);
 				
 				storage.equippedItems(item, "Add");				
 				itemTable.clear();
 				createItemGrid();
-				coins.setText("Coins: " + Player.getCoins());
+				coins.setText("Coins: " + Player.getRaidCoins());
 			}
 		}		
 	}
@@ -970,7 +975,8 @@ public class Merchant implements Screen{
 			}
 		}
 		
-		if(raid) {
+		if(!raid) {
+			coins.setText("Coins: " + Player.getCoins());
 			inventoryTable.clear();
 		    createInventoryGrid();
 		}

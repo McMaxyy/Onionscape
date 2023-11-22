@@ -73,7 +73,7 @@ public class StartScreen implements Screen{
 		settings.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			
+    			gameScreen.setCurrentState(GameScreen.SETTINGS);
     	    }});
 		settings.setSize(150, 100);
 		settings.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 9f);
@@ -103,7 +103,7 @@ public class StartScreen implements Screen{
 		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 		mapBatch.begin();
-		mapBatch.draw(mapTexture, 0, 0, 1920, 1080);
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.MAX_WIDTH, GameScreen.MAX_HEIGHT);
 		mapBatch.end();		
 		
 		stage.act();

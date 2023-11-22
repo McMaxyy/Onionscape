@@ -1763,7 +1763,7 @@ public class Inventory implements Screen {
 		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 		mapBatch.begin();
-		mapBatch.draw(mapTexture, 0, 0, 1920, 1080);
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.MAX_WIDTH, GameScreen.MAX_HEIGHT);
 		mapBatch.end();
 		
 		Actor helmetTable = characterTable.getChildren().get(0);
