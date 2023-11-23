@@ -137,6 +137,12 @@ public class Storage {
 		assetManager.load("BattleOver.png", Texture.class, textureParameter);		
 		assetManager.load("player/Onion.png", Texture.class, textureParameter);
 		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);
+		assetManager.load("mapIcons/BonfireIcon.png", Texture.class, textureParameter);
+		assetManager.load("mapIcons/BossIcon.png", Texture.class, textureParameter);
+		assetManager.load("mapIcons/FightIcon.png", Texture.class, textureParameter);
+		assetManager.load("mapIcons/MerchIcon.png", Texture.class, textureParameter);
+		assetManager.load("mapIcons/RandIcon.png", Texture.class, textureParameter);
+		assetManager.load("mapIcons/StrEnemyIcon.png", Texture.class, textureParameter);
 	}
 	
 	// Load items
@@ -316,6 +322,7 @@ public class Storage {
 			equippedWeapons.remove(weapon);
 		else if(action.equals("Clear"))
 			equippedWeapons.clear();
+		
 	}
 	
 	public List<Armor> getEquippedArmor(){

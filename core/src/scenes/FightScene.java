@@ -682,7 +682,7 @@ public class FightScene implements Screen{
         	
         	if(x == 0 && !eBarrierActive)
         		combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
-        	else if(x == 1 || x == 3 || x == 4 || x == 5 || x == 13 || x == 14 && eBarrierActive)
+        	else if(x == 1 || x == 3 || x == 4 || x == 5 || x == 13 || x == 14 && !eBarrierActive)
         		combatLog.setText(combatText + "\n " + getAbilityName(x) + " hit the enemy for " + temp + " damage");
         	else if(eBarrierActive)
         		combatLog.setText(combatText + "\n Enemy blocked the attack");
@@ -1388,7 +1388,7 @@ public class FightScene implements Screen{
     	    		storage.equippedItems(storage.healthPot, "Remove");
     	    		newLine();
     				combatLog.setText(combatText + "\n Player used a Health potion");
-    	    		Player.gainHP(storage.healthPot.getValue());
+    	    		Player.gainHP(Player.getMaxHP() / 5);
     				if(Player.getHp() > Player.getMaxHP())
     					Player.setHp(Player.getMaxHP());
     				attackCount--;
@@ -1396,8 +1396,8 @@ public class FightScene implements Screen{
     	    	case "Bomb":
     	    		storage.equippedItems(storage.bomb, "Remove");
     	    		newLine();
-    				combatLog.setText(combatText + "\n Player threw a Bomb which dealt " + storage.bomb.getValue() + " damage");
-    				enemyHP -= storage.bomb.getValue();
+    				combatLog.setText(combatText + "\n Player threw a Bomb which dealt " + enemyHP / 10 + " damage");
+    				enemyHP -= enemyHP / 10;
     				attackCount--;
     	    		break;
     	    	case "Attack Boost":
@@ -1679,7 +1679,7 @@ public class FightScene implements Screen{
 		Texture chestTexture = null;
 		Texture bootsTexture = null;			
 		
-		if(storage.getEquippedWeapons().size() > 0) {			
+		if(storage.getEquippedWeapons().size() > 0) {	
 			Actor weaponItem = Inventory.characterTable.getChildren().get(3);
 			Actor shieldItem = Inventory.characterTable.getChildren().get(4);
 						

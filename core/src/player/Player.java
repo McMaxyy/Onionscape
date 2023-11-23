@@ -6,9 +6,9 @@ import com.onionscape.game.GameScreen;
 
 public class Player {
 	private static int raidCoins = 0;
-	private static int maxHP = 60;
+	private static int maxHP = 70;
 	private static int hp;
-	private static int strength = 300;
+	private static int strength = 3;
 	private static int weaponDmg = 0;
 	private static int dmgResist = 0;
 	private static int coins = 30;

@@ -37,8 +37,8 @@ public class GameScreen implements Screen {
 	
 	private static final int MIN_WIDTH = 1280;
     private static final int MIN_HEIGHT = 720;
-    public static final int MAX_WIDTH = Gdx.graphics.getWidth();
-    public static final int MAX_HEIGHT = Gdx.graphics.getHeight();
+    public static final int MAX_WIDTH = 1920;
+    public static final int MAX_HEIGHT = 1080;
     
     public static final int LOADING_SCREEN = 0;
     public static final int HOME = 1;

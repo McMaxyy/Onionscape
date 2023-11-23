@@ -49,7 +49,7 @@ class WoodenGreatAxe extends Weapons{
 		setWeaponName("Wooden Greataxe");
 		setWeaponDmg(2);
 		setHanded("TwoHanded");
-		setValue(1);
+		setValue(6);
 		setID(0);
 	}
 }
@@ -60,7 +60,7 @@ class HealthyIronGreatAxe extends Weapons{
 		setWeaponDmg(4);
 		setHanded("TwoHanded");
 		setBonusStat(5);
-		setValue(4);
+		setValue(10);
 		setID(1);
 	}
 }
@@ -71,7 +71,7 @@ class StrongIronGreatAxe extends Weapons{
 		setWeaponDmg(4);
 		setHanded("TwoHanded");
 		setBonusStat(2);
-		setValue(4);
+		setValue(10);
 		setID(1);
 	}
 }
@@ -82,7 +82,7 @@ class DefensiveIronGreatAxe extends Weapons{
 		setWeaponDmg(4);
 		setHanded("TwoHanded");
 		setBonusStat(2);
-		setValue(4);
+		setValue(10);
 		setID(1);
 	}
 }
@@ -93,7 +93,7 @@ class HealthyIronAxe extends Weapons{
 		setWeaponDmg(2);
 		setHanded("OneHanded");
 		setBonusStat(2);
-		setValue(2);
+		setValue(5);
 		setID(2);
 	}
 }
@@ -104,7 +104,7 @@ class StrongIronAxe extends Weapons{
 		setWeaponDmg(2);
 		setHanded("OneHanded");
 		setBonusStat(1);
-		setValue(2);
+		setValue(5);
 		setID(2);
 	}
 }
@@ -115,7 +115,7 @@ class DefensiveIronAxe extends Weapons{
 		setWeaponDmg(2);
 		setHanded("OneHanded");
 		setBonusStat(1);
-		setValue(2);
+		setValue(5);
 		setID(2);
 	}
 }
@@ -125,7 +125,7 @@ class WoodenShield extends Weapons{
 		setWeaponName("Wooden Shield");
 		setWeaponDmg(1);
 		setHanded("OffHand");
-		setValue(1);
+		setValue(3);
 		setID(3);
 	}
 }
@@ -136,7 +136,7 @@ class HealthyIronShield extends Weapons{
 		setWeaponDmg(3);
 		setHanded("OffHand");
 		setBonusStat(3);
-		setValue(2);
+		setValue(5);
 		setID(4);
 	}
 }
@@ -146,7 +146,7 @@ class StrongIronShield extends Weapons{
 		setWeaponName("Strong Iron Shield");
 		setWeaponDmg(3);
 		setHanded("OffHand");
-		setValue(2);
+		setValue(5);
 		setBonusStat(1);
 		setID(4);
 	}
@@ -158,7 +158,7 @@ class DefensiveIronShield extends Weapons{
 		setWeaponDmg(3);
 		setHanded("OffHand");
 		setBonusStat(1);
-		setValue(2);
+		setValue(5);
 		setID(4);
 	}
 }
@@ -168,7 +168,7 @@ class WoodenAxe extends Weapons{
 		setWeaponName("Wooden Axe");
 		setWeaponDmg(1);
 		setHanded("OneHanded");
-		setValue(1);
+		setValue(3);
 		setID(5);
 	}
 }
@@ -176,10 +176,10 @@ class WoodenAxe extends Weapons{
 class HealthyBronzeGreatAxe extends Weapons{
 	public HealthyBronzeGreatAxe() {
 		setWeaponName("Healthy Bronze Greataxe");
-		setWeaponDmg(5);
+		setWeaponDmg(6);
 		setHanded("TwoHanded");
 		setBonusStat(7);
-		setValue(6);
+		setValue(20);
 		setID(6);
 	}
 }
@@ -187,10 +187,10 @@ class HealthyBronzeGreatAxe extends Weapons{
 class StrongBronzeGreatAxe extends Weapons{
 	public StrongBronzeGreatAxe() {
 		setWeaponName("Strong Bronze Greataxe");
-		setWeaponDmg(5);
+		setWeaponDmg(6);
 		setHanded("TwoHanded");
 		setBonusStat(3);
-		setValue(6);
+		setValue(20);
 		setID(6);
 	}
 }
@@ -198,10 +198,10 @@ class StrongBronzeGreatAxe extends Weapons{
 class DefensiveBronzeGreatAxe extends Weapons{
 	public DefensiveBronzeGreatAxe() {
 		setWeaponName("Defensive Bronze Greataxe");
-		setWeaponDmg(5);
+		setWeaponDmg(6);
 		setHanded("TwoHanded");
 		setBonusStat(3);
-		setValue(6);
+		setValue(20);
 		setID(6);
 	}
 }
@@ -209,10 +209,10 @@ class DefensiveBronzeGreatAxe extends Weapons{
 class HealthySteelGreatAxe extends Weapons{
 	public HealthySteelGreatAxe() {
 		setWeaponName("Healthy Steel Greataxe");
-		setWeaponDmg(7);
+		setWeaponDmg(8);
 		setHanded("TwoHanded");
 		setBonusStat(10);
-		setValue(10);
+		setValue(35);
 		setID(7);
 	}
 }
@@ -220,10 +220,10 @@ class HealthySteelGreatAxe extends Weapons{
 class StrongSteelGreatAxe extends Weapons{
 	public StrongSteelGreatAxe() {
 		setWeaponName("Strong Steel Greataxe");
-		setWeaponDmg(7);
+		setWeaponDmg(8);
 		setHanded("TwoHanded");
-		setBonusStat(4);
-		setValue(10);
+		setBonusStat(5);
+		setValue(35);
 		setID(7);
 	}
 }
@@ -231,10 +231,10 @@ class StrongSteelGreatAxe extends Weapons{
 class DefensiveSteelGreatAxe extends Weapons{
 	public DefensiveSteelGreatAxe() {
 		setWeaponName("Defensive Steel Greataxe");
-		setWeaponDmg(7);
+		setWeaponDmg(8);
 		setHanded("TwoHanded");
-		setBonusStat(4);
-		setValue(10);
+		setBonusStat(5);
+		setValue(35);
 		setID(7);
 	}
 }
@@ -242,10 +242,10 @@ class DefensiveSteelGreatAxe extends Weapons{
 class HealthyBronzeAxe extends Weapons{
 	public HealthyBronzeAxe() {
 		setWeaponName("Healthy Bronze Axe");
-		setWeaponDmg(3);
+		setWeaponDmg(4);
 		setHanded("OneHanded");
 		setBonusStat(3);
-		setValue(3);
+		setValue(10);
 		setID(8);
 	}
 }
@@ -253,10 +253,10 @@ class HealthyBronzeAxe extends Weapons{
 class StrongBronzeAxe extends Weapons{
 	public StrongBronzeAxe() {
 		setWeaponName("Strong Bronze Axe");
-		setWeaponDmg(3);
+		setWeaponDmg(4);
 		setHanded("OneHanded");
 		setBonusStat(2);
-		setValue(3);
+		setValue(10);
 		setID(8);
 	}
 }
@@ -264,10 +264,10 @@ class StrongBronzeAxe extends Weapons{
 class DefensiveBronzeAxe extends Weapons{
 	public DefensiveBronzeAxe() {
 		setWeaponName("Defensive Bronze Axe");
-		setWeaponDmg(3);
+		setWeaponDmg(4);
 		setHanded("OneHanded");
 		setBonusStat(2);
-		setValue(3);
+		setValue(10);
 		setID(8);
 	}
 }
@@ -275,10 +275,10 @@ class DefensiveBronzeAxe extends Weapons{
 class HealthySteelAxe extends Weapons{
 	public HealthySteelAxe() {
 		setWeaponName("Healthy Steel Axe");
-		setWeaponDmg(4);
+		setWeaponDmg(5);
 		setHanded("OneHanded");
-		setBonusStat(5);
-		setValue(5);
+		setBonusStat(6);
+		setValue(20);
 		setID(9);
 	}
 }
@@ -286,10 +286,10 @@ class HealthySteelAxe extends Weapons{
 class StrongSteelAxe extends Weapons{
 	public StrongSteelAxe() {
 		setWeaponName("Strong Steel Axe");
-		setWeaponDmg(4);
+		setWeaponDmg(5);
 		setHanded("OneHanded");
-		setBonusStat(3);
-		setValue(5);
+		setBonusStat(4);
+		setValue(20);
 		setID(9);
 	}
 }
@@ -297,10 +297,10 @@ class StrongSteelAxe extends Weapons{
 class DefensiveSteelAxe extends Weapons{
 	public DefensiveSteelAxe() {
 		setWeaponName("Defensive Steel Axe");
-		setWeaponDmg(4);
+		setWeaponDmg(5);
 		setHanded("OneHanded");
-		setBonusStat(3);
-		setValue(5);
+		setBonusStat(4);
+		setValue(20);
 		setID(9);
 	}
 }
@@ -311,7 +311,7 @@ class HealthyBronzeShield extends Weapons{
 		setWeaponDmg(4);
 		setHanded("OffHand");
 		setBonusStat(4);
-		setValue(3);
+		setValue(10);
 		setID(10);
 	}
 }
@@ -321,8 +321,8 @@ class StrongBronzeShield extends Weapons{
 		setWeaponName("Strong Bronze Shield");
 		setWeaponDmg(4);
 		setHanded("OffHand");
-		setBonusStat(1);
-		setValue(3);
+		setBonusStat(2);
+		setValue(10);
 		setID(10);
 	}
 }
@@ -332,8 +332,8 @@ class DefensiveBronzeShield extends Weapons{
 		setWeaponName("Defensive Bronze Shield");
 		setWeaponDmg(4);
 		setHanded("OffHand");
-		setBonusStat(1);
-		setValue(3);
+		setBonusStat(2);
+		setValue(10);
 		setID(10);
 	}
 }
@@ -343,8 +343,8 @@ class HealthySteelShield extends Weapons{
 		setWeaponName("Healthy Steel Shield");
 		setWeaponDmg(5);
 		setHanded("OffHand");
-		setBonusStat(5);
-		setValue(5);
+		setBonusStat(4);
+		setValue(15);
 		setID(11);
 	}
 }
@@ -354,8 +354,8 @@ class StrongSteelShield extends Weapons{
 		setWeaponName("Strong Steel Shield");
 		setWeaponDmg(5);
 		setHanded("OffHand");
-		setBonusStat(2);
-		setValue(5);
+		setBonusStat(3);
+		setValue(15);
 		setID(11);
 	}
 }
@@ -365,8 +365,8 @@ class DefensiveSteelShield extends Weapons{
 		setWeaponName("Defensive Steel Shield");
 		setWeaponDmg(5);
 		setHanded("OffHand");
-		setBonusStat(2);
-		setValue(5);
+		setBonusStat(3);
+		setValue(15);
 		setID(11);
 	}
 }

@@ -63,8 +63,8 @@ public abstract class Enemy {
 class Wolf extends Enemy{
 	public Wolf() {
 		setEnemyName("Wolf");
-		setAttackPower(5);
-		setMaxHP(30);
+		setAttackPower(8);
+		setMaxHP(60);
 		setValue(5);
 		setExp(5);
 		setAbility1("Bleed");
@@ -75,8 +75,8 @@ class Wolf extends Enemy{
 class Spider extends Enemy{
 	public Spider() {
 		setEnemyName("Spider");
-		setAttackPower(4);
-		setMaxHP(35);
+		setAttackPower(9);
+		setMaxHP(50);
 		setValue(7);
 		setExp(6);
 		setAbility1("Poison");
@@ -87,8 +87,8 @@ class Spider extends Enemy{
 class Bear extends Enemy{
 	public Bear() {
 		setEnemyName("Bear");
-		setAttackPower(6);
-		setMaxHP(40);
+		setAttackPower(9);
+		setMaxHP(65);
 		setValue(10);
 		setExp(8);
 		setAbility1("Enrage");
@@ -99,8 +99,8 @@ class Bear extends Enemy{
 class Monkey extends Enemy{
 	public Monkey() {
 		setEnemyName("Monkey");
-		setAttackPower(8);
-		setMaxHP(30);
+		setAttackPower(10);
+		setMaxHP(55);
 		setValue(10);
 		setExp(7);
 		setAbility1("Enrage");
@@ -111,8 +111,8 @@ class Monkey extends Enemy{
 class Wasp extends Enemy{
 	public Wasp() {
 		setEnemyName("Wasp");
-		setAttackPower(6);
-		setMaxHP(35);
+		setAttackPower(10);
+		setMaxHP(50);
 		setValue(10);
 		setExp(8);
 		setAbility1("Poison");
@@ -123,7 +123,7 @@ class Wasp extends Enemy{
 class ForestGuardian extends Enemy{
 	public ForestGuardian() {
 		setEnemyName("Forest Guardian");
-		setAttackPower(10);
+		setAttackPower(15);
 		setMaxHP(100);
 		setValue(25);
 		setExp(20);
@@ -135,7 +135,7 @@ class ForestGuardian extends Enemy{
 class MimicTree extends Enemy{
 	public MimicTree() {
 		setEnemyName("Mimic Tree");
-		setAttackPower(7);
+		setAttackPower(10);
 		setMaxHP(125);
 		setValue(25);
 		setExp(20);
@@ -147,7 +147,7 @@ class MimicTree extends Enemy{
 class BoarBoss extends Enemy{
 	public BoarBoss() {
 		setEnemyName("Angry Boar");
-		setAttackPower(10);
+		setAttackPower(20);
 		setMaxHP(150);
 		setValue(40);
 		setExp(40);

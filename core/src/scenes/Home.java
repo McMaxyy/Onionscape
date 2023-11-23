@@ -29,7 +29,7 @@ public class Home implements Screen {
 	private GameScreen gameScreen; 
 	private SaveData saveData = new SaveData();
 	public static boolean apBoost, dpBoost, hpBoost, expBoost, freshLoad = true, story;
-	public static int stageLvl;
+	public static int stageLvl = 0;
 	
 	public Home(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -43,7 +43,7 @@ public class Home implements Screen {
 		gameScreen.forestMap = null;
 		Merchant.raid = false;
 		
-		if(!story)
+		if(!story && stageLvl != 0)
 			saveData.loadGame();
 		
 		if(hpBoost)
@@ -56,6 +56,7 @@ public class Home implements Screen {
 		apBoost = dpBoost = hpBoost = expBoost = false;
 		
 		createComponents();	
+		stageLvl = 0;
 	}
 	
 	private void createComponents() {
@@ -144,6 +145,10 @@ public class Home implements Screen {
     			GameScreen.newGame = true;
     			story = true;
     			stageLvl = 1;
+    			if(freshLoad) {
+    				gameScreen.setCurrentState(GameScreen.INVENTORY);
+    				freshLoad = false;
+    			}
     			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
     	    }});
 		forestBtn.setSize(150, 100);

@@ -133,10 +133,10 @@ public class SaveData {
 		jsonString = json.toJson(saveData);		
 		FileHandle file = Gdx.files.local("saveData.json");
 		file.writeString(jsonString, false);
+		System.out.println("Saved the game state");
 	}
 	
-	public void loadGame() {
-		
+	public void loadGame() {		
 		SaveData loadedData = null;
 		FileHandle file = Gdx.files.local("saveData.json");
 		if (file.exists()) {
@@ -196,6 +196,8 @@ public class SaveData {
 		    BerserkerSkillTree.weaponDmg = loadedData.weaponDmg2;
 		    BerserkerSkillTree.strength = loadedData.strength2;
 		    BerserkerSkillTree.maxHP = loadedData.maxHP2;
+		    
+		    System.out.println("Loaded the game state");
 		}
 	}
 	
