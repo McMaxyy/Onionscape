@@ -71,7 +71,61 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 	default: {
+		up: default-round-large
+		down: default-scroll
+		focused: default-scroll
+		disabled: default-round-down
+		pressedOffsetX: 1
+		pressedOffsetY: 1
+	}
+	fightIcon: {
 		parent: default
+		imageUp: FightIcon
+		imageDown: FightIcon
+		imageDisabled: FightIcon
+		imageChecked: FightIcon
+	}
+	merchIcon: {
+		parent: default
+		imageUp: MerchIcon
+		imageDown: MerchIcon
+		imageDisabled: MerchIcon
+		imageChecked: MerchIcon
+	}
+	bossIcon: {
+		parent: default
+		imageUp: BossIcon
+		imageDown: BossIcon
+		imageDisabled: BossIcon
+		imageChecked: BossIcon
+	}
+	eliteIcon: {
+		parent: default
+		imageUp: StrEnemyIcon
+		imageDown: StrEnemyIcon
+		imageDisabled: StrEnemyIcon
+		imageChecked: StrEnemyIcon
+	}
+	randIcon: {
+		parent: default
+		imageUp: RandIcon
+		imageDown: RandIcon
+		imageDisabled: RandIcon
+		imageChecked: RandIcon
+	}
+	treasureIcon: {
+		parent: default
+		imageUp: BonfireIcon
+		imageDown: BonfireIcon
+		imageDisabled: BonfireIcon
+		imageChecked: BonfireIcon
+	}
+	playerIcon: {
+		parent: default
+		imageUp: tree-plus
+		imageDown: tree-plus
+		imageDisabled: tree-plus
+		imageChecked: tree-plus
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {

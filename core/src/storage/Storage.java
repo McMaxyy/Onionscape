@@ -20,7 +20,6 @@ public class Storage {
 	private static Storage instance = null;
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle;
-	public ImageButtonStyle imgButtonStyle;
 	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol;
 	public BitmapFont font, fontBig, fontSmol;
 	private List<Weapons> playerWeapons = new ArrayList<>();
@@ -137,12 +136,6 @@ public class Storage {
 		assetManager.load("BattleOver.png", Texture.class, textureParameter);		
 		assetManager.load("player/Onion.png", Texture.class, textureParameter);
 		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);
-		assetManager.load("mapIcons/BonfireIcon.png", Texture.class, textureParameter);
-		assetManager.load("mapIcons/BossIcon.png", Texture.class, textureParameter);
-		assetManager.load("mapIcons/FightIcon.png", Texture.class, textureParameter);
-		assetManager.load("mapIcons/MerchIcon.png", Texture.class, textureParameter);
-		assetManager.load("mapIcons/RandIcon.png", Texture.class, textureParameter);
-		assetManager.load("mapIcons/StrEnemyIcon.png", Texture.class, textureParameter);
 	}
 	
 	// Load items
@@ -372,9 +365,7 @@ public class Storage {
         // Create a new style for button
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
         buttonStyle.font = font; 
-        
-        imgButtonStyle = new ImageButton.ImageButtonStyle(skin.get(ImageButton.ImageButtonStyle.class));
-        
+
         labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyle.font = font;  
         

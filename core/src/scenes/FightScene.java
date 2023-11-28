@@ -278,6 +278,7 @@ public class FightScene implements Screen{
 	        	homeBtn.addListener(new ClickListener() {
 	        		@Override
 	        	    public void clicked(InputEvent event, float x, float y) {
+	        			Player.gainCoins(Player.getRaidCoins());
 	    				Player.setRaidCoins(0);
 	        			stage.clear();
 	        			gameScreen.setCurrentState(GameScreen.HOME);
@@ -1226,8 +1227,10 @@ public class FightScene implements Screen{
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			stage.clear();
-    			if(Merchant.raid)
+    			if(Merchant.raid) {
+    				GameScreen.newGame = false;
     				gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+    			}
     			else {
     				Player.gainCoins(Player.getRaidCoins());
     				Player.setRaidCoins(0);
