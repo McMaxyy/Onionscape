@@ -36,7 +36,7 @@ public class LoadingScreen implements Screen {
         // Create a progress bar using the default skin
         float progressBarWidth = Gdx.graphics.getWidth() / 2f;
         float progressBarHeight = 50f;
-        progressBar = new ProgressBar(0, 1, 0.01f, false, storage.skin, "default-horizontal");
+        progressBar = new ProgressBar(0, 1, 0.01f, false, skin, "default-horizontal");
 
         // Calculate the position for the progress bar at the center of the screen
         float progressBarX = (vp.getScreenWidth() - progressBarWidth) / 2f;

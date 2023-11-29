@@ -5,7 +5,7 @@ import java.util.Random;
 import com.onionscape.game.GameScreen;
 
 public class Player {
-	private static int raidCoins = 0;
+	private static int raidCoins = 50;
 	private static int maxHP = 70;
 	private static int hp;
 	private static int strength = 3;

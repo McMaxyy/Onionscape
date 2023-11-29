@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -53,6 +54,8 @@ public class FightScene implements Screen{
 	private SpriteBatch chestBatch = new SpriteBatch();
 	private SpriteBatch bootsBatch = new SpriteBatch();
 	private SpriteBatch mapBatch = new SpriteBatch();
+	private SpriteBatch playerHealthBatch = new SpriteBatch();
+	private SpriteBatch enemyHealthBatch = new SpriteBatch();
     private Sprite charSprite, enemySprite, weaponSprite, shieldSprite, helmetSprite, chestSprite, bootsSprite;
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
     private String enemyName, eAbility1, eAbility2, eAbility3, loot;
@@ -79,6 +82,8 @@ public class FightScene implements Screen{
     private float rotationInterval = 0.017f;
     private int timer = 0;   
     public static boolean normal, elite, boss;
+    private ShapeRenderer playerHealthBar = new ShapeRenderer();
+    private ShapeRenderer enemyHealthBar = new ShapeRenderer();
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -181,9 +186,9 @@ public class FightScene implements Screen{
 
     private void setEnemyAttributes(Enemy enemy, String texturePath) {
     	if(!Home.story) {
-    		enemyMaxHP = enemy.getMaxHP() / Home.stageLvl;
-    		enemyValue = enemy.getValue() / Home.stageLvl;
-    		enemyDamage = enemy.getAttackPower() / Home.stageLvl;
+    		enemyMaxHP = enemy.getMaxHP() / (Home.stageLvl + 1);
+    		enemyValue = enemy.getValue() / (Home.stageLvl + 1);
+    		enemyDamage = enemy.getAttackPower() / (Home.stageLvl + 1);
     	}
     	else {
     		enemyMaxHP = enemy.getMaxHP();
@@ -211,13 +216,13 @@ public class FightScene implements Screen{
     
     public void update() {
     	if(!pDead && !eDead && btnClicked || turnEnded) {
-    		playerHPLbl.setText("Player HP: " + Player.getHp() + "/" + Player.getMaxHP());
-        	enemyHPLbl.setText("Enemy HP: " + enemyHP + "/" + enemyMaxHP); 
+    		playerHPLbl.setText(Player.getHp() + "/" + Player.getMaxHP());
+        	enemyHPLbl.setText(enemyHP + "/" + enemyMaxHP); 
         	btnClicked = false;
     	}
     	
     	if(firstLoad) {
-    		enemyHPLbl.setText("Enemy HP: " + enemyHP + "/" + enemyMaxHP);   
+    		enemyHPLbl.setText(enemyHP + "/" + enemyMaxHP);   
     		firstLoad = false;
     	}
         	 		
@@ -281,6 +286,14 @@ public class FightScene implements Screen{
 	        			Player.gainCoins(Player.getRaidCoins());
 	    				Player.setRaidCoins(0);
 	        			stage.clear();
+	        			if(!Home.story) {
+	        				Player.loseDR(storage.ironHelmet.getDefense() + storage.ironChest.getDefense() +
+	            					storage.ironBoots.getDefense() + storage.healthyIronShield.getWeaponDmg());
+	            			Player.loseMaxHP(storage.ironHelmet.getBonusStat() + storage.ironChest.getBonusStat() +
+	            					storage.ironBoots.getBonusStat() + storage.healthyIronAxe.getBonusStat() +
+	            					storage.healthyIronShield.getBonusStat());
+	            			Player.loseWeaponDmg(storage.healthyIronAxe.getWeaponDmg());
+	        			}
 	        			gameScreen.setCurrentState(GameScreen.HOME);
 	        	    }});
 	        }	        	
@@ -746,6 +759,9 @@ public class FightScene implements Screen{
     	case 4:
     		attackType = eAbility2;
     		break;
+    	case 5:
+    		attackType = eAbility3;
+    		break;
     	}
     	
     	if(!attackType.equals("Attack")) {
@@ -777,7 +793,7 @@ public class FightScene implements Screen{
     		}
     	}
     	
-    	System.out.println(attackType);
+//    	System.out.println(attackType);
     	
     	if(attackType.equals("Attack")) {
     		int temp = enemyDamage;
@@ -1107,8 +1123,8 @@ public class FightScene implements Screen{
     }
     
     private void createComponents() {    	    	
-    	playerHPLbl = new Label("Player HP: " + Player.getHp() + "/" + Player.getMaxHP(), storage.labelStyle);
-    	enemyHPLbl = new Label("Enemy HP: " + enemyHP + "/" + enemyMaxHP, storage.labelStyle);
+    	playerHPLbl = new Label(Player.getHp() + "/" + Player.getMaxHP(), storage.labelStyle);
+    	enemyHPLbl = new Label(enemyHP + "/" + enemyMaxHP, storage.labelStyle);
     	enemyNameLbl = new Label(enemyName, storage.labelStyle);
     	
     	combatLog = new Label("", storage.labelStyleSmol);
@@ -1216,8 +1232,11 @@ public class FightScene implements Screen{
     	endTurn.addListener(new ClickListener() {
         	@Override
     	    public void clicked(InputEvent event, float x, float y) {
-        		attackCount = 3;        		
-        		enemyAttack(rand.nextInt(5));
+        		attackCount = 3;
+        		if(eAbility3 == null)
+        			enemyAttack(rand.nextInt(5));
+        		else
+        			enemyAttack(rand.nextInt(6));
     	        turnEnded = true;
     	    }});
     	
@@ -1640,6 +1659,40 @@ public class FightScene implements Screen{
         }        
     }
     
+    private void drawHealthBar() {
+    	// Player Health bar
+    	playerHealthBar.setProjectionMatrix(vp.getCamera().combined);
+    	playerHealthBar.begin(ShapeRenderer.ShapeType.Filled);
+
+    	playerHealthBar.setColor(Color.BLACK);
+    	playerHealthBar.rect(playerHPLbl.getX() - playerHPLbl.getWidth() / 4f, playerHPLbl.getY() + 0.1f, 300, 30);
+
+    	playerHealthBar.setColor(Color.RED);
+        float barWidth = (float)Player.getHp() / (float)Player.getMaxHP();
+        int width = (int)(barWidth * 300);
+        width = (width / 10) * 10;
+        if(width < 10)
+        	width = 0;
+        playerHealthBar.rect(playerHPLbl.getX() - playerHPLbl.getWidth() / 4f, playerHPLbl.getY() + 0.1f, width, 30);
+        playerHealthBar.end(); 
+        
+        // Enemy Health bar
+        enemyHealthBar.setProjectionMatrix(vp.getCamera().combined);
+        enemyHealthBar.begin(ShapeRenderer.ShapeType.Filled);
+
+        enemyHealthBar.setColor(Color.BLACK);
+        enemyHealthBar.rect(enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f, enemyHPLbl.getY() + 0.1f, 300, 30);
+
+        enemyHealthBar.setColor(Color.RED);
+        barWidth = (float)enemyHP / (float)enemyMaxHP;
+        width = (int)(barWidth * 300);
+        width = (width / 10) * 10;
+        if(width < 10)
+        	width = 0;
+        enemyHealthBar.rect(enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f, enemyHPLbl.getY() + 0.1f, width, 30);
+        enemyHealthBar.end();
+    }
+    
     @Override
     public void dispose() {
         stage.dispose();
@@ -1658,7 +1711,7 @@ public class FightScene implements Screen{
 
 	@Override
 	public void show() {
-			
+		
 	}
 	
 	@Override
@@ -1756,7 +1809,7 @@ public class FightScene implements Screen{
 	    }
 	    
 	    mapBatch.begin();
-		mapBatch.draw(mapTexture, 0, 0, GameScreen.MAX_WIDTH, GameScreen.MAX_HEIGHT);
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
 		mapBatch.end();
 		
 		if(!gameOver) {
@@ -1974,6 +2027,8 @@ public class FightScene implements Screen{
 	    		turnEnded = false;	    		
 	    }
 	    
+	    drawHealthBar();
+	    
     	update();
         stage.act();
         stage.draw();
@@ -1990,6 +2045,8 @@ public class FightScene implements Screen{
 		chestBatch.setProjectionMatrix(vp.getCamera().combined);
 		bootsBatch.setProjectionMatrix(vp.getCamera().combined);
 		mapBatch.setProjectionMatrix(vp.getCamera().combined);
+		playerHealthBatch.setProjectionMatrix(vp.getCamera().combined);
+		enemyHealthBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

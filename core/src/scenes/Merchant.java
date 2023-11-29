@@ -605,7 +605,7 @@ public class Merchant implements Screen{
 	                }
 	            });
 			}
-			discountTable.defaults().size(200, 200);
+			discountTable.defaults().size(150, 150);
 			
 			int index = 0;
 			for(int y = 0; y < 3; y++) {
@@ -655,7 +655,7 @@ public class Merchant implements Screen{
 	                }
 	            });
 			}
-			standardTable.defaults().size(200, 200);
+			standardTable.defaults().size(150, 150);
 			
 			index = 0;
 			for(int y = 0; y < 3; y++) {
@@ -795,8 +795,8 @@ public class Merchant implements Screen{
 			Items item = itemMap.get(itemName);
 			if(Player.getRaidCoins() >= item.getValue() && storage.getEquippedItems().size() < 14 && !discount) {
 				Player.loseRaidCoins(item.getValue());
-				standardBtns[loc].setTouchable(Touchable.disabled);
-					
+				standardBtns[loc].setColor(Color.DARK_GRAY);
+				standardBtns[loc].setTouchable(Touchable.disabled);					
 				storage.equippedItems(item, "Add");				
 				itemTable.clear();
 				createItemGrid();
@@ -805,7 +805,7 @@ public class Merchant implements Screen{
 			else if(Player.getRaidCoins() >= item.getValue() / 2 && storage.getEquippedItems().size() < 14 && discount) {
 				Player.loseRaidCoins(item.getValue() / 2);
 				discountBtns[loc].setTouchable(Touchable.disabled);
-				
+				discountBtns[loc].setColor(Color.DARK_GRAY);
 				storage.equippedItems(item, "Add");				
 				itemTable.clear();
 				createItemGrid();

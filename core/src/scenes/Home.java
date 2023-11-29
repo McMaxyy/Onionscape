@@ -82,6 +82,11 @@ public class Home implements Screen {
     			storage.equippedArmor(null, "Clear");
     			storage.equippedWeapons(null, "Clear");
     			storage.equippedItems(null, "Clear");
+    			storage.equippedArmor(storage.healthyIronHelmet, "Add");
+    			storage.equippedArmor(storage.healthyIronChest, "Add");
+    			storage.equippedArmor(storage.healthyIronBoots, "Add");
+    			storage.equippedWeapons(storage.healthyIronAxe, "Add");
+    			storage.equippedWeapons(storage.healthyIronShield, "Add");
     			stageLvl = 1;
     			if(freshLoad) {
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
@@ -103,6 +108,17 @@ public class Home implements Screen {
     			storage.equippedArmor(null, "Clear");
     			storage.equippedWeapons(null, "Clear");
     			storage.equippedItems(null, "Clear");
+    			storage.equippedArmor(storage.healthyIronHelmet, "Add");
+    			storage.equippedArmor(storage.healthyIronChest, "Add");
+    			storage.equippedArmor(storage.healthyIronBoots, "Add");
+    			storage.equippedWeapons(storage.healthyIronAxe, "Add");
+    			storage.equippedWeapons(storage.healthyIronShield, "Add");
+    			Player.gainDR(storage.ironHelmet.getDefense() + storage.ironChest.getDefense() +
+    					storage.ironBoots.getDefense() + storage.healthyIronShield.getWeaponDmg());
+    			Player.gainMaxHP(storage.ironHelmet.getBonusStat() + storage.ironChest.getBonusStat() +
+    					storage.ironBoots.getBonusStat() + storage.healthyIronAxe.getBonusStat() +
+    					storage.healthyIronShield.getBonusStat());
+    			Player.gainWeaponDmg(storage.healthyIronAxe.getWeaponDmg());
     			stageLvl = 1;
     			GameScreen.newGame = true;
     			if(freshLoad) {

@@ -50,7 +50,7 @@ public class Settings implements Screen{
 		fullscreenBtn.setPosition(vp.getWorldWidth() / 4f, vp.getWorldHeight() / 5f);
 		stage.addActor(fullscreenBtn);
 		
-		borderlessBtn = new TextButton("Borderless Windowed", storage.buttonStyle);
+		borderlessBtn = new TextButton("Borderless", storage.buttonStyle);
 		borderlessBtn.setColor(Color.LIGHT_GRAY);
 		borderlessBtn.addListener(new ClickListener() {
     		@Override

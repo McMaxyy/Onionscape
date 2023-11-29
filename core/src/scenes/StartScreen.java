@@ -103,7 +103,7 @@ public class StartScreen implements Screen{
 		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 		mapBatch.begin();
-		mapBatch.draw(mapTexture, 0, 0, GameScreen.MAX_WIDTH, GameScreen.MAX_HEIGHT);
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
 		mapBatch.end();		
 		
 		stage.act();

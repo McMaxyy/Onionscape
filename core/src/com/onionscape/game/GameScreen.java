@@ -39,6 +39,8 @@ public class GameScreen implements Screen {
     private static final int MIN_HEIGHT = 720;
     public static final int MAX_WIDTH = 1920;
     public static final int MAX_HEIGHT = 1080;
+    public static int SELECTED_WIDTH = MAX_WIDTH;
+    public static int SELECTED_HEIGHT = MAX_HEIGHT;
     
     public static final int LOADING_SCREEN = 0;
     public static final int HOME = 1;
@@ -54,7 +56,7 @@ public class GameScreen implements Screen {
 
 	public GameScreen(Game game) {		
 		this.game = game;
-		viewport = new FitViewport(MAX_WIDTH, MAX_HEIGHT);		
+		viewport = new FitViewport(SELECTED_WIDTH, SELECTED_HEIGHT);		
 	    setCurrentState(LOADING_SCREEN);
 	}
 	
