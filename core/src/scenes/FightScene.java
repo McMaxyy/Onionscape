@@ -105,6 +105,8 @@ public class FightScene implements Screen{
         charSprite.setSize(275, heightChar);
         charSprite.setOrigin(0, 0);
         
+        System.out.println("State: " + Player.weaponState);
+        
         // Check if the player has the Lucky Strike mastery activated
         if(BerserkerSkillTree.luckyStrike == 1)
         	firstAttack = true;
@@ -138,6 +140,10 @@ public class FightScene implements Screen{
 			ability4.setTouchable(Touchable.disabled);
     		ability4.setColor(Color.GRAY);
 		}  
+		
+		System.out.println("Wep dmg: " + Player.getWeaponDmg());
+		System.out.println("Str: " + Player.getStrength());
+		System.out.println("Dmg res: " + Player.getDmgResist());
     }
     
     private void newEnemy() {    	
@@ -287,12 +293,12 @@ public class FightScene implements Screen{
 	    				Player.setRaidCoins(0);
 	        			stage.clear();
 	        			if(!Home.story) {
-	        				Player.loseDR(storage.ironHelmet.getDefense() + storage.ironChest.getDefense() +
-	            					storage.ironBoots.getDefense() + storage.healthyIronShield.getWeaponDmg());
-	            			Player.loseMaxHP(storage.ironHelmet.getBonusStat() + storage.ironChest.getBonusStat() +
-	            					storage.ironBoots.getBonusStat() + storage.healthyIronAxe.getBonusStat() +
-	            					storage.healthyIronShield.getBonusStat());
-	            			Player.loseWeaponDmg(storage.healthyIronAxe.getWeaponDmg());
+	        				Player.setStrength(3);
+	            			Player.setOneHandStr(0);
+	            			Player.setTwoHandStr(0);
+	            			Player.setMaxHP(70);
+	            			Player.setDmgResist(0);
+	            			Player.setWeaponDmg(0);
 	        			}
 	        			gameScreen.setCurrentState(GameScreen.HOME);
 	        	    }});
@@ -1253,6 +1259,12 @@ public class FightScene implements Screen{
     			else {
     				Player.gainCoins(Player.getRaidCoins());
     				Player.setRaidCoins(0);
+    				Player.setStrength(3);
+        			Player.setOneHandStr(0);
+        			Player.setTwoHandStr(0);
+        			Player.setMaxHP(70);
+        			Player.setDmgResist(0);
+        			Player.setWeaponDmg(0);
     				gameScreen.setCurrentState(GameScreen.HOME);
     			}    				
     	    }});

@@ -57,9 +57,10 @@ public class Inventory implements Screen {
 	private SpriteBatch chestBatch = new SpriteBatch();
 	private SpriteBatch bootsBatch = new SpriteBatch();
 	private SpriteBatch mapBatch = new SpriteBatch();
-	private static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0, weaponAP = 0,
+	public static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0, weaponAP = 0,
 			bonusHP = 0, bonusAP = 0, bonusDP = 0;
-	boolean twoHand = false;
+	boolean twoHand = false, gearEq;
+	public static boolean haveGear = true;
 	
 	// Map texture
 	private Texture mapTexture  = Storage.assetManager.get("maps/InventoryScreen.png", Texture.class);
@@ -142,14 +143,24 @@ public class Inventory implements Screen {
 		characterTable.clear();
 		Home.freshLoad = false;
 
-		smoothFilter();		
-		removeBonusStats();
+		smoothFilter();				
 		createComponents();	
 		createInventoryGrid();
 		createCharacterGrid();
 		createItemGrid();
+		removeBonusStats();
+		if(gearEq)
+			addBonusStats();
 	}
 	
+	private void addBonusStats() {
+		System.out.println("Adding stats");
+		Player.setDmgResist(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
+		Player.setWeaponDmg(weaponAP);	
+		Player.gainBonusStr(bonusAP);
+		Player.gainMaxHP(bonusHP);
+	}
+
 	private void smoothFilter(){
 		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		inventorySlotTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
@@ -218,7 +229,44 @@ public class Inventory implements Screen {
 		eSteelGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 	}
 	
-	private void removeBonusStats() {
+	private void removeBonusStats() {		
+		Actor item = characterTable.getChildren().get(0);					
+		String itemName = item.getName();
+		if(!itemName.equals("Empty")) {
+			setArmor(itemName, "Helmet");
+			addArmorDefenses(itemName);
+		}
+		
+		item = characterTable.getChildren().get(1);					
+		itemName = item.getName();
+		if(!itemName.equals("Empty")) {
+			setArmor(itemName, "Chest");
+			addArmorDefenses(itemName);
+		}	
+		
+		item = characterTable.getChildren().get(2);					
+		itemName = item.getName();
+		if(!itemName.equals("Empty")) {
+			setArmor(itemName, "Boots");
+			addArmorDefenses(itemName);
+		}
+		
+		item = characterTable.getChildren().get(3);					
+		itemName = item.getName();
+		if(!itemName.equals("Empty")) {
+			if(itemName.endsWith("Axe"))
+				setWeapon(itemName, "OneHanded");	
+			else
+				setWeapon(itemName, "TwoHanded");
+			addWeaponDamage(itemName);
+		}
+						
+		item = characterTable.getChildren().get(4);					
+		itemName = item.getName();
+		if(!itemName.equals("Empty")) {
+			setWeapon(itemName, "Offhand");		
+			addWeaponDamage(itemName);
+		}
 		if(SaveData.loaded) {
 			bonusAP = bonusHP = bonusDP = 0;
 			for(int ap : storage.getBonusAP())
@@ -229,6 +277,11 @@ public class Inventory implements Screen {
 				bonusDP += dp;
 		}
 		
+		if(helmetDP != 0 || chestDP != 0 || bootsDP != 0 || shieldDP != 0 || weaponAP != 0)	
+			if(!haveGear) {
+				haveGear = true;
+				gearEq = true;
+			}
 		Player.loseDR(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
 		Player.loseMaxHP(bonusHP);
 		Player.loseWeaponDmg(weaponAP);
@@ -318,7 +371,7 @@ public class Inventory implements Screen {
 	    stage.addActor(inventoryTable);
 	}
 	
-	private void createCharacterGrid() {
+	public void createCharacterGrid() {
 		equippedWeapons = storage.getEquippedWeapons();
 		equippedArmor = storage.getEquippedArmor();		
 	    characterTable.defaults().size(100, 100);
@@ -1237,9 +1290,7 @@ public class Inventory implements Screen {
 				storage.equippedWeapons(storage.defensiveSteelGA, "Add");
 				setWeaponBonus("Defensive", 3, storage.defensiveSteelGA);
 				break;
-			}
-			
-//			mainHand.setName(weapon);
+			}			
 		}		
 		else if(handed == "OneHanded") {
 			if(mainHand.getName() != "Empty")
@@ -1737,9 +1788,9 @@ public class Inventory implements Screen {
     			for(int dp : storage.getBonusDP())
     				bonusDP += dp;
     			
-    			Player.gainDR(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
+    			Player.setDmgResist(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
     			Player.gainMaxHP(bonusHP);
-    			Player.gainWeaponDmg(weaponAP);
+    			Player.setWeaponDmg(weaponAP);
     			Player.gainBonusStr(bonusAP);
     			gameScreen.setCurrentState(GameScreen.HOME);
     	    }});

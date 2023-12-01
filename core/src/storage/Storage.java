@@ -28,9 +28,9 @@ public class Storage {
 	private List<Weapons> equippedWeapons = new ArrayList<>();
 	private List<Armor> equippedArmor = new ArrayList<>();
 	private List<Items> equippedItems = new ArrayList<>();
-	private int[] bonusAP = {0, 0, 0, 0, 0};
-	private int[] bonusHP = {0, 0, 0, 0, 0};
-	private int[] bonusDP = {0, 0, 0, 0, 0};
+	private static int[] bonusAP = {0, 0, 0, 0, 0};
+	private static int[] bonusHP = {0, 0, 0, 0, 0};
+	private static int[] bonusDP = {0, 0, 0, 0, 0};
 	public static AssetManager assetManager = new AssetManager();
 	private static boolean newLoad = true;	
 	

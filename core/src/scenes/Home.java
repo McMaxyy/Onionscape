@@ -27,6 +27,7 @@ public class Home implements Screen {
 	saveBtn, loadBtn, forestBtn, merchantBtn;
 	private Label level, exp, coins;
 	private GameScreen gameScreen; 
+	private Inventory inv;
 	private SaveData saveData = new SaveData();
 	public static boolean apBoost, dpBoost, hpBoost, expBoost, freshLoad = true, story;
 	public static int stageLvl = 0;
@@ -43,8 +44,10 @@ public class Home implements Screen {
 		gameScreen.forestMap = null;
 		Merchant.raid = false;
 		
-		if(!story && stageLvl != 0)
+		if(!story && stageLvl != 0) {
+			Inventory.characterTable.clear();
 			saveData.loadGame();
+		}
 		
 		if(hpBoost)
 			Player.setMaxHP(Player.getMaxHP() - 10);
@@ -57,6 +60,15 @@ public class Home implements Screen {
 		
 		createComponents();	
 		stageLvl = 0;
+		
+		if(storage.getEquippedWeapons().size() > 0) {
+			if(storage.getEquippedWeapons().get(0).toString().endsWith("Axe"))
+				Player.weaponState = 1;
+			else if(storage.getEquippedWeapons().get(0).toString().endsWith("Greataxe"))
+				Player.weaponState = 2;
+		}
+		else
+			Player.weaponState = 0;
 	}
 	
 	private void createComponents() {
@@ -81,7 +93,8 @@ public class Home implements Screen {
     			story = false;
     			storage.equippedArmor(null, "Clear");
     			storage.equippedWeapons(null, "Clear");
-    			storage.equippedItems(null, "Clear");
+    			storage.equippedItems(null, "Clear");   			
+    			Player.weaponState = 1;
     			storage.equippedArmor(storage.healthyIronHelmet, "Add");
     			storage.equippedArmor(storage.healthyIronChest, "Add");
     			storage.equippedArmor(storage.healthyIronBoots, "Add");
@@ -104,7 +117,7 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			saveData.saveGame();
-    			story = false;
+    			story = false;   	    			
     			storage.equippedArmor(null, "Clear");
     			storage.equippedWeapons(null, "Clear");
     			storage.equippedItems(null, "Clear");
@@ -112,13 +125,23 @@ public class Home implements Screen {
     			storage.equippedArmor(storage.healthyIronChest, "Add");
     			storage.equippedArmor(storage.healthyIronBoots, "Add");
     			storage.equippedWeapons(storage.healthyIronAxe, "Add");
-    			storage.equippedWeapons(storage.healthyIronShield, "Add");
-    			Player.gainDR(storage.ironHelmet.getDefense() + storage.ironChest.getDefense() +
-    					storage.ironBoots.getDefense() + storage.healthyIronShield.getWeaponDmg());
-    			Player.gainMaxHP(storage.ironHelmet.getBonusStat() + storage.ironChest.getBonusStat() +
-    					storage.ironBoots.getBonusStat() + storage.healthyIronAxe.getBonusStat() +
-    					storage.healthyIronShield.getBonusStat());
-    			Player.gainWeaponDmg(storage.healthyIronAxe.getWeaponDmg());
+    			storage.equippedWeapons(storage.healthyIronShield, "Add"); 
+    			if (inv == null)
+    				inv = new Inventory(vp, game, gameScreen);
+    			inv.createCharacterGrid();
+    			Player.weaponState = 1;   			
+    			Player.setStrength(3);
+    			Player.setOneHandStr(0);
+    			Player.setTwoHandStr(0);
+    			Player.setMaxHP(82);
+    			Player.setDmgResist(17);
+    			Player.setWeaponDmg(2);
+//    			Player.gainDR(storage.ironHelmet.getDefense() + storage.ironChest.getDefense() +
+//    					storage.ironBoots.getDefense() + storage.healthyIronShield.getWeaponDmg());
+//    			Player.gainMaxHP(storage.healthyIronHelmet.getBonusStat() + storage.healthyIronChest.getBonusStat() +
+//    					storage.healthyIronBoots.getBonusStat() + storage.healthyIronAxe.getBonusStat() +
+//    					storage.healthyIronShield.getBonusStat());
+//    			Player.gainWeaponDmg(storage.healthyIronAxe.getWeaponDmg());
     			stageLvl = 1;
     			GameScreen.newGame = true;
     			if(freshLoad) {
@@ -161,7 +184,12 @@ public class Home implements Screen {
     			GameScreen.newGame = true;
     			story = true;
     			stageLvl = 1;
-    			if(freshLoad) {
+    			if(freshLoad || Inventory.characterTable.getChildren().size == 0) {
+    				if(Inventory.helmetDP != 0 || Inventory.chestDP != 0 || Inventory.bootsDP != 0 || 
+    						Inventory.shieldDP != 0 || Inventory.weaponAP != 0)	
+    					Inventory.haveGear = false;
+    				else
+    					Inventory.haveGear = true;
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
     				freshLoad = false;
     			}
