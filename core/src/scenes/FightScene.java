@@ -44,7 +44,8 @@ public class FightScene implements Screen{
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
     private TextButton reward1, reward2, reward3;
     private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
-    private Texture charTexture, enemyTexture, mapTexture;
+    private Texture charTexture, enemyTexture, mapTexture, barrierBuffTex, bleedBuffTex, enrageBuffTex,
+    poisonBuffTex, stunBuffTex, hardenBuffTex;
     private SpriteBatch charBatch = new SpriteBatch();
     private SpriteBatch enemyBatch = new SpriteBatch();
     private SpriteBatch weaponBatch = new SpriteBatch();
@@ -56,6 +57,8 @@ public class FightScene implements Screen{
 	private SpriteBatch mapBatch = new SpriteBatch();
 	private SpriteBatch playerHealthBatch = new SpriteBatch();
 	private SpriteBatch enemyHealthBatch = new SpriteBatch();
+	private SpriteBatch buffBatch = new SpriteBatch();
+	private SpriteBatch debuffBatch = new SpriteBatch();
     private Sprite charSprite, enemySprite, weaponSprite, shieldSprite, helmetSprite, chestSprite, bootsSprite;
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
     private String enemyName, eAbility1, eAbility2, eAbility3, loot;
@@ -84,6 +87,8 @@ public class FightScene implements Screen{
     public static boolean normal, elite, boss;
     private ShapeRenderer playerHealthBar = new ShapeRenderer();
     private ShapeRenderer enemyHealthBar = new ShapeRenderer();
+    private Image[] buffBar = new Image[3];
+    private Image[] debuffBar = new Image[3];
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -93,8 +98,7 @@ public class FightScene implements Screen{
         Gdx.input.setInputProcessor(stage);  // Set the stage to process inputs      
         storage = Storage.getInstance();
         skin = storage.skin;
-        mapTexture = Storage.assetManager.get("maps/ForestFight.png", Texture.class);
-        mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);       
+        loadTextures();
         
         // Initialize sprite stuff
         charTexture = Inventory.onionTexture;
@@ -144,6 +148,31 @@ public class FightScene implements Screen{
 		System.out.println("Wep dmg: " + Player.getWeaponDmg());
 		System.out.println("Str: " + Player.getStrength());
 		System.out.println("Dmg res: " + Player.getDmgResist());
+    }
+    
+    private void loadTextures() {
+    	mapTexture = Storage.assetManager.get("maps/ForestFight.png", Texture.class);
+        mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);  
+        barrierBuffTex = Storage.assetManager.get("buffs/Barrier.png", Texture.class);
+        barrierBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 
+        bleedBuffTex = Storage.assetManager.get("buffs/Bleed.png", Texture.class);
+        bleedBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+        enrageBuffTex = Storage.assetManager.get("buffs/Enrage.png", Texture.class);
+        enrageBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+        poisonBuffTex = Storage.assetManager.get("buffs/Poison.png", Texture.class);
+        poisonBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+        stunBuffTex = Storage.assetManager.get("buffs/Stun.png", Texture.class);
+        stunBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+        hardenBuffTex = Storage.assetManager.get("buffs/Harden.png", Texture.class);
+        hardenBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+        
+        buffBar[0] = new Image(barrierBuffTex);
+        buffBar[1] = new Image(enrageBuffTex);
+        buffBar[2] = new Image(hardenBuffTex);
+        
+        debuffBar[0] = new Image(bleedBuffTex);
+        debuffBar[1] = new Image(poisonBuffTex);
+        debuffBar[2] = new Image(stunBuffTex);
     }
     
     private void newEnemy() {    	
@@ -716,10 +745,19 @@ public class FightScene implements Screen{
         		}      		
         	}      		
         }
+               
+        if(enemyHP <= 0)
+        	eDead = true;  
+        if(eBarrierActive)
+        	eBarrierActive = false;
         
-        // Bleed hits after a succesful attack
-        if(rendLeft > 0 && x != 6 && x != 7 && !eBarrierActive) {
-        	temp = storage.rend.getAttackPower() + BerserkerSkillTree.rendMastery;
+        firstAttack = false;
+    }
+    
+    private void bleedHit() {
+    	// Bleed hit after ending turn
+        if(rendLeft > 0 && !eBarrierActive) {
+        	int temp = storage.rend.getAttackPower() + BerserkerSkillTree.rendMastery;
         	enemyHP -= temp;
         	newLine();
         	combatLog.setText(combatText + "\n Rend hit the enemy for " + temp + " damage");
@@ -732,14 +770,10 @@ public class FightScene implements Screen{
         	}
    	
         	rendLeft--;
-        }        
-        
-        if(enemyHP <= 0)
-        	eDead = true;  
-        if(eBarrierActive)
-        	eBarrierActive = false;
-        
-        firstAttack = false;
+        	
+        	if(enemyHP <= 0)
+            	eDead = true; 
+        }  
     }
     
     private void enemyAttack(int attack) {
@@ -1237,13 +1271,16 @@ public class FightScene implements Screen{
     	endTurn.setColor(Color.LIGHT_GRAY);
     	endTurn.addListener(new ClickListener() {
         	@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-        		attackCount = 3;
-        		if(eAbility3 == null)
-        			enemyAttack(rand.nextInt(5));
-        		else
-        			enemyAttack(rand.nextInt(6));
-    	        turnEnded = true;
+    	    public void clicked(InputEvent event, float x, float y) {      		
+        		bleedHit();
+        		if(!eDead) {
+        			attackCount = 3;
+        			if(eAbility3 == null)
+            			enemyAttack(rand.nextInt(5));
+            		else
+            			enemyAttack(rand.nextInt(6));
+        	        turnEnded = true;
+        		}      		
     	    }});
     	
     	homeBtn = new TextButton("Return", storage.buttonStyle);
@@ -1705,6 +1742,60 @@ public class FightScene implements Screen{
         enemyHealthBar.end();
     }
     
+    private void drawBuffs() {
+    	float x1 = playerHPLbl.getX() - playerHPLbl.getWidth() / 4f;
+    	float x2 = enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f;
+    	float y = playerHPLbl.getY() - 30f;
+    	buffBatch.begin();
+    	
+    	if(barrierActive)
+    		buffBatch.draw(barrierBuffTex, x1, y, 25, 25);
+    	
+    	if(enrageLeft > 0)
+    		buffBatch.draw(enrageBuffTex, x1 + 30, y, 25, 25);
+    	
+    	if(hardenActive)
+    		buffBatch.draw(hardenBuffTex, x1 + 60, y, 25, 25);
+    	
+    	if(eBarrierActive)
+    		buffBatch.draw(barrierBuffTex, x2, y, 25, 25);
+    	
+    	if(eEnrageLeft > 0)
+    		buffBatch.draw(enrageBuffTex, x2 + 30, y, 25, 25);
+    	
+    	if(eHardenActive)
+    		buffBatch.draw(hardenBuffTex, x2 + 60, y, 25, 25);
+    	
+    	buffBatch.end();
+    }
+    
+    private void drawDebuffs() {
+    	float x1 = playerHPLbl.getX() - playerHPLbl.getWidth() / 4f;
+    	float x2 = enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f;
+    	float y = playerHPLbl.getY() - 30f;
+    	debuffBatch.begin();
+    	
+    	if(rendLeft > 0)
+    		debuffBatch.draw(bleedBuffTex, x2 + 90, y, 25, 25);
+    	
+    	if(rendLeft > 0 && BerserkerSkillTree.poisonRend == 1)
+    		debuffBatch.draw(poisonBuffTex, x2 + 120, y, 25, 25);
+    	
+    	if(enemyStunned)
+    		debuffBatch.draw(stunBuffTex, x2 + 150, y, 25, 25);
+    	
+    	if(eRendLeft > 0)
+    		debuffBatch.draw(bleedBuffTex, x1 + 90, y, 25, 25);
+    	
+    	if(ePoisonLeft > 0)
+    		debuffBatch.draw(poisonBuffTex, x1 + 120, y, 25, 25);
+    	
+    	if(playerStunned)
+    		debuffBatch.draw(stunBuffTex, x1 + 150, y, 25, 25);
+    	
+    	debuffBatch.end();
+    }
+    
     @Override
     public void dispose() {
         stage.dispose();
@@ -1795,6 +1886,8 @@ public class FightScene implements Screen{
 	    helmetBatch.setProjectionMatrix(vp.getCamera().combined);
 		chestBatch.setProjectionMatrix(vp.getCamera().combined);
 		bootsBatch.setProjectionMatrix(vp.getCamera().combined);
+		buffBatch.setProjectionMatrix(vp.getCamera().combined);
+		debuffBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	    time += delta; // Increment time by frame time
 	    rotationTime += delta;
@@ -2040,6 +2133,8 @@ public class FightScene implements Screen{
 	    }
 	    
 	    drawHealthBar();
+	    drawBuffs();
+	    drawDebuffs();
 	    
     	update();
         stage.act();
@@ -2059,6 +2154,8 @@ public class FightScene implements Screen{
 		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		playerHealthBatch.setProjectionMatrix(vp.getCamera().combined);
 		enemyHealthBatch.setProjectionMatrix(vp.getCamera().combined);
+		buffBatch.setProjectionMatrix(vp.getCamera().combined);
+		debuffBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

@@ -16,6 +16,7 @@ public class DesktopLauncher {
 
         // Hide window decorations to make it appear borderless
         config.setDecorated(false);
+        config.setWindowIcon("player/MapIcon.png");
 
         int samples = 32;
         config.setBackBufferConfig(8, 8, 8, 8, 16, 0, samples);

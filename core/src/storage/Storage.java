@@ -136,6 +136,12 @@ public class Storage {
 		assetManager.load("BattleOver.png", Texture.class, textureParameter);		
 		assetManager.load("player/Onion.png", Texture.class, textureParameter);
 		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);
+		assetManager.load("buffs/Barrier.png", Texture.class, textureParameter);
+		assetManager.load("buffs/Enrage.png", Texture.class, textureParameter);
+		assetManager.load("buffs/Bleed.png", Texture.class, textureParameter);
+		assetManager.load("buffs/Poison.png", Texture.class, textureParameter);
+		assetManager.load("buffs/Stun.png", Texture.class, textureParameter);
+		assetManager.load("buffs/Harden.png", Texture.class, textureParameter);
 	}
 	
 	// Load items
