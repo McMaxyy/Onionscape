@@ -1,19 +1,26 @@
 
 newskin.png
-size: 256, 256
+size: 512, 512
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
+ButtonButton
+  rotate: false
+  xy: 1, 273
+  size: 247, 149
+  orig: 247, 149
+  offset: 0, 0
+  index: -1
 check-off
   rotate: false
-  xy: 52, 17
+  xy: 1, 91
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 textfield
   rotate: false
-  xy: 52, 17
+  xy: 1, 91
   size: 14, 14
   split: 3, 3, 3, 3
   orig: 14, 14
@@ -21,14 +28,14 @@ textfield
   index: -1
 check-on
   rotate: false
-  xy: 217, 108
+  xy: 30, 113
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 cursor
   rotate: false
-  xy: 233, 119
+  xy: 1, 86
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -36,14 +43,14 @@ cursor
   index: -1
 default
   rotate: false
-  xy: 1, 177
+  xy: 1, 424
   size: 254, 77
   orig: 254, 77
   offset: 0, 0
   index: -1
 default-pane
   rotate: false
-  xy: 239, 141
+  xy: 250, 419
   size: 5, 3
   split: 1, 1, 1, 1
   orig: 5, 3
@@ -51,7 +58,7 @@ default-pane
   index: -1
 default-rect-pad
   rotate: false
-  xy: 239, 141
+  xy: 250, 419
   size: 5, 3
   split: 1, 1, 1, 1
   orig: 5, 3
@@ -59,7 +66,7 @@ default-rect-pad
   index: -1
 default-pane-noborder
   rotate: false
-  xy: 59, 14
+  xy: 102, 182
   size: 1, 1
   split: 0, 0, 0, 0
   orig: 1, 1
@@ -67,7 +74,7 @@ default-pane-noborder
   index: -1
 default-rect
   rotate: false
-  xy: 84, 28
+  xy: 17, 102
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -75,7 +82,7 @@ default-rect
   index: -1
 default-rect-down
   rotate: false
-  xy: 217, 43
+  xy: 30, 108
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -83,7 +90,7 @@ default-rect-down
   index: -1
 default-round
   rotate: false
-  xy: 217, 70
+  xy: 145, 229
   size: 12, 20
   split: 5, 5, 5, 4
   pad: 4, 4, 1, 1
@@ -92,7 +99,7 @@ default-round
   index: -1
 default-round-down
   rotate: false
-  xy: 217, 48
+  xy: 167, 251
   size: 12, 20
   split: 5, 5, 5, 4
   pad: 4, 4, 1, 1
@@ -101,7 +108,7 @@ default-round-down
   index: -1
 default-round-large
   rotate: false
-  xy: 30, 11
+  xy: 145, 251
   size: 20, 20
   split: 5, 5, 5, 4
   orig: 20, 20
@@ -109,7 +116,7 @@ default-round-large
   index: -1
 default-scroll
   rotate: false
-  xy: 217, 124
+  xy: 473, 481
   size: 20, 20
   split: 2, 2, 2, 2
   orig: 20, 20
@@ -117,7 +124,7 @@ default-scroll
   index: -1
 default-select
   rotate: false
-  xy: 1, 11
+  xy: 1, 107
   size: 27, 20
   split: 4, 14, 4, 4
   orig: 27, 20
@@ -125,7 +132,7 @@ default-select
   index: -1
 default-select-selection
   rotate: false
-  xy: 246, 152
+  xy: 46, 124
   size: 3, 3
   split: 1, 1, 1, 1
   orig: 3, 3
@@ -133,7 +140,7 @@ default-select-selection
   index: -1
 default-slider
   rotate: false
-  xy: 1, 1
+  xy: 495, 493
   size: 8, 8
   split: 2, 2, 2, 2
   orig: 8, 8
@@ -141,14 +148,14 @@ default-slider
   index: -1
 default-slider-knob
   rotate: false
-  xy: 246, 157
+  xy: 473, 461
   size: 9, 18
   orig: 9, 18
   offset: 0, 0
   index: -1
 default-splitpane
   rotate: false
-  xy: 52, 12
+  xy: 257, 426
   size: 5, 3
   split: 0, 5, 0, 0
   orig: 5, 3
@@ -156,7 +163,7 @@ default-splitpane
   index: -1
 default-splitpane-vertical
   rotate: false
-  xy: 11, 4
+  xy: 73, 147
   size: 3, 5
   split: 0, 0, 0, 5
   orig: 3, 5
@@ -164,7 +171,7 @@ default-splitpane-vertical
   index: -1
 default-window
   rotate: false
-  xy: 217, 146
+  xy: 73, 170
   size: 27, 29
   split: 4, 3, 20, 3
   orig: 27, 29
@@ -172,70 +179,70 @@ default-window
   index: -1
 selection
   rotate: false
-  xy: 233, 116
+  xy: 118, 198
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 tree-minus
   rotate: false
-  xy: 68, 17
+  xy: 73, 154
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 tree-plus
   rotate: false
-  xy: 217, 92
+  xy: 102, 185
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 white
   rotate: false
-  xy: 239, 136
+  xy: 89, 165
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 BonfireIcon
   rotate: false
-  xy: 1, 33
+  xy: 1, 201
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 BossIcon
   rotate: false
-  xy: 73, 105
+  xy: 329, 431
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 FightIcon
   rotate: false
-  xy: 1, 105
+  xy: 257, 431
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 MerchIcon
   rotate: false
-  xy: 73, 33
+  xy: 1, 129
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 RandIcon
   rotate: false
-  xy: 145, 105
+  xy: 73, 201
   size: 70, 70
   orig: 70, 70
   offset: 0, 0
   index: -1
 StrEnemyIcon
   rotate: false
-  xy: 145, 33
+  xy: 401, 431
   size: 70, 70
   orig: 70, 70
   offset: 0, 0

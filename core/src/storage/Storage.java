@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -19,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class Storage {
 	private static Storage instance = null;
 	public Skin skin;
-	public TextButton.TextButtonStyle buttonStyle;
+	public TextButton.TextButtonStyle buttonStyle, buttonStyleBig;
 	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol;
 	public BitmapFont font, fontBig, fontSmol;
 	private List<Weapons> playerWeapons = new ArrayList<>();
@@ -371,6 +369,9 @@ public class Storage {
         // Create a new style for button
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
         buttonStyle.font = font; 
+        
+        buttonStyleBig = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
+        buttonStyleBig.font = fontBig; 
 
         labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyle.font = font;  

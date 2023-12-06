@@ -1169,7 +1169,7 @@ public class FightScene implements Screen{
     	
     	combatLog = new Label("", storage.labelStyleSmol);
     	
-    	attackBtn = new TextButton("Attack", storage.buttonStyle);
+    	attackBtn = new TextButton("Attack", storage.buttonStyleBig);
     	attackBtn.setColor(Color.GRAY);
     	attackBtn.setName("Attack");
     	attackBtn.addListener(new ClickListener() {

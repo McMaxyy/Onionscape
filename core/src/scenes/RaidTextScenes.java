@@ -44,7 +44,7 @@ public class RaidTextScenes implements Screen{
 		skin = storage.skin;
 		storage.createFont();
 		centerX = vp.getWorldWidth() / 2f;
-		GameScreen.newGame = false;
+//		GameScreen.newGame = false;
 		
 		createComponents();
 		setScene();
