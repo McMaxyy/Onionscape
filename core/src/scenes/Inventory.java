@@ -77,6 +77,7 @@ public class Inventory implements Screen {
 	public static Texture woodenShieldTexture = Storage.assetManager.get("weapons/inventory/WoodenShield.png", Texture.class);
 	public static Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
 	public static Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
+	public static Texture knifeTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
 	public static Texture apTexture = Storage.assetManager.get("items/AttackBoost.png", Texture.class);
 	public static Texture dpTexture = Storage.assetManager.get("items/DefenseBoost.png", Texture.class);
 	public static Texture hpTexture = Storage.assetManager.get("items/HealthBoost.png", Texture.class);
@@ -179,6 +180,7 @@ public class Inventory implements Screen {
 		woodenShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		healthPotionTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		bombTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		knifeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		apTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		dpTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		hpTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
@@ -646,6 +648,8 @@ public class Inventory implements Screen {
 				return healthPotionTexture;
 			case "Bomb":
 				return bombTexture;
+			case "Throwing Knife":
+				return knifeTexture;
 			case "Swing":
 				return swingTexture;
 			case "Rend":
@@ -1501,6 +1505,10 @@ public class Inventory implements Screen {
 	    		storage.inventoryItems(storage.bomb, "Remove");
 	    		storage.equippedItems(storage.bomb, "Add");
 	    		break;
+	    	case "Throwing Knife":
+	    		storage.inventoryItems(storage.throwingKnife, "Remove");
+	    		storage.equippedItems(storage.throwingKnife, "Add");
+	    		break;
 	    	case "Attack Boost":
 	    		storage.inventoryItems(storage.apBoost, "Remove");
 	    		storage.equippedItems(storage.apBoost, "Add");
@@ -1601,6 +1609,10 @@ public class Inventory implements Screen {
 	    	case "Bomb":
 	    		storage.inventoryItems(storage.bomb, "Add");
 	    		storage.equippedItems(storage.bomb, "Remove");
+	    		break;
+	    	case "Throwing Knife":
+	    		storage.inventoryItems(storage.throwingKnife, "Add");
+	    		storage.equippedItems(storage.throwingKnife, "Remove");
 	    		break;
 	    	case "Attack Boost":
 	    		storage.inventoryItems(storage.apBoost, "Add");

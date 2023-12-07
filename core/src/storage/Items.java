@@ -26,16 +26,24 @@ public abstract class Items {
 
 class HealthPot extends Items{
 	public HealthPot() {
-		setValue(4);
+		setValue(5);
 		setItemName("Health Potion");
-		setID(1);
+		setID(0);
 	}
 }
 
 class Bomb extends Items{
 	public Bomb() {
-		setValue(3);
+		setValue(10);
 		setItemName("Bomb");
+		setID(1);
+	}
+}
+
+class ThrowingKnife extends Items{
+	public ThrowingKnife() {
+		setValue(5);
+		setItemName("Throwing Knife");
 		setID(2);
 	}
 }
@@ -162,7 +170,7 @@ class ExpBoost extends Items{
 
 class APBoost extends Items{
 	public APBoost() {
-		setValue(10);
+		setValue(12);
 		setItemName("Attack Boost");
 		setID(18);
 	}
@@ -170,7 +178,7 @@ class APBoost extends Items{
 
 class DPBoost extends Items{
 	public DPBoost() {
-		setValue(10);
+		setValue(12);
 		setItemName("Defense Boost");
 		setID(19);
 	}
@@ -178,7 +186,7 @@ class DPBoost extends Items{
 
 class HPBoost extends Items{
 	public HPBoost() {
-		setValue(10);
+		setValue(12);
 		setItemName("Health Boost");
 		setID(20);
 	}

@@ -45,7 +45,7 @@ public class FightScene implements Screen{
     private TextButton reward1, reward2, reward3;
     private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
     private Texture charTexture, enemyTexture, mapTexture, barrierBuffTex, bleedBuffTex, enrageBuffTex,
-    poisonBuffTex, stunBuffTex, hardenBuffTex;
+    poisonBuffTex, stunBuffTex, hardenBuffTex, weakenBuffTex, thornsBuffTex;
     private SpriteBatch charBatch = new SpriteBatch();
     private SpriteBatch enemyBatch = new SpriteBatch();
     private SpriteBatch weaponBatch = new SpriteBatch();
@@ -68,7 +68,7 @@ public class FightScene implements Screen{
     private Label ab1UseLbl, ab2UseLbl, ab3UseLbl, ab4UseLbl;
     private GameScreen gameScreen;
     private int rendLeft, attackCount = 3, eAttackCount = 0, bludgeonCount = 0, doubleSwingCount = 0,
-    		weakenLeft, thornsLeft, enrageLeft;
+    		weakenLeft, thornsLeft, enrageLeft, eWeakenLeft;
     private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false, 
     		riposteActive, firstLoad = true;
     private int eRendLeft, ePoisonLeft, eEnrageLeft;
@@ -87,8 +87,6 @@ public class FightScene implements Screen{
     public static boolean normal, elite, boss;
     private ShapeRenderer playerHealthBar = new ShapeRenderer();
     private ShapeRenderer enemyHealthBar = new ShapeRenderer();
-    private Image[] buffBar = new Image[3];
-    private Image[] debuffBar = new Image[3];
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -121,6 +119,16 @@ public class FightScene implements Screen{
         
         if(Player.weaponState == 0)
         	Player.setWeaponDmg(0);
+        
+        // Debuffs from random encounters
+        if(RaidTextScenes.poison)
+        	ePoisonLeft = 3;
+        
+        if(RaidTextScenes.enrage)
+        	enrageLeft = 3;
+        
+        if(RaidTextScenes.weaken)
+        	eWeakenLeft = 2;
         
         storage.createFont();       
         createComponents();
@@ -165,14 +173,10 @@ public class FightScene implements Screen{
         stunBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
         hardenBuffTex = Storage.assetManager.get("buffs/Harden.png", Texture.class);
         hardenBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-        
-        buffBar[0] = new Image(barrierBuffTex);
-        buffBar[1] = new Image(enrageBuffTex);
-        buffBar[2] = new Image(hardenBuffTex);
-        
-        debuffBar[0] = new Image(bleedBuffTex);
-        debuffBar[1] = new Image(poisonBuffTex);
-        debuffBar[2] = new Image(stunBuffTex);
+        weakenBuffTex = Storage.assetManager.get("buffs/Weaken.png", Texture.class);
+        weakenBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+        thornsBuffTex = Storage.assetManager.get("buffs/Thorns.png", Texture.class);
+        thornsBuffTex.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
     }
     
     private void newEnemy() {    	
@@ -328,6 +332,11 @@ public class FightScene implements Screen{
 	            			Player.setMaxHP(70);
 	            			Player.setDmgResist(0);
 	            			Player.setWeaponDmg(0);
+	        			}
+	        			else {
+	        				storage.equippedArmor(null, "Clear");
+	        				storage.equippedWeapons(null, "Clear");
+	        				storage.equippedItems(null, "Clear");
 	        			}
 	        			gameScreen.setCurrentState(GameScreen.HOME);
 	        	    }});
@@ -486,6 +495,8 @@ public class FightScene implements Screen{
         		break;
 			case "Bomb":
 				storage.equippedItems(storage.bomb, "Add");
+			case "Throwing Knife":
+				storage.equippedItems(storage.throwingKnife, "Add");
         		break;		
 			case "Attack Boost":
 				storage.equippedItems(storage.apBoost, "Add");
@@ -830,6 +841,10 @@ public class FightScene implements Screen{
     			if(eBarrierActive)
     				attackType = "Attack";
     			break;
+    		case "Weaken":
+    			if(eWeakenLeft > 0)
+    				attackType = "Attack";
+    			break;
     		}
     	}
     	
@@ -842,7 +857,7 @@ public class FightScene implements Screen{
     			eEnrageLeft--;
     		}
     			
-        	temp -= Player.getDmgResist(); // Lower damage via damage resist stat    	
+        	temp -= (Player.getDmgResist() / 3); // Lower damage via damage resist stat    	
         	
         	if(hardenActive) {
         		hardenActive = false;
@@ -858,6 +873,14 @@ public class FightScene implements Screen{
                 		temp -= storage.barbedArmor.getAttackPower();
                 		thornsLeft--;
                 	}        			
+        			
+        			if(eWeakenLeft > 0) {
+        				int weak = temp / 4;
+        				if(weak <= 0)
+        					weak = 1;
+        				temp += weak;
+        				eWeakenLeft--;
+        			}
         			
         			Player.loseHP(temp);
                     newLine();
@@ -1291,6 +1314,7 @@ public class FightScene implements Screen{
     			stage.clear();
     			if(Merchant.raid) {
     				GameScreen.newGame = false;
+    				RaidTextScenes.enrage = RaidTextScenes.poison = RaidTextScenes.weaken = false;
     				gameScreen.setCurrentState(GameScreen.FOREST_MAP);
     			}
     			else {
@@ -1471,6 +1495,16 @@ public class FightScene implements Screen{
     				enemyHP -= enemyHP / 10;
     				attackCount--;
     	    		break;
+    	    	case "Throwing Knife":
+    	    		storage.equippedItems(storage.throwingKnife, "Remove");
+    	    		newLine();
+    	    		combatLog.setText(combatText + "\n Player threw a Knife which dealt " + 5 + " damage");
+    				enemyHP -= 5;
+    				rendLeft = 2;
+    				newLine();
+    	    		combatLog.setText(combatText + "\n The Throwing Knife also inflicts bleed");
+    				attackCount--;
+    				break;
     	    	case "Attack Boost":
     	    		storage.equippedItems(storage.apBoost, "Remove");
     	    		Home.apBoost = true;
@@ -1655,6 +1689,8 @@ public class FightScene implements Screen{
 				return Inventory.healthPotionTexture;
 			case "Bomb":
 				return Inventory.bombTexture;
+			case "Throwing Knife":
+				return Inventory.knifeTexture;
 			case "Swing":
 				return Inventory.swingTexture;
 			case "Rend":
@@ -1757,6 +1793,9 @@ public class FightScene implements Screen{
     	if(hardenActive)
     		buffBatch.draw(hardenBuffTex, x1 + 60, y, 25, 25);
     	
+    	if(thornsLeft > 0)
+    		buffBatch.draw(thornsBuffTex, x1 + 90, y, 25, 25);
+    	
     	if(eBarrierActive)
     		buffBatch.draw(barrierBuffTex, x2, y, 25, 25);
     	
@@ -1784,14 +1823,20 @@ public class FightScene implements Screen{
     	if(enemyStunned)
     		debuffBatch.draw(stunBuffTex, x2 + 150, y, 25, 25);
     	
+    	if(weakenLeft > 0)
+    		debuffBatch.draw(weakenBuffTex, x2 + 180, y, 25, 25);
+    	
     	if(eRendLeft > 0)
-    		debuffBatch.draw(bleedBuffTex, x1 + 90, y, 25, 25);
+    		debuffBatch.draw(bleedBuffTex, x1 + 120, y, 25, 25);
     	
     	if(ePoisonLeft > 0)
-    		debuffBatch.draw(poisonBuffTex, x1 + 120, y, 25, 25);
+    		debuffBatch.draw(poisonBuffTex, x1 + 150, y, 25, 25);
     	
     	if(playerStunned)
-    		debuffBatch.draw(stunBuffTex, x1 + 150, y, 25, 25);
+    		debuffBatch.draw(stunBuffTex, x1 + 180, y, 25, 25);
+    	
+    	if(eWeakenLeft > 0)
+    		debuffBatch.draw(weakenBuffTex, x1 + 210, y, 25, 25);
     	
     	debuffBatch.end();
     }

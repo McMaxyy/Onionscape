@@ -46,6 +46,7 @@ public class ForestMap implements Screen{
 	private Random rand = new Random();
 	private boolean moved = false;
 	public static int encounter = 0, ex;
+	public static boolean newRaid = true;
 	
 	public ForestMap(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -63,7 +64,7 @@ public class ForestMap implements Screen{
 		Merchant.raid = true;
 		FightScene.normal = FightScene.elite = FightScene.boss = false;
 				
-		if(GameScreen.newGame) {	
+		if(newRaid) {	
 			createComponents();	
 			location = 0;
 			ex = rand.nextInt(3);
@@ -908,9 +909,12 @@ public class ForestMap implements Screen{
 	}
 	
 	private void btnClick(String action) {
+		if(newRaid)
+			newRaid = false;
 		disableButtons();
 		moved = true;
-		enableButtons();	
+		enableButtons();
+		int x = rand.nextInt(11);
 		
 		switch(action) {
 		case "F":
@@ -919,15 +923,25 @@ public class ForestMap implements Screen{
 			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);			
 			break;
 		case "R":
-			if(rand.nextInt(5) < 4) {
+			if(x <= 6) {
 				encounter = 1;
 				gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
 			}
-			else {
+			else if(x == 7){
 				FightScene.elite = FightScene.boss = false;
 				FightScene.normal = true;
 				gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
 			}
+			else if(x == 8){
+				encounter = 1;
+				gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
+			}
+			else if(x == 9){
+				encounter = 2;
+				gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
+			}
+			else
+				gameScreen.setCurrentState(GameScreen.MERCHANT);
 			break;
 		case "B":
 			FightScene.normal = FightScene.elite = false;

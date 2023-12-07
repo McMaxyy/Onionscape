@@ -182,6 +182,7 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			GameScreen.newGame = true;
+    			ForestMap.newRaid = true;
     			story = true;
     			stageLvl = 1;
     			if(freshLoad || Inventory.characterTable.getChildren().size == 0) {
@@ -261,7 +262,7 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryItems(storage.healthPot, "Add");
-    			storage.inventoryItems(storage.bomb, "Add");
+    			storage.inventoryItems(storage.throwingKnife, "Add");
     			storage.inventoryItems(storage.itemSwing, "Add");
     			storage.inventoryItems(storage.apBoost, "Add");
     			storage.inventoryItems(storage.dpBoost, "Add");

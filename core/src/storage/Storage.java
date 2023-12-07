@@ -140,11 +140,14 @@ public class Storage {
 		assetManager.load("buffs/Poison.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Stun.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Harden.png", Texture.class, textureParameter);
+		assetManager.load("buffs/Weaken.png", Texture.class, textureParameter);
+		assetManager.load("buffs/Thorns.png", Texture.class, textureParameter);
 	}
 	
 	// Load items
 	public Items healthPot = new HealthPot();
 	public Items bomb = new Bomb();
+	public Items throwingKnife = new ThrowingKnife();
 	public Items expBoost = new ExpBoost();
 	public Items apBoost = new APBoost();
 	public Items dpBoost = new DPBoost();
