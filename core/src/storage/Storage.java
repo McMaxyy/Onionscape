@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 
 public class Storage {
 	private static Storage instance = null;
@@ -142,6 +144,7 @@ public class Storage {
 		assetManager.load("buffs/Harden.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Weaken.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Thorns.png", Texture.class, textureParameter);
+		assetManager.load("white.PNG", Texture.class, textureParameter);
 	}
 	
 	// Load items
@@ -368,12 +371,20 @@ public class Storage {
         fontBig = generator.generateFont(parameter);
         parameter.size = 18;
         fontSmol = generator.generateFont(parameter);
+        Texture borderTextureUp = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton.9.png"));
+        Texture borderTextureDown = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton-down.9.png"));
+        NinePatch borderPatchUp = new NinePatch(borderTextureUp, 1, 1, 1, 1);
+        NinePatch borderPatchDown = new NinePatch(borderTextureDown, 1, 1, 1, 1);
         
         // Create a new style for button
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
+        buttonStyle.up = new NinePatchDrawable(borderPatchUp);
+        buttonStyle.down = new NinePatchDrawable(borderPatchDown);
         buttonStyle.font = font; 
         
         buttonStyleBig = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
+        buttonStyleBig.up = new NinePatchDrawable(borderPatchUp);
+        buttonStyleBig.down = new NinePatchDrawable(borderPatchDown);
         buttonStyleBig.font = fontBig; 
 
         labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));

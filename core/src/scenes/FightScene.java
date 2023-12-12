@@ -45,7 +45,7 @@ public class FightScene implements Screen{
     private TextButton reward1, reward2, reward3;
     private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
     private Texture charTexture, enemyTexture, mapTexture, barrierBuffTex, bleedBuffTex, enrageBuffTex,
-    poisonBuffTex, stunBuffTex, hardenBuffTex, weakenBuffTex, thornsBuffTex;
+    poisonBuffTex, stunBuffTex, hardenBuffTex, weakenBuffTex, thornsBuffTex, whiteTexture;
     private SpriteBatch charBatch = new SpriteBatch();
     private SpriteBatch enemyBatch = new SpriteBatch();
     private SpriteBatch weaponBatch = new SpriteBatch();
@@ -159,6 +159,7 @@ public class FightScene implements Screen{
     }
     
     private void loadTextures() {
+    	whiteTexture = Storage.assetManager.get("white.PNG", Texture.class);
     	mapTexture = Storage.assetManager.get("maps/ForestFight.png", Texture.class);
         mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);  
         barrierBuffTex = Storage.assetManager.get("buffs/Barrier.png", Texture.class);
@@ -1377,7 +1378,7 @@ public class FightScene implements Screen{
     	
     	combatLog.setColor(Color.BLACK);
     	Container<Label> container = new Container<Label>(combatLog);
-    	container.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("white.png"))));
+    	container.setBackground(new TextureRegionDrawable(new TextureRegion(whiteTexture)));
     	container.setBounds(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 1.8f, 600, 300);
     	container.align(Align.topLeft);
     	combatLog.setSize(600, 300);
