@@ -11,7 +11,7 @@ public class Player {
 	private static int strength = 3;
 	private static int weaponDmg = 0;
 	private static int dmgResist = 0;
-	private static int coins = 30;
+	private static int coins = 200;
 	private static int level = 1;
 	private static int exp = 0;
 	private static int levelCap = 20;

@@ -108,10 +108,12 @@ public class Merchant implements Screen{
 	            gearBtns[index].addListener(new InputListener() {
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    	gearName.setText(gearBtns[num].getName() + "\nCost: " + cost);
-	                    gearName.setAlignment(Align.center);
-	                	gearName.setVisible(true);	                  	                    
-	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);            	
+	                	if(item.startsWith("Healthy") || item.startsWith("Strong") || item.startsWith("Defensive")) {
+		                	gearName.setText(gearBtns[num].getName() + "\nCost: " + cost);
+		                    gearName.setAlignment(Align.center);
+		                	gearName.setVisible(true);	                  	                    
+		                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f); 
+	                    }           	
 	                }
 
 	                @Override
@@ -587,16 +589,16 @@ public class Merchant implements Screen{
 				
 				final int cost = itemValue;
 				final String item = discountBtns[i].getName().toString();
-				
+								
 				discountBtns[i].addListener(new InputListener() {
 	                @Override
-	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-	                	gearName.setText(item + "\nCost: " + cost / 2);
-	                    if(cost / 2 == 0)
-	                    	gearName.setText(item + "\nCost: " + cost);
-	                    gearName.setAlignment(Align.center);
-	                	gearName.setVisible(true);	                  	                    
-	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);
+	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {	                	
+	                		gearName.setText(item + "\nCost: " + cost / 2);
+		                    if(cost / 2 == 0)
+		                    	gearName.setText(item + "\nCost: " + cost);
+		                    gearName.setAlignment(Align.center);
+		                	gearName.setVisible(true);	                  	                    
+		                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.2f);                	
 	                }
 
 	                @Override

@@ -2,23 +2,12 @@ package com.onionscape.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import scenes.BerserkerSkillTree;
-import scenes.FightScene;
-import scenes.ForestMap;
-import scenes.Home;
-import scenes.Inventory;
-import scenes.LoadingScreen;
-import scenes.Merchant;
-import scenes.RaidTextScenes;
-import scenes.Settings;
-import scenes.StartScreen;
+import scenes.*;
 
 public class GameScreen implements Screen {
 	private Game game;
@@ -32,6 +21,7 @@ public class GameScreen implements Screen {
 	private StartScreen startScreen;
 	private Merchant merchant;
 	private Settings settings;
+	private SlotMinigame slot;
 	private Viewport viewport;
 	public static boolean newGame = true;
 	
@@ -52,6 +42,7 @@ public class GameScreen implements Screen {
     public static final int START_SCREEN = 7;
     public static final int MERCHANT = 8;
     public static final int SETTINGS = 9;
+    public static final int SLOT_GAME = 10;
     private int currentState;
 
 	public GameScreen(Game game) {		
@@ -104,6 +95,10 @@ public class GameScreen implements Screen {
 	        	this.settings = new Settings(viewport, game, this);
 	            Gdx.input.setInputProcessor(settings.stage);
 	            break;
+	        case SLOT_GAME:
+	        	this.slot = new SlotMinigame(viewport, game, this);
+	            Gdx.input.setInputProcessor(slot.stage);
+	            break;
 	    }
 	}
 
@@ -142,6 +137,9 @@ public class GameScreen implements Screen {
 	        	break;
 	        case SETTINGS:
 	        	settings.render(delta);
+	        	break;
+	        case SLOT_GAME:
+	        	slot.render(delta);
 	        	break;
 	    }
 	}
@@ -196,6 +194,7 @@ public class GameScreen implements Screen {
 		textScene.dispose();
 		merchant.dispose();
 		settings.dispose();
+		slot.dispose();
 	}
 
 }

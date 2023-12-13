@@ -22,7 +22,7 @@ public class Settings implements Screen{
 	private Storage storage;
 	private Game game;
 	private GameScreen gameScreen; 
-	private TextButton fullscreenBtn, borderlessBtn, backBtn;
+	private TextButton fullscreenBtn, borderlessBtn, backBtn, res1, res2;
 	
 	public Settings(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -38,6 +38,34 @@ public class Settings implements Screen{
 	}
 
 	private void createComponents() {
+		res1 = new TextButton("1080p", storage.buttonStyle);
+		res1.setColor(Color.LIGHT_GRAY);
+		res1.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			GameScreen.SELECTED_HEIGHT = 1080;
+    			GameScreen.SELECTED_WIDTH = 1920;
+    			gameScreen.resize(1920, 1080);
+    			gameScreen.setCurrentState(GameScreen.SETTINGS);   			
+    	    }});
+		res1.setSize(300, 100);
+		res1.setPosition(vp.getWorldWidth() / 4f, vp.getWorldHeight() / 3f);
+		stage.addActor(res1);
+		
+		res2 = new TextButton("Ass res", storage.buttonStyle);
+		res2.setColor(Color.LIGHT_GRAY);
+		res2.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			GameScreen.SELECTED_HEIGHT = 1200;
+    			GameScreen.SELECTED_WIDTH = 1920;
+    			gameScreen.resize(1920, 1200);
+    			gameScreen.setCurrentState(GameScreen.SETTINGS);   			
+    	    }});
+		res2.setSize(300, 100);
+		res2.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 3f);
+		stage.addActor(res2);
+		
 		fullscreenBtn = new TextButton("Fullscreen", storage.buttonStyle);
 		fullscreenBtn.setColor(Color.LIGHT_GRAY);
 		fullscreenBtn.addListener(new ClickListener() {

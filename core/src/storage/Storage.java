@@ -380,7 +380,7 @@ public class Storage {
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
         buttonStyle.up = new NinePatchDrawable(borderPatchUp);
         buttonStyle.down = new NinePatchDrawable(borderPatchDown);
-        buttonStyle.font = font; 
+        buttonStyle.font = font;
         
         buttonStyleBig = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
         buttonStyleBig.up = new NinePatchDrawable(borderPatchUp);

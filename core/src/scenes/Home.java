@@ -84,28 +84,12 @@ public class Home implements Screen {
 		coins.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.2f);
 		stage.addActor(coins);
 		
-		fight = new TextButton("Fight", storage.buttonStyle);
+		fight = new TextButton("Slots", storage.buttonStyle);
 		fight.setColor(Color.LIGHT_GRAY);
 		fight.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			saveData.saveGame();
-    			story = false;
-    			storage.equippedArmor(null, "Clear");
-    			storage.equippedWeapons(null, "Clear");
-    			storage.equippedItems(null, "Clear");   			
-    			Player.weaponState = 1;
-    			storage.equippedArmor(storage.healthyIronHelmet, "Add");
-    			storage.equippedArmor(storage.healthyIronChest, "Add");
-    			storage.equippedArmor(storage.healthyIronBoots, "Add");
-    			storage.equippedWeapons(storage.healthyIronAxe, "Add");
-    			storage.equippedWeapons(storage.healthyIronShield, "Add");
-    			stageLvl = 1;
-    			if(freshLoad) {
-    				gameScreen.setCurrentState(GameScreen.INVENTORY);
-    				freshLoad = false;
-    			}
-    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+    			gameScreen.setCurrentState(GameScreen.SLOT_GAME);
     	    }});
 		fight.setSize(150, 100);
 		fight.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
