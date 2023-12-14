@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+import com.onionscape.game.MusicManager;
 
 import player.Player;
 import storage.Abilities;
@@ -41,7 +42,7 @@ public class FightScene implements Screen{
     Random rand = new Random();
     private Game game;
     public Stage stage;
-    private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, homeBtn;
+    private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, backBtn;
     private TextButton reward1, reward2, reward3;
     private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
     private Texture charTexture, enemyTexture, mapTexture, barrierBuffTex, bleedBuffTex, enrageBuffTex,
@@ -68,7 +69,7 @@ public class FightScene implements Screen{
     private Label ab1UseLbl, ab2UseLbl, ab3UseLbl, ab4UseLbl;
     private GameScreen gameScreen;
     private int rendLeft, attackCount = 3, eAttackCount = 0, bludgeonCount = 0, doubleSwingCount = 0,
-    		weakenLeft, thornsLeft, enrageLeft, eWeakenLeft;
+    		weakenLeft, thornsLeft, enrageLeft, eWeakenLeft, eThornsLeft;
     private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false, 
     		riposteActive, firstLoad = true;
     private int eRendLeft, ePoisonLeft, eEnrageLeft;
@@ -319,8 +320,8 @@ public class FightScene implements Screen{
     		newLine();
 	        if(pDead) {
 	        	combatLog.setText(combatText + "\n Player died");
-	        	homeBtn.clearListeners();
-	        	homeBtn.addListener(new ClickListener() {
+	        	backBtn.clearListeners();
+	        	backBtn.addListener(new ClickListener() {
 	        		@Override
 	        	    public void clicked(InputEvent event, float x, float y) {
 	        			Player.gainCoins(Player.getRaidCoins());
@@ -367,7 +368,7 @@ public class FightScene implements Screen{
     private void chooseReward() {
     	int x;
     	
-    	x = rand.nextInt(1, 11);
+    	x = rand.nextInt(1, 14);
     	switch(x) {
     	case 1:
     	case 2:
@@ -391,6 +392,10 @@ public class FightScene implements Screen{
     	case 10:
     		reward1.setText("Experience Boost");
     		break;
+    	case 11:
+    	case 12:
+    	case 13:
+    		reward1.setText("Throwing Knife");
     	}
     	
     	x = rand.nextInt(1, 15);
@@ -721,6 +726,7 @@ public class FightScene implements Screen{
         newLine();
         
         if(hit) {
+//        	MusicManager.getInstance().playSoundEffect(1);
         	if(enrageLeft > 0) {
         		temp += storage.enrage.getAttackPower();
         		enrageLeft--;
@@ -740,7 +746,7 @@ public class FightScene implements Screen{
         	
         	if(!eBarrierActive)
         		enemyHP -= temp;
-        	
+        	       	
         	if(x == 0 && !eBarrierActive)
         		combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
         	else if(x == 1 || x == 3 || x == 4 || x == 5 || x == 13 || x == 14 && !eBarrierActive)
@@ -748,12 +754,22 @@ public class FightScene implements Screen{
         	else if(eBarrierActive)
         		combatLog.setText(combatText + "\n Enemy blocked the attack");
         	
+			if(eThornsLeft > 0) {
+				int newTemp = temp / 2;
+				if(newTemp <= 0)
+					newTemp = 1;
+				newLine();
+				combatLog.setText(combatText + "\n Player hit with Thorns for " + newTemp + " damage");
+			}
+        	
         	// Life steal mastery
         	if(BerserkerSkillTree.lifeSteal == 1) {
         		if(Player.getHp() < Player.getMaxHP()) {
         			Player.gainHP(temp / 3);
         			if(Player.getHp() > Player.getMaxHP())
         				Player.setHp(Player.getMaxHP());
+        		newLine();
+        		combatLog.setText(combatText + "\n Player healed with Life Steal for " + temp);
         		}      		
         	}      		
         }
@@ -846,6 +862,10 @@ public class FightScene implements Screen{
     			if(eWeakenLeft > 0)
     				attackType = "Attack";
     			break;
+    		case "Thorns":
+    			if(eThornsLeft > 0)
+    				attackType = "Attack";
+    			break;
     		}
     	}
     	
@@ -870,6 +890,7 @@ public class FightScene implements Screen{
       	
         	if(!barrierActive && !enemyStunned) {
         		if(!riposteActive) {
+//        			MusicManager.getInstance().playSoundEffect(2);
         			if(thornsLeft > 0) {
                 		temp -= storage.barbedArmor.getAttackPower();
                 		thornsLeft--;
@@ -974,6 +995,10 @@ public class FightScene implements Screen{
     		case "Barrier":
     			eBarrierActive = true;
     			combatLog.setText(combatText + "\n Enemy activated Barrier");
+    			break;
+    		case "Thorns":
+    			eThornsLeft = 3;
+    			combatLog.setText(combatText + "\n Enemy activated Thorns");
     			break;
     		}
     	}
@@ -1307,12 +1332,12 @@ public class FightScene implements Screen{
         		}      		
     	    }});
     	
-    	homeBtn = new TextButton("Return", storage.buttonStyle);
-    	homeBtn.setColor(Color.LIGHT_GRAY);
-    	homeBtn.addListener(new ClickListener() {
+    	backBtn = new TextButton("Return", storage.buttonStyle);
+    	backBtn.setColor(Color.LIGHT_GRAY);
+    	backBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			stage.clear();
+    			stage.clear();    			
     			if(Merchant.raid) {
     				GameScreen.newGame = false;
     				RaidTextScenes.enrage = RaidTextScenes.poison = RaidTextScenes.weaken = false;
@@ -1327,6 +1352,7 @@ public class FightScene implements Screen{
         			Player.setMaxHP(70);
         			Player.setDmgResist(0);
         			Player.setWeaponDmg(0);
+        			MusicManager.getInstance().playBackgroundMusic();
     				gameScreen.setCurrentState(GameScreen.HOME);
     			}    				
     	    }});
@@ -1373,8 +1399,8 @@ public class FightScene implements Screen{
     	
     	enemyNameLbl.setPosition(enemyHPLbl.getX(), enemyHPLbl.getY() + 50f);
     	
-    	homeBtn.setSize(150, 100);
-    	homeBtn.setPosition(vp.getWorldWidth() / 1.1f, vp.getWorldHeight() / 10f);
+    	backBtn.setSize(150, 100);
+    	backBtn.setPosition(vp.getWorldWidth() / 1.1f, vp.getWorldHeight() / 10f);
     	
     	combatLog.setColor(Color.BLACK);
     	Container<Label> container = new Container<Label>(combatLog);
@@ -1420,7 +1446,7 @@ public class FightScene implements Screen{
         stage.addActor(ability2);
         stage.addActor(ability3);
         stage.addActor(ability4);
-        stage.addActor(homeBtn);       
+        stage.addActor(backBtn);       
     }
     
     private void createInventoryGrid() {
@@ -1806,6 +1832,9 @@ public class FightScene implements Screen{
     	if(eHardenActive)
     		buffBatch.draw(hardenBuffTex, x2 + 60, y, 25, 25);
     	
+    	if(eThornsLeft > 0)
+    		buffBatch.draw(thornsBuffTex, x2 + 90, y, 25, 25);
+    	
     	buffBatch.end();
     }
     
@@ -1816,16 +1845,16 @@ public class FightScene implements Screen{
     	debuffBatch.begin();
     	
     	if(rendLeft > 0)
-    		debuffBatch.draw(bleedBuffTex, x2 + 90, y, 25, 25);
+    		debuffBatch.draw(bleedBuffTex, x2 + 120, y, 25, 25);
     	
     	if(rendLeft > 0 && BerserkerSkillTree.poisonRend == 1)
-    		debuffBatch.draw(poisonBuffTex, x2 + 120, y, 25, 25);
+    		debuffBatch.draw(poisonBuffTex, x2 + 150, y, 25, 25);
     	
     	if(enemyStunned)
-    		debuffBatch.draw(stunBuffTex, x2 + 150, y, 25, 25);
+    		debuffBatch.draw(stunBuffTex, x2 + 180, y, 25, 25);
     	
     	if(weakenLeft > 0)
-    		debuffBatch.draw(weakenBuffTex, x2 + 180, y, 25, 25);
+    		debuffBatch.draw(weakenBuffTex, x2 + 210, y, 25, 25);
     	
     	if(eRendLeft > 0)
     		debuffBatch.draw(bleedBuffTex, x1 + 120, y, 25, 25);
@@ -1856,6 +1885,8 @@ public class FightScene implements Screen{
         helmetBatch.dispose();
         chestBatch.dispose();
         bootsBatch.dispose();
+        buffBatch.dispose();
+        debuffBatch.dispose();
     }
 
 	@Override

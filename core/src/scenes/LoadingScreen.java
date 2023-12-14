@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+import com.onionscape.game.MusicManager;
 
 import storage.Storage;
 
@@ -60,6 +61,7 @@ public class LoadingScreen implements Screen {
 
         if (Storage.assetManager.update()) {
             // All assets are loaded
+        	MusicManager.getInstance().initialize();
             gameScreen.setCurrentState(GameScreen.START_SCREEN);
         } else {
             progressBar.setValue(Storage.assetManager.getProgress());

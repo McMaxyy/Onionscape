@@ -5,7 +5,7 @@ import com.badlogic.gdx.Game;
 public class Boot extends Game {
 
 	@Override
-	public void create () {
+	public void create () {				
 		setScreen(new GameScreen(this));
 	}
 
@@ -16,6 +16,7 @@ public class Boot extends Game {
 	
 	@Override
 	public void dispose () {
+		MusicManager.getInstance().dispose();
 		super.dispose();
 	}
 }

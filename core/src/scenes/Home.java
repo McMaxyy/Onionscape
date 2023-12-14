@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+import com.onionscape.game.MusicManager;
 import com.onionscape.game.SaveData;
 
 import player.Player;
@@ -100,6 +101,7 @@ public class Home implements Screen {
 		newGame.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
+    			MusicManager.getInstance().playFightMusic();
     			saveData.saveGame();
     			story = false;   	    			
     			storage.equippedArmor(null, "Clear");
@@ -120,18 +122,12 @@ public class Home implements Screen {
     			Player.setMaxHP(82);
     			Player.setDmgResist(17);
     			Player.setWeaponDmg(2);
-//    			Player.gainDR(storage.ironHelmet.getDefense() + storage.ironChest.getDefense() +
-//    					storage.ironBoots.getDefense() + storage.healthyIronShield.getWeaponDmg());
-//    			Player.gainMaxHP(storage.healthyIronHelmet.getBonusStat() + storage.healthyIronChest.getBonusStat() +
-//    					storage.healthyIronBoots.getBonusStat() + storage.healthyIronAxe.getBonusStat() +
-//    					storage.healthyIronShield.getBonusStat());
-//    			Player.gainWeaponDmg(storage.healthyIronAxe.getWeaponDmg());
     			stageLvl = 1;
     			GameScreen.newGame = true;
     			if(freshLoad) {
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
     				freshLoad = false;
-    			}
+    			}    			
     			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
     	    }});
 		newGame.setSize(150, 100);

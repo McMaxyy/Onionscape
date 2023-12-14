@@ -6,14 +6,18 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
@@ -29,13 +33,15 @@ public class SlotMinigame implements Screen{
 	private GameScreen gameScreen;
 	private Storage storage;
 	private Random rand = new Random();
-	private Label[][] symbolMatrix = new Label[3][5];
-	private String[] symbols = {"A", "7", "X", "Y", "Z", "Book", "Skull", "Gun", "Scatter"};
-	private TextButton spin;
-	private int maxMultiplier = 15, totalWin;
+	private Image[][] symbolMatrix = new Image[3][5];
+	private String[] symbols = {"A", "10", "J", "K", "Q", "Book", "Skull", "Gun", "Scatter"};
+	private TextButton spin, higher, lower, backBtn;
+	private int multiplier = 15, totalWin, freeSpinsLeft;
 	private ShapeRenderer shapeRenderer;
-	private Label coins, winnings;
-	
+	private Label coins, winnings, betSize, freeSpinsLbl;
+	private Texture tenT, aT, bookT, gunT, jT, kT, qT, scatterT, skullT;	
+	private float hitRate = 69.420f;
+	private boolean succHit;
 	private int[][][] paylines = {
             {{0, 0}, {0, 1}, {0, 2}, {0, 3}, {0, 4}},  // Line 1
             {{1, 0}, {0, 1}, {0, 2}, {0, 3}, {1, 4}},  // Line 2
@@ -64,44 +70,107 @@ public class SlotMinigame implements Screen{
 		storage.createFont();
 		shapeRenderer = new ShapeRenderer();
 		
-		createComponents();
+		loadTextures();
+		createComponents();		
 	}
 	
-	private void newSpin() {
-		if(symbolMatrix[0][0] != null)
-			clearMatrix();
-		
-		int x = 0;
-		int y = 0;
-		
-		for (int i = 0; i < 3; i++) {
-		    for (int j = 0; j < 5; j++) {
-		        symbolMatrix[i][j] = new Label(randomSymbol(), storage.labelStyleBig);
-		        symbolMatrix[i][j].setSize(50, 50);
-		        symbolMatrix[i][j].setPosition(vp.getWorldWidth() / 6 + x, vp.getWorldHeight() / 1.3f - y, Align.center);  // Adjust the position calculation
-		        x += 250;
-		        
-		        stage.addActor(symbolMatrix[i][j]);
-		    }
-		    x = 0;
-		    y += 250;
-		}
-		
-		checkCombinations();
+	private void loadTextures() {
+		tenT = Storage.assetManager.get("slots/10.png", Texture.class);
+		tenT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 
+		aT = Storage.assetManager.get("slots/A.png", Texture.class);
+		aT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 	
+		bookT = Storage.assetManager.get("slots/Book.png", Texture.class);
+		bookT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 	
+		gunT = Storage.assetManager.get("slots/Gun.png", Texture.class);
+		gunT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 	
+		jT = Storage.assetManager.get("slots/J.png", Texture.class);
+		jT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 	
+		kT = Storage.assetManager.get("slots/K.png", Texture.class);
+		kT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 	
+		qT = Storage.assetManager.get("slots/Q.png", Texture.class);
+		qT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 	
+		skullT = Storage.assetManager.get("slots/Skull.png", Texture.class);
+		skullT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 	
+		scatterT = Storage.assetManager.get("slots/Scatter.png", Texture.class);
+		scatterT.setFilter(TextureFilter.MipMap,TextureFilter.Nearest); 	
 	}
+
+	private void newSpin() {
+	    if (symbolMatrix[0][0] != null)
+	        clearMatrix();
+
+	    int x = 0;
+	    int y = 0;
+
+	    for (int i = 0; i < 3; i++) {
+	        for (int j = 0; j < 5; j++) {
+	            // Create Image instances and set the texture based on the random symbol
+	            Image newImage = new Image();
+	            newImage.setDrawable(new TextureRegionDrawable(getSymbolTexture(randomSymbol(), newImage)));
+	            newImage.setSize(150, 150);
+	            newImage.setPosition(vp.getWorldWidth() / 6 + x, vp.getWorldHeight() / 1.3f - y, Align.center);
+
+	            symbolMatrix[i][j] = newImage;
+	            stage.addActor(symbolMatrix[i][j]);
+
+	            x += 200;
+	        }
+	        x = 0;
+	        y += 200;
+	    }
+
+	    checkCombinations();
+	}
+	
+
+	private Texture getSymbolTexture(String symbol, Image img) {
+        switch (symbol) {
+            case "A":
+            	img.setName("A");
+                return aT;
+            case "10":
+            	img.setName("10");
+                return tenT;
+            case "J":
+            	img.setName("J");
+                return jT;
+            case "K":
+            	img.setName("K");
+                return kT;
+            case "Q":
+            	img.setName("Q");
+                return qT;
+            case "Book":
+            	img.setName("Book");
+                return bookT;
+            case "Skull":
+            	img.setName("Skull");
+                return skullT;
+            case "Gun":
+            	img.setName("Gun");
+                return gunT;
+            case "Scatter":
+            	img.setName("Scatter");
+                return scatterT;
+            default:
+                return null;
+        }
+    }
 	
 	private boolean isSymbolEqual(int row, int col, String symbol) {
 	    // Check if row and col are within bounds
 	    if (row >= 0 && row < symbolMatrix.length && col >= 0 && col < symbolMatrix[0].length) {
-	        return symbolMatrix[row][col] != null && symbolMatrix[row][col].getText().toString().equals(symbol);
+	        Image image = symbolMatrix[row][col];
+	        return image != null && image.getName() != null && image.getName().equals(symbol);
 	    } else {
 	        return false;
 	    }
 	}
-
+	
 	private void checkCombinations() {
 		totalWin = 0;
 	    int minNeighboursOnPayline = 3;
+	    float hit = rand.nextFloat(100);
 
 	    for (String symbol : symbols) {
 	        for (int i = 0; i < paylines.length; i++) {
@@ -116,12 +185,15 @@ public class SlotMinigame implements Screen{
 	                Gdx.app.log("Combination", "Payline " + (i + 1) + " has " + neighboursOnPayline + " neighbouring " + symbol + " symbols");
 	            
 	                // Winnings
-	                addWinnings(neighboursOnPayline, symbol);
+	                if(hit <= hitRate) {
+	                	addWinnings(neighboursOnPayline, symbol);
+	                	succHit = true;
+	                }
 	            }
 	        }
 	    }
 	    
-	    if(totalWin > 0) {
+	    if(totalWin > 0 && succHit) {
 	    	Player.gainCoins(totalWin);
 	    	coins.setText("Coins: " + Player.getCoins());
 	    	winnings.setText("Winnings: " + totalWin);
@@ -130,22 +202,36 @@ public class SlotMinigame implements Screen{
 	}
 	
 	private void addWinnings(int amount, String symbol) {
+		float bet = (float)multiplier;
+		
 		switch(symbol) {
 		case "A":
-		case "X":
-		case "Y":
-		case "Z":
-			totalWin += amount * (maxMultiplier / 4);
+		case "J":
+		case "K":
+		case "Q":			
+			if(freeSpinsLeft > 0)
+				totalWin += amount * (bet / 2.5f);
+			else
+				totalWin += amount * (bet / 3.3f);
 			break;
-		case "7":
-			totalWin += amount * (maxMultiplier / 3);
+		case "10":
+			if(freeSpinsLeft > 0)
+				totalWin += amount * (bet / 1.8f);
+			else
+				totalWin += amount * (bet / 2.2f);
 			break;
 		case "Skull":
 		case "Gun":
-			totalWin += amount * (maxMultiplier / 2);
+			if(freeSpinsLeft > 0)
+				totalWin += amount * bet;
+			else
+				totalWin += amount * (bet / 2) + amount;
 			break;
 		case "Book":
-			totalWin += amount * maxMultiplier;
+			if(freeSpinsLeft > 0)
+				totalWin += amount * bet * 2;
+			else
+				totalWin += amount * bet;
 			break;
 		}
 	}
@@ -219,64 +305,105 @@ public class SlotMinigame implements Screen{
 	            }
 	        }
 	    }
-
+	    
+	    if(freeSpinsLeft <= 0) {
+	    	if(scatterCount == 3)
+		    	freeSpinsLeft = 6;
+		    else if(scatterCount == 4)
+		    	freeSpinsLeft = 9;
+		    else if(scatterCount > 4)
+		    	freeSpinsLeft = 11;
+	    }
+	    else {
+	    	if(scatterCount == 3)
+		    	freeSpinsLeft += 6;
+		    else if(scatterCount == 4)
+		    	freeSpinsLeft += 9;
+		    else if(scatterCount > 4)
+		    	freeSpinsLeft += 11;
+	    }	    
+	    
 	    if (scatterCount >= 3) {
-	        Gdx.app.log("Combination", "Scatter combination: " + scatterCount + " Scatter symbols");
+	        Gdx.app.log("Combination", "Scatter combination: " + scatterCount + " Scatter symbols");	        
+	        freeSpins(1);        
 	    }
 	}
 	
 	private void clearMatrix() {
-	    for (int i = 0; i < 3; i++) {
-	        for (int j = 0; j < 5; j++) {
-	            Label labelToRemove = symbolMatrix[i][j];
-	            
-	            if (labelToRemove != null) {
-	                stage.getRoot().removeActor(labelToRemove);
-	                labelToRemove.clear();
-	            }
-	            
-	            symbolMatrix[i][j] = null;
-	        }
-	    }
-	}
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 5; j++) {
+                Image imageToRemove = symbolMatrix[i][j];
 
+                if (imageToRemove != null) {
+                    stage.getRoot().removeActor(imageToRemove);
+                    imageToRemove.clear();
+                }
+
+                symbolMatrix[i][j] = null;
+            }
+        }
+    }
 	
 	private String randomSymbol() {
-		int x = rand.nextInt(19);
+		int x = rand.nextInt(33);
 		
-		if(x >= 0 && x <=2)
+		if(x >= 0 && x <=5)
 			return symbols[0];
-		else if(x >= 3 && x <=5)
+		else if(x >= 6 && x <=10)
 			return symbols[1];
-		else if(x >= 6 && x <=8)
+		else if(x >= 11 && x <=15)
 			return symbols[2];
-		else if(x >= 9 && x <=11)
+		else if(x >= 16 && x <=20)
 			return symbols[3];
-		else if(x >= 12 && x <=14)
+		else if(x >= 21 && x <=25)
 			return symbols[4];
-		else if(x == 15)
+		else if(x == 26 || x == 27)
 			return symbols[5];
-		else if(x == 16)
+		else if(x == 28 || x == 29)
 			return symbols[6];
-		else if(x == 17)
+		else if(x == 30 || x == 31)
 			return symbols[7];
-		else if(x == 18)
+		else if(x == 32)
 			return symbols[8];
 		else
 			return null;
 	}
 	
 	private void createComponents() {
-		spin = new TextButton("Spin (15 coins)", storage.buttonStyle);
+		backBtn = new TextButton("Back", storage.buttonStyle);
+		backBtn.setColor(Color.LIGHT_GRAY);
+		backBtn.addListener(new ClickListener() {
+			@Override
+		    public void clicked(InputEvent event, float x, float y) {  
+				gameScreen.setCurrentState(GameScreen.HOME);					
+		    }});
+		backBtn.setSize(150, 100);
+		backBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.25f);
+		stage.addActor(backBtn);	
+		
+		spin = new TextButton("Spin", storage.buttonStyle);
 		spin.setColor(Color.LIGHT_GRAY);
 		spin.addListener(new ClickListener() {
 			@Override
 		    public void clicked(InputEvent event, float x, float y) { 
-				if(Player.getCoins() >= 15) {
-					Player.loseCoins(15);
+				succHit = false;
+				
+				if(Player.getCoins() >= multiplier && freeSpinsLeft <= 0) {
+					Player.loseCoins(multiplier);
 					coins.setText("Coins: " + Player.getCoins());
 					winnings.setText("");
 					newSpin();
+				}
+				else if(freeSpinsLeft > 0) {
+					winnings.setText("");
+					newSpin();
+				}
+				
+				if(freeSpinsLeft > 0) {					
+					freeSpinsLeft--;
+					freeSpinsLbl.setText("Free spins: " + freeSpinsLeft);
+					if(freeSpinsLeft == 0)
+						freeSpins(0);
 				}
 		    }});
 		spin.setSize(250, 100);
@@ -290,32 +417,113 @@ public class SlotMinigame implements Screen{
 		winnings = new Label("", storage.labelStyle);
 		winnings.setPosition(spin.getX() + spin.getWidth() + 50, spin.getY());
 		stage.addActor(winnings);
+		
+		betSize = new Label(String.valueOf(multiplier), storage.labelStyle);
+		betSize.setPosition(vp.getWorldWidth() / 2f - spin.getWidth() - coins.getWidth(), vp.getWorldHeight() / 10f);
+		stage.addActor(betSize);
+		
+		higher = new TextButton("+", storage.buttonStyle);
+		higher.setColor(Color.LIGHT_GRAY);
+		higher.addListener(new ClickListener() {
+			@Override
+		    public void clicked(InputEvent event, float x, float y) { 
+				changeBet(0);
+		    }});
+		higher.setSize(50, 50);
+		higher.setPosition(betSize.getX() + betSize.getWidth() * 1.5f, vp.getWorldHeight() / 10f);
+		stage.addActor(higher);	
+		
+		lower = new TextButton("-", storage.buttonStyle);
+		lower.setColor(Color.LIGHT_GRAY);
+		lower.addListener(new ClickListener() {
+			@Override
+		    public void clicked(InputEvent event, float x, float y) { 
+				changeBet(1);
+		    }});
+		lower.setSize(50, 50);
+		lower.setPosition(betSize.getX() - betSize.getWidth() * 2, vp.getWorldHeight() / 10f);
+		stage.addActor(lower);	
+				
+		freeSpinsLbl = new Label("", storage.labelStyle);
+		freeSpinsLbl.setPosition(vp.getWorldWidth() / 1.3f, vp.getWorldHeight() / 1.5f);
+		stage.addActor(freeSpinsLbl);
+	}
+	
+	private void freeSpins(int x) {
+		if(x == 0) {
+			higher.setVisible(true);
+			lower.setVisible(true);
+			freeSpinsLbl.setVisible(false);
+			hitRate = 69.420f;
+		}
+		else {
+			hitRate = 77.5f;
+			higher.setVisible(false);
+			lower.setVisible(false);
+			freeSpinsLbl.setVisible(true);
+	        freeSpinsLbl.setText("Free spins: " + freeSpinsLeft);
+		}
+	}
+	
+	private void changeBet(int x) {
+		if(x == 0) {
+			switch(multiplier) {
+			case 10:
+				multiplier = 15;
+				break;
+			case 15:
+				multiplier = 20;
+				break;
+			case 20:
+				multiplier = 40;
+				break;
+			case 40:
+				multiplier = 80;
+				break;
+			}
+		}
+		else {
+			switch(multiplier) {
+			case 15:
+				multiplier = 10;
+				break;
+			case 20:
+				multiplier = 15;
+				break;
+			case 40:
+				multiplier = 20;
+				break;
+			case 80:
+				multiplier = 40;
+				break;
+			}
+		}
+		
+		betSize.setText(multiplier);
 	}
 	
 	private void drawLinesForPayline(int paylineIndex) {
-	    shapeRenderer.begin(ShapeType.Line);
-	    shapeRenderer.setColor(Color.RED); // Set the line color as needed
-	    Gdx.gl.glLineWidth(3);  // Set the line width as needed
+        shapeRenderer.begin(ShapeType.Filled);
+        shapeRenderer.setColor(Color.RED);
 
-	    int[][] payline = paylines[paylineIndex];
+        int[][] payline = paylines[paylineIndex];
 
-	    for (int j = 0; j < payline.length - 1; j++) {
-	        int startX = payline[j][1];
-	        int startY = payline[j][0];
-	        int endX = payline[j + 1][1];
-	        int endY = payline[j + 1][0];
+        for (int j = 0; j < payline.length - 1; j++) {
+            int startX = payline[j][1];
+            int startY = payline[j][0];
+            int endX = payline[j + 1][1];
+            int endY = payline[j + 1][0];
 
-	        float startXPos = vp.getWorldWidth() / 6 + startX * 250 + symbolMatrix[0][0].getWidth() / 2 - 25;
-	        float startYPos = vp.getWorldHeight() / 1.3f - startY * 250 - symbolMatrix[0][0].getHeight() / 2f + 75;
-	        float endXPos = vp.getWorldWidth() / 6 + endX * 250 + symbolMatrix[0][0].getWidth() / 2f - 25;
-	        float endYPos = vp.getWorldHeight() / 1.3f - endY * 250 - symbolMatrix[0][0].getHeight() / 2f + 75;
+            float startXPos = vp.getWorldWidth() / 6 + startX * 200 + symbolMatrix[0][0].getWidth() / 2 - 75;
+            float startYPos = vp.getWorldHeight() / 1.3f - startY * 200 - symbolMatrix[0][0].getHeight() / 2f + 150;
+            float endXPos = vp.getWorldWidth() / 6 + endX * 200 + symbolMatrix[0][0].getWidth() / 2f - 75;
+            float endYPos = vp.getWorldHeight() / 1.3f - endY * 200 - symbolMatrix[0][0].getHeight() / 2f + 150;
 
-	        shapeRenderer.line(startXPos, startYPos, endXPos, endYPos);
-	    }
+            shapeRenderer.rectLine(startXPos, startYPos, endXPos, endYPos, 4f);
+        }
 
-	    shapeRenderer.end();
-	    Gdx.gl.glLineWidth(1);  // Reset the line width
-	}
+        shapeRenderer.end();
+    }
 
 	@Override
 	public void show() {
@@ -329,8 +537,8 @@ public class SlotMinigame implements Screen{
 		stage.draw();
 		
 		for (int i = 0; i < paylines.length; i++) {
-	        if (hasWinningCombination(i)) {
-	            drawLinesForPayline(i);
+	        if (hasWinningCombination(i) && succHit) {
+	            drawLinesForPayline(i);	            
 	        }
 	    }
 	}

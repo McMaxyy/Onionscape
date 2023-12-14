@@ -139,7 +139,7 @@ class MimicTree extends Enemy{
 		setMaxHP(125);
 		setValue(25);
 		setExp(20);
-		setAbility1("Harden");
+		setAbility1("Thorns");
 		setAbility2("Barrier");
 	}
 }

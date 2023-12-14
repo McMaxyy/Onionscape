@@ -131,11 +131,7 @@ public class Storage {
 		assetManager.load("maps/ForestMap.png", Texture.class, textureParameter);
 		assetManager.load("maps/ForestFight.png", Texture.class, textureParameter);
 		
-		// Misc
-		assetManager.load("abilities/SwingIcon.png", Texture.class, textureParameter);
-		assetManager.load("BattleOver.png", Texture.class, textureParameter);		
-		assetManager.load("player/Onion.png", Texture.class, textureParameter);
-		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);
+		// Buffs & Debuffs
 		assetManager.load("buffs/Barrier.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Enrage.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Bleed.png", Texture.class, textureParameter);
@@ -144,6 +140,23 @@ public class Storage {
 		assetManager.load("buffs/Harden.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Weaken.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Thorns.png", Texture.class, textureParameter);
+		
+		// Slot minigame
+		assetManager.load("slots/10.png", Texture.class, textureParameter);
+		assetManager.load("slots/A.png", Texture.class, textureParameter);
+		assetManager.load("slots/Book.png", Texture.class, textureParameter);
+		assetManager.load("slots/Gun.png", Texture.class, textureParameter);
+		assetManager.load("slots/J.png", Texture.class, textureParameter);
+		assetManager.load("slots/K.png", Texture.class, textureParameter);
+		assetManager.load("slots/Q.png", Texture.class, textureParameter);
+		assetManager.load("slots/Skull.png", Texture.class, textureParameter);
+		assetManager.load("slots/Scatter.png", Texture.class, textureParameter);
+		
+		// Misc
+		assetManager.load("abilities/SwingIcon.png", Texture.class, textureParameter);
+		assetManager.load("BattleOver.png", Texture.class, textureParameter);		
+		assetManager.load("player/Onion.png", Texture.class, textureParameter);
+		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);		
 		assetManager.load("white.PNG", Texture.class, textureParameter);
 	}
 	
