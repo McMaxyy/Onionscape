@@ -726,7 +726,10 @@ public class FightScene implements Screen{
         newLine();
         
         if(hit) {
-//        	MusicManager.getInstance().playSoundEffect(1);
+        	// Play sound effect if weapon equiped
+        	if(Player.weaponState == 1 || Player.weaponState == 2)
+        		MusicManager.getInstance().playSoundEffect(0);
+        	
         	if(enrageLeft > 0) {
         		temp += storage.enrage.getAttackPower();
         		enrageLeft--;
@@ -890,7 +893,7 @@ public class FightScene implements Screen{
       	
         	if(!barrierActive && !enemyStunned) {
         		if(!riposteActive) {
-//        			MusicManager.getInstance().playSoundEffect(2);
+        			MusicManager.getInstance().playSoundEffect(1);
         			if(thornsLeft > 0) {
                 		temp -= storage.barbedArmor.getAttackPower();
                 		thornsLeft--;

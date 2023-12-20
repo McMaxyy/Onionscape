@@ -43,20 +43,20 @@ public class MusicManager {
 
         for (Music music : backgroundMusicTracks) {
             music.setLooping(false);
-            music.setVolume(0.3f);
+            music.setVolume(0.2f);
         }
         for (Music music : fightMusicTracks) {
             music.setLooping(false);
-            music.setVolume(0.4f);
+            music.setVolume(0.1f);
         }
 
         // Sound effects
-//        Sound attackSound = Gdx.audio.newSound(Gdx.files.internal("sounds/AxeAttack.wav"));
-//        Sound blockSound = Gdx.audio.newSound(Gdx.files.internal("sounds/EntityHit.wav"));
-//
-//        soundEffects.add(attackSound);
-//        soundEffects.add(blockSound);
+        Sound attackSound = Gdx.audio.newSound(Gdx.files.internal("sounds/AxeAttack.wav"));
+        Sound blockSound = Gdx.audio.newSound(Gdx.files.internal("sounds/EntityHit.wav"));
 
+        soundEffects.add(attackSound);
+        soundEffects.add(blockSound);
+        
         playBackgroundMusic();
     }
 
@@ -76,11 +76,11 @@ public class MusicManager {
         currentMusic.play();
     }
 
-//    public void playSoundEffect(int index) {
-//        if (index >= 0 && index < soundEffects.size()) {
-//            soundEffects.get(index).play();
-//        }
-//    }
+    public void playSoundEffect(int index) {
+        if (index >= 0 && index < soundEffects.size()) {
+            soundEffects.get(index).play(0.4f);
+        }
+    }
 
     public void stopCurrentTrack() {
         if (currentMusic != null && currentMusic.isPlaying()) {

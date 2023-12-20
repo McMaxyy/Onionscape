@@ -515,9 +515,9 @@ public class SlotMinigame implements Screen{
             int endY = payline[j + 1][0];
 
             float startXPos = vp.getWorldWidth() / 6 + startX * 200 + symbolMatrix[0][0].getWidth() / 2 - 75;
-            float startYPos = vp.getWorldHeight() / 1.3f - startY * 200 - symbolMatrix[0][0].getHeight() / 2f + 150;
+            float startYPos = vp.getWorldHeight() / 1.3f - startY * 200 - symbolMatrix[0][0].getHeight() / 2f + 75;
             float endXPos = vp.getWorldWidth() / 6 + endX * 200 + symbolMatrix[0][0].getWidth() / 2f - 75;
-            float endYPos = vp.getWorldHeight() / 1.3f - endY * 200 - symbolMatrix[0][0].getHeight() / 2f + 150;
+            float endYPos = vp.getWorldHeight() / 1.3f - endY * 200 - symbolMatrix[0][0].getHeight() / 2f + 75;
 
             shapeRenderer.rectLine(startXPos, startYPos, endXPos, endYPos, 4f);
         }

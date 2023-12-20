@@ -69,12 +69,12 @@ public class RaidTextScenes implements Screen{
 		text.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 2f);
 		
 		if(ForestMap.encounter == 2) {
-			encNum = rand.nextInt(1, 31);
+			encNum = rand.nextInt(1, 11);
 			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
 			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
 		}			
 		else
-			encNum = rand.nextInt(31, 61);
+			encNum = rand.nextInt(31, 43);
 		
 		switch(encNum) {
 		case 1:
