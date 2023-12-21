@@ -123,6 +123,7 @@ public class Home implements Screen {
     			Player.setDmgResist(17);
     			Player.setWeaponDmg(2);
     			stageLvl = 1;
+    			resetSkills();
     			GameScreen.newGame = true;
     			if(freshLoad) {
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
@@ -275,6 +276,33 @@ public class Home implements Screen {
 		loadBtn.setSize(150, 100);
 		loadBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.4f);
 		stage.addActor(loadBtn);
+	}
+	
+	private void resetSkills() {
+		BerserkerSkillTree.twoHMastery = 0;
+		BerserkerSkillTree.oneHMastery = 0;
+		BerserkerSkillTree.thickSkin = 0;
+		BerserkerSkillTree.weaponMastery = 0;
+		BerserkerSkillTree.blockAura = 0;
+		BerserkerSkillTree.eleResist = 0;
+		BerserkerSkillTree.rendMastery = 0;
+		BerserkerSkillTree.lifeSteal = 0;
+		BerserkerSkillTree.poisonRend = 0;
+		BerserkerSkillTree.ironSkin = 0;
+		BerserkerSkillTree.bulkUp = 0;
+		BerserkerSkillTree.sharpenWeapons = 0;
+		BerserkerSkillTree.luckyStrike = 0;
+		BerserkerSkillTree.blockEfficiency = 0;
+		BerserkerSkillTree.bludgeonEnemy = 0;
+		BerserkerSkillTree.doubleSwing = 0;
+		BerserkerSkillTree.thorns = 0;
+		BerserkerSkillTree.healthy = 0;		
+		BerserkerSkillTree.twoHandStr = 0;
+		BerserkerSkillTree.oneHandStr = 0;
+		BerserkerSkillTree.dmgResist = 0;
+		BerserkerSkillTree.weaponDmg = 0;
+		BerserkerSkillTree.strength = 0;
+		BerserkerSkillTree.maxHP = 0;
 	}
 	
 	public void dispose() {

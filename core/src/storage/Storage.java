@@ -21,7 +21,7 @@ public class Storage {
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle, buttonStyleBig;
 	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol;
-	public BitmapFont font, fontBig, fontSmol;
+	public BitmapFont font, fontBig, fontSmol, fontMedium;
 	private List<Weapons> playerWeapons = new ArrayList<>();
 	private List<Armor> playerArmor = new ArrayList<>();
 	private List<Items> playerItems = new ArrayList<>();
@@ -154,10 +154,8 @@ public class Storage {
 		
 		// Misc
 		assetManager.load("abilities/SwingIcon.png", Texture.class, textureParameter);
-		assetManager.load("BattleOver.png", Texture.class, textureParameter);		
 		assetManager.load("player/Onion.png", Texture.class, textureParameter);
 		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);		
-		assetManager.load("white.PNG", Texture.class, textureParameter);
 	}
 	
 	// Load items
@@ -384,6 +382,8 @@ public class Storage {
         fontBig = generator.generateFont(parameter);
         parameter.size = 18;
         fontSmol = generator.generateFont(parameter);
+        parameter.size = 40;
+        fontMedium = generator.generateFont(parameter);
         Texture borderTextureUp = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton.9.png"));
         Texture borderTextureDown = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton-down.9.png"));
         NinePatch borderPatchUp = new NinePatch(borderTextureUp, 1, 1, 1, 1);

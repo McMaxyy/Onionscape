@@ -78,7 +78,7 @@ public class MusicManager {
 
     public void playSoundEffect(int index) {
         if (index >= 0 && index < soundEffects.size()) {
-            soundEffects.get(index).play(0.4f);
+            soundEffects.get(index).play(0.45f);
         }
     }
 

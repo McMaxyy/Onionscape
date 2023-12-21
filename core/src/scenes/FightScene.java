@@ -25,7 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.onionscape.game.DamageNumbers;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.MusicManager;
 
@@ -44,14 +47,13 @@ public class FightScene implements Screen{
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, backBtn;
     private TextButton reward1, reward2, reward3;
-    private Label playerHPLbl, enemyHPLbl, combatLog, enemyNameLbl;
+    private Label playerHPLbl, enemyHPLbl, enemyNameLbl;
     private Texture charTexture, enemyTexture, mapTexture, barrierBuffTex, bleedBuffTex, enrageBuffTex,
-    poisonBuffTex, stunBuffTex, hardenBuffTex, weakenBuffTex, thornsBuffTex, whiteTexture;
+    poisonBuffTex, stunBuffTex, hardenBuffTex, weakenBuffTex, thornsBuffTex;
     private SpriteBatch charBatch = new SpriteBatch();
     private SpriteBatch enemyBatch = new SpriteBatch();
     private SpriteBatch weaponBatch = new SpriteBatch();
     private SpriteBatch shieldBatch = new SpriteBatch();
-    private SpriteBatch gameOverBatch = new SpriteBatch();
     private SpriteBatch helmetBatch = new SpriteBatch();
 	private SpriteBatch chestBatch = new SpriteBatch();
 	private SpriteBatch bootsBatch = new SpriteBatch();
@@ -81,8 +83,8 @@ public class FightScene implements Screen{
     private float scaleSpeed = 4f; 
     private float heightChar, heightEnemy, heightWeapon = 0;
     private float baseYChar, baseYEnemy;
-    private float weaponRotation = 20f; // starting rotation
-    private float rotationSpeed = -10f; // rotation speed per frame (adjust as needed)
+    private float weaponRotation = 20f;
+    private float rotationSpeed = -10f;
     private float rotationInterval = 0.017f;
     private int timer = 0;   
     public static boolean normal, elite, boss;
@@ -94,7 +96,7 @@ public class FightScene implements Screen{
     	this.game = game;
         stage = new Stage(viewport);
         vp = viewport;
-        Gdx.input.setInputProcessor(stage);  // Set the stage to process inputs      
+        Gdx.input.setInputProcessor(stage);    
         storage = Storage.getInstance();
         skin = storage.skin;
         loadTextures();
@@ -160,7 +162,6 @@ public class FightScene implements Screen{
     }
     
     private void loadTextures() {
-    	whiteTexture = Storage.assetManager.get("white.PNG", Texture.class);
     	mapTexture = Storage.assetManager.get("maps/ForestFight.png", Texture.class);
         mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);  
         barrierBuffTex = Storage.assetManager.get("buffs/Barrier.png", Texture.class);
@@ -317,9 +318,8 @@ public class FightScene implements Screen{
     		ability4.setTouchable(Touchable.disabled);
     		ability4.setText("");
     		
-    		newLine();
 	        if(pDead) {
-	        	combatLog.setText(combatText + "\n Player died");
+	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player died");
 	        	backBtn.clearListeners();
 	        	backBtn.addListener(new ClickListener() {
 	        		@Override
@@ -344,7 +344,7 @@ public class FightScene implements Screen{
 	        	    }});
 	        }	        	
 	        else {
-	        	combatLog.setText("\n Enemy died");	
+	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy died");
 	        	chooseReward();	
 	        	if(Home.story) {
 	        		Player.gainExp(expValue);
@@ -354,8 +354,14 @@ public class FightScene implements Screen{
 		        	}	        		
 		        	else
 		        		Player.gainExp(expValue);
-		        	newLine();
-		        	combatLog.setText(combatText + "\n Gained " + expValue + "exp");
+		        	
+		        	final String expString = "Gained " + expValue + "exp";
+		        	Timer.schedule(new Timer.Task() {
+                    	@Override
+                        public void run() {
+                    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, expString);
+                    	}
+                    }, 0.5f);		        	
 		        	Player.checkExp();
 	        	}        	
 	        }
@@ -539,130 +545,106 @@ public class FightScene implements Screen{
     	case "Attack":
     		if(rand.nextInt(4) != 0)
     			playerAttack(0);
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player's attack missed");
-    		}  	
+    		else
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed"); 	
 	        break;
     	case "Swing":
     		if(rand.nextInt(4) != 0)
     			playerAttack(1);
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player's attack missed");
-    		}   		
+    		else
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed"); 		
     		break;
     	case "Rend":
     		if(rand.nextInt(4) != 0) {
     			rendLeft = 3;
-    			newLine();
-    			combatLog.setText(combatText + "\n Bleed applied to enemy");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Bleed applied");
     		}   			
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player failed to apply bleed");
-    		}  			
+    		else
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to apply bleed");		
     		break;
     	case "Whirlwind":
     		if(rand.nextInt(4) != 0)
     			playerAttack(3);
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player's attack missed");
-    		}  			
+    		else
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed"); 			
     		break;
     	case "Ground Breaker":
     		if(rand.nextInt(4) != 0)
     			playerAttack(4);
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player's attack missed");
-    		}  			
+    		else 
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed");			
     		break;
     	case "Bash":
     		if(rand.nextInt(4) != 0)
     			playerAttack(5);
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player's attack missed");
-    		}  			
+    		else 
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed");		
     		break;
     	case "Barrier":
-    		newLine();
     		if(rand.nextInt(4) != 0) {
     			barrierActive = true;    			
-    			combatLog.setText(combatText + "\n Player activated Barrier");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Barrier activated");
     		}
     		else
-    			combatLog.setText(combatText + "\n Player failed to use Barrier"); 			
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to activate Barrier");			
     		break;
     	case "Harden":
-    		newLine();
     		if(rand.nextInt(4) != 0) {
     			hardenActive = true;    			
-    			combatLog.setText(combatText + "\n Player activated Harden");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Harden activated");
     		}
     		else
-    			combatLog.setText(combatText + "\n Player failed to use Harden");			
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to activat Harden");		
     		break;
     	case "Mend":
-    		newLine();
-			combatLog.setText(combatText + "\n Player used heal");
+    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player used heal");
     		Player.gainHP(storage.mend.getAttackPower());
 			if(Player.getHp() > Player.getMaxHP())
 				Player.setHp(Player.getMaxHP());
 			break;
     	case "Hilt Bash":
-    		newLine();
     		if(rand.nextInt(3) != 0) {
     			weakenLeft = 2;  			
-    			combatLog.setText(combatText + "\n Enemy weakened");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy weakened");
     		}
     		else
-    			combatLog.setText(combatText + "\n Failed to weaken enemy");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to weaken enemy");
     		break;
     	case "Barbed Armor":
-    		newLine();
     		if(rand.nextInt(3) != 0) {
     			thornsLeft = 2;
-    			combatLog.setText(combatText + "\n Player activated Thorns");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Thorns activated");
     		}
     		else
-    			combatLog.setText(combatText + "\n Failed to activate Thorns");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to activate Thorns");
     		break;
     	case "Enrage":
-    		newLine();
     		if(rand.nextInt(4) != 0) {
     			enrageLeft = 2;
-    			combatLog.setText(combatText + "\n Player enraged, increasing damage dealt");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player enraged");
     		}
     		else
-    			combatLog.setText(combatText + "\n Player failed to enrage");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to enrage");
     		break;
     	case "Riposte":
-    		newLine();
     		if(rand.nextInt(4) != 0) {
     			riposteActive = true;
-    			combatLog.setText(combatText + "\n Player will reflect the next attack");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Next attack will be reflected");
     		}
     		else
-    			combatLog.setText(combatText + "\n Failed to activate Riposte");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to activate Riposte");
     		break;
     	case "Stab":
     		if(rand.nextInt(4) != 0)
     			playerAttack(13);
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player's attack missed");
-    		}
+    		else 
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed");
     		break;
     	case "Decapitate":
     		if(rand.nextInt(5) != 0)
     			playerAttack(14);
-    		else {
-    			newLine();
-    			combatLog.setText(combatText + "\n Player's attack missed");
-    		}
+    		else 
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed");
     		break;
     	}
     }
@@ -722,8 +704,6 @@ public class FightScene implements Screen{
     			enemyStunned = true;
     		}
     	} 
-    	
-        newLine();
         
         if(hit) {
         	// Play sound effect if weapon equiped
@@ -747,22 +727,18 @@ public class FightScene implements Screen{
         		eHardenActive = false;
         	}
         	
-        	if(!eBarrierActive)
+        	if(!eBarrierActive) {
         		enemyHP -= temp;
-        	       	
-        	if(x == 0 && !eBarrierActive)
-        		combatLog.setText(combatText + "\n Player hit the enemy for " + temp + " damage");
-        	else if(x == 1 || x == 3 || x == 4 || x == 5 || x == 13 || x == 14 && !eBarrierActive)
-        		combatLog.setText(combatText + "\n " + getAbilityName(x) + " hit the enemy for " + temp + " damage");
-        	else if(eBarrierActive)
-        		combatLog.setText(combatText + "\n Enemy blocked the attack");
+        		dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), temp);
+        	}      	     	
+        	else 
+        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy blocked the attack");
         	
 			if(eThornsLeft > 0) {
 				int newTemp = temp / 2;
 				if(newTemp <= 0)
 					newTemp = 1;
-				newLine();
-				combatLog.setText(combatText + "\n Player hit with Thorns for " + newTemp + " damage");
+				dealDamage(playerHPLbl.getX(), playerHPLbl.getY(), newTemp);
 			}
         	
         	// Life steal mastery
@@ -771,8 +747,7 @@ public class FightScene implements Screen{
         			Player.gainHP(temp / 3);
         			if(Player.getHp() > Player.getMaxHP())
         				Player.setHp(Player.getMaxHP());
-        		newLine();
-        		combatLog.setText(combatText + "\n Player healed with Life Steal for " + temp);
+        			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player healed for " + temp);
         		}      		
         	}      		
         }
@@ -787,24 +762,32 @@ public class FightScene implements Screen{
     
     private void bleedHit() {
     	// Bleed hit after ending turn
-        if(rendLeft > 0 && !eBarrierActive) {
-        	int temp = storage.rend.getAttackPower() + BerserkerSkillTree.rendMastery;
-        	enemyHP -= temp;
-        	newLine();
-        	combatLog.setText(combatText + "\n Rend hit the enemy for " + temp + " damage");
-        	
-        	// Poison Rend mastery
-        	if(BerserkerSkillTree.poisonRend == 1) {
-            	enemyHP -= storage.rend.getAttackPower();
-        		newLine();
-            	combatLog.setText(combatText + "\n Enemy hit with poison for " + storage.rend.getAttackPower() + " damage");
-        	}
-   	
-        	rendLeft--;
-        	
-        	if(enemyHP <= 0)
-            	eDead = true; 
-        }  
+    	if (rendLeft > 0 && !eBarrierActive) {
+		    Timer.schedule(new Timer.Task() {
+		        @Override
+		        public void run() {		            
+	                int temp = storage.rend.getAttackPower() + BerserkerSkillTree.rendMastery;
+	                enemyHP -= temp;
+	                dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), temp);
+	
+	                // Poison Rend mastery
+	                if (BerserkerSkillTree.poisonRend == 1) {
+	                    Timer.schedule(new Timer.Task() {
+	                    	@Override
+	                        public void run() {
+			                    enemyHP -= storage.rend.getAttackPower();
+			                    dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), storage.rend.getAttackPower());
+	                    	}
+	                    }, 0.5f);
+	                }
+	                
+	                rendLeft--;
+	
+	                if (enemyHP <= 0)
+	                    eDead = true;
+		        }
+		    }, 0.5f);
+        }
     }
     
     private void enemyAttack(int attack) {
@@ -908,28 +891,24 @@ public class FightScene implements Screen{
         			}
         			
         			Player.loseHP(temp);
-                    newLine();
-                    combatLog.setText(combatText + "\n Enemy attacked for " + temp + " damage");
+        			dealDamage(playerHPLbl.getX(), playerHPLbl.getY(), temp);
                     
                     if(BerserkerSkillTree.thorns == 1 || thornsLeft > 0) {                	              		
                     	temp /= 2;
                     	if(temp <= 0)
                     		temp = 1;
                     	enemyHP -= temp;
-                    	newLine();
-                        combatLog.setText(combatText + "\n Enemy hit with Thorns for " + temp + " damage");
+                    	dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), temp);
                     }
         		}
         		else {
         			riposteActive = false;
         			enemyHP -= temp;
-        			newLine();
-        			combatLog.setText(combatText + "\n Player reflected the attack \n and hit for " + temp + " damage");
+        			dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), temp);
         		}
         	}
         	else if(barrierActive){
-        		newLine();
-        		combatLog.setText(combatText + "\n Player blocked the enemy's attack");
+        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Attack blocked");
         		switch(BerserkerSkillTree.blockEfficiency) {
         		case 0:
         			barrierActive = false;
@@ -967,57 +946,63 @@ public class FightScene implements Screen{
         		} 
         	}
         	else if(enemyStunned){
-        		newLine();
-        		combatLog.setText(combatText + "\n Enemy stunned and cannot attack");
+        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy stunned and cannot attack");
         		enemyStunned = false;
         	}
     	}
     	else {
-    		newLine();
     		switch(attackType) {
     		case "Bleed":
     			eRendLeft = 3;
-    			combatLog.setText(combatText + "\n Enemy hit the player with bleed");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Bleed applied");
     			break;
     		case "Enrage":
     			eEnrageLeft = 3;
-    			combatLog.setText(combatText + "\n Enemy is enraged");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy enraged");
     			break;
     		case "Poison":
     			ePoisonLeft = 3;
-    			combatLog.setText(combatText + "\n Enemy poisoned the player");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Poison applied");
     			break;
     		case "Harden":
     			eHardenActive = true;
-    			combatLog.setText(combatText + "\n Enemy increased its defenses");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Harden activated");
     			break;
     		case "Stun":
     			playerStunned = true;
-    			combatLog.setText(combatText + "\n Enemy stunned the player");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player stunned");
     			break;
     		case "Barrier":
     			eBarrierActive = true;
-    			combatLog.setText(combatText + "\n Enemy activated Barrier");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Barrier activated");
     			break;
     		case "Thorns":
     			eThornsLeft = 3;
-    			combatLog.setText(combatText + "\n Enemy activated Thorns");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Thorns activated");
     			break;
     		}
     	}
     	
-    	if(eRendLeft > 0 && eRendLeft < 3) {
-    		Player.loseHP(3);
-            newLine();
-            combatLog.setText(combatText + "\n Player hit with bleed for " + 3 + " damage");
-            eRendLeft--;
+    	if(eRendLeft > 0) {
+    		Timer.schedule(new Timer.Task() {
+            	@Override
+                public void run() {
+            		Player.loseHP(3);
+            		dealDamage(playerHPLbl.getX(), playerHPLbl.getY(), 3);
+                    eRendLeft--;
+            	}
+            }, 0.5f);    		
     	}
     	
-    	if(ePoisonLeft > 0 && ePoisonLeft < 3) {
-    		Player.loseHP(3);
-            newLine();
-            combatLog.setText(combatText + "\n Player hit with poison for " + 3 + " damage");
-            ePoisonLeft--;
+    	if(ePoisonLeft > 0) {
+    		Timer.schedule(new Timer.Task() {
+            	@Override
+                public void run() {
+            		Player.loseHP(3);
+            		dealDamage(playerHPLbl.getX(), playerHPLbl.getY(), 3);
+            		ePoisonLeft--;
+            	}
+            }, 0.5f); 
     	}
     	
     	if(eRendLeft == 3)
@@ -1219,8 +1204,6 @@ public class FightScene implements Screen{
     	enemyHPLbl = new Label(enemyHP + "/" + enemyMaxHP, storage.labelStyle);
     	enemyNameLbl = new Label(enemyName, storage.labelStyle);
     	
-    	combatLog = new Label("", storage.labelStyleSmol);
-    	
     	attackBtn = new TextButton("Attack", storage.buttonStyleBig);
     	attackBtn.setColor(Color.GRAY);
     	attackBtn.setName("Attack");
@@ -1367,7 +1350,7 @@ public class FightScene implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     	    	rewardClick((TextButton) event.getListenerActor());
     	    	loot = reward1.getText().toString();
-    	    	combatLog.setText(combatText + "\n Gained " + loot);
+    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Gained " + loot);
     	    }});
     	
     	reward2 = new TextButton("", storage.buttonStyle);
@@ -1377,7 +1360,7 @@ public class FightScene implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     	    	rewardClick((TextButton) event.getListenerActor()); 
     	    	loot = reward2.getText().toString();
-    	    	combatLog.setText(combatText + "\n Gained " + loot);
+    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Gained " + loot);
     	    }});
     	
     	reward3 = new TextButton("", storage.buttonStyle);
@@ -1387,8 +1370,7 @@ public class FightScene implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     	    	Player.gainRaidCoins(enemyValue);  
     	    	loot = enemyValue + " Coins";
-    	    	newLine();
-	        	combatLog.setText(combatText + "\n Gained " + loot);
+    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Gained " + loot);;
 	        	reward1.setVisible(false);
 	        	reward2.setVisible(false);
 	        	reward3.setVisible(false);
@@ -1405,18 +1387,11 @@ public class FightScene implements Screen{
     	backBtn.setSize(150, 100);
     	backBtn.setPosition(vp.getWorldWidth() / 1.1f, vp.getWorldHeight() / 10f);
     	
-    	combatLog.setColor(Color.BLACK);
-    	Container<Label> container = new Container<Label>(combatLog);
-    	container.setBackground(new TextureRegionDrawable(new TextureRegion(whiteTexture)));
-    	container.setBounds(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 1.8f, 600, 300);
-    	container.align(Align.topLeft);
-    	combatLog.setSize(600, 300);
-    	
         attackBtn.setSize(550, 120); 
         attackBtn.setPosition(vp.getWorldWidth() / 5.2f - attackBtn.getWidth() / 2f,  vp.getWorldHeight() / 2.4f - attackBtn.getHeight() / 2f);
         
         endTurn.setSize(200, 80); 
-        endTurn.setPosition(container.getX() + container.getWidth() / 2f - endTurn.getWidth() / 2f, vp.getWorldHeight() / 2.65f);
+        endTurn.setPosition(vp.getWorldWidth() / 2f - endTurn.getWidth() / 2f, vp.getWorldHeight() / 1.8f);
         
         ability1.setSize(250, 150); 
         ability1.setPosition(vp.getWorldWidth() / 8.7f - ability1.getWidth() / 2f, vp.getWorldHeight() / 3.8f - ability1.getHeight() / 2f);
@@ -1444,7 +1419,6 @@ public class FightScene implements Screen{
         stage.addActor(playerHPLbl);
         stage.addActor(enemyHPLbl);
         stage.addActor(enemyNameLbl);
-        stage.addActor(container);
         stage.addActor(ability1);
         stage.addActor(ability2);
         stage.addActor(ability3);
@@ -1511,8 +1485,7 @@ public class FightScene implements Screen{
     			switch(itemName) {
         		case "Health Potion":
     	    		storage.equippedItems(storage.healthPot, "Remove");
-    	    		newLine();
-    				combatLog.setText(combatText + "\n Player used a Health potion");
+    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Health Potion used");
     	    		Player.gainHP(Player.getMaxHP() / 5);
     				if(Player.getHp() > Player.getMaxHP())
     					Player.setHp(Player.getMaxHP());
@@ -1520,34 +1493,29 @@ public class FightScene implements Screen{
     	    		break;
     	    	case "Bomb":
     	    		storage.equippedItems(storage.bomb, "Remove");
-    	    		newLine();
-    				combatLog.setText(combatText + "\n Player threw a Bomb which dealt " + enemyHP / 10 + " damage");
+    	    		dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), 10);
     				enemyHP -= enemyHP / 10;
     				attackCount--;
     	    		break;
     	    	case "Throwing Knife":
     	    		storage.equippedItems(storage.throwingKnife, "Remove");
-    	    		newLine();
-    	    		combatLog.setText(combatText + "\n Player threw a Knife which dealt " + 5 + " damage");
+    	    		dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), 5);
     				enemyHP -= 5;
     				rendLeft = 2;
-    				newLine();
-    	    		combatLog.setText(combatText + "\n The Throwing Knife also inflicts bleed");
+    				sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Bleed applied");
     				attackCount--;
     				break;
     	    	case "Attack Boost":
     	    		storage.equippedItems(storage.apBoost, "Remove");
     	    		Home.apBoost = true;
     	    		Player.gainWeaponDmg(5);
-    	    		newLine();
-    	    		combatLog.setText(combatText + "\n Player boosted their attack");
+    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Attack Boost activated");
     	    		break;
     	    	case "Defense Boost":
     	    		storage.equippedItems(storage.dpBoost, "Remove");
     	    		Home.dpBoost = true;
     	    		Player.setDmgResist(Player.getDmgResist() + 5);
-    	    		newLine();
-    	    		combatLog.setText(combatText + "\n Player boosted their defenses");
+    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Defense Boost activated");
     	    		break;
     	    	case "Health Boost":
     	    		storage.equippedItems(storage.hpBoost, "Remove");
@@ -1557,14 +1525,12 @@ public class FightScene implements Screen{
     	    			Player.gainHP(10);
     	    		if(Player.getHp() > Player.getMaxHP())
     	    			Player.setHp(Player.getMaxHP());
-    	    		newLine();
-    	    		combatLog.setText(combatText + "\n Player gained additional Health Points");
+    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Health Boost activated");
     	    		break;
     	    	case "Experience Boost":
     	    		storage.equippedItems(storage.expBoost, "Remove");
     	    		Home.expBoost = true;
-    	    		newLine();
-    	    		combatLog.setText(combatText + "\n Player activated an Experience Boost");
+    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Experience Boost activated");
     	    		break;
     	    	default:   	       	    		
     	    		createAbilityGrid(itemName);
@@ -1765,15 +1731,6 @@ public class FightScene implements Screen{
 			return Inventory.inventorySlotTexture;
     }
     
-    public void newLine() {
-    	combatText = combatLog.getText().toString();
-        int lines = combatText.split("\n").length;
-        if(lines >= 10) {
-            int index = combatText.indexOf("\n");
-            combatText = combatText.substring(index+1);
-        }        
-    }
-    
     private void drawHealthBar() {
     	// Player Health bar
     	playerHealthBar.setProjectionMatrix(vp.getCamera().combined);
@@ -1874,6 +1831,16 @@ public class FightScene implements Screen{
     	debuffBatch.end();
     }
     
+    private void dealDamage(float x, float y, float damage) {
+    	DamageNumbers damageNumber = new DamageNumbers(x, y, damage, null);
+        stage.addActor(damageNumber);
+    }
+    
+    private void sendText(float x, float y, String text) {
+    	DamageNumbers damageNumber = new DamageNumbers(x, y, 0, text);
+        stage.addActor(damageNumber);
+    }
+    
     @Override
     public void dispose() {
         stage.dispose();
@@ -1960,7 +1927,6 @@ public class FightScene implements Screen{
 		
 		charBatch.setProjectionMatrix(vp.getCamera().combined);
 	    enemyBatch.setProjectionMatrix(vp.getCamera().combined);
-	    gameOverBatch.setProjectionMatrix(vp.getCamera().combined);
 	    weaponBatch.setProjectionMatrix(vp.getCamera().combined);
 	    shieldBatch.setProjectionMatrix(vp.getCamera().combined);
 	    helmetBatch.setProjectionMatrix(vp.getCamera().combined);
@@ -2217,7 +2183,7 @@ public class FightScene implements Screen{
 	    drawDebuffs();
 	    
     	update();
-        stage.act();
+    	stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
@@ -2225,7 +2191,6 @@ public class FightScene implements Screen{
 	public void resize(int width, int height) {
 		charBatch.setProjectionMatrix(vp.getCamera().combined);
 	    enemyBatch.setProjectionMatrix(vp.getCamera().combined);
-	    gameOverBatch.setProjectionMatrix(vp.getCamera().combined);
 	    weaponBatch.setProjectionMatrix(vp.getCamera().combined);
 	    shieldBatch.setProjectionMatrix(vp.getCamera().combined);
 	    helmetBatch.setProjectionMatrix(vp.getCamera().combined);
