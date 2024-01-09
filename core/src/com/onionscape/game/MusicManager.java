@@ -43,11 +43,11 @@ public class MusicManager {
 
         for (Music music : backgroundMusicTracks) {
             music.setLooping(false);
-            music.setVolume(0.2f);
+            music.setVolume(0.0f);
         }
         for (Music music : fightMusicTracks) {
             music.setLooping(false);
-            music.setVolume(0.1f);
+            music.setVolume(0.0f);
         }
 
         // Sound effects

@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 public class Storage {
 	private static Storage instance = null;
 	public Skin skin;
-	public TextButton.TextButtonStyle buttonStyle, buttonStyleBig;
+	public TextButton.TextButtonStyle buttonStyle, buttonStyleBig, homeBtnStyle;
 	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol;
 	public BitmapFont font, fontBig, fontSmol, fontMedium;
 	private List<Weapons> playerWeapons = new ArrayList<>();
@@ -130,6 +130,7 @@ public class Storage {
 		assetManager.load("maps/StartScreen.png", Texture.class, textureParameter);
 		assetManager.load("maps/ForestMap.png", Texture.class, textureParameter);
 		assetManager.load("maps/ForestFight.png", Texture.class, textureParameter);
+		assetManager.load("maps/HomeScreen.png", Texture.class, textureParameter);
 		
 		// Buffs & Debuffs
 		assetManager.load("buffs/Barrier.png", Texture.class, textureParameter);
@@ -386,8 +387,12 @@ public class Storage {
         fontMedium = generator.generateFont(parameter);
         Texture borderTextureUp = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton.9.png"));
         Texture borderTextureDown = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton-down.9.png"));
+        Texture homeBorderTextureUp = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/homeButton.9.png"));
+        Texture homeBorderTextureDown = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/homeButton-down.9.png"));
         NinePatch borderPatchUp = new NinePatch(borderTextureUp, 1, 1, 1, 1);
         NinePatch borderPatchDown = new NinePatch(borderTextureDown, 1, 1, 1, 1);
+        NinePatch homeBorderPatchUp = new NinePatch(homeBorderTextureUp, 1, 1, 1, 1);
+        NinePatch homeBorderPatchDown = new NinePatch(homeBorderTextureDown, 1, 1, 1, 1);
         
         // Create a new style for button
         buttonStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
@@ -399,6 +404,11 @@ public class Storage {
         buttonStyleBig.up = new NinePatchDrawable(borderPatchUp);
         buttonStyleBig.down = new NinePatchDrawable(borderPatchDown);
         buttonStyleBig.font = fontBig; 
+                
+        homeBtnStyle = new TextButton.TextButtonStyle(skin.get(TextButton.TextButtonStyle.class));
+        homeBtnStyle.up = new NinePatchDrawable(homeBorderPatchUp);
+        homeBtnStyle.down = new NinePatchDrawable(homeBorderPatchDown);
+        homeBtnStyle.font = font;
 
         labelStyle = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyle.font = font;  
