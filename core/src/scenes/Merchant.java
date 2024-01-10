@@ -8,6 +8,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -22,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+import com.onionscape.game.TextureManager;
 
 import player.Player;
 import storage.Armor;
@@ -56,6 +59,8 @@ public class Merchant implements Screen{
 	private int itemValue;
 	private String itemName;
 	private Random rand = new Random();
+	private Texture mapTexture;
+	private SpriteBatch mapBatch = new SpriteBatch();
 	
 	public Merchant(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -66,6 +71,9 @@ public class Merchant implements Screen{
 		storage = Storage.getInstance();
 		skin = storage.skin;
 		storage.createFont();
+		
+		mapTexture = Storage.assetManager.get("maps/MerchantScreen.png", Texture.class);
+		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		
 		createComponents();	
 		if(!raid) {
@@ -144,73 +152,73 @@ public class Merchant implements Screen{
 	            switch (type) {
 	            case "Helmet": 
 	            	itemValue = storage.healthyIronHelmet.getValue();
-	            	return Inventory.ironHelmetTexture;
+	            	return TextureManager.ironHelmetTexture;
 	            case "Chest": 
 	            	itemValue = storage.healthyIronChest.getValue();
-	            	return Inventory.ironChestTexture;
+	            	return TextureManager.ironChestTexture;
 	            case "Boots": 
 	            	itemValue = storage.healthyIronBoots.getValue();
-	            	return Inventory.ironBootsTexture;
+	            	return TextureManager.ironBootsTexture;
 	            case "Axe": 
 	            	itemValue = storage.healthyIronAxe.getValue();
-	            	return Inventory.ironAxeTexture;
+	            	return TextureManager.ironAxeTexture;
 	            case "Greataxe": 
 	            	itemValue = storage.healthyIronGA.getValue();
-	            	return Inventory.ironGreataxeTexture;
+	            	return TextureManager.ironGreataxeTexture;
 	            case "Shield": 
 	            	itemValue = storage.healthyIronShield.getValue();
-	            	return Inventory.ironShieldTexture;
+	            	return TextureManager.ironShieldTexture;
 	            default: 
-	            	return Inventory.inventorySlotTexture;
+	            	return TextureManager.inventorySlotTexture;
 	            }
 	        case "Bronze":
 	            switch (type) {
 	            case "Helmet": 
 	            	itemValue = storage.healthyBronzeHelmet.getValue();
-	            	return Inventory.bronzeHelmetTexture;
+	            	return TextureManager.bronzeHelmetTexture;
 	            case "Chest": 
 	            	itemValue = storage.healthyBronzeChest.getValue();
-	            	return Inventory.bronzeChestTexture;
+	            	return TextureManager.bronzeChestTexture;
 	            case "Boots": 
 	            	itemValue = storage.healthyBronzeBoots.getValue();
-	            	return Inventory.bronzeBootsTexture;
+	            	return TextureManager.bronzeBootsTexture;
 	            case "Axe": 
 	            	itemValue = storage.healthyBronzeAxe.getValue();
-	            	return Inventory.bronzeAxeTexture;
+	            	return TextureManager.bronzeAxeTexture;
 	            case "Greataxe": 
 	            	itemValue = storage.healthyBronzeGA.getValue();
-	            	return Inventory.bronzeGreataxeTexture;
+	            	return TextureManager.bronzeGreataxeTexture;
 	            case "Shield": 
 	            	itemValue = storage.healthyBronzeShield.getValue();
-	            	return Inventory.bronzeShieldTexture;
+	            	return TextureManager.bronzeShieldTexture;
 		        default: 
-		        	return Inventory.inventorySlotTexture;
+		        	return TextureManager.inventorySlotTexture;
 	            }
 	        case "Steel":
 	            switch (type) {
 	            case "Helmet": 
                 	itemValue = storage.healthySteelHelmet.getValue();
-                	return Inventory.steelHelmetTexture;
+                	return TextureManager.steelHelmetTexture;
                 case "Chest": 
                 	itemValue = storage.healthySteelChest.getValue();
-                	return Inventory.steelChestTexture;
+                	return TextureManager.steelChestTexture;
                 case "Boots": 
                 	itemValue = storage.healthySteelBoots.getValue();
-                	return Inventory.steelBootsTexture;
+                	return TextureManager.steelBootsTexture;
                 case "Axe": 
                 	itemValue = storage.healthySteelAxe.getValue();
-                	return Inventory.steelAxeTexture;
+                	return TextureManager.steelAxeTexture;
                 case "Greataxe": 
                 	itemValue = storage.healthySteelGA.getValue();
-                	return Inventory.steelGreataxeTexture;
+                	return TextureManager.steelGreataxeTexture;
                 case "Shield": 
                 	itemValue = storage.healthySteelShield.getValue();
-                	return Inventory.steelShieldTexture;
+                	return TextureManager.steelShieldTexture;
                 default: 
-                	return Inventory.inventorySlotTexture;
+                	return TextureManager.inventorySlotTexture;
 	            }
 	        default:
-	        	return Inventory.inventorySlotTexture;
+	        	return TextureManager.inventorySlotTexture;
 	    }
 	}
 	
@@ -388,109 +396,109 @@ public class Merchant implements Screen{
 		if(gearType == "Weapon") {
 			switch(gearSlot) {
 			case "Wooden Greataxe":
-				return Inventory.woodenGreataxeTexture;
+				return TextureManager.woodenGreataxeTexture;
 			case "Iron Greataxe":
-				return Inventory.ironGreataxeTexture;
+				return TextureManager.ironGreataxeTexture;
 			case "Iron Axe":
-				return Inventory.ironAxeTexture;
+				return TextureManager.ironAxeTexture;
 			case "Wooden Axe":
-				return Inventory.woodenAxeTexture;
+				return TextureManager.woodenAxeTexture;
 			case "Wooden Shield":
-				return Inventory.woodenShieldTexture;
+				return TextureManager.woodenShieldTexture;
 			case "Iron Shield":
-				return Inventory.ironShieldTexture;
+				return TextureManager.ironShieldTexture;
 			case "Bronze Greataxe":
-				return Inventory.bronzeGreataxeTexture;
+				return TextureManager.bronzeGreataxeTexture;
 			case "Bronze Axe":
-				return Inventory.bronzeAxeTexture;
+				return TextureManager.bronzeAxeTexture;
 			case "Bronze Shield":
-				return Inventory.bronzeShieldTexture;
+				return TextureManager.bronzeShieldTexture;
 			case "Steel Greataxe":
-				return Inventory.steelGreataxeTexture;
+				return TextureManager.steelGreataxeTexture;
 			case "Steel Axe":
-				return Inventory.steelAxeTexture;
+				return TextureManager.steelAxeTexture;
 			case "Steel Shield":
-				return Inventory.steelShieldTexture;
+				return TextureManager.steelShieldTexture;
 			case "":
-				return Inventory.inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			default:
-				return Inventory.inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			}
 		}
 		else if(gearType == "Armor") {
 			switch(gearSlot) {
 			case "Iron Helmet":
-				return Inventory.ironHelmetTexture;
+				return TextureManager.ironHelmetTexture;
 			case "Iron Chest":
-				return Inventory.ironChestTexture;
+				return TextureManager.ironChestTexture;
 			case "Iron Boots":
-				return Inventory.ironBootsTexture;
+				return TextureManager.ironBootsTexture;
 			case "Bronze Helmet":
-				return Inventory.bronzeHelmetTexture;
+				return TextureManager.bronzeHelmetTexture;
 			case "Bronze Chest":
-				return Inventory.bronzeChestTexture;
+				return TextureManager.bronzeChestTexture;
 			case "Bronze Boots":
-				return Inventory.bronzeBootsTexture;
+				return TextureManager.bronzeBootsTexture;
 			case "Steel Helmet":
-				return Inventory.steelHelmetTexture;
+				return TextureManager.steelHelmetTexture;
 			case "Steel Chest":
-				return Inventory.steelChestTexture;
+				return TextureManager.steelChestTexture;
 			case "Steel Boots":
-				return Inventory.steelBootsTexture;
+				return TextureManager.steelBootsTexture;
 			case "":
-				return Inventory.inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			default:
-				return Inventory.inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			}
 		}
 		else if(gearType == "Item") {
 			switch(itemName) {
 			case "Health Potion":
-				return Inventory.healthPotionTexture;
+				return TextureManager.healthPotionTexture;
 			case "Bomb":
-				return Inventory.bombTexture;
+				return TextureManager.bombTexture;
 			case "Swing":
-				return Inventory.swingTexture;
+				return TextureManager.swingTexture;
 			case "Rend":
-				return Inventory.rendTexture;
+				return TextureManager.rendTexture;
 			case "Whirlwind":
-				return Inventory.whirlwindTexture;
+				return TextureManager.whirlwindTexture;
 			case "Ground Breaker":
-				return Inventory.groundBreakerTexture;
+				return TextureManager.groundBreakerTexture;
 			case "Bash":
-				return Inventory.bashTexture;
+				return TextureManager.bashTexture;
 			case "Barrier":
-				return Inventory.barrierTexture;
+				return TextureManager.barrierTexture;
 			case "Harden":
-				return Inventory.hardenTexture;
+				return TextureManager.hardenTexture;
 			case "Mend":
-				return Inventory.mendTexture;
+				return TextureManager.mendTexture;
 			case "Hilt Bash":
-				return Inventory.hiltBashTexture;
+				return TextureManager.hiltBashTexture;
 			case "Barbed Armor":
-				return Inventory.barbedArmorTexture;
+				return TextureManager.barbedArmorTexture;
 			case "Enrage":
-				return Inventory.enrageTexture;
+				return TextureManager.enrageTexture;
 			case "Riposte":
-				return Inventory.riposteTexture;
+				return TextureManager.riposteTexture;
 			case "Stab":
-				return Inventory.stabTexture;
+				return TextureManager.stabTexture;
 			case "Decapitate":
-				return Inventory.decapitateTexture;
+				return TextureManager.decapitateTexture;
 			case "Attack Boost":
-				return Inventory.apTexture;
+				return TextureManager.apTexture;
 			case "Defense Boost":
-				return Inventory.dpTexture;
+				return TextureManager.dpTexture;
 			case "Health Boost":
-				return Inventory.hpTexture;
+				return TextureManager.hpTexture;
 			case "Experience Boost":
-				return Inventory.expTexture;
+				return TextureManager.expTexture;
 			default:
-				return Inventory.inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			}
 		}
 		else
-			return Inventory.inventorySlotTexture;
+			return TextureManager.inventorySlotTexture;
 	}	
 	
 	private void createComponents() {
@@ -557,7 +565,7 @@ public class Merchant implements Screen{
 			
 			// Gear table (non-raid)		
 			for (int i = 0; i < gearBtns.length; i++) {
-				gearBtns[i] = new Image(Inventory.inventorySlotTexture);
+				gearBtns[i] = new Image(TextureManager.inventorySlotTexture);
 			}
 			gearTable.defaults().size(100, 100);
 			
@@ -623,7 +631,7 @@ public class Merchant implements Screen{
 	                @Override
 	                public void clicked(InputEvent event, float x, float y) {
 	                    handleRaidPurchases(true, item, loc);
-	                    discountBtns[loc] = new Image(Inventory.inventorySlotTexture);
+	                    discountBtns[loc] = new Image(TextureManager.inventorySlotTexture);
 	                }				
 	            });
 			}
@@ -673,7 +681,7 @@ public class Merchant implements Screen{
 	                @Override
 	                public void clicked(InputEvent event, float x, float y) {
 	                    handleRaidPurchases(false, item, loc);
-	                    standardBtns[loc] = new Image(Inventory.inventorySlotTexture);
+	                    standardBtns[loc] = new Image(TextureManager.inventorySlotTexture);
 	                }				
 	            });
 			}
@@ -688,85 +696,85 @@ public class Merchant implements Screen{
 		case 1:
 			itemName = storage.healthPot.getItemName().toString();
 			itemValue = storage.healthPot.getValue();
-			return Inventory.healthPotionTexture;
+			return TextureManager.healthPotionTexture;
 		case 2:
 			itemName = storage.bomb.getItemName().toString();
 			itemValue = storage.bomb.getValue();
-			return Inventory.bombTexture;
+			return TextureManager.bombTexture;
 		case 3:
 			itemName = storage.apBoost.getItemName().toString();
 			itemValue = storage.apBoost.getValue();
-			return Inventory.apTexture;
+			return TextureManager.apTexture;
 		case 4:
 			itemName = storage.dpBoost.getItemName().toString();
 			itemValue = storage.dpBoost.getValue();
-			return Inventory.dpTexture;
+			return TextureManager.dpTexture;
 		case 5:
 			itemName = storage.hpBoost.getItemName().toString();
 			itemValue = storage.hpBoost.getValue();
-			return Inventory.hpTexture;
+			return TextureManager.hpTexture;
 		case 6:
 			itemName = storage.expBoost.getItemName().toString();
 			itemValue = storage.expBoost.getValue();
-			return Inventory.expTexture;
+			return TextureManager.expTexture;
 		case 7:
 			itemName = storage.itemSwing.getItemName().toString();
 			itemValue = storage.itemSwing.getValue();
-			return Inventory.swingTexture;
+			return TextureManager.swingTexture;
 		case 8:
 			itemName = storage.itemRend.getItemName().toString();
 			itemValue = storage.itemRend.getValue();
-			return Inventory.rendTexture;
+			return TextureManager.rendTexture;
 		case 9:
 			itemName = storage.itemWhirlwind.getItemName().toString();
 			itemValue = storage.itemWhirlwind.getValue();
-			return Inventory.whirlwindTexture;
+			return TextureManager.whirlwindTexture;
 		case 10:
 			itemName = storage.itemGroundBreaker.getItemName().toString();
 			itemValue = storage.itemGroundBreaker.getValue();
-			return Inventory.groundBreakerTexture;
+			return TextureManager.groundBreakerTexture;
 		case 11:
 			itemName = storage.itemBash.getItemName().toString();
 			itemValue = storage.itemBash.getValue();
-			return Inventory.bashTexture;
+			return TextureManager.bashTexture;
 		case 12:
 			itemName = storage.itemBarrier.getItemName().toString();
 			itemValue = storage.itemBarrier.getValue();
-			return Inventory.barrierTexture;
+			return TextureManager.barrierTexture;
 		case 13:
 			itemName = storage.itemHarden.getItemName().toString();
 			itemValue = storage.itemHarden.getValue();
-			return Inventory.hardenTexture;
+			return TextureManager.hardenTexture;
 		case 14:
 			itemName = storage.itemMend.getItemName().toString();
 			itemValue = storage.itemMend.getValue();
-			return Inventory.mendTexture;
+			return TextureManager.mendTexture;
 		case 15:
 			itemName = storage.itemHiltBash.getItemName().toString();
 			itemValue = storage.itemHiltBash.getValue();
-			return Inventory.hiltBashTexture;
+			return TextureManager.hiltBashTexture;
 		case 16:
 			itemName = storage.itemBarbedArmor.getItemName().toString();
 			itemValue = storage.itemBarbedArmor.getValue();
-			return Inventory.barbedArmorTexture;
+			return TextureManager.barbedArmorTexture;
 		case 17:
 			itemName = storage.itemRiposte.getItemName().toString();
 			itemValue = storage.itemRiposte.getValue();
-			return Inventory.riposteTexture;
+			return TextureManager.riposteTexture;
 		case 18:
 			itemName = storage.itemStab.getItemName().toString();
 			itemValue = storage.itemStab.getValue();
-			return Inventory.stabTexture;
+			return TextureManager.stabTexture;
 		case 19:
 			itemName = storage.itemDecapitate.getItemName().toString();
 			itemValue = storage.itemDecapitate.getValue();
-			return Inventory.decapitateTexture;
+			return TextureManager.decapitateTexture;
 		case 20:
 			itemName = storage.itemEnrage.getItemName().toString();
 			itemValue = storage.itemEnrage.getValue();
-			return Inventory.enrageTexture;
+			return TextureManager.enrageTexture;
 		default:
-			return Inventory.inventorySlotTexture;
+			return TextureManager.inventorySlotTexture;
 		}		
 	}
 	
@@ -997,13 +1005,19 @@ public class Merchant implements Screen{
 
 	@Override
 	public void render(float delta) {
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
+		
+		mapBatch.begin();
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
+		mapBatch.end();
+		
 		stage.act();
 		stage.draw();			
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	}
 

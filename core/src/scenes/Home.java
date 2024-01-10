@@ -2,13 +2,16 @@ package scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -27,9 +30,9 @@ public class Home implements Screen {
 	public Stage stage;
 	private Storage storage;
 	private Game game;
-	private TextButton fight, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
-	saveBtn, loadBtn, forestBtn, merchantBtn;
-	private Label level, exp, coins;
+	private TextButton slots, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
+	saveBtn, exitBtn, forestBtn, merchantBtn, playBtn, settingsBtn;
+	private Label level, playerStats, coins;
 	private GameScreen gameScreen; 
 	private Inventory inv;
 	private SaveData saveData = new SaveData();
@@ -37,6 +40,7 @@ public class Home implements Screen {
 	public static int stageLvl = 0;
 	private SpriteBatch mapBatch = new SpriteBatch();
 	private Texture mapTexture;
+	public static boolean newHome = true;
 	
 	public Home(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -49,6 +53,7 @@ public class Home implements Screen {
 		storage.createFont();	
 		gameScreen.forestMap = null;
 		Merchant.raid = false;
+		newHome = false;
 		
 		mapTexture = Storage.assetManager.get("maps/HomeScreen.png", Texture.class);
 		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
@@ -66,8 +71,7 @@ public class Home implements Screen {
 			Player.setWeaponDmg(Player.getWeaponDmg() - 5);
 			
 		apBoost = dpBoost = hpBoost = expBoost = false;
-		
-		createComponents();	
+				
 		stageLvl = 0;
 		
 		if(storage.getEquippedWeapons().size() > 0) {
@@ -78,31 +82,65 @@ public class Home implements Screen {
 		}
 		else
 			Player.weaponState = 0;
+		
+		createComponents();	
 	}
 	
 	private void createComponents() {
 		level = new Label("Level: " + Player.getLevel(), storage.labelStyle);
-		level.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.1f);
+		level.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 1.45f);
+		level.setText("Level: " + Player.getLevel() + "\n\nExp: " + Player.getExp());
 		stage.addActor(level);
 		
-		exp = new Label("Exp: " + Player.getExp(), storage.labelStyle);
-		exp.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.15f);
-		stage.addActor(exp);
+		playerStats = new Label("", storage.labelStyle);
+		playerStats.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 2f);
+		if(Player.weaponState == 0)
+			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg()) + 
+					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
+		else if(Player.weaponState == 1)
+			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getOneHandStr()) + 
+					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
+		else if(Player.weaponState == 2)
+			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getTwoHandStr()) + 
+					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
+		stage.addActor(playerStats);
 		
 		coins = new Label("Coins: " + Player.getCoins(), storage.labelStyle);
-		coins.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.2f);
+		coins.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 3.5f);
 		stage.addActor(coins);
 		
-		fight = new TextButton("Slots", storage.homeBtnStyle);
-		fight.setColor(Color.LIGHT_GRAY);
-		fight.addListener(new ClickListener() {
+		slots = new TextButton("Slots", storage.homeBtnStyle);
+		slots.setColor(Color.LIGHT_GRAY);
+		slots.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			gameScreen.setCurrentState(GameScreen.SLOT_GAME);
     	    }});
-		fight.setSize(200, 50);
-		fight.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
-		stage.addActor(fight);
+		slots.setSize(200, 50);
+		slots.setPosition(vp.getWorldWidth() / 5.5f, vp.getWorldHeight() / 1.08f);
+		stage.addActor(slots);
+		
+		playBtn = new TextButton("Play", storage.homeBtnStyle);
+		playBtn.setColor(Color.LIGHT_GRAY);
+		playBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			if(playBtn.getText().toString().equals("Play")) {
+    				newGame.setVisible(true);
+        			forestBtn.setVisible(true);
+        			slots.setVisible(false);
+        			playBtn.setText("Back");
+    			}
+    			else {
+    				newGame.setVisible(false);
+	    			forestBtn.setVisible(false);
+	    			slots.setVisible(true);
+	    			playBtn.setText("Play");
+    			}
+    	    }});
+		playBtn.setSize(200, 50);
+		playBtn.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 1.08f);
+		stage.addActor(playBtn);
 		
 		newGame = new TextButton("New Game", storage.homeBtnStyle);
 		newGame.setColor(Color.LIGHT_GRAY);
@@ -140,7 +178,8 @@ public class Home implements Screen {
     			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
     	    }});
 		newGame.setSize(200, 50);
-		newGame.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 2f);
+		newGame.setPosition(vp.getWorldWidth() / 3.18f, vp.getWorldHeight() / 1.08f);
+		newGame.setVisible(false);
 		stage.addActor(newGame);
 		
 		zerkerTreeBtn = new TextButton("Skill Tree", storage.homeBtnStyle);
@@ -151,7 +190,7 @@ public class Home implements Screen {
     			gameScreen.setCurrentState(GameScreen.ZERKER_TREE);
     	    }});
 		zerkerTreeBtn.setSize(200, 50);
-		zerkerTreeBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 2f);
+		zerkerTreeBtn.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 32f);
 		stage.addActor(zerkerTreeBtn);			
 		
 		inventory = new TextButton("Bag", storage.homeBtnStyle);
@@ -162,7 +201,7 @@ public class Home implements Screen {
     			gameScreen.setCurrentState(GameScreen.INVENTORY);
     	    }});
 		inventory.setSize(200, 50);
-		inventory.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 3f);
+		inventory.setPosition(vp.getWorldWidth() / 5.5f, vp.getWorldHeight() / 32f);
 		stage.addActor(inventory);
 		
 		forestBtn = new TextButton("Forest", storage.homeBtnStyle);
@@ -186,7 +225,8 @@ public class Home implements Screen {
     			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
     	    }});
 		forestBtn.setSize(200, 50);
-		forestBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 2f);
+		forestBtn.setPosition(vp.getWorldWidth() / 5.5f, vp.getWorldHeight() / 1.08f);
+		forestBtn.setVisible(false);
 		stage.addActor(forestBtn);
 		
 		merchantBtn = new TextButton("Merchant", storage.homeBtnStyle);
@@ -201,7 +241,7 @@ public class Home implements Screen {
     			gameScreen.setCurrentState(GameScreen.MERCHANT);
     	    }});
 		merchantBtn.setSize(200, 50);
-		merchantBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 5f);
+		merchantBtn.setPosition(vp.getWorldWidth() / 3.18f, vp.getWorldHeight() / 32f);
 		stage.addActor(merchantBtn);
 		
 		weaponsBtn = new TextButton("Weapons", storage.homeBtnStyle);
@@ -223,7 +263,7 @@ public class Home implements Screen {
     			storage.inventoryWeapons(storage.healthySteelShield, "Add");
     	    }});
 		weaponsBtn.setSize(200, 50);
-		weaponsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 3.35f);
+		weaponsBtn.setPosition(vp.getWorldWidth() / 25f, vp.getWorldHeight() / 1.5f);
 		stage.addActor(weaponsBtn);
 		
 		armorBtn = new TextButton("Armor", storage.homeBtnStyle);
@@ -242,7 +282,7 @@ public class Home implements Screen {
     			storage.inventoryArmor(storage.healthySteelBoots, "Add");
     	    }});
 		armorBtn.setSize(200, 50);
-		armorBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 5f);
+		armorBtn.setPosition(vp.getWorldWidth() / 25f, vp.getWorldHeight() / 1.67f);
 		stage.addActor(armorBtn);
 		
 		itemsBtn = new TextButton("Items", storage.homeBtnStyle);
@@ -259,31 +299,42 @@ public class Home implements Screen {
     			storage.inventoryItems(storage.expBoost, "Add");
     	    }});
 		itemsBtn.setSize(200, 50);
-		itemsBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 10f);
+		itemsBtn.setPosition(vp.getWorldWidth() / 25f, vp.getWorldHeight() / 1.9f);
 		stage.addActor(itemsBtn);
 		
-		saveBtn = new TextButton("Save", storage.homeBtnStyle);
+		settingsBtn = new TextButton("SE", storage.homeBtnStyle);
+		settingsBtn.setColor(Color.LIGHT_GRAY);
+		settingsBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			gameScreen.setCurrentState(GameScreen.SETTINGS);
+    	    }});
+		settingsBtn.setSize(50, 50);
+		settingsBtn.setPosition(vp.getWorldWidth() / 1.21f, vp.getWorldHeight() / 1.08f);
+		stage.addActor(settingsBtn);
+		
+		saveBtn = new TextButton("S", storage.homeBtnStyle);
 		saveBtn.setColor(Color.LIGHT_GRAY);
 		saveBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			saveData.saveGame();
     	    }});
-		saveBtn.setSize(200, 50);
-		saveBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.2f);
+		saveBtn.setSize(50, 50);
+		saveBtn.setPosition(vp.getWorldWidth() / 1.14f, vp.getWorldHeight() / 1.08f);
 		stage.addActor(saveBtn);
 		
-		loadBtn = new TextButton("Exit", storage.homeBtnStyle);
-		loadBtn.setColor(Color.LIGHT_GRAY);
-		loadBtn.addListener(new ClickListener() {
+		exitBtn = new TextButton("X", storage.homeBtnStyle);
+		exitBtn.setColor(Color.LIGHT_GRAY);
+		exitBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			Gdx.app.exit();
     			System.exit(0);
     	    }});
-		loadBtn.setSize(200, 50);
-		loadBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.4f);
-		stage.addActor(loadBtn);
+		exitBtn.setSize(50, 50);
+		exitBtn.setPosition(vp.getWorldWidth() / 1.08f, vp.getWorldHeight() / 1.08f);
+		stage.addActor(exitBtn);
 	}
 	
 	private void resetSkills() {
@@ -332,6 +383,14 @@ public class Home implements Screen {
 		mapBatch.begin();
 		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
 		mapBatch.end();
+		
+		if(Gdx.input.isKeyPressed(Keys.F5)) {
+			for(Actor actor : stage.getActors()) {
+				actor.addAction(Actions.removeActor());
+			}
+			
+			createComponents();
+		}
 		
 		stage.act();
 		stage.draw();		

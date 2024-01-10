@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.SaveData;
+import com.onionscape.game.TextureManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,80 +58,18 @@ public class Inventory implements Screen {
 	private SpriteBatch chestBatch = new SpriteBatch();
 	private SpriteBatch bootsBatch = new SpriteBatch();
 	private SpriteBatch mapBatch = new SpriteBatch();
+	private SpriteBatch abilityBatch = new SpriteBatch();
+	private SpriteBatch gearBatch = new SpriteBatch();
 	public static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0, weaponAP = 0,
 			bonusHP = 0, bonusAP = 0, bonusDP = 0;
-	boolean twoHand = false, gearEq;
+	boolean twoHand = false, gearEq, showCard;
 	public static boolean haveGear = true;
 	
 	// Map texture
 	private Texture mapTexture  = Storage.assetManager.get("maps/InventoryScreen.png", Texture.class);
 	
 	// Get textures from storage
-	public static Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
-	public static Texture ironGreataxeTexture = Storage.assetManager.get("weapons/inventory/IronGreataxe.png", Texture.class);
-	public static Texture ironShieldTexture = Storage.assetManager.get("weapons/inventory/IronShield.png", Texture.class);
-	public static Texture ironAxeTexture = Storage.assetManager.get("weapons/inventory/IronAxe.png", Texture.class);
-	public static Texture woodenGreataxeTexture = Storage.assetManager.get("weapons/inventory/WoodenGreataxe.png", Texture.class);
-	public static Texture ironHelmetTexture = Storage.assetManager.get("armor/inventory/IronHelmet.png", Texture.class);
-	public static Texture ironChestTexture = Storage.assetManager.get("armor/inventory/IronChest.png", Texture.class);
-	public static Texture ironBootsTexture = Storage.assetManager.get("armor/inventory/IronBoots.png", Texture.class);
-	public static Texture woodenShieldTexture = Storage.assetManager.get("weapons/inventory/WoodenShield.png", Texture.class);
-	public static Texture healthPotionTexture = Storage.assetManager.get("items/HealthPotion.png", Texture.class);
-	public static Texture bombTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
-	public static Texture knifeTexture = Storage.assetManager.get("items/Bomb.png", Texture.class);
-	public static Texture apTexture = Storage.assetManager.get("items/AttackBoost.png", Texture.class);
-	public static Texture dpTexture = Storage.assetManager.get("items/DefenseBoost.png", Texture.class);
-	public static Texture hpTexture = Storage.assetManager.get("items/HealthBoost.png", Texture.class);
-	public static Texture expTexture = Storage.assetManager.get("items/ExperienceBoost.png", Texture.class);
-	public static Texture swingTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture rendTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture whirlwindTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture groundBreakerTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture bashTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture barrierTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture hardenTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture mendTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture hiltBashTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture barbedArmorTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture enrageTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture riposteTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture stabTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture decapitateTexture = Storage.assetManager.get("abilities/SwingIcon.png", Texture.class);
-	public static Texture onionTexture = Storage.assetManager.get("player/Onion.png", Texture.class);
-	public static Texture eIronGreataxeTexture = Storage.assetManager.get("weapons/equipped/IronGreataxe.png", Texture.class);
-	public static Texture eWoodenGreataxeTexture = Storage.assetManager.get("weapons/equipped/WoodenGreataxe.png", Texture.class);
-	public static Texture woodenAxeTexture = Storage.assetManager.get("weapons/inventory/WoodenAxe.png", Texture.class);	
-	public static Texture eWoodenAxeTexture = Storage.assetManager.get("weapons/equipped/WoodenAxe.png", Texture.class);
-	public static Texture eIronAxeTexture = Storage.assetManager.get("weapons/equipped/IronAxe.png", Texture.class);
-	public static Texture eIronShieldTexture = Storage.assetManager.get("weapons/equipped/IronShield.png", Texture.class);
-	public static Texture eWoodenShieldTexture = Storage.assetManager.get("weapons/equipped/WoodenShield.png", Texture.class);		
-	public static Texture eIronHelmetTexture = Storage.assetManager.get("armor/equipped/IronHelmet.png", Texture.class);		
-	public static Texture eIronChestTexture = Storage.assetManager.get("armor/equipped/IronChest.png", Texture.class);		
-	public static Texture eIronBootsTexture = Storage.assetManager.get("armor/equipped/IronBoots.png", Texture.class);		
-	public static Texture eBronzeHelmetTexture = Storage.assetManager.get("armor/equipped/BronzeHelmet.png", Texture.class);		
-	public static Texture eBronzeChestTexture = Storage.assetManager.get("armor/equipped/BronzeChest.png", Texture.class);		
-	public static Texture eBronzeBootsTexture = Storage.assetManager.get("armor/equipped/BronzeBoots.png", Texture.class);	
-	public static Texture eSteelHelmetTexture = Storage.assetManager.get("armor/equipped/SteelHelmet.png", Texture.class);		
-	public static Texture eSteelChestTexture = Storage.assetManager.get("armor/equipped/SteelChest.png", Texture.class);		
-	public static Texture eSteelBootsTexture = Storage.assetManager.get("armor/equipped/SteelBoots.png", Texture.class);
-	public static Texture bronzeHelmetTexture = Storage.assetManager.get("armor/inventory/BronzeHelmet.png", Texture.class);
-	public static Texture bronzeChestTexture = Storage.assetManager.get("armor/inventory/BronzeChest.png", Texture.class);
-	public static Texture bronzeBootsTexture = Storage.assetManager.get("armor/inventory/BronzeBoots.png", Texture.class);
-	public static Texture steelHelmetTexture = Storage.assetManager.get("armor/inventory/SteelHelmet.png", Texture.class);
-	public static Texture steelChestTexture = Storage.assetManager.get("armor/inventory/SteelChest.png", Texture.class);
-	public static Texture steelBootsTexture = Storage.assetManager.get("armor/inventory/SteelBoots.png", Texture.class);
-	public static Texture bronzeGreataxeTexture = Storage.assetManager.get("weapons/inventory/BronzeGreataxe.png", Texture.class);
-	public static Texture bronzeShieldTexture = Storage.assetManager.get("weapons/inventory/BronzeShield.png", Texture.class);
-	public static Texture bronzeAxeTexture = Storage.assetManager.get("weapons/inventory/BronzeAxe.png", Texture.class);
-	public static Texture steelGreataxeTexture = Storage.assetManager.get("weapons/inventory/SteelGreataxe.png", Texture.class);
-	public static Texture steelShieldTexture = Storage.assetManager.get("weapons/inventory/SteelShield.png", Texture.class);
-	public static Texture steelAxeTexture = Storage.assetManager.get("weapons/inventory/SteelAxe.png", Texture.class);
-	public static Texture eBronzeAxeTexture = Storage.assetManager.get("weapons/equipped/BronzeAxe.png", Texture.class);
-	public static Texture eBronzeShieldTexture = Storage.assetManager.get("weapons/equipped/BronzeShield.png", Texture.class);
-	public static Texture eBronzeGreataxeTexture = Storage.assetManager.get("weapons/equipped/BronzeGreataxe.png", Texture.class);
-	public static Texture eSteelAxeTexture = Storage.assetManager.get("weapons/equipped/SteelAxe.png", Texture.class);
-	public static Texture eSteelShieldTexture = Storage.assetManager.get("weapons/equipped/SteelShield.png", Texture.class);
-	public static Texture eSteelGreataxeTexture = Storage.assetManager.get("weapons/equipped/SteelGreataxe.png", Texture.class);
+	
 	
 	public Inventory(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -164,71 +103,7 @@ public class Inventory implements Screen {
 
 	private void smoothFilter(){
 		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		inventorySlotTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
-		eIronGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eWoodenGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eIronAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eWoodenAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eWoodenShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eIronShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		onionTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		ironAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		woodenAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		ironGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		woodenGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		ironShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		woodenShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		healthPotionTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bombTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		knifeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		apTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		dpTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		hpTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		expTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		swingTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		rendTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		whirlwindTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		groundBreakerTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bashTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		barrierTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		hardenTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		mendTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		hiltBashTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		barbedArmorTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		enrageTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		riposteTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		stabTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		decapitateTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		ironHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		ironChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		ironBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eIronHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eIronChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eIronBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);		
-		eBronzeHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);	
-		eBronzeChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eBronzeBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eSteelHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eSteelChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eSteelBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bronzeHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bronzeChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bronzeBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		steelHelmetTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		steelChestTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		steelBootsTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bronzeGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bronzeShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		bronzeAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		steelGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		steelShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		steelAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eBronzeAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eBronzeShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eBronzeGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eSteelAxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eSteelShieldTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		eSteelGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		
 	}
 	
 	private void removeBonusStats() {		
@@ -306,6 +181,8 @@ public class Inventory implements Screen {
 	            boolean emptySlot = false;
 	            String itemName = "";
 	            Texture slotTexture = null;
+	            int itemPower = 0;
+	            int bonus1 = 0;
 	        	
 	            // Check if there's a weapon to display in this slot.
 	            if (weaponIndex < inventoryWeapons.size()) {
@@ -313,12 +190,16 @@ public class Inventory implements Screen {
 	                slotTexture = setSlotImage(weapon.getWeaponName(), "Weapon");
 	                weaponIndex++;
 	                itemName = weapon.getWeaponName();
+	                itemPower = weapon.getWeaponDmg();
+	                bonus1 = weapon.getBonusStat();
 	            } 
 	            else if (armorIndex < inventoryArmor.size()) {
 	                Armor armor = inventoryArmor.get(armorIndex);
 	                slotTexture = setSlotImage(armor.getArmorName(), "Armor");
 	                armorIndex++;
 	                itemName = armor.getArmorName();
+	                itemPower = armor.getDefense();
+	                bonus1 = armor.getBonusStat();
 	            }
 	            else if (itemIndex < inventoryItems.size()) {
 	                Items item = inventoryItems.get(itemIndex);
@@ -343,6 +224,8 @@ public class Inventory implements Screen {
 	            }                    
 	            
 	            final String item = itemName;
+            	final int itemP = itemPower;
+            	final int bonus = bonus1;
 
 	            inventorySlotImage.addListener(new ClickListener() {
 	                @Override
@@ -354,15 +237,22 @@ public class Inventory implements Screen {
 	            inventorySlotImage.addListener(new InputListener() {
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-	                    gearName.setText(item);
-	                    gearName.setAlignment(Align.center);
+	                    if(itemP > 0 && bonus > 0)
+	                    	gearName.setText(item + "\n\n" + bonus + "\n\n" + itemP);
+	                    else if(itemP > 0)
+	                    	gearName.setText(item + "\n\n" + itemP);
+	                    else
+	                    	gearName.setText(item);
+//	                    gearName.setAlignment(Align.center);
 	                	gearName.setVisible(true);	                  	                    
 	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
+	                    showCard = true;
 	                }
 
 	                @Override
 	                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 	                    gearName.setVisible(false);
+	                    showCard = false;
 	                }
 	            });
 	        }
@@ -405,6 +295,8 @@ public class Inventory implements Screen {
 	        String itemName = "";
 	        Texture slotTexture = setSlotImage("", "");
             boolean emptySlot = true;
+            int itemPower = 0;
+            int bonus1 = 0;
 	        
 	        if (i <= 2) {  // Checking armor slots
 	            String armorType = (i == 0) ? "Helmet" : (i == 1) ? "Chest" : "Boots";
@@ -413,6 +305,8 @@ public class Inventory implements Screen {
 	                slotTexture = setSlotImage(armor.getArmorName(), "Armor");
 	                emptySlot = false;
 	                itemName = armor.getArmorName();
+	                itemPower = armor.getDefense();
+	                bonus1 = armor.getBonusStat();
 	            }
 	        }
 	        else if(i >= 3) {
@@ -422,13 +316,17 @@ public class Inventory implements Screen {
 	                    slotTexture = setSlotImage(weapon.getWeaponName(), "Weapon");
 	                    emptySlot = false;
 	                    itemName = weapon.getWeaponName();
+	                    itemPower = weapon.getWeaponDmg();
+		                bonus1 = weapon.getBonusStat();
 	                }
 	        		else if (weaponMap.containsKey("Axe")) {
 	                    Weapons weapon = weaponMap.get("Axe");
 	                    slotTexture = setSlotImage(weapon.getWeaponName(), "Weapon");
 	                    emptySlot = false;
 	                    itemName = weapon.getWeaponName();
-	                }
+	                    itemPower = weapon.getWeaponDmg();
+		                bonus1 = weapon.getBonusStat();
+	                }	        		
 	        	}
 	        	else if(i == 4) {
 	        		if (weaponMap.containsKey("Shield")) {
@@ -436,6 +334,8 @@ public class Inventory implements Screen {
 	                    slotTexture = setSlotImage(weapon.getWeaponName(), "Weapon");
 	                    emptySlot = false;
 	                    itemName = weapon.getWeaponName();
+	                    itemPower = weapon.getWeaponDmg();
+		                bonus1 = weapon.getBonusStat();
 	                }
 	        	}
 	        }	                  
@@ -456,6 +356,8 @@ public class Inventory implements Screen {
             }                    
 
             final String item = itemName;
+            final int itemP = itemPower;
+            final int bonus = bonus1;
 	    	
 	    	characterSlotImage.addListener(new ClickListener() {
                 @Override
@@ -466,10 +368,16 @@ public class Inventory implements Screen {
 	    	characterSlotImage.addListener(new InputListener() {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                    gearName.setText(item);
+                	if(itemP > 0 && bonus > 0)
+                    	gearName.setText(item + "\n\n" + bonus + "\n\n" + itemP);
+                    else if(itemP > 0)
+                    	gearName.setText(item + "\n\n" + itemP);
+                    else
+                    	gearName.setText(item);
                     gearName.setAlignment(Align.center);
                 	gearName.setVisible(true);	                  	                    
                     gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
+                    
                 }
 
                 @Override
@@ -587,111 +495,111 @@ public class Inventory implements Screen {
 		if(gearType == "Weapon") {
 			switch(gearSlot) {
 			case "Wooden Greataxe":
-				return woodenGreataxeTexture;
+				return TextureManager.woodenGreataxeTexture;
 			case "Iron Greataxe":
-				return ironGreataxeTexture;
+				return TextureManager.ironGreataxeTexture;
 			case "Iron Axe":
-				return ironAxeTexture;
+				return TextureManager.ironAxeTexture;
 			case "Wooden Axe":
-				return woodenAxeTexture;
+				return TextureManager.woodenAxeTexture;
 			case "Wooden Shield":
-				return woodenShieldTexture;
+				return TextureManager.woodenShieldTexture;
 			case "Iron Shield":
-				return ironShieldTexture;
+				return TextureManager.ironShieldTexture;
 			case "Bronze Greataxe":
-				return bronzeGreataxeTexture;
+				return TextureManager.bronzeGreataxeTexture;
 			case "Bronze Axe":
-				return bronzeAxeTexture;
+				return TextureManager.bronzeAxeTexture;
 			case "Bronze Shield":
-				return bronzeShieldTexture;
+				return TextureManager.bronzeShieldTexture;
 			case "Steel Greataxe":
-				return steelGreataxeTexture;
+				return TextureManager.steelGreataxeTexture;
 			case "Steel Axe":
-				return steelAxeTexture;
+				return TextureManager.steelAxeTexture;
 			case "Steel Shield":
-				return steelShieldTexture;
+				return TextureManager.steelShieldTexture;
 			case "":
-				return inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			default:
-				return inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			}
 		}
 		else if(gearType == "Armor") {
 			switch(gearSlot) {
 			case "Iron Helmet":
-				return ironHelmetTexture;
+				return TextureManager.ironHelmetTexture;
 			case "Iron Chest":
-				return ironChestTexture;
+				return TextureManager.ironChestTexture;
 			case "Iron Boots":
-				return ironBootsTexture;
+				return TextureManager.ironBootsTexture;
 			case "Bronze Helmet":
-				return bronzeHelmetTexture;
+				return TextureManager.bronzeHelmetTexture;
 			case "Bronze Chest":
-				return bronzeChestTexture;
+				return TextureManager.bronzeChestTexture;
 			case "Bronze Boots":
-				return bronzeBootsTexture;
+				return TextureManager.bronzeBootsTexture;
 			case "Steel Helmet":
-				return steelHelmetTexture;
+				return TextureManager.steelHelmetTexture;
 			case "Steel Chest":
-				return steelChestTexture;
+				return TextureManager.steelChestTexture;
 			case "Steel Boots":
-				return steelBootsTexture;
+				return TextureManager.steelBootsTexture;
 			case "":
-				return inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			default:
-				return inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			}
 		}
 		else if(gearType == "Item") {
 			switch(itemName) {
 			case "Health Potion":
-				return healthPotionTexture;
+				return TextureManager.healthPotionTexture;
 			case "Bomb":
-				return bombTexture;
+				return TextureManager.bombTexture;
 			case "Throwing Knife":
-				return knifeTexture;
+				return TextureManager.knifeTexture;
 			case "Swing":
-				return swingTexture;
+				return TextureManager.swingTexture;
 			case "Rend":
-				return rendTexture;
+				return TextureManager.rendTexture;
 			case "Whirlwind":
-				return whirlwindTexture;
+				return TextureManager.whirlwindTexture;
 			case "Ground Breaker":
-				return groundBreakerTexture;
+				return TextureManager.groundBreakerTexture;
 			case "Bash":
-				return bashTexture;
+				return TextureManager.bashTexture;
 			case "Barrier":
-				return barrierTexture;
+				return TextureManager.barrierTexture;
 			case "Harden":
-				return hardenTexture;
+				return TextureManager.hardenTexture;
 			case "Mend":
-				return mendTexture;
+				return TextureManager.mendTexture;
 			case "Hilt Bash":
-				return hiltBashTexture;
+				return TextureManager.hiltBashTexture;
 			case "Barbed Armor":
-				return barbedArmorTexture;
+				return TextureManager.barbedArmorTexture;
 			case "Enrage":
-				return enrageTexture;
+				return TextureManager.enrageTexture;
 			case "Riposte":
-				return riposteTexture;
+				return TextureManager.riposteTexture;
 			case "Stab":
-				return stabTexture;
+				return TextureManager.stabTexture;
 			case "Decapitate":
-				return decapitateTexture;
+				return TextureManager.decapitateTexture;
 			case "Attack Boost":
-				return apTexture;
+				return TextureManager.apTexture;
 			case "Defense Boost":
-				return dpTexture;
+				return TextureManager.dpTexture;
 			case "Health Boost":
-				return hpTexture;
+				return TextureManager.hpTexture;
 			case "Experience Boost":
-				return expTexture;
+				return TextureManager.expTexture;
 			default:
-				return inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			}
 		}
 		else
-			return inventorySlotTexture;
+			return TextureManager.inventorySlotTexture;
 	}	
 	
 	private String checkGearSlot(String gearSlot) {
@@ -1812,6 +1720,8 @@ public class Inventory implements Screen {
 		
 		gearName = new Label("", storage.labelStyle);
 		gearName.setVisible(false);
+		gearName.setSize(300, 450);
+		gearName.setWrap(true);
 		stage.addActor(gearName);
 	}
 
@@ -1824,6 +1734,7 @@ public class Inventory implements Screen {
 	@Override
 	public void render(float delta) {
 		mapBatch.setProjectionMatrix(vp.getCamera().combined);
+		abilityBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 		mapBatch.begin();
 		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
@@ -1881,19 +1792,19 @@ public class Inventory implements Screen {
 		}
 		
 		onionBatch.begin();
-		onionBatch.draw(onionTexture, vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 3f, 310, 500);
+		onionBatch.draw(TextureManager.onionTexture, vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 3f, 310, 500);
 		onionBatch.end();
 		
 		if(!helmetPiece.equals("Empty")) {
 			switch(helmet) {
 			case "Iron Helmet":
-				helmetTexture = eIronHelmetTexture;
+				helmetTexture = TextureManager.eIronHelmetTexture;
 				break;
 			case "Bronze Helmet":
-				helmetTexture = eBronzeHelmetTexture;
+				helmetTexture = TextureManager.eBronzeHelmetTexture;
 				break;
 			case "Steel Helmet":
-				helmetTexture = eSteelHelmetTexture;
+				helmetTexture = TextureManager.eSteelHelmetTexture;
 				break;
 			}
 			
@@ -1909,13 +1820,13 @@ public class Inventory implements Screen {
 		if(!chestPiece.equals("Empty")) {
 			switch(chest) {
 			case "Iron Chest":
-				chestTexture = eIronChestTexture;
+				chestTexture = TextureManager.eIronChestTexture;
 				break;
 			case "Bronze Chest":
-				chestTexture = eBronzeChestTexture;
+				chestTexture = TextureManager.eBronzeChestTexture;
 				break;
 			case "Steel Chest":
-				chestTexture = eSteelChestTexture;
+				chestTexture = TextureManager.eSteelChestTexture;
 				break;
 			}
 			
@@ -1931,13 +1842,13 @@ public class Inventory implements Screen {
 		if(!bootsPiece.equals("Empty")) {
 			switch(boots) {
 			case "Iron Boots":
-				bootsTexture = eIronBootsTexture;
+				bootsTexture = TextureManager.eIronBootsTexture;
 				break;
 			case "Bronze Boots":
-				bootsTexture = eBronzeBootsTexture;
+				bootsTexture = TextureManager.eBronzeBootsTexture;
 				break;
 			case "Steel Boots":
-				bootsTexture = eSteelBootsTexture;
+				bootsTexture = TextureManager.eSteelBootsTexture;
 				break;
 			}
 			
@@ -1953,35 +1864,35 @@ public class Inventory implements Screen {
 		if(!weaponPiece.equals("Empty")) {
 			switch(weapon) {
 			case "Iron Greataxe":
-				weaponTexture = eIronGreataxeTexture;
+				weaponTexture = TextureManager.eIronGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Wooden Greataxe":
-				weaponTexture = eWoodenGreataxeTexture;
+				weaponTexture = TextureManager.eWoodenGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Iron Axe":
-				weaponTexture = eIronAxeTexture;
+				weaponTexture = TextureManager.eIronAxeTexture;
 				twoHand = false;
 				break;
 			case "Wooden Axe":
-				weaponTexture = eWoodenAxeTexture;
+				weaponTexture = TextureManager.eWoodenAxeTexture;
 				twoHand = false;
 				break;
 			case "Bronze Greataxe":
-				weaponTexture = eBronzeGreataxeTexture;
+				weaponTexture = TextureManager.eBronzeGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Bronze Axe":
-				weaponTexture = eBronzeAxeTexture;
+				weaponTexture = TextureManager.eBronzeAxeTexture;
 				twoHand = false;
 				break;
 			case "Steel Greataxe":
-				weaponTexture = eSteelGreataxeTexture;
+				weaponTexture = TextureManager.eSteelGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Steel Axe":
-				weaponTexture = eSteelAxeTexture;
+				weaponTexture = TextureManager.eSteelAxeTexture;
 				twoHand = false;
 				break;
 			}
@@ -2009,16 +1920,16 @@ public class Inventory implements Screen {
 		if(!shieldPiece.equals("Empty")) {
 			switch(shield) {
 			case "Wooden Shield":
-				shieldTexture = eWoodenShieldTexture;
+				shieldTexture = TextureManager.eWoodenShieldTexture;
 				break;
 			case "Iron Shield":
-				shieldTexture = eIronShieldTexture;
+				shieldTexture = TextureManager.eIronShieldTexture;
 				break;
 			case "Bronze Shield":
-				shieldTexture = eBronzeShieldTexture;
+				shieldTexture = TextureManager.eBronzeShieldTexture;
 				break;
 			case "Steel Shield":
-				shieldTexture = eSteelShieldTexture;
+				shieldTexture = TextureManager.eSteelShieldTexture;
 				break;
 			}
 			
@@ -2029,6 +1940,12 @@ public class Inventory implements Screen {
 			shieldBatch.begin();
 			shieldSprite.draw(shieldBatch);		
 			shieldBatch.end();
+		}
+		
+		if(showCard) {
+			abilityBatch.begin();
+			abilityBatch.draw(TextureManager.abilityCardTexture, gearName.getX() - 40f, gearName.getY(), 300, 450);
+			abilityBatch.end();
 		}
 		
 		stage.act();
@@ -2044,6 +1961,7 @@ public class Inventory implements Screen {
 		chestBatch.setProjectionMatrix(vp.getCamera().combined);
 		bootsBatch.setProjectionMatrix(vp.getCamera().combined);
 		mapBatch.setProjectionMatrix(vp.getCamera().combined);	
+		abilityBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

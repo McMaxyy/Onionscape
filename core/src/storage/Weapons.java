@@ -1,7 +1,5 @@
 package storage;
 
-import java.util.Objects;
-
 public abstract class Weapons {
 	private String weaponName, handed;
 	private int weaponDmg, ID, bonusStat, value;

@@ -131,7 +131,8 @@ public class Storage {
 		assetManager.load("maps/ForestMap.png", Texture.class, textureParameter);
 		assetManager.load("maps/ForestFight.png", Texture.class, textureParameter);
 		assetManager.load("maps/HomeScreen.png", Texture.class, textureParameter);
-		
+		assetManager.load("maps/MerchantScreen.png", Texture.class, textureParameter);
+
 		// Buffs & Debuffs
 		assetManager.load("buffs/Barrier.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Enrage.png", Texture.class, textureParameter);
@@ -156,7 +157,9 @@ public class Storage {
 		// Misc
 		assetManager.load("abilities/SwingIcon.png", Texture.class, textureParameter);
 		assetManager.load("player/Onion.png", Texture.class, textureParameter);
-		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);		
+		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);	
+		assetManager.load("items/CardLarge.png", Texture.class, textureParameter);	
+		assetManager.load("items/CardSmall.png", Texture.class, textureParameter);	
 	}
 	
 	// Load items
@@ -378,6 +381,8 @@ public class Storage {
     	FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Cascadia.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 25;
+        parameter.minFilter = Texture.TextureFilter.Linear;
+        parameter.magFilter = Texture.TextureFilter.Linear;
         font = generator.generateFont(parameter);
         parameter.size = 50;
         fontBig = generator.generateFont(parameter);
@@ -385,6 +390,7 @@ public class Storage {
         fontSmol = generator.generateFont(parameter);
         parameter.size = 40;
         fontMedium = generator.generateFont(parameter);
+        
         Texture borderTextureUp = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton.9.png"));
         Texture borderTextureDown = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton-down.9.png"));
         Texture homeBorderTextureUp = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/homeButton.9.png"));

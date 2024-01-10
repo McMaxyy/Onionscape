@@ -22,7 +22,7 @@ public class Settings implements Screen{
 	private Storage storage;
 	private Game game;
 	private GameScreen gameScreen; 
-	private TextButton fullscreenBtn, borderlessBtn, backBtn, res1, res2;
+	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn;
 	
 	public Settings(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -38,34 +38,6 @@ public class Settings implements Screen{
 	}
 
 	private void createComponents() {
-		res1 = new TextButton("1080p", storage.buttonStyle);
-		res1.setColor(Color.LIGHT_GRAY);
-		res1.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			GameScreen.SELECTED_HEIGHT = 1080;
-    			GameScreen.SELECTED_WIDTH = 1920;
-    			gameScreen.resize(1920, 1080);
-    			gameScreen.setCurrentState(GameScreen.SETTINGS);   			
-    	    }});
-		res1.setSize(300, 100);
-		res1.setPosition(vp.getWorldWidth() / 4f, vp.getWorldHeight() / 3f);
-		stage.addActor(res1);
-		
-		res2 = new TextButton("Ass res", storage.buttonStyle);
-		res2.setColor(Color.LIGHT_GRAY);
-		res2.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			GameScreen.SELECTED_HEIGHT = 1200;
-    			GameScreen.SELECTED_WIDTH = 1920;
-    			gameScreen.resize(1920, 1200);
-    			gameScreen.setCurrentState(GameScreen.SETTINGS);   			
-    	    }});
-		res2.setSize(300, 100);
-		res2.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 3f);
-		stage.addActor(res2);
-		
 		fullscreenBtn = new TextButton("Fullscreen", storage.buttonStyle);
 		fullscreenBtn.setColor(Color.LIGHT_GRAY);
 		fullscreenBtn.addListener(new ClickListener() {
@@ -81,21 +53,38 @@ public class Settings implements Screen{
 		borderlessBtn = new TextButton("Borderless", storage.buttonStyle);
 		borderlessBtn.setColor(Color.LIGHT_GRAY);
 		borderlessBtn.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
-    			Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
-    	    }});
+		    @Override
+		    public void clicked(InputEvent event, float x, float y) {
+		    	Gdx.graphics.setUndecorated(true);
+		        Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+		        Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
+		    }
+		});
 		borderlessBtn.setSize(300, 100);
 		borderlessBtn.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 5f);
 		stage.addActor(borderlessBtn);
+		
+		windowedBtn = new TextButton("Windowed", storage.buttonStyle);
+		windowedBtn.setColor(Color.LIGHT_GRAY);
+		windowedBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			Gdx.graphics.setUndecorated(false);
+    			Gdx.graphics.setWindowedMode(1600, 900);
+    	    }});
+		windowedBtn.setSize(300, 100);
+		windowedBtn.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 10f);
+		stage.addActor(windowedBtn);
 		
 		backBtn = new TextButton("Return", storage.buttonStyle);
 		backBtn.setColor(Color.LIGHT_GRAY);
 		backBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.START_SCREEN);
+    			if(Home.newHome)
+    				gameScreen.setCurrentState(GameScreen.START_SCREEN);
+    			else
+    				gameScreen.setCurrentState(GameScreen.HOME);
     	    }});
 		backBtn.setSize(200, 150);
 		backBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.2f);
@@ -111,7 +100,7 @@ public class Settings implements Screen{
 	@Override
 	public void render(float delta) {
 		stage.act();
-		stage.draw();		
+		stage.draw();	
 	}
 
 	@Override

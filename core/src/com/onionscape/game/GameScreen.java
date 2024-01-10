@@ -2,6 +2,7 @@ package com.onionscape.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -92,7 +93,7 @@ public class GameScreen implements Screen {
 	            Gdx.input.setInputProcessor(merchant.stage);
 	            break;
 	        case SETTINGS:
-	        	this.settings = new Settings(viewport, game, this);
+	            this.settings = new Settings(viewport, game, this);
 	            Gdx.input.setInputProcessor(settings.stage);
 	            break;
 	        case SLOT_GAME:
@@ -159,9 +160,6 @@ public class GameScreen implements Screen {
         viewport.update(finalWidth, finalHeight, true);
         viewport.apply();
         viewport.getCamera().update(); 
-        
-        if(fightScene != null)
-        	fightScene.resize(width, height);
 	}
 
 	@Override

@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.DamageNumbers;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.MusicManager;
+import com.onionscape.game.TextureManager;
 
 import player.Player;
 import storage.Abilities;
@@ -102,7 +103,7 @@ public class FightScene implements Screen{
         loadTextures();
         
         // Initialize sprite stuff
-        charTexture = Inventory.onionTexture;
+        charTexture = TextureManager.onionTexture;
         charSprite = new Sprite(charTexture);
         charSprite.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 2f);
         heightChar = 450;
@@ -1682,53 +1683,53 @@ public class FightScene implements Screen{
     	if(type == "Item") {
 			switch(itemName) {
 			case "Health Potion":
-				return Inventory.healthPotionTexture;
+				return TextureManager.healthPotionTexture;
 			case "Bomb":
-				return Inventory.bombTexture;
+				return TextureManager.bombTexture;
 			case "Throwing Knife":
-				return Inventory.knifeTexture;
+				return TextureManager.knifeTexture;
 			case "Swing":
-				return Inventory.swingTexture;
+				return TextureManager.swingTexture;
 			case "Rend":
-				return Inventory.rendTexture;
+				return TextureManager.rendTexture;
 			case "Whirlwind":
-				return Inventory.whirlwindTexture;
+				return TextureManager.whirlwindTexture;
 			case "Ground Breaker":
-				return Inventory.groundBreakerTexture;
+				return TextureManager.groundBreakerTexture;
 			case "Bash":
-				return Inventory.bashTexture;
+				return TextureManager.bashTexture;
 			case "Barrier":
-				return Inventory.barrierTexture;
+				return TextureManager.barrierTexture;
 			case "Harden":
-				return Inventory.hardenTexture;
+				return TextureManager.hardenTexture;
 			case "Mend":
-				return Inventory.mendTexture;
+				return TextureManager.mendTexture;
 			case "Hilt Bash":
-				return Inventory.hiltBashTexture;
+				return TextureManager.hiltBashTexture;
 			case "Barbed Armor":
-				return Inventory.barbedArmorTexture;
+				return TextureManager.barbedArmorTexture;
 			case "Enrage":
-				return Inventory.enrageTexture;
+				return TextureManager.enrageTexture;
 			case "Riposte":
-				return Inventory.riposteTexture;
+				return TextureManager.riposteTexture;
 			case "Stab":
-				return Inventory.stabTexture;
+				return TextureManager.stabTexture;
 			case "Decapitate":
-				return Inventory.decapitateTexture;
+				return TextureManager.decapitateTexture;
 			case "Attack Boost":
-				return Inventory.apTexture;
+				return TextureManager.apTexture;
 			case "Defense Boost":
-				return Inventory.dpTexture;
+				return TextureManager.dpTexture;
 			case "Health Boost":
-				return Inventory.hpTexture;
+				return TextureManager.hpTexture;
 			case "Experience Boost":
-				return Inventory.expTexture;
+				return TextureManager.expTexture;
 			default:
-				return Inventory.inventorySlotTexture;
+				return TextureManager.inventorySlotTexture;
 			}
 		}
 		else
-			return Inventory.inventorySlotTexture;
+			return TextureManager.inventorySlotTexture;
     }
     
     private void drawHealthBar() {
@@ -1983,13 +1984,13 @@ public class FightScene implements Screen{
 	    if(!helmetPiece.equals("Empty")) {
 			switch(helmet) {
 			case "Iron Helmet":
-				helmetTexture = Inventory.eIronHelmetTexture;
+				helmetTexture = TextureManager.eIronHelmetTexture;
 				break;
 			case "Bronze Helmet":
-				helmetTexture = Inventory.eBronzeHelmetTexture;
+				helmetTexture = TextureManager.eBronzeHelmetTexture;
 				break;
 			case "Steel Helmet":
-				helmetTexture = Inventory.eSteelHelmetTexture;
+				helmetTexture = TextureManager.eSteelHelmetTexture;
 				break;
 			}			
 			
@@ -2009,13 +2010,13 @@ public class FightScene implements Screen{
 		if(!chestPiece.equals("Empty")) {
 			switch(chest) {
 			case "Iron Chest":
-				chestTexture = Inventory.eIronChestTexture;
+				chestTexture = TextureManager.eIronChestTexture;
 				break;
 			case "Bronze Chest":
-				chestTexture = Inventory.eBronzeChestTexture;
+				chestTexture = TextureManager.eBronzeChestTexture;
 				break;
 			case "Steel Chest":
-				chestTexture = Inventory.eSteelChestTexture;
+				chestTexture = TextureManager.eSteelChestTexture;
 				break;
 			}
 			
@@ -2033,13 +2034,13 @@ public class FightScene implements Screen{
 		if(!bootsPiece.equals("Empty")) {
 			switch(boots) {
 			case "Iron Boots":
-				bootsTexture = Inventory.eIronBootsTexture;
+				bootsTexture = TextureManager.eIronBootsTexture;
 				break;
 			case "Bronze Boots":
-				bootsTexture = Inventory.eBronzeBootsTexture;
+				bootsTexture = TextureManager.eBronzeBootsTexture;
 				break;
 			case "Steel Boots":
-				bootsTexture = Inventory.eSteelBootsTexture;
+				bootsTexture = TextureManager.eSteelBootsTexture;
 				break;
 			}
 			
@@ -2058,35 +2059,35 @@ public class FightScene implements Screen{
 	    if(!weaponPiece.equals("Empty")) {
 			switch(weapon) {
 			case "Iron Greataxe":
-				weaponTexture = Inventory.eIronGreataxeTexture;
+				weaponTexture = TextureManager.eIronGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Wooden Greataxe":
-				weaponTexture = Inventory.eWoodenGreataxeTexture;
+				weaponTexture = TextureManager.eWoodenGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Wooden Axe":
-				weaponTexture = Inventory.eWoodenAxeTexture;
+				weaponTexture = TextureManager.eWoodenAxeTexture;
 				twoHand = false;
 				break;
 			case "Iron Axe":
-				weaponTexture = Inventory.eIronAxeTexture;
+				weaponTexture = TextureManager.eIronAxeTexture;
 				twoHand = false;
 				break;
 			case "Bronze Greataxe":
-				weaponTexture = Inventory.eBronzeGreataxeTexture;
+				weaponTexture = TextureManager.eBronzeGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Bronze Axe":
-				weaponTexture = Inventory.eBronzeAxeTexture;
+				weaponTexture = TextureManager.eBronzeAxeTexture;
 				twoHand = false;
 				break;
 			case "Steel Greataxe":
-				weaponTexture = Inventory.eSteelGreataxeTexture;
+				weaponTexture = TextureManager.eSteelGreataxeTexture;
 				twoHand = true;
 				break;
 			case "Steel Axe":
-				weaponTexture = Inventory.eSteelAxeTexture;
+				weaponTexture = TextureManager.eSteelAxeTexture;
 				twoHand = false;
 				break;
 			}
@@ -2133,16 +2134,16 @@ public class FightScene implements Screen{
 	    if(!shieldPiece.equals("Empty")) {
 	    	switch(shield) {
 	    	case "Wooden Shield":
-				shieldTexture = Inventory.eWoodenShieldTexture;
+				shieldTexture = TextureManager.eWoodenShieldTexture;
 				break;
 			case "Iron Shield":
-				shieldTexture = Inventory.eIronShieldTexture;
+				shieldTexture = TextureManager.eIronShieldTexture;
 				break;
 			case "Bronze Shield":
-				shieldTexture = Inventory.eBronzeShieldTexture;
+				shieldTexture = TextureManager.eBronzeShieldTexture;
 				break;
 			case "Steel Shield":
-				shieldTexture = Inventory.eSteelShieldTexture;
+				shieldTexture = TextureManager.eSteelShieldTexture;
 				break;
 	    	}
 	    	
