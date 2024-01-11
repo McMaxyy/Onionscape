@@ -3,9 +3,16 @@ package scenes;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -29,10 +36,12 @@ public class BerserkerSkillTree implements Screen{
 	private Label twoHandLbl, oneHandLbl, thickSkinLbl, weaponMasteryLbl, blockAuraLbl, 
 	eleResistLbl, rendMasteryLbl, lifeStealLbl, poisonRendLbl, ironSkinLbl, bulkUpLbl,sharpenWeaponsLbl, 
 	luckyStrikeLbl, blockEfficiencyLbl, bludgeonEnemyLbl, doubleSwingLbl, thornsLbl, healthyLbl;
-	private Label level, skillPoints;
+	private Label level, skillPoints, skillDescription;
 	private GameScreen gameScreen;
 	private boolean pointUsed = false;
 	public static int skillPointsUsed = 0;
+	private SpriteBatch mapBatch = new SpriteBatch();
+	private Texture mapTexture;
 
 	public static int twoHMastery = 0;
 	public static int oneHMastery = 0;
@@ -70,93 +79,101 @@ public class BerserkerSkillTree implements Screen{
 		skin = storage.skin;
 		storage.createFont();
 		
+		mapTexture = Storage.assetManager.get("maps/SkillTreeZerker.png", Texture.class);
+		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
+		
 		createComponents();	
 	}
 	
 	private void createComponents() {
-		homeBtn = new TextButton("Home", storage.buttonStyle);
+		homeBtn = new TextButton("Home", storage.homeBtnStyle);
 		homeBtn.setColor(Color.LIGHT_GRAY);
 		homeBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			gameScreen.setCurrentState(GameScreen.HOME);
     	    }});
-		homeBtn.setSize(130, 80);
-		homeBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.25f);
+		homeBtn.setSize(150, 40);
+		homeBtn.setPosition(vp.getWorldWidth() / 50f, vp.getWorldHeight() / 1.064f);
 		stage.addActor(homeBtn);
 		
-		resetBtn = new TextButton("Reset", storage.buttonStyle);
+		resetBtn = new TextButton("Reset", storage.homeBtnStyle);
 		resetBtn.setColor(Color.LIGHT_GRAY);
 		resetBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			resetTree();
     	    }});
-		resetBtn.setSize(130, 80);
-		resetBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.4f);
+		resetBtn.setSize(150, 40);
+		resetBtn.setPosition(vp.getWorldWidth() / 8f, vp.getWorldHeight() / 1.064f);
 		stage.addActor(resetBtn);
 	
-		level = new Label("Level: " + Player.getLevel(), storage.labelStyle);
-		level.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.05f);
+		level = new Label("Level: " + Player.getLevel(), storage.labelStyleBlack);
+		level.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.15f);
 		stage.addActor(level);
+				
+		skillDescription = new Label("", storage.labelStyle);
+		skillDescription.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 1.045f);
+		skillDescription.setVisible(false);
+		stage.addActor(skillDescription);
 		
-		skillPoints = new Label("Skill points: " + Player.getSkillPoints(), storage.labelStyle);
-		skillPoints.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.1f);
+		skillPoints = new Label("Skill points: " + Player.getSkillPoints(), storage.labelStyleBlack);
+		skillPoints.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.2f);
 		stage.addActor(skillPoints);
 		
 		// Skill Tree labels
-		twoHandLbl = new Label("2H Mastery (" + twoHMastery + "/5)", storage.labelStyle);
+		twoHandLbl = new Label("2H Mastery (" + twoHMastery + "/5)", storage.labelStyleBlack);
 		twoHandLbl.setPosition(vp.getWorldWidth() / 4f, vp.getWorldHeight() / 1.15f);
 		
-		oneHandLbl = new Label("1H Mastery (" + oneHMastery + "/5)", storage.labelStyle);
+		oneHandLbl = new Label("1H Mastery (" + oneHMastery + "/5)", storage.labelStyleBlack);
 		oneHandLbl.setPosition(vp.getWorldWidth() / 2.3f, vp.getWorldHeight() / 1.15f);
 		
-		thickSkinLbl = new Label("Thick Skin (" + thickSkin + "/5)", storage.labelStyle);
+		thickSkinLbl = new Label("Thick Skin (" + thickSkin + "/5)", storage.labelStyleBlack);
 		thickSkinLbl.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 1.15f);
 		
-		weaponMasteryLbl = new Label("Weapon Mastery (" + weaponMastery + "/3)", storage.labelStyle);
+		weaponMasteryLbl = new Label("Weapon Mastery (" + weaponMastery + "/3)", storage.labelStyleBlack);
 		weaponMasteryLbl.setPosition(vp.getWorldWidth() / 7f, vp.getWorldHeight() / 1.4f);
 		
-		blockAuraLbl = new Label("Block Aura (" + blockAura + "/1)", storage.labelStyle);
+		blockAuraLbl = new Label("Block Aura (" + blockAura + "/1)", storage.labelStyleBlack);
 		blockAuraLbl.setPosition(vp.getWorldWidth() / 2.9f, vp.getWorldHeight() / 1.4f);
 		
-		eleResistLbl = new Label("Elemental Resistance (" + eleResist + "/2)", storage.labelStyle);
+		eleResistLbl = new Label("Elemental Resistance (" + eleResist + "/2)", storage.labelStyleBlack);
 		eleResistLbl.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.4f);
 		
-		rendMasteryLbl = new Label("Rend Mastery (" + rendMastery + "/3)", storage.labelStyle);
+		rendMasteryLbl = new Label("Rend Mastery (" + rendMastery + "/3)", storage.labelStyleBlack);
 		rendMasteryLbl.setPosition(vp.getWorldWidth() / 1.35f, vp.getWorldHeight() / 1.4f);
 		
-		poisonRendLbl = new Label("Poison Rend (" + poisonRend + "/1)", storage.labelStyle);
+		poisonRendLbl = new Label("Poison Rend (" + poisonRend + "/1)", storage.labelStyleBlack);
 		poisonRendLbl.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.9f);
 		
-		lifeStealLbl = new Label("Life Steal (" + lifeSteal + "/1)", storage.labelStyle);
+		lifeStealLbl = new Label("Life Steal (" + lifeSteal + "/1)", storage.labelStyleBlack);
 		lifeStealLbl.setPosition(vp.getWorldWidth() / 3.35f, vp.getWorldHeight() / 1.9f);
 		
-		ironSkinLbl = new Label("Iron Skin (" + ironSkin + "/5)", storage.labelStyle);
+		ironSkinLbl = new Label("Iron Skin (" + ironSkin + "/5)", storage.labelStyleBlack);
 		ironSkinLbl.setPosition(vp.getWorldWidth() / 2.1f, vp.getWorldHeight() / 1.9f);
 		
-		bulkUpLbl = new Label("Bulk Up! (" + bulkUp + "/5)", storage.labelStyle);
+		bulkUpLbl = new Label("Bulk Up! (" + bulkUp + "/5)", storage.labelStyleBlack);
 		bulkUpLbl.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 1.9f);
 		
-		healthyLbl = new Label("Healthy (" + healthy + "/5)", storage.labelStyle);
+		healthyLbl = new Label("Healthy (" + healthy + "/5)", storage.labelStyleBlack);
 		healthyLbl.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 1.9f);
 		
-		sharpenWeaponsLbl = new Label("Sharpen Weapons (" + sharpenWeapons + "/5)", storage.labelStyle);
+		sharpenWeaponsLbl = new Label("Sharpen Weapons (" + sharpenWeapons + "/5)", storage.labelStyleBlack);
 		sharpenWeaponsLbl.setPosition(vp.getWorldWidth() / 5f, vp.getWorldHeight() / 2.9f);
 		
-		luckyStrikeLbl = new Label("Lucky Strike (" + luckyStrike + "/1)", storage.labelStyle);
+		luckyStrikeLbl = new Label("Lucky Strike (" + luckyStrike + "/1)", storage.labelStyleBlack);
 		luckyStrikeLbl.setPosition(vp.getWorldWidth() / 2.3f, vp.getWorldHeight() / 2.9f);
 		
-		blockEfficiencyLbl = new Label("Block Efficiency (" + blockEfficiency + "/5)", storage.labelStyle);
+		blockEfficiencyLbl = new Label("Block Efficiency (" + blockEfficiency + "/5)", storage.labelStyleBlack);
 		blockEfficiencyLbl.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 2.9f);
 		
-		bludgeonEnemyLbl = new Label("Bludgeon Enemy (" + bludgeonEnemy + "/1)", storage.labelStyle);
+		bludgeonEnemyLbl = new Label("Bludgeon Enemy (" + bludgeonEnemy + "/1)", storage.labelStyleBlack);
 		bludgeonEnemyLbl.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 6.3f);
 		
-		doubleSwingLbl = new Label("Double Swing (" + doubleSwing + "/1)", storage.labelStyle);
+		doubleSwingLbl = new Label("Double Swing (" + doubleSwing + "/1)", storage.labelStyleBlack);
 		doubleSwingLbl.setPosition(vp.getWorldWidth() / 2.3f, vp.getWorldHeight() / 6.3f);
 		
-		thornsLbl = new Label("Thorns (" + thorns + "/1)", storage.labelStyle);
+		thornsLbl = new Label("Thorns (" + thorns + "/1)", storage.labelStyleBlack);
 		thornsLbl.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 6.3f);
 		
 		// Skill Tree buttons		
@@ -175,6 +192,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		twoHandBtn.setSize(50, 50);
 		twoHandBtn.setPosition(twoHandLbl.getX() + twoHandLbl.getWidth() / 2.5f, twoHandLbl.getY() - 65f);
+		descriptionListener(twoHandBtn, "Increase damage dealt with 2H weapons");
 		
 		oneHandBtn = new TextButton("+", storage.buttonStyle);
 		oneHandBtn.setColor(Color.WHITE);
@@ -191,6 +209,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		oneHandBtn.setSize(50, 50);
 		oneHandBtn.setPosition(oneHandLbl.getX() + oneHandLbl.getWidth() / 2.5f, oneHandLbl.getY() - 65f);
+		descriptionListener(oneHandBtn, "Increase damage dealt with 1H weapons");
 		
 		thickSkinBtn = new TextButton("+", storage.buttonStyle);
 		thickSkinBtn.setColor(Color.WHITE);
@@ -207,6 +226,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		thickSkinBtn.setSize(50, 50);
 		thickSkinBtn.setPosition(thickSkinLbl.getX() + thickSkinLbl.getWidth() / 2.5f, thickSkinLbl.getY() - 65f);
+		descriptionListener(thickSkinBtn, "Increase damage resistance");
 		
 		weaponMasteryBtn = new TextButton("+", storage.buttonStyle);
 		weaponMasteryBtn.setColor(Color.WHITE);
@@ -223,6 +243,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		weaponMasteryBtn.setSize(50, 50);
 		weaponMasteryBtn.setPosition(weaponMasteryLbl.getX() + weaponMasteryLbl.getWidth() / 2.5f, weaponMasteryLbl.getY() - 65f);
+		descriptionListener(weaponMasteryBtn, "Increase weapon damage");
 		
 		blockAuraBtn = new TextButton("+", storage.buttonStyle);
 		blockAuraBtn.setColor(Color.WHITE);
@@ -237,6 +258,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		blockAuraBtn.setSize(50, 50);
 		blockAuraBtn.setPosition(blockAuraLbl.getX() + blockAuraLbl.getWidth() / 2.5f, blockAuraLbl.getY() - 65f);
+		descriptionListener(blockAuraBtn, "Every third enemy attack is blocked");
 		
 		eleResistBtn = new TextButton("+", storage.buttonStyle);
 		eleResistBtn.setColor(Color.WHITE);
@@ -251,6 +273,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		eleResistBtn.setSize(50, 50);
 		eleResistBtn.setPosition(eleResistLbl.getX() + eleResistLbl.getWidth() / 2.5f, eleResistLbl.getY() - 65f);
+		descriptionListener(eleResistBtn, "Increase damage resistence of DoT attacks");
 		
 		rendMasteryBtn = new TextButton("+", storage.buttonStyle);
 		rendMasteryBtn.setColor(Color.WHITE);
@@ -265,6 +288,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		rendMasteryBtn.setSize(50, 50);
 		rendMasteryBtn.setPosition(rendMasteryLbl.getX() + rendMasteryLbl.getWidth() / 2.5f, rendMasteryLbl.getY() - 65f);
+		descriptionListener(rendMasteryBtn, "Increase damage over time effects");
 		
 		lifeStealBtn = new TextButton("+", storage.buttonStyle);
 		lifeStealBtn.setColor(Color.WHITE);
@@ -279,6 +303,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		lifeStealBtn.setSize(50, 50);
 		lifeStealBtn.setPosition(lifeStealLbl.getX() + lifeStealLbl.getWidth() / 2.5f, lifeStealLbl.getY() - 65f);
+		descriptionListener(lifeStealBtn, "Heal for a portion of your attack");
 		
 		poisonRendBtn = new TextButton("+", storage.buttonStyle);
 		poisonRendBtn.setColor(Color.WHITE);
@@ -293,6 +318,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		poisonRendBtn.setSize(50, 50);
 		poisonRendBtn.setPosition(poisonRendLbl.getX() + poisonRendLbl.getWidth() / 2.5f, poisonRendLbl.getY() - 65f);
+		descriptionListener(poisonRendBtn, "Apply poison when using Rend");
 		
 		ironSkinBtn = new TextButton("+", storage.buttonStyle);
 		ironSkinBtn.setColor(Color.WHITE);
@@ -309,6 +335,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		ironSkinBtn.setSize(50, 50);
 		ironSkinBtn.setPosition(ironSkinLbl.getX() + ironSkinLbl.getWidth() / 2.5f, ironSkinLbl.getY() - 65f);
+		descriptionListener(ironSkinBtn, "Increase damage resistence");
 		
 		bulkUpBtn = new TextButton("+", storage.buttonStyle);
 		bulkUpBtn.setColor(Color.WHITE);
@@ -325,6 +352,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		bulkUpBtn.setSize(50, 50);
 		bulkUpBtn.setPosition(bulkUpLbl.getX() + bulkUpLbl.getWidth() / 2.5f, bulkUpLbl.getY() - 65f);
+		descriptionListener(bulkUpBtn, "Increase player strength");
 		
 		healthyBtn = new TextButton("+", storage.buttonStyle);
 		healthyBtn.setColor(Color.WHITE);
@@ -341,6 +369,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		healthyBtn.setSize(50, 50);
 		healthyBtn.setPosition(healthyLbl.getX() + healthyLbl.getWidth() / 2.5f, healthyLbl.getY() - 65f);
+		descriptionListener(healthyBtn, "Increase player's max Health Points");
 		
 		sharpenWeaponsBtn = new TextButton("+", storage.buttonStyle);
 		sharpenWeaponsBtn.setColor(Color.WHITE);
@@ -357,6 +386,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		sharpenWeaponsBtn.setSize(50, 50);
 		sharpenWeaponsBtn.setPosition(sharpenWeaponsLbl.getX() + sharpenWeaponsLbl.getWidth() / 2.5f, sharpenWeaponsLbl.getY() - 65f);
+		descriptionListener(sharpenWeaponsBtn, "Increase weapon damage");
 		
 		luckyStrikeBtn = new TextButton("+", storage.buttonStyle);
 		luckyStrikeBtn.setColor(Color.WHITE);
@@ -371,6 +401,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		luckyStrikeBtn.setSize(50, 50);
 		luckyStrikeBtn.setPosition(luckyStrikeLbl.getX() + luckyStrikeLbl.getWidth() / 2.5f, luckyStrikeLbl.getY() - 65f);
+		descriptionListener(luckyStrikeBtn, "The first attack of a battle is doubled");
 		
 		blockEfficiencyBtn = new TextButton("+", storage.buttonStyle);
 		blockEfficiencyBtn.setColor(Color.WHITE);
@@ -385,6 +416,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		blockEfficiencyBtn.setSize(50, 50);
 		blockEfficiencyBtn.setPosition(blockEfficiencyLbl.getX() + blockEfficiencyLbl.getWidth() / 2.5f, blockEfficiencyLbl.getY() - 65f);
+		descriptionListener(blockEfficiencyBtn, "Chance to reactivate Barrier after it's depleted");
 		
 		bludgeonEnemyBtn = new TextButton("+", storage.buttonStyle);
 		bludgeonEnemyBtn.setColor(Color.WHITE);
@@ -399,6 +431,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		bludgeonEnemyBtn.setSize(50, 50);
 		bludgeonEnemyBtn.setPosition(bludgeonEnemyLbl.getX() + bludgeonEnemyLbl.getWidth() / 2.5f, bludgeonEnemyLbl.getY() - 65f);
+		descriptionListener(bludgeonEnemyBtn, "Every fifth attack with a 2H weapon also stuns the enemy");
 		
 		doubleSwingBtn = new TextButton("+", storage.buttonStyle);
 		doubleSwingBtn.setColor(Color.WHITE);
@@ -413,6 +446,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		doubleSwingBtn.setSize(50, 50);
 		doubleSwingBtn.setPosition(doubleSwingLbl.getX() + doubleSwingLbl.getWidth() / 2.5f, doubleSwingLbl.getY() - 65f);
+		descriptionListener(doubleSwingBtn, "Every third attack with a 1H weapon hits twice");
 		
 		thornsBtn = new TextButton("+", storage.buttonStyle);
 		thornsBtn.setColor(Color.WHITE);
@@ -427,6 +461,7 @@ public class BerserkerSkillTree implements Screen{
     	    }});
 		thornsBtn.setSize(50, 50);
 		thornsBtn.setPosition(thornsLbl.getX() + thornsLbl.getWidth() / 2.5f, thornsLbl.getY() - 65f);		
+		descriptionListener(thornsBtn, "Add permanent Thorns to the player");
 		
 		stage.addActor(twoHandBtn);
 		stage.addActor(oneHandBtn);
@@ -469,6 +504,25 @@ public class BerserkerSkillTree implements Screen{
 		checkAvailableUpgrades();
 		lockUpgradeButtons();
 	}	
+	
+	private void descriptionListener(final TextButton button, final String description) {
+	    button.setColor(Color.WHITE);
+	    
+	    // Enter listener
+	    button.addListener(new InputListener() {
+	        @Override
+	        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+	            skillDescription.setVisible(true);
+	            skillDescription.setText(description);
+	        }
+
+	        // Exit listener
+	        @Override
+	        public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+	            skillDescription.setVisible(false);
+	        }
+	    });
+	}
 	
 	private void resetTree() {
 		// Reset tree points
@@ -661,13 +715,27 @@ public class BerserkerSkillTree implements Screen{
 	}
 	@Override
 	public void render(float delta) {
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
+		
+		mapBatch.begin();
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
+		mapBatch.end();
+		
+		if(Gdx.input.isKeyPressed(Keys.F5)) {
+			for(Actor actor : stage.getActors()) {
+				actor.addAction(Actions.removeActor());
+			}
+			
+			createComponents();
+		}
+		
 		update();
 		stage.act();
 		stage.draw();		
 	}
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	}
 	@Override

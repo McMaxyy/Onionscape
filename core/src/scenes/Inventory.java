@@ -169,7 +169,7 @@ public class Inventory implements Screen {
 	    inventoryWeapons = storage.getPlayerWeapons();
 	    inventoryArmor = storage.getPlayerArmor();
 	    inventoryItems = storage.getPlayerItems();
-	    inventoryTable.defaults().size(100, 100); 
+	    inventoryTable.defaults().size(100, 100);
 	    inventoryTable.setName("inventoryTable");
 	    
 	    int weaponIndex = 0;
@@ -183,6 +183,7 @@ public class Inventory implements Screen {
 	            Texture slotTexture = null;
 	            int itemPower = 0;
 	            int bonus1 = 0;
+	            int gType = 0;
 	        	
 	            // Check if there's a weapon to display in this slot.
 	            if (weaponIndex < inventoryWeapons.size()) {
@@ -192,6 +193,7 @@ public class Inventory implements Screen {
 	                itemName = weapon.getWeaponName();
 	                itemPower = weapon.getWeaponDmg();
 	                bonus1 = weapon.getBonusStat();
+	                gType = 1;
 	            } 
 	            else if (armorIndex < inventoryArmor.size()) {
 	                Armor armor = inventoryArmor.get(armorIndex);
@@ -200,12 +202,13 @@ public class Inventory implements Screen {
 	                itemName = armor.getArmorName();
 	                itemPower = armor.getDefense();
 	                bonus1 = armor.getBonusStat();
+	                gType = 2;
 	            }
 	            else if (itemIndex < inventoryItems.size()) {
 	                Items item = inventoryItems.get(itemIndex);
 	                slotTexture = setSlotImage(item.getItemName(), "Item");
 	                itemIndex++;
-	                itemName = item.getItemName();	                
+	                itemName = item.getItemName();	
 	            }
 	            else {
 	                slotTexture = setSlotImage("", "");
@@ -226,6 +229,32 @@ public class Inventory implements Screen {
 	            final String item = itemName;
             	final int itemP = itemPower;
             	final int bonus = bonus1;
+            	String gearType = "";
+            	
+            	String prefix;
+            	if(item.startsWith("Healthy"))
+            		prefix = " Health";
+            	else if(item.startsWith("Strong"))
+            		prefix = " Attack Power";
+            	else if(item.startsWith("Defensive"))
+            		prefix = " Defense";
+            	else
+            		prefix = "";
+            	
+            	switch(gType) {
+            	case 0:
+            		gearType = "";
+            		break;
+            	case 1:
+            		gearType = "Attack Power: ";
+            		break;
+            	case 2:
+            		gearType = "Defense: ";
+            		break;
+            	}
+            	
+            	final String type = gearType;
+            	final String bonusStat = prefix; 
 
 	            inventorySlotImage.addListener(new ClickListener() {
 	                @Override
@@ -238,15 +267,16 @@ public class Inventory implements Screen {
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
 	                    if(itemP > 0 && bonus > 0)
-	                    	gearName.setText(item + "\n\n" + bonus + "\n\n" + itemP);
+	                    	gearName.setText(item + "\n\n\n+" + bonus + bonusStat + "\n\n\n" + type + itemP);
 	                    else if(itemP > 0)
-	                    	gearName.setText(item + "\n\n" + itemP);
+	                    	gearName.setText(item + "\n\n\n" + type + itemP);
 	                    else
-	                    	gearName.setText(item);
-//	                    gearName.setAlignment(Align.center);
+	                    	gearName.setText(item + "\n\n\n" + storage.itemDescription(item));
+	                    gearName.setAlignment(Align.center);
 	                	gearName.setVisible(true);	                  	                    
-	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
-	                    showCard = true;
+	                    gearName.setPosition(vp.getWorldWidth() / 2.2f, vp.getWorldHeight() / 2f);
+	                    if(!item.equals(""))
+	                    	showCard = true;
 	                }
 
 	                @Override
@@ -297,6 +327,7 @@ public class Inventory implements Screen {
             boolean emptySlot = true;
             int itemPower = 0;
             int bonus1 = 0;
+            int gType = 0;
 	        
 	        if (i <= 2) {  // Checking armor slots
 	            String armorType = (i == 0) ? "Helmet" : (i == 1) ? "Chest" : "Boots";
@@ -307,6 +338,7 @@ public class Inventory implements Screen {
 	                itemName = armor.getArmorName();
 	                itemPower = armor.getDefense();
 	                bonus1 = armor.getBonusStat();
+	                gType = 2;
 	            }
 	        }
 	        else if(i >= 3) {
@@ -318,6 +350,7 @@ public class Inventory implements Screen {
 	                    itemName = weapon.getWeaponName();
 	                    itemPower = weapon.getWeaponDmg();
 		                bonus1 = weapon.getBonusStat();
+		                gType = 1;
 	                }
 	        		else if (weaponMap.containsKey("Axe")) {
 	                    Weapons weapon = weaponMap.get("Axe");
@@ -326,6 +359,7 @@ public class Inventory implements Screen {
 	                    itemName = weapon.getWeaponName();
 	                    itemPower = weapon.getWeaponDmg();
 		                bonus1 = weapon.getBonusStat();
+		                gType = 1;
 	                }	        		
 	        	}
 	        	else if(i == 4) {
@@ -336,6 +370,7 @@ public class Inventory implements Screen {
 	                    itemName = weapon.getWeaponName();
 	                    itemPower = weapon.getWeaponDmg();
 		                bonus1 = weapon.getBonusStat();
+		                gType = 2;
 	                }
 	        	}
 	        }	                  
@@ -356,8 +391,34 @@ public class Inventory implements Screen {
             }                    
 
             final String item = itemName;
-            final int itemP = itemPower;
-            final int bonus = bonus1;
+        	final int itemP = itemPower;
+        	final int bonus = bonus1;
+        	String gearType = "";
+        	
+        	String prefix;
+        	if(item.startsWith("Healthy"))
+        		prefix = " Health";
+        	else if(item.startsWith("Strong"))
+        		prefix = " Attack Power";
+        	else if(item.startsWith("Defensive"))
+        		prefix = " Defense";
+        	else
+        		prefix = "";
+        	
+        	switch(gType) {
+        	case 0:
+        		gearType = "";
+        		break;
+        	case 1:
+        		gearType = "Attack Power: ";
+        		break;
+        	case 2:
+        		gearType = "Defense: ";
+        		break;
+        	}
+        	
+        	final String type = gearType;
+        	final String bonusStat = prefix;
 	    	
 	    	characterSlotImage.addListener(new ClickListener() {
                 @Override
@@ -368,21 +429,23 @@ public class Inventory implements Screen {
 	    	characterSlotImage.addListener(new InputListener() {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                	if(itemP > 0 && bonus > 0)
-                    	gearName.setText(item + "\n\n" + bonus + "\n\n" + itemP);
+                    if(itemP > 0 && bonus > 0)
+                    	gearName.setText(item + "\n\n+" + bonus + bonusStat + "\n\n" + type + itemP);
                     else if(itemP > 0)
-                    	gearName.setText(item + "\n\n" + itemP);
+                    	gearName.setText(item + "\n\n" + type + itemP);
                     else
                     	gearName.setText(item);
                     gearName.setAlignment(Align.center);
                 	gearName.setVisible(true);	                  	                    
-                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
-                    
+                    gearName.setPosition(vp.getWorldWidth() / 2.2f, vp.getWorldHeight() / 2f);
+                    if(!item.equals(""))
+                    	showCard = true;
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     gearName.setVisible(false);
+                    showCard = false;
                 }
             });
 	    	
@@ -439,15 +502,18 @@ public class Inventory implements Screen {
 	            inventorySlotImage.addListener(new InputListener() {
 	                @Override
 	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-	                    gearName.setText(item);
+	                	gearName.setText(item + "\n\n\n" + storage.itemDescription(item));
 	                    gearName.setAlignment(Align.center);
 	                	gearName.setVisible(true);	                  	                    
-	                    gearName.setPosition(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f);
+	                    gearName.setPosition(vp.getWorldWidth() / 2.2f, vp.getWorldHeight() / 2f);
+	                    if(!item.equals(""))
+	                    	showCard = true;
 	                }
 
 	                @Override
 	                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
 	                    gearName.setVisible(false);
+	                    showCard = false;
 	                }
 	            });
 	        }
@@ -1944,7 +2010,7 @@ public class Inventory implements Screen {
 		
 		if(showCard) {
 			abilityBatch.begin();
-			abilityBatch.draw(TextureManager.abilityCardTexture, gearName.getX() - 40f, gearName.getY(), 300, 450);
+			abilityBatch.draw(TextureManager.gearCardTexture, gearName.getX() - 40f, gearName.getY(), 380, gearName.getHeight());
 			abilityBatch.end();
 		}
 		

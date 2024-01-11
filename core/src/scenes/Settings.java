@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
+import com.onionscape.game.MusicManager;
 
 import storage.Storage;
 
@@ -22,7 +24,8 @@ public class Settings implements Screen{
 	private Storage storage;
 	private Game game;
 	private GameScreen gameScreen; 
-	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn;
+	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn, musicUp, musicDown, sfxUp, sfxDown;
+	private ShapeRenderer musicBar = new ShapeRenderer();
 	
 	public Settings(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -70,11 +73,39 @@ public class Settings implements Screen{
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			Gdx.graphics.setUndecorated(false);
-    			Gdx.graphics.setWindowedMode(1600, 900);
+    			Gdx.graphics.setWindowedMode(1280, 720);
     	    }});
 		windowedBtn.setSize(300, 100);
 		windowedBtn.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 10f);
 		stage.addActor(windowedBtn);
+		
+		musicUp = new TextButton("+", storage.buttonStyle);
+		musicUp.setColor(Color.LIGHT_GRAY);
+		musicUp.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			if(MusicManager.musicVol <= 1f) {
+    				MusicManager.musicVol += 0.05f;
+    				MusicManager.getInstance().changeVolume();
+    			}    				
+    	    }});
+		musicUp.setSize(30, 30);
+		musicUp.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 1.4f);
+		stage.addActor(musicUp);
+		
+		musicDown = new TextButton("-", storage.buttonStyle);
+		musicDown.setColor(Color.LIGHT_GRAY);
+		musicDown.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			if(MusicManager.musicVol >= 0.045f) {
+    				MusicManager.musicVol -= 0.05f;
+    				MusicManager.getInstance().changeVolume();
+    			} 
+    	    }});
+		musicDown.setSize(30, 30);
+		musicDown.setPosition(musicUp.getX() - 370, musicUp.getY());
+		stage.addActor(musicDown);
 		
 		backBtn = new TextButton("Return", storage.buttonStyle);
 		backBtn.setColor(Color.LIGHT_GRAY);
@@ -90,6 +121,23 @@ public class Settings implements Screen{
 		backBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.2f);
 		stage.addActor(backBtn);
 	}
+	
+	private void drawSoundBar() {
+		musicBar.setProjectionMatrix(vp.getCamera().combined);
+		musicBar.begin(ShapeRenderer.ShapeType.Filled);
+		
+		musicBar.setColor(Color.WHITE);
+		musicBar.rect(musicUp.getX() - 320, musicUp.getY(), 300, 30);
+		
+		musicBar.setColor(Color.BLACK);
+        float barWidth = (float)MusicManager.musicVol / 1.0f;
+        int width = (int)(barWidth * 300);
+        width = (width / 10) * 10;
+        if(MusicManager.musicVol <= 0.045f)
+        	width = 0;
+        musicBar.rect(musicUp.getX() - 320, musicUp.getY(), width, 30);
+        musicBar.end(); 
+	}
 
 	@Override
 	public void show() {
@@ -99,6 +147,8 @@ public class Settings implements Screen{
 
 	@Override
 	public void render(float delta) {
+		drawSoundBar();
+		
 		stage.act();
 		stage.draw();	
 	}

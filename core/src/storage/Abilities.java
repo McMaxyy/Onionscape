@@ -163,7 +163,7 @@ class Stab extends Abilities{
 class Decapitate extends Abilities{
 	public Decapitate() {
 		setAbilityName("Decapitate");
-		setAttackPower(15);
+		setAttackPower(20);
 		setUsesLeft(3);
 		setID(14);
 	}

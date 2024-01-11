@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -20,8 +21,8 @@ public class Storage {
 	private static Storage instance = null;
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle, buttonStyleBig, homeBtnStyle;
-	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol;
-	public BitmapFont font, fontBig, fontSmol, fontMedium;
+	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol, labelStyleBlack;
+	public BitmapFont font, fontBig, fontSmol, fontMedium, fontBlack;
 	private List<Weapons> playerWeapons = new ArrayList<>();
 	private List<Armor> playerArmor = new ArrayList<>();
 	private List<Items> playerItems = new ArrayList<>();
@@ -132,7 +133,8 @@ public class Storage {
 		assetManager.load("maps/ForestFight.png", Texture.class, textureParameter);
 		assetManager.load("maps/HomeScreen.png", Texture.class, textureParameter);
 		assetManager.load("maps/MerchantScreen.png", Texture.class, textureParameter);
-
+		assetManager.load("maps/SkillTreeZerker.png", Texture.class, textureParameter);
+		
 		// Buffs & Debuffs
 		assetManager.load("buffs/Barrier.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Enrage.png", Texture.class, textureParameter);
@@ -384,6 +386,9 @@ public class Storage {
         parameter.minFilter = Texture.TextureFilter.Linear;
         parameter.magFilter = Texture.TextureFilter.Linear;
         font = generator.generateFont(parameter);
+        parameter.color = Color.BLACK;
+        fontBlack = generator.generateFont(parameter);
+        parameter.color = Color.WHITE;
         parameter.size = 50;
         fontBig = generator.generateFont(parameter);
         parameter.size = 18;
@@ -424,6 +429,9 @@ public class Storage {
         
         labelStyleSmol = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyleSmol.font = fontSmol; 
+        
+        labelStyleBlack = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
+        labelStyleBlack.font = fontBlack; 
     }
 
 	public int[] getBonusHP() {
@@ -448,5 +456,54 @@ public class Storage {
 
 	public void setBonusDP(int index, int x) {
 		this.bonusDP[index] = x;
+	}
+	
+	public String itemDescription(String item) {
+		switch(item) {
+		case "Health Potion":
+			return "A potion of health, replenishing 20% of your max Health Points";
+		case "Bomb":
+			return "A small explosive, dealing 5 damage (increases depending on what stage you're on)";
+		case "Throwing Knife":
+			return "A knife that poisons the enemy upon use";
+		case "Attack Boost":
+			return "A booster vial that increases your overall Attack Power";
+		case "Defense Boost":
+			return "A booster vial that increases your overall Defenses";
+		case "Health Boost":
+			return "A booster vial that increases your max Health Points";
+		case "Experience Boost":
+			return "A booster vial that increases the Experience Points you gain during the raid";
+		case "Swing":
+			return "Swing your weapon towards the enemy, dealing damage" + "\n\n\nAttack Power: " + swing.getAttackPower();
+		case "Rend":
+			return "Cause the enemy to bleed";
+		case "Whirlwind":
+			return "Spin around yourself, hitting the enemy 3 times" + "\n\n\nAttack Power: " + whirlwind.getAttackPower();
+		case "Ground Breaker":
+			return "Hit the enemy with overwhelming force, stunning them in the process" + "\n\n\nAttack Power: " + groundBreaker.getAttackPower();
+		case "Bash":
+			return "Strike the enemy and stun them" + "\n\n\nAttack Power: " + bash.getAttackPower();
+		case "Barrier":
+			return "Block the next enemy attack (doesn't prevent DoT damage)";
+		case "Harden":
+			return "Strengthen your body, decreasing incoming damage";
+		case "Mend":
+			return "Heals the player for 5 (increases depending on what stage you're on)" + "\n\n\nHealing Power: " + mend.getAttackPower();
+		case "Hilt Bash":
+			return "Weaken the enemy, lowering its Attack Power";
+		case "Barbed Armor":
+			return "Cover your body with Thorns, which reflect a portion of the damage back to the attacker";
+		case "Enrage":
+			return "Enter a frenzied state, increasing your damage output";
+		case "Riposte":
+			return "Parry and reflect the enemy's attack";
+		case "Stab":
+			return "Stab the enemy, dealing damage" + "\n\n\nAttack Power: " + stab.getAttackPower();
+		case "Decapitate":
+			return "Attempt to decapitate the enemy. Deals more damage if the enemy's health is bellow 30%" + "\n\n\nAttack Power: " + decapitate.getAttackPower();
+		default:
+			return "";
+		}
 	}
 }

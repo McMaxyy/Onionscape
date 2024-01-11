@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -48,7 +49,7 @@ public class FightScene implements Screen{
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, backBtn;
     private TextButton reward1, reward2, reward3;
-    private Label playerHPLbl, enemyHPLbl, enemyNameLbl;
+    private Label playerHPLbl, enemyHPLbl, enemyNameLbl, gearName;
     private Texture charTexture, enemyTexture, mapTexture, barrierBuffTex, bleedBuffTex, enrageBuffTex,
     poisonBuffTex, stunBuffTex, hardenBuffTex, weakenBuffTex, thornsBuffTex;
     private SpriteBatch charBatch = new SpriteBatch();
@@ -63,6 +64,7 @@ public class FightScene implements Screen{
 	private SpriteBatch enemyHealthBatch = new SpriteBatch();
 	private SpriteBatch buffBatch = new SpriteBatch();
 	private SpriteBatch debuffBatch = new SpriteBatch();
+	private SpriteBatch abilityBatch = new SpriteBatch();
     private Sprite charSprite, enemySprite, weaponSprite, shieldSprite, helmetSprite, chestSprite, bootsSprite;
     private int enemyHP, enemyDamage, enemyValue, enemyMaxHP, expValue;
     private String enemyName, eAbility1, eAbility2, eAbility3, loot;
@@ -76,7 +78,7 @@ public class FightScene implements Screen{
     private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false, 
     		riposteActive, firstLoad = true;
     private int eRendLeft, ePoisonLeft, eEnrageLeft;
-    private boolean eHardenActive, playerStunned, eBarrierActive;
+    private boolean eHardenActive, playerStunned, eBarrierActive, showCard;
     java.util.List<Items> equippedItems;
     Table itemTable = new Table();
     Table abilitySwapTable = new Table();
@@ -134,6 +136,11 @@ public class FightScene implements Screen{
         if(RaidTextScenes.weaken)
         	eWeakenLeft = 2;
         
+        if(Home.story) {
+        	Player.setMaxHP(Player.getMaxHP() + Player.getSkillMaxHP());
+        	Player.setDmgResist(Player.getDmgResist() + Player.getSkillDmgResist());
+        }
+        
         storage.createFont();       
         createComponents();
         componentParameters(); 
@@ -157,9 +164,16 @@ public class FightScene implements Screen{
     		ability4.setColor(Color.GRAY);
 		}  
 		
-		System.out.println("Wep dmg: " + Player.getWeaponDmg());
-		System.out.println("Str: " + Player.getStrength());
-		System.out.println("Dmg res: " + Player.getDmgResist());
+		if(!Home.story) {
+			System.out.println("Wep dmg: " + Player.getWeaponDmg());
+			System.out.println("Str: " + Player.getStrength());
+			System.out.println("Dmg res: " + Player.getDmgResist());
+		}
+		else {
+			System.out.println("Wep dmg: " + (Player.getWeaponDmg() + Player.getSkillWeaponDmg() + Player.getOneHandStr()));
+			System.out.println("Str: " + Player.getStrength());
+			System.out.println("Dmg res: " + Player.getDmgResist());
+		}
     }
     
     private void loadTextures() {
@@ -318,6 +332,9 @@ public class FightScene implements Screen{
     		ability3.setText("");
     		ability4.setTouchable(Touchable.disabled);
     		ability4.setText("");
+    		
+    		Player.loseMaxHP(Player.getSkillMaxHP());
+    		Player.loseDR(Player.getSkillDmgResist());
     		
 	        if(pDead) {
 	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player died");
@@ -599,7 +616,7 @@ public class FightScene implements Screen{
     		break;
     	case "Mend":
     		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player used heal");
-    		Player.gainHP(storage.mend.getAttackPower());
+    		Player.gainHP(storage.mend.getAttackPower() * Home.stageLvl);
 			if(Player.getHp() > Player.getMaxHP())
 				Player.setHp(Player.getMaxHP());
 			break;
@@ -683,7 +700,10 @@ public class FightScene implements Screen{
     		hit = true;
     		break;
     	case 14:
-    		temp += Player.getStrength() + rand.nextInt(1, storage.decapitate.getAttackPower() + 1);
+    		if(enemyHP < (enemyMaxHP / 3))
+    			temp += Player.getStrength() + rand.nextInt(10, storage.decapitate.getAttackPower() + 1);
+    		else
+    			temp += Player.getStrength() + rand.nextInt(1, (storage.decapitate.getAttackPower() / 2) + 1);
     		hit = true;
     		break;
     	}
@@ -691,7 +711,10 @@ public class FightScene implements Screen{
     	// Add weapon damage
     	if(Player.weaponState == 1) {
     		doubleSwingCount++;
-    		temp += Player.getOneHandStr() + Player.getWeaponDmg();
+    		if(Home.story)
+    			temp += Player.getOneHandStr() + Player.getWeaponDmg() + Player.getSkillWeaponDmg();
+    		else
+    			temp += Player.getWeaponDmg();
     		if(doubleSwingCount == 3 && BerserkerSkillTree.doubleSwing == 1) {
     			doubleSwingCount = 0;
     			temp *= 2;
@@ -699,7 +722,10 @@ public class FightScene implements Screen{
     	}   		
     	else if(Player.weaponState == 2) {
     		bludgeonCount++;
-    		temp += Player.getTwoHandStr() + Player.getWeaponDmg();
+    		if(Home.story)
+    			temp += Player.getTwoHandStr() + Player.getWeaponDmg() + Player.getSkillWeaponDmg();
+    		else
+    			temp += Player.getWeaponDmg();
     		if(bludgeonCount == 5  && BerserkerSkillTree.bludgeonEnemy == 1) {
     			bludgeonCount = 0;
     			enemyStunned = true;
@@ -1205,6 +1231,12 @@ public class FightScene implements Screen{
     	enemyHPLbl = new Label(enemyHP + "/" + enemyMaxHP, storage.labelStyle);
     	enemyNameLbl = new Label(enemyName, storage.labelStyle);
     	
+    	gearName = new Label("", storage.labelStyle);
+		gearName.setVisible(false);
+		gearName.setSize(300, 450);
+		gearName.setWrap(true);
+		stage.addActor(gearName);
+    	
     	attackBtn = new TextButton("Attack", storage.buttonStyleBig);
     	attackBtn.setColor(Color.GRAY);
     	attackBtn.setName("Attack");
@@ -1236,6 +1268,22 @@ public class FightScene implements Screen{
     	    	}
     	        btnClicked = true;
     	    }});
+    	ability1.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+            	gearName.setText(getAbilityName(Player.getAbID1()) + "\n\n\n" + storage.itemDescription(getAbilityName(Player.getAbID1())));
+                gearName.setAlignment(Align.center);
+            	gearName.setVisible(true);	                  	                    
+            	gearName.setPosition(vp.getWorldWidth() / 2f - gearName.getWidth() / 2f, vp.getWorldHeight() / 2f);
+                showCard = true;
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                gearName.setVisible(false);
+                showCard = false;
+            }
+        });
     	
     	ability2 = new TextButton("Ability2", storage.buttonStyle);
     	if(GameScreen.newGame)
@@ -1258,6 +1306,22 @@ public class FightScene implements Screen{
     	    	}
     	        btnClicked = true;
     	    }});
+    	ability2.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        		gearName.setText(getAbilityName(Player.getAbID2()) + "\n\n\n" + storage.itemDescription(getAbilityName(Player.getAbID2())));
+                gearName.setAlignment(Align.center);
+            	gearName.setVisible(true);	                  	                    
+            	gearName.setPosition(vp.getWorldWidth() / 2f - gearName.getWidth() / 2f, vp.getWorldHeight() / 2f);
+                showCard = true;
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                gearName.setVisible(false);
+                showCard = false;
+            }
+        });
     	
     	ability3 = new TextButton("Ability3", storage.buttonStyle);
     	if(GameScreen.newGame)
@@ -1280,6 +1344,22 @@ public class FightScene implements Screen{
     	    	}
     	        btnClicked = true;
     	    }});
+    	ability3.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        		gearName.setText(getAbilityName(Player.getAbID3()) + "\n\n\n" + storage.itemDescription(getAbilityName(Player.getAbID3())));
+                gearName.setAlignment(Align.center);
+            	gearName.setVisible(true);	                  	                    
+            	gearName.setPosition(vp.getWorldWidth() / 2f - gearName.getWidth() / 2f, vp.getWorldHeight() / 2f);
+                showCard = true;
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                gearName.setVisible(false);
+                showCard = false;
+            }
+        });
     	
     	ability4 = new TextButton("Ability4", storage.buttonStyle);
     	if(GameScreen.newGame)
@@ -1302,6 +1382,22 @@ public class FightScene implements Screen{
     	    	}
     	        btnClicked = true;
     	    }});
+    	ability4.addListener(new InputListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        		gearName.setText(getAbilityName(Player.getAbID4()) + "\n\n\n" + storage.itemDescription(getAbilityName(Player.getAbID4())));
+                gearName.setAlignment(Align.center);
+            	gearName.setVisible(true);	                  	                    
+            	gearName.setPosition(vp.getWorldWidth() / 2f - gearName.getWidth() / 2f, vp.getWorldHeight() / 2f);
+                showCard = true;
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                gearName.setVisible(false);
+                showCard = false;
+            }
+        });
         
     	endTurn = new TextButton("End Turn", storage.buttonStyle);
     	endTurn.setColor(Color.LIGHT_GRAY);
@@ -1392,7 +1488,7 @@ public class FightScene implements Screen{
         attackBtn.setPosition(vp.getWorldWidth() / 5.2f - attackBtn.getWidth() / 2f,  vp.getWorldHeight() / 2.4f - attackBtn.getHeight() / 2f);
         
         endTurn.setSize(200, 80); 
-        endTurn.setPosition(vp.getWorldWidth() / 2f - endTurn.getWidth() / 2f, vp.getWorldHeight() / 1.8f);
+        endTurn.setPosition(vp.getWorldWidth() / 2f - endTurn.getWidth() / 2f, vp.getWorldHeight() / 3f);
         
         ability1.setSize(250, 150); 
         ability1.setPosition(vp.getWorldWidth() / 8.7f - ability1.getWidth() / 2f, vp.getWorldHeight() / 3.8f - ability1.getHeight() / 2f);
@@ -1494,8 +1590,8 @@ public class FightScene implements Screen{
     	    		break;
     	    	case "Bomb":
     	    		storage.equippedItems(storage.bomb, "Remove");
-    	    		dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), 10);
-    				enemyHP -= enemyHP / 10;
+    	    		dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), (Home.stageLvl * 5));
+    				enemyHP -= enemyHP / (Home.stageLvl * 5);
     				attackCount--;
     	    		break;
     	    	case "Throwing Knife":
@@ -1508,25 +1604,31 @@ public class FightScene implements Screen{
     				break;
     	    	case "Attack Boost":
     	    		storage.equippedItems(storage.apBoost, "Remove");
-    	    		Home.apBoost = true;
-    	    		Player.gainWeaponDmg(5);
-    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Attack Boost activated");
+    	    		if(!Home.apBoost) {
+    	    			Home.apBoost = true;
+        	    		Player.gainBonusStr(5);
+        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Attack Boost activated");
+    	    		} 	    		
     	    		break;
     	    	case "Defense Boost":
-    	    		storage.equippedItems(storage.dpBoost, "Remove");
-    	    		Home.dpBoost = true;
-    	    		Player.setDmgResist(Player.getDmgResist() + 5);
-    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Defense Boost activated");
+    	    		storage.equippedItems(storage.dpBoost, "Remove");    	    		
+    	    		if(!Home.dpBoost) {
+    	    			Player.setDmgResist(Player.getDmgResist() + 5);   
+        	    		Home.dpBoost = true;
+        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Defense Boost activated");
+    	    		}		
     	    		break;
     	    	case "Health Boost":
     	    		storage.equippedItems(storage.hpBoost, "Remove");
-    	    		Home.hpBoost = true;
-    	    		Player.gainMaxHP(10);
-    	    		if(Player.getHp() < Player.getMaxHP())
-    	    			Player.gainHP(10);
-    	    		if(Player.getHp() > Player.getMaxHP())
-    	    			Player.setHp(Player.getMaxHP());
-    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Health Boost activated");
+    	    		if(!Home.hpBoost) {
+    	    			Player.gainMaxHP(10); 		
+        	    		Home.hpBoost = true;  
+        	    		if(Player.getHp() < Player.getMaxHP())
+        	    			Player.gainHP(10);
+        	    		if(Player.getHp() > Player.getMaxHP())
+        	    			Player.setHp(Player.getMaxHP());
+        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Health Boost activated");
+    	    		}    		
     	    		break;
     	    	case "Experience Boost":
     	    		storage.equippedItems(storage.expBoost, "Remove");
@@ -1935,6 +2037,7 @@ public class FightScene implements Screen{
 		bootsBatch.setProjectionMatrix(vp.getCamera().combined);
 		buffBatch.setProjectionMatrix(vp.getCamera().combined);
 		debuffBatch.setProjectionMatrix(vp.getCamera().combined);
+		abilityBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	    time += delta; // Increment time by frame time
 	    rotationTime += delta;
@@ -2183,6 +2286,12 @@ public class FightScene implements Screen{
 	    drawBuffs();
 	    drawDebuffs();
 	    
+	    if(showCard) {
+			abilityBatch.begin();
+			abilityBatch.draw(TextureManager.gearCardTexture, gearName.getX() - 40f, gearName.getY(), 380, gearName.getHeight());
+			abilityBatch.end();
+		}
+	    
     	update();
     	stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
@@ -2202,6 +2311,7 @@ public class FightScene implements Screen{
 		enemyHealthBatch.setProjectionMatrix(vp.getCamera().combined);
 		buffBatch.setProjectionMatrix(vp.getCamera().combined);
 		debuffBatch.setProjectionMatrix(vp.getCamera().combined);
+		abilityBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

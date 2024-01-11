@@ -11,6 +11,9 @@ public class Player {
 	private static int strength = 3;
 	private static int weaponDmg = 0;
 	private static int dmgResist = 0;
+	private static int skillDmgResist = 0;
+	private static int skillWeaponDmg = 0;
+	private static int skillMaxHP = 0;
 	private static int coins = 200;
 	private static int level = 1;
 	private static int exp = 0;
@@ -18,7 +21,7 @@ public class Player {
 	private static int skillPoints = 30;	
 	private static int twoHandStr = 0, oneHandStr = 0;
 	public static int abID1, abID2, abID3, abID4;
-	public static int weaponState = 0;
+	public static int weaponState = 0;	
 	private static Random rand = new Random();
 	
 	public static void skillTreeGains(int x) {
@@ -30,16 +33,16 @@ public class Player {
 			oneHandStr++;
 			break;
 		case 2:
-			dmgResist++;
+			skillDmgResist++;
 			break;
 		case 3:
-			weaponDmg++;
+			skillWeaponDmg++;
 			break;
 		case 4:
 			strength++;
 			break;
 		case 5:
-			maxHP += 3;
+			skillMaxHP += 3;
 			break;
 		}
 	}
@@ -248,5 +251,29 @@ public class Player {
 
 	public static void setRaidCoins(int raidCoins) {
 		Player.raidCoins = raidCoins;
-	}	
+	}
+
+	public static int getSkillDmgResist() {
+		return skillDmgResist;
+	}
+
+	public static void setSkillDmgResist(int skillDmgResist) {
+		Player.skillDmgResist = skillDmgResist;
+	}
+
+	public static int getSkillWeaponDmg() {
+		return skillWeaponDmg;
+	}
+
+	public static void setSkillWeaponDmg(int skillWeaponDmg) {
+		Player.skillWeaponDmg = skillWeaponDmg;
+	}
+
+	public static int getSkillMaxHP() {
+		return skillMaxHP;
+	}
+
+	public static void setSkillMaxHP(int skillMaxHP) {
+		Player.skillMaxHP = skillMaxHP;
+	}
 }

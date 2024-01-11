@@ -13,6 +13,7 @@ public class MusicManager {
     private List<Sound> soundEffects;
     private int currentTrackIndex;
     private Music currentMusic;
+    public static float musicVol = 0.1f, sfxVol = 0.45f;
 
     private MusicManager() {
         // private constructor to enforce singleton pattern
@@ -24,6 +25,20 @@ public class MusicManager {
 
     public static MusicManager getInstance() {
         return instance;
+    }
+    
+    public void changeVolume() {
+    	if(musicVol <= 0.0f)
+    		musicVol = 0.0f;
+    	
+    	for (Music music : backgroundMusicTracks) {
+            music.setLooping(false);
+            music.setVolume(musicVol);
+        }
+        for (Music music : fightMusicTracks) {
+            music.setLooping(false);
+            music.setVolume(musicVol);
+        }
     }
 
     public void initialize() {
@@ -43,11 +58,11 @@ public class MusicManager {
 
         for (Music music : backgroundMusicTracks) {
             music.setLooping(false);
-            music.setVolume(0.0f);
+            music.setVolume(musicVol);
         }
         for (Music music : fightMusicTracks) {
             music.setLooping(false);
-            music.setVolume(0.0f);
+            music.setVolume(musicVol);
         }
 
         // Sound effects
@@ -78,7 +93,7 @@ public class MusicManager {
 
     public void playSoundEffect(int index) {
         if (index >= 0 && index < soundEffects.size()) {
-            soundEffects.get(index).play(0.45f);
+            soundEffects.get(index).play(sfxVol);
         }
     }
 

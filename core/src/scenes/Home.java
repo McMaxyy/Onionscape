@@ -64,11 +64,11 @@ public class Home implements Screen {
 		}
 		
 		if(hpBoost)
-			Player.setMaxHP(Player.getMaxHP() - 10);
+			Player.loseMaxHP(10);
 		if(dpBoost)
-			Player.setDmgResist(Player.getDmgResist() - 5);
+			Player.loseDR(5);
 		if(apBoost)
-			Player.setWeaponDmg(Player.getWeaponDmg() - 5);
+			Player.loseBonusStr(5);
 			
 		apBoost = dpBoost = hpBoost = expBoost = false;
 				
@@ -82,7 +82,7 @@ public class Home implements Screen {
 		}
 		else
 			Player.weaponState = 0;
-		
+				
 		createComponents();	
 	}
 	
@@ -96,13 +96,13 @@ public class Home implements Screen {
 		playerStats.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 2f);
 		if(Player.weaponState == 0)
 			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg()) + 
-					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
+					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
 		else if(Player.weaponState == 1)
-			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getOneHandStr()) + 
-					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
+			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getOneHandStr() + Player.getSkillWeaponDmg()) + 
+					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
 		else if(Player.weaponState == 2)
-			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getTwoHandStr()) + 
-					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
+			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getTwoHandStr() + Player.getSkillWeaponDmg()) + 
+					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
 		stage.addActor(playerStats);
 		
 		coins = new Label("Coins: " + Player.getCoins(), storage.labelStyle);
@@ -291,7 +291,7 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryItems(storage.healthPot, "Add");
-    			storage.inventoryItems(storage.throwingKnife, "Add");
+    			storage.inventoryItems(storage.bomb, "Add");
     			storage.inventoryItems(storage.itemSwing, "Add");
     			storage.inventoryItems(storage.apBoost, "Add");
     			storage.inventoryItems(storage.dpBoost, "Add");

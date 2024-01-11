@@ -41,6 +41,8 @@ public class SaveData {
 	public int[] bonusHP = {0, 0, 0, 0, 0};
 	public int[] bonusAP = {0, 0, 0, 0, 0};
 	public int[] bonusDP = {0, 0, 0, 0, 0};
+	public float musicVol;
+	public float sfxVol;
 	
 	public int twoHMastery;
 	public int oneHMastery;
@@ -130,6 +132,9 @@ public class SaveData {
 		saveData.strength2 = BerserkerSkillTree.strength;
 		saveData.maxHP2 = BerserkerSkillTree.maxHP;
 		
+		saveData.musicVol = MusicManager.musicVol;
+		saveData.sfxVol = MusicManager.sfxVol;
+		
 		jsonString = json.toJson(saveData);		
 		FileHandle file = Gdx.files.local("saveData.json");
 		file.writeString(jsonString, false);
@@ -196,6 +201,10 @@ public class SaveData {
 		    BerserkerSkillTree.weaponDmg = loadedData.weaponDmg2;
 		    BerserkerSkillTree.strength = loadedData.strength2;
 		    BerserkerSkillTree.maxHP = loadedData.maxHP2;
+		    
+		    MusicManager.musicVol = loadedData.musicVol;
+		    MusicManager.sfxVol = loadedData.sfxVol;
+		    MusicManager.getInstance().changeVolume();
 		    
 		    System.out.println("Loaded the game state");
 		}
