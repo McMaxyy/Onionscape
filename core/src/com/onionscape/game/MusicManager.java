@@ -32,7 +32,7 @@ public class MusicManager {
     		musicVol = 0.0f;
     	
     	for (Music music : backgroundMusicTracks) {
-            music.setLooping(false);
+            music.setLooping(true);
             music.setVolume(musicVol);
         }
         for (Music music : fightMusicTracks) {
@@ -48,16 +48,18 @@ public class MusicManager {
         Music track3 = Gdx.audio.newMusic(Gdx.files.internal("sounds/PhaseShift.mp3"));
         Music track4 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Chase.mp3"));
         Music track5 = Gdx.audio.newMusic(Gdx.files.internal("sounds/SuperEpic.mp3"));
+        Music track6 = Gdx.audio.newMusic(Gdx.files.internal("sounds/MainMenuLoop.mp3"));
 
-        backgroundMusicTracks.add(track1);
-        backgroundMusicTracks.add(track2);
-        backgroundMusicTracks.add(track3);
+//        backgroundMusicTracks.add(track1);
+//        backgroundMusicTracks.add(track2);
+//        backgroundMusicTracks.add(track3);
+        backgroundMusicTracks.add(track6);
 
         fightMusicTracks.add(track4);
         fightMusicTracks.add(track5);
 
         for (Music music : backgroundMusicTracks) {
-            music.setLooping(false);
+            music.setLooping(true);
             music.setVolume(musicVol);
         }
         for (Music music : fightMusicTracks) {

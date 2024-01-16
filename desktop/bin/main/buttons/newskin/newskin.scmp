@@ -508,26 +508,6 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/FightIcon.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: FightIcon
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: TEXTURE
-			hidden: false
-		}
-		{
 			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/BonfireIcon.png
 			bgColor: {
 				r: 1
@@ -538,86 +518,6 @@ atlasData: {
 			tint: null
 			tintName: null
 			name: BonfireIcon
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: TEXTURE
-			hidden: false
-		}
-		{
-			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/BossIcon.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: BossIcon
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: TEXTURE
-			hidden: false
-		}
-		{
-			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/MerchIcon.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: MerchIcon
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: TEXTURE
-			hidden: false
-		}
-		{
-			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/RandIcon.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: RandIcon
-			tiled: false
-			minWidth: -1
-			minHeight: -1
-			customized: false
-			tenPatchData: null
-			tvgData: null
-			type: TEXTURE
-			hidden: false
-		}
-		{
-			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/StrEnemyIcon.png
-			bgColor: {
-				r: 1
-				g: 1
-				b: 1
-				a: 1
-			}
-			tint: null
-			tintName: null
-			name: StrEnemyIcon
 			tiled: false
 			minWidth: -1
 			minHeight: -1
@@ -670,6 +570,296 @@ atlasData: {
 			tenPatchData: null
 			tvgData: null
 			type: TINTED
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/TreasureIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: TreasureIcon
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/BossIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: BossIcon
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/FightIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: FightIcon
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/StrEnemyIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: StrEnemyIcon
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/FightIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: {
+				r: 0.73333335
+				g: 0.73333335
+				b: 0.73333335
+				a: 1
+			}
+			tintName: null
+			name: FightIconDown
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TINTED
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/BossIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: {
+				r: 0.827451
+				g: 0.827451
+				b: 0.827451
+				a: 1
+			}
+			tintName: null
+			name: BossIconDown
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TINTED
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/MerchIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: MerchIcon
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/RandIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: RandIcon
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/RandIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: {
+				r: 0.81960785
+				g: 0.81960785
+				b: 0.81960785
+				a: 1
+			}
+			tintName: null
+			name: RandIconDown
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TINTED
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/MerchIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: {
+				r: 0.81960785
+				g: 0.81960785
+				b: 0.81960785
+				a: 1
+			}
+			tintName: null
+			name: MerchIconDown
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TINTED
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/StrEnemyIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: {
+				r: 0.81960785
+				g: 0.81960785
+				b: 0.81960785
+				a: 1
+			}
+			tintName: null
+			name: StrEnemyIconDown
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TINTED
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/mapIcons/TreasureIcon.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: {
+				r: 0.81960785
+				g: 0.81960785
+				b: 0.81960785
+				a: 1
+			}
+			tintName: null
+			name: TreasureIconDown
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TINTED
+			hidden: false
+		}
+		{
+			file: C:/Users/Max/Documents/repos/Onionscape/assets/player/Onion.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: Onion
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
 			hidden: false
 		}
 	]
@@ -2827,7 +3017,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDown
 						optional: true
-						value: FightIcon
+						value: FightIconDown
 					}
 					imageOver: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -2839,13 +3029,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDisabled
 						optional: true
-						value: FightIcon
+						value: FightIconDown
 					}
 					imageChecked: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageChecked
 						optional: true
-						value: FightIcon
+						value: FightIconDown
 					}
 					imageCheckedDown: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -2951,7 +3141,7 @@ jsonData: {
 					}
 				}
 				deletable: true
-				parent: default
+				parent: null
 			}
 			{
 				class: com.ray3k.skincomposer.data.StyleData
@@ -2968,7 +3158,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDown
 						optional: true
-						value: MerchIcon
+						value: MerchIconDown
 					}
 					imageOver: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -2980,13 +3170,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDisabled
 						optional: true
-						value: MerchIcon
+						value: MerchIconDown
 					}
 					imageChecked: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageChecked
 						optional: true
-						value: MerchIcon
+						value: MerchIconDown
 					}
 					imageCheckedDown: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3092,7 +3282,7 @@ jsonData: {
 					}
 				}
 				deletable: true
-				parent: default
+				parent: null
 			}
 			{
 				class: com.ray3k.skincomposer.data.StyleData
@@ -3109,7 +3299,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDown
 						optional: true
-						value: BossIcon
+						value: BossIconDown
 					}
 					imageOver: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3121,13 +3311,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDisabled
 						optional: true
-						value: BossIcon
+						value: BossIconDown
 					}
 					imageChecked: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageChecked
 						optional: true
-						value: BossIcon
+						value: BossIconDown
 					}
 					imageCheckedDown: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3233,7 +3423,7 @@ jsonData: {
 					}
 				}
 				deletable: true
-				parent: default
+				parent: null
 			}
 			{
 				class: com.ray3k.skincomposer.data.StyleData
@@ -3250,7 +3440,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDown
 						optional: true
-						value: StrEnemyIcon
+						value: StrEnemyIconDown
 					}
 					imageOver: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3262,13 +3452,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDisabled
 						optional: true
-						value: StrEnemyIcon
+						value: StrEnemyIconDown
 					}
 					imageChecked: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageChecked
 						optional: true
-						value: StrEnemyIcon
+						value: StrEnemyIconDown
 					}
 					imageCheckedDown: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3374,7 +3564,7 @@ jsonData: {
 					}
 				}
 				deletable: true
-				parent: default
+				parent: null
 			}
 			{
 				class: com.ray3k.skincomposer.data.StyleData
@@ -3391,7 +3581,7 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDown
 						optional: true
-						value: RandIcon
+						value: RandIconDown
 					}
 					imageOver: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3403,13 +3593,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDisabled
 						optional: true
-						value: RandIcon
+						value: RandIconDown
 					}
 					imageChecked: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageChecked
 						optional: true
-						value: RandIcon
+						value: RandIconDown
 					}
 					imageCheckedDown: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3515,7 +3705,7 @@ jsonData: {
 					}
 				}
 				deletable: true
-				parent: default
+				parent: null
 			}
 			{
 				class: com.ray3k.skincomposer.data.StyleData
@@ -3526,13 +3716,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageUp
 						optional: true
-						value: BonfireIcon
+						value: TreasureIcon
 					}
 					imageDown: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDown
 						optional: true
-						value: BonfireIcon
+						value: TreasureIconDown
 					}
 					imageOver: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3544,13 +3734,13 @@ jsonData: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageDisabled
 						optional: true
-						value: BonfireIcon
+						value: TreasureIconDown
 					}
 					imageChecked: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: imageChecked
 						optional: true
-						value: BonfireIcon
+						value: TreasureIconDown
 					}
 					imageCheckedDown: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -3656,7 +3846,7 @@ jsonData: {
 					}
 				}
 				deletable: true
-				parent: default
+				parent: null
 			}
 			{
 				class: com.ray3k.skincomposer.data.StyleData
@@ -3797,7 +3987,7 @@ jsonData: {
 					}
 				}
 				deletable: true
-				parent: default
+				parent: null
 			}
 		]
 	}

@@ -58,6 +58,60 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 			a: 1
 		}
 	}
+	FightIconDown: {
+		name: FightIcon
+		color: {
+			r: 0.73333335
+			g: 0.73333335
+			b: 0.73333335
+			a: 1
+		}
+	}
+	BossIconDown: {
+		name: BossIcon
+		color: {
+			r: 0.827451
+			g: 0.827451
+			b: 0.827451
+			a: 1
+		}
+	}
+	RandIconDown: {
+		name: RandIcon
+		color: {
+			r: 0.81960785
+			g: 0.81960785
+			b: 0.81960785
+			a: 1
+		}
+	}
+	MerchIconDown: {
+		name: MerchIcon
+		color: {
+			r: 0.81960785
+			g: 0.81960785
+			b: 0.81960785
+			a: 1
+		}
+	}
+	StrEnemyIconDown: {
+		name: StrEnemyIcon
+		color: {
+			r: 0.81960785
+			g: 0.81960785
+			b: 0.81960785
+			a: 1
+		}
+	}
+	TreasureIconDown: {
+		name: TreasureIcon
+		color: {
+			r: 0.81960785
+			g: 0.81960785
+			b: 0.81960785
+			a: 1
+		}
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
@@ -88,49 +142,42 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		pressedOffsetY: 1
 	}
 	fightIcon: {
-		parent: default
 		imageUp: FightIcon
-		imageDown: FightIcon
-		imageDisabled: FightIcon
-		imageChecked: FightIcon
+		imageDown: FightIconDown
+		imageDisabled: FightIconDown
+		imageChecked: FightIconDown
 	}
 	merchIcon: {
-		parent: default
 		imageUp: MerchIcon
-		imageDown: MerchIcon
-		imageDisabled: MerchIcon
-		imageChecked: MerchIcon
+		imageDown: MerchIconDown
+		imageDisabled: MerchIconDown
+		imageChecked: MerchIconDown
 	}
 	bossIcon: {
-		parent: default
 		imageUp: BossIcon
-		imageDown: BossIcon
-		imageDisabled: BossIcon
-		imageChecked: BossIcon
+		imageDown: BossIconDown
+		imageDisabled: BossIconDown
+		imageChecked: BossIconDown
 	}
 	eliteIcon: {
-		parent: default
 		imageUp: StrEnemyIcon
-		imageDown: StrEnemyIcon
-		imageDisabled: StrEnemyIcon
-		imageChecked: StrEnemyIcon
+		imageDown: StrEnemyIconDown
+		imageDisabled: StrEnemyIconDown
+		imageChecked: StrEnemyIconDown
 	}
 	randIcon: {
-		parent: default
 		imageUp: RandIcon
-		imageDown: RandIcon
-		imageDisabled: RandIcon
-		imageChecked: RandIcon
+		imageDown: RandIconDown
+		imageDisabled: RandIconDown
+		imageChecked: RandIconDown
 	}
 	treasureIcon: {
-		parent: default
-		imageUp: BonfireIcon
-		imageDown: BonfireIcon
-		imageDisabled: BonfireIcon
-		imageChecked: BonfireIcon
+		imageUp: TreasureIcon
+		imageDown: TreasureIconDown
+		imageDisabled: TreasureIconDown
+		imageChecked: TreasureIconDown
 	}
 	playerIcon: {
-		parent: default
 		imageUp: tree-plus
 		imageDown: tree-plus
 		imageDisabled: tree-plus

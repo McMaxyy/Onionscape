@@ -96,13 +96,13 @@ public class Home implements Screen {
 		playerStats.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 2f);
 		if(Player.weaponState == 0)
 			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg()) + 
-					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
+					"\n\nDefense: " + (Player.getDmgResist() + Player.getSkillDmgResist()) + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
 		else if(Player.weaponState == 1)
 			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getOneHandStr() + Player.getSkillWeaponDmg()) + 
-					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
+					"\n\nDefense: " + (Player.getDmgResist() + Player.getSkillDmgResist()) + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
 		else if(Player.weaponState == 2)
 			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getTwoHandStr() + Player.getSkillWeaponDmg()) + 
-					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
+					"\n\nDefense: " + (Player.getDmgResist() + Player.getSkillDmgResist()) + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
 		stage.addActor(playerStats);
 		
 		coins = new Label("Coins: " + Player.getCoins(), storage.labelStyle);
@@ -362,6 +362,9 @@ public class Home implements Screen {
 		BerserkerSkillTree.weaponDmg = 0;
 		BerserkerSkillTree.strength = 0;
 		BerserkerSkillTree.maxHP = 0;
+		Player.setSkillDmgResist(0);
+		Player.setSkillWeaponDmg(0);
+		Player.setSkillMaxHP(0);
 	}
 	
 	public void dispose() {

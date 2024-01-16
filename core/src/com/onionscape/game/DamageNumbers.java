@@ -18,7 +18,7 @@ public class DamageNumbers extends Actor {
     public boolean isTimerExpired() {
         return timer <= 0;
     }
-    private static final float FALL_SPEED = 100f;
+    private static final float FALL_SPEED = 150f;
     private String text;
     
     public DamageNumbers(float x, float y, float damage, String text) {

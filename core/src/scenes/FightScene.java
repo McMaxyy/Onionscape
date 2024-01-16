@@ -119,8 +119,14 @@ public class FightScene implements Screen{
         if(BerserkerSkillTree.luckyStrike == 1)
         	firstAttack = true;
         
+        if(Home.story) {
+        	Player.gainMaxHP(Player.getSkillMaxHP());
+        	Player.gainDR(Player.getSkillDmgResist());
+        }
+        
         if(GameScreen.newGame) {
         	Player.newGame();
+        	Player.setHp(Player.getMaxHP());
         }
         
         if(Player.weaponState == 0)
@@ -135,12 +141,7 @@ public class FightScene implements Screen{
         
         if(RaidTextScenes.weaken)
         	eWeakenLeft = 2;
-        
-        if(Home.story) {
-        	Player.setMaxHP(Player.getMaxHP() + Player.getSkillMaxHP());
-        	Player.setDmgResist(Player.getDmgResist() + Player.getSkillDmgResist());
-        }
-        
+   
         storage.createFont();       
         createComponents();
         componentParameters(); 
@@ -173,6 +174,7 @@ public class FightScene implements Screen{
 			System.out.println("Wep dmg: " + (Player.getWeaponDmg() + Player.getSkillWeaponDmg() + Player.getOneHandStr()));
 			System.out.println("Str: " + Player.getStrength());
 			System.out.println("Dmg res: " + Player.getDmgResist());
+			System.out.println("MaxHP: " + Player.getMaxHP());
 		}
     }
     
@@ -331,13 +333,10 @@ public class FightScene implements Screen{
     		ability3.setTouchable(Touchable.disabled);
     		ability3.setText("");
     		ability4.setTouchable(Touchable.disabled);
-    		ability4.setText("");
-    		
-    		Player.loseMaxHP(Player.getSkillMaxHP());
-    		Player.loseDR(Player.getSkillDmgResist());
+    		ability4.setText("");   		
     		
 	        if(pDead) {
-	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player died");
+	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player died");
 	        	backBtn.clearListeners();
 	        	backBtn.addListener(new ClickListener() {
 	        		@Override
@@ -362,7 +361,7 @@ public class FightScene implements Screen{
 	        	    }});
 	        }	        	
 	        else {
-	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy died");
+	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Enemy died");
 	        	chooseReward();	
 	        	if(Home.story) {
 	        		Player.gainExp(expValue);
@@ -377,7 +376,7 @@ public class FightScene implements Screen{
 		        	Timer.schedule(new Timer.Task() {
                     	@Override
                         public void run() {
-                    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, expString);
+                    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, expString);
                     	}
                     }, 0.5f);		        	
 		        	Player.checkExp();
@@ -564,58 +563,58 @@ public class FightScene implements Screen{
     		if(rand.nextInt(4) != 0)
     			playerAttack(0);
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed"); 	
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player's attack missed"); 	
 	        break;
     	case "Swing":
     		if(rand.nextInt(4) != 0)
     			playerAttack(1);
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed"); 		
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player's attack missed"); 		
     		break;
     	case "Rend":
     		if(rand.nextInt(4) != 0) {
     			rendLeft = 3;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Bleed applied");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Bleed applied");
     		}   			
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to apply bleed");		
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Failed to apply bleed");		
     		break;
     	case "Whirlwind":
     		if(rand.nextInt(4) != 0)
     			playerAttack(3);
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed"); 			
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player's attack missed"); 			
     		break;
     	case "Ground Breaker":
     		if(rand.nextInt(4) != 0)
     			playerAttack(4);
     		else 
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed");			
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player's attack missed");			
     		break;
     	case "Bash":
     		if(rand.nextInt(4) != 0)
     			playerAttack(5);
     		else 
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed");		
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player's attack missed");		
     		break;
     	case "Barrier":
     		if(rand.nextInt(4) != 0) {
     			barrierActive = true;    			
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Barrier activated");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Barrier activated");
     		}
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to activate Barrier");			
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Failed to activate Barrier");			
     		break;
     	case "Harden":
     		if(rand.nextInt(4) != 0) {
     			hardenActive = true;    			
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Harden activated");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Harden activated");
     		}
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to activat Harden");		
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Failed to activat Harden");		
     		break;
     	case "Mend":
-    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player used heal");
+    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player used heal");
     		Player.gainHP(storage.mend.getAttackPower() * Home.stageLvl);
 			if(Player.getHp() > Player.getMaxHP())
 				Player.setHp(Player.getMaxHP());
@@ -623,46 +622,46 @@ public class FightScene implements Screen{
     	case "Hilt Bash":
     		if(rand.nextInt(3) != 0) {
     			weakenLeft = 2;  			
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy weakened");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Enemy weakened");
     		}
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to weaken enemy");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Failed to weaken enemy");
     		break;
     	case "Barbed Armor":
     		if(rand.nextInt(3) != 0) {
     			thornsLeft = 2;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Thorns activated");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Thorns activated");
     		}
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to activate Thorns");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Failed to activate Thorns");
     		break;
     	case "Enrage":
     		if(rand.nextInt(4) != 0) {
     			enrageLeft = 2;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player enraged");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player enraged");
     		}
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to enrage");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Failed to enrage");
     		break;
     	case "Riposte":
     		if(rand.nextInt(4) != 0) {
     			riposteActive = true;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Next attack will be reflected");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Next attack will be reflected");
     		}
     		else
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Failed to activate Riposte");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Failed to activate Riposte");
     		break;
     	case "Stab":
     		if(rand.nextInt(4) != 0)
     			playerAttack(13);
     		else 
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player's attack missed");
     		break;
     	case "Decapitate":
     		if(rand.nextInt(5) != 0)
     			playerAttack(14);
     		else 
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player's attack missed");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player's attack missed");
     		break;
     	}
     }
@@ -711,10 +710,7 @@ public class FightScene implements Screen{
     	// Add weapon damage
     	if(Player.weaponState == 1) {
     		doubleSwingCount++;
-    		if(Home.story)
-    			temp += Player.getOneHandStr() + Player.getWeaponDmg() + Player.getSkillWeaponDmg();
-    		else
-    			temp += Player.getWeaponDmg();
+    		temp += Player.getOneHandStr() + Player.getWeaponDmg() + Player.getSkillWeaponDmg();
     		if(doubleSwingCount == 3 && BerserkerSkillTree.doubleSwing == 1) {
     			doubleSwingCount = 0;
     			temp *= 2;
@@ -722,10 +718,7 @@ public class FightScene implements Screen{
     	}   		
     	else if(Player.weaponState == 2) {
     		bludgeonCount++;
-    		if(Home.story)
-    			temp += Player.getTwoHandStr() + Player.getWeaponDmg() + Player.getSkillWeaponDmg();
-    		else
-    			temp += Player.getWeaponDmg();
+    		temp += Player.getTwoHandStr() + Player.getWeaponDmg() + Player.getSkillWeaponDmg();
     		if(bludgeonCount == 5  && BerserkerSkillTree.bludgeonEnemy == 1) {
     			bludgeonCount = 0;
     			enemyStunned = true;
@@ -759,7 +752,7 @@ public class FightScene implements Screen{
         		dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), temp);
         	}      	     	
         	else 
-        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy blocked the attack");
+        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Enemy blocked the attack");
         	
 			if(eThornsLeft > 0) {
 				int newTemp = temp / 2;
@@ -774,7 +767,7 @@ public class FightScene implements Screen{
         			Player.gainHP(temp / 3);
         			if(Player.getHp() > Player.getMaxHP())
         				Player.setHp(Player.getMaxHP());
-        			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player healed for " + temp);
+        			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player healed for " + temp);
         		}      		
         	}      		
         }
@@ -935,7 +928,7 @@ public class FightScene implements Screen{
         		}
         	}
         	else if(barrierActive){
-        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Attack blocked");
+        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Attack blocked");
         		switch(BerserkerSkillTree.blockEfficiency) {
         		case 0:
         			barrierActive = false;
@@ -973,7 +966,7 @@ public class FightScene implements Screen{
         		} 
         	}
         	else if(enemyStunned){
-        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy stunned and cannot attack");
+        		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Enemy stunned and cannot attack");
         		enemyStunned = false;
         	}
     	}
@@ -981,31 +974,31 @@ public class FightScene implements Screen{
     		switch(attackType) {
     		case "Bleed":
     			eRendLeft = 3;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Bleed applied");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Bleed applied");
     			break;
     		case "Enrage":
     			eEnrageLeft = 3;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Enemy enraged");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Enemy enraged");
     			break;
     		case "Poison":
     			ePoisonLeft = 3;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Poison applied");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Poison applied");
     			break;
     		case "Harden":
     			eHardenActive = true;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Harden activated");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Harden activated");
     			break;
     		case "Stun":
     			playerStunned = true;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Player stunned");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player stunned");
     			break;
     		case "Barrier":
     			eBarrierActive = true;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Barrier activated");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Barrier activated");
     			break;
     		case "Thorns":
     			eThornsLeft = 3;
-    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Thorns activated");
+    			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Thorns activated");
     			break;
     		}
     	}
@@ -1422,6 +1415,8 @@ public class FightScene implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			stage.clear();    			
     			if(Merchant.raid) {
+    				Player.loseMaxHP(Player.getSkillMaxHP());
+    	    		Player.loseDR(Player.getSkillDmgResist());
     				GameScreen.newGame = false;
     				RaidTextScenes.enrage = RaidTextScenes.poison = RaidTextScenes.weaken = false;
     				gameScreen.setCurrentState(GameScreen.FOREST_MAP);
@@ -1447,7 +1442,7 @@ public class FightScene implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     	    	rewardClick((TextButton) event.getListenerActor());
     	    	loot = reward1.getText().toString();
-    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Gained " + loot);
+    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Gained " + loot);
     	    }});
     	
     	reward2 = new TextButton("", storage.buttonStyle);
@@ -1457,7 +1452,7 @@ public class FightScene implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     	    	rewardClick((TextButton) event.getListenerActor()); 
     	    	loot = reward2.getText().toString();
-    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Gained " + loot);
+    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Gained " + loot);
     	    }});
     	
     	reward3 = new TextButton("", storage.buttonStyle);
@@ -1467,7 +1462,7 @@ public class FightScene implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     	    	Player.gainRaidCoins(enemyValue);  
     	    	loot = enemyValue + " Coins";
-    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Gained " + loot);;
+    	    	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Gained " + loot);;
 	        	reward1.setVisible(false);
 	        	reward2.setVisible(false);
 	        	reward3.setVisible(false);
@@ -1582,7 +1577,7 @@ public class FightScene implements Screen{
     			switch(itemName) {
         		case "Health Potion":
     	    		storage.equippedItems(storage.healthPot, "Remove");
-    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Health Potion used");
+    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Health Potion used");
     	    		Player.gainHP(Player.getMaxHP() / 5);
     				if(Player.getHp() > Player.getMaxHP())
     					Player.setHp(Player.getMaxHP());
@@ -1599,7 +1594,7 @@ public class FightScene implements Screen{
     	    		dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), 5);
     				enemyHP -= 5;
     				rendLeft = 2;
-    				sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Bleed applied");
+    				sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Bleed applied");
     				attackCount--;
     				break;
     	    	case "Attack Boost":
@@ -1607,7 +1602,7 @@ public class FightScene implements Screen{
     	    		if(!Home.apBoost) {
     	    			Home.apBoost = true;
         	    		Player.gainBonusStr(5);
-        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Attack Boost activated");
+        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Attack Boost activated");
     	    		} 	    		
     	    		break;
     	    	case "Defense Boost":
@@ -1615,7 +1610,7 @@ public class FightScene implements Screen{
     	    		if(!Home.dpBoost) {
     	    			Player.setDmgResist(Player.getDmgResist() + 5);   
         	    		Home.dpBoost = true;
-        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Defense Boost activated");
+        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Defense Boost activated");
     	    		}		
     	    		break;
     	    	case "Health Boost":
@@ -1627,13 +1622,13 @@ public class FightScene implements Screen{
         	    			Player.gainHP(10);
         	    		if(Player.getHp() > Player.getMaxHP())
         	    			Player.setHp(Player.getMaxHP());
-        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Health Boost activated");
+        	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Health Boost activated");
     	    		}    		
     	    		break;
     	    	case "Experience Boost":
     	    		storage.equippedItems(storage.expBoost, "Remove");
     	    		Home.expBoost = true;
-    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, "Experience Boost activated");
+    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Experience Boost activated");
     	    		break;
     	    	default:   	       	    		
     	    		createAbilityGrid(itemName);
@@ -1960,6 +1955,7 @@ public class FightScene implements Screen{
         bootsBatch.dispose();
         buffBatch.dispose();
         debuffBatch.dispose();
+        abilityBatch.dispose();
     }
 
 	@Override
