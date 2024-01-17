@@ -26,6 +26,7 @@ public class Settings implements Screen{
 	private GameScreen gameScreen; 
 	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn, musicUp, musicDown, sfxUp, sfxDown;
 	private ShapeRenderer musicBar = new ShapeRenderer();
+	private ShapeRenderer sfxBar = new ShapeRenderer();
 	
 	public Settings(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -107,15 +108,45 @@ public class Settings implements Screen{
 		musicDown.setPosition(musicUp.getX() - 370, musicUp.getY());
 		stage.addActor(musicDown);
 		
+		sfxUp = new TextButton("+", storage.buttonStyle);
+		sfxUp.setColor(Color.LIGHT_GRAY);
+		sfxUp.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			if(MusicManager.sfxVol <= 1f) {
+    				MusicManager.sfxVol += 0.05f;
+    				if(MusicManager.sfxVol <= 0.0f)
+    					MusicManager.sfxVol = 0.0f; 
+    			}    				
+    	    }});
+		sfxUp.setSize(30, 30);
+		sfxUp.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 1.6f);
+		stage.addActor(sfxUp);
+		
+		sfxDown = new TextButton("-", storage.buttonStyle);
+		sfxDown.setColor(Color.LIGHT_GRAY);
+		sfxDown.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			if(MusicManager.sfxVol >= 0.045f) {
+    				MusicManager.sfxVol -= 0.05f;
+    				if(MusicManager.sfxVol <= 0.0f)
+    					MusicManager.sfxVol = 0.0f; 
+    			} 
+    	    }});
+		sfxDown.setSize(30, 30);
+		sfxDown.setPosition(sfxUp.getX() - 370, sfxUp.getY());
+		stage.addActor(sfxDown);
+		
 		backBtn = new TextButton("Return", storage.buttonStyle);
 		backBtn.setColor(Color.LIGHT_GRAY);
 		backBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			if(Home.newHome)
-    				gameScreen.setCurrentState(GameScreen.START_SCREEN);
+    				gameScreen.switchToNewState(GameScreen.START_SCREEN);
     			else
-    				gameScreen.setCurrentState(GameScreen.HOME);
+    				gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
 		backBtn.setSize(200, 150);
 		backBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.2f);
@@ -138,6 +169,23 @@ public class Settings implements Screen{
         musicBar.rect(musicUp.getX() - 320, musicUp.getY(), width, 30);
         musicBar.end(); 
 	}
+	
+	private void drawSfxBar() {
+		sfxBar.setProjectionMatrix(vp.getCamera().combined);
+		sfxBar.begin(ShapeRenderer.ShapeType.Filled);
+		
+		sfxBar.setColor(Color.WHITE);
+		sfxBar.rect(sfxUp.getX() - 320, sfxUp.getY(), 300, 30);
+		
+		sfxBar.setColor(Color.BLACK);
+        float barWidth = (float)MusicManager.sfxVol / 1.0f;
+        int width = (int)(barWidth * 300);
+        width = (width / 10) * 10;
+        if(MusicManager.sfxVol <= 0.045f)
+        	width = 0;
+        sfxBar.rect(sfxUp.getX() - 320, sfxUp.getY(), width, 30);
+        sfxBar.end(); 
+	}
 
 	@Override
 	public void show() {
@@ -148,6 +196,7 @@ public class Settings implements Screen{
 	@Override
 	public void render(float delta) {
 		drawSoundBar();
+		drawSfxBar();
 		
 		stage.act();
 		stage.draw();	
@@ -155,8 +204,8 @@ public class Settings implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		musicBar.setProjectionMatrix(vp.getCamera().combined);
+		sfxBar.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

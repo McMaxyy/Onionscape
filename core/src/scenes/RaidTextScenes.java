@@ -295,7 +295,7 @@ public class RaidTextScenes implements Screen{
 		backBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+    			gameScreen.switchToNewState(GameScreen.FOREST_MAP);
     	    }});
 		backBtn.setSize(250, 150);
 		backBtn.setPosition(vp.getWorldWidth() / 2f - backBtn.getWidth() / 2, vp.getWorldHeight() / 10f);
@@ -363,7 +363,7 @@ public class RaidTextScenes implements Screen{
 		    	    public void clicked(InputEvent event, float x, float y) {
 		    			FightScene.elite = FightScene.boss = false;
 		    			FightScene.normal = true;
-		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
 				break;
 			case 6:
@@ -433,7 +433,7 @@ public class RaidTextScenes implements Screen{
 		    	    public void clicked(InputEvent event, float x, float y) {
 		    			FightScene.elite = FightScene.boss = false;
 		    			FightScene.normal = true;
-		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
 				break;
 			case 36:
@@ -453,12 +453,12 @@ public class RaidTextScenes implements Screen{
 		    	    public void clicked(InputEvent event, float x, float y) {
 		    			FightScene.elite = FightScene.boss = false;
 		    			FightScene.normal = true;
-		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
 				option2.addListener(new ClickListener() {
 		    		@Override
 		    	    public void clicked(InputEvent event, float x, float y) {
-		    			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+		    			gameScreen.switchToNewState(GameScreen.FOREST_MAP);
 		    	    }});
 				break;
 			case 37:
@@ -501,7 +501,7 @@ public class RaidTextScenes implements Screen{
 		    	    public void clicked(InputEvent event, float x, float y) {
 		    			FightScene.elite = FightScene.boss = false;
 		    			FightScene.normal = true;
-		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
 				break;
 			case 42:
@@ -549,7 +549,7 @@ public class RaidTextScenes implements Screen{
 		    	    public void clicked(InputEvent event, float x, float y) {
 		    			FightScene.elite = FightScene.boss = false;
 		    			FightScene.normal = true;
-		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
 				break;
 			case 4:
@@ -575,7 +575,7 @@ public class RaidTextScenes implements Screen{
 		    	    public void clicked(InputEvent event, float x, float y) {
 		    			FightScene.elite = FightScene.boss = false;
 		    			FightScene.normal = true;
-		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
 				break;
 			case 31:
@@ -749,7 +749,7 @@ public class RaidTextScenes implements Screen{
 		    			FightScene.boss = FightScene.normal = false;
 		    			FightScene.elite = true;
 		    			mimic = true;
-		    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
 			}
 		}

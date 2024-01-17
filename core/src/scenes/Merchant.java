@@ -508,9 +508,9 @@ public class Merchant implements Screen{
 			@Override
 		    public void clicked(InputEvent event, float x, float y) {  
 				if(!raid)
-					gameScreen.setCurrentState(GameScreen.HOME);
+					gameScreen.switchToNewState(GameScreen.HOME);
 				else
-					gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+					gameScreen.switchToNewState(GameScreen.FOREST_MAP);
 					
 		    }});
 		backBtn.setSize(150, 100);

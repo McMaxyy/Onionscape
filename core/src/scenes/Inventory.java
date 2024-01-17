@@ -1778,7 +1778,7 @@ public class Inventory implements Screen {
     			Player.gainMaxHP(bonusHP);
     			Player.setWeaponDmg(weaponAP);
     			Player.gainBonusStr(bonusAP);
-    			gameScreen.setCurrentState(GameScreen.HOME);
+    			gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
 		backBtn.setSize(150, 100);
 		backBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.25f);

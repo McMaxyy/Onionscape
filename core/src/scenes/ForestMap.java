@@ -837,7 +837,7 @@ public class ForestMap implements Screen{
     			if(exit1.getColor().equals(Color.GREEN)) {
     				Player.gainCoins(Player.getRaidCoins());
     				Player.setRaidCoins(0);
-    				gameScreen.setCurrentState(GameScreen.HOME);
+    				gameScreen.switchToNewState(GameScreen.HOME);
     			}  				
     	    }});
 		
@@ -851,7 +851,7 @@ public class ForestMap implements Screen{
     			if(exit2.getColor().equals(Color.GREEN)) {
     				Player.gainCoins(Player.getRaidCoins());
     				Player.setRaidCoins(0);
-    				gameScreen.setCurrentState(GameScreen.HOME);
+    				gameScreen.switchToNewState(GameScreen.HOME);
     			}  
     	    }});
 		
@@ -865,7 +865,7 @@ public class ForestMap implements Screen{
     			if(exit3.getColor().equals(Color.GREEN)) {
     				Player.gainCoins(Player.getRaidCoins());
     				Player.setRaidCoins(0);
-    				gameScreen.setCurrentState(GameScreen.HOME);
+    				gameScreen.switchToNewState(GameScreen.HOME);
     			}  
     	    }});
 		
@@ -920,54 +920,53 @@ public class ForestMap implements Screen{
 		case "F":
 			FightScene.elite = FightScene.boss = false;
 			FightScene.normal = true;
-			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);			
+			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);			
 			break;
 		case "R":
 			if(x <= 6) {
 				encounter = 1;
-				gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
+				gameScreen.switchToNewState(GameScreen.TEXT_SCENE);
 			}
 			else if(x == 7){
 				FightScene.elite = FightScene.boss = false;
 				FightScene.normal = true;
-				gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+				gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 			}
 			else if(x == 8){
 				encounter = 1;
-				gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
+				gameScreen.switchToNewState(GameScreen.TEXT_SCENE);
 			}
 			else if(x == 9){
 				encounter = 2;
-				gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
+				gameScreen.switchToNewState(GameScreen.TEXT_SCENE);
 			}
 			else
-				gameScreen.setCurrentState(GameScreen.MERCHANT);
+				gameScreen.switchToNewState(GameScreen.MERCHANT);
 			break;
 		case "B":
 			FightScene.normal = FightScene.elite = false;
 			FightScene.boss = true;
-			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 			break;
 		case "T":
 			encounter = 2;
-			gameScreen.setCurrentState(GameScreen.TEXT_SCENE);
+			gameScreen.switchToNewState(GameScreen.TEXT_SCENE);
 			break;
 		case "M":
-			gameScreen.setCurrentState(GameScreen.MERCHANT);
+			gameScreen.switchToNewState(GameScreen.MERCHANT);
 			break;
 		case "E":
 			FightScene.normal = FightScene.boss = false;
 			FightScene.elite = true;
-			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);			
+			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);			
 			break;
 		}
 	}
 	
 	private void disableButtons() {
 		for(Integer i = 0; i < buttons.length; i++) {
-			buttons[i].setColor(Color.GRAY);
 			buttons[i].setTouchable(Touchable.disabled);
-//			buttons[i].setDisabled(true);
+			buttons[i].setDisabled(true);
 		}
 	}
 	
@@ -977,17 +976,17 @@ public class ForestMap implements Screen{
 			button1.setTouchable(Touchable.enabled);
 			button2.setTouchable(Touchable.enabled);
 			button9.setTouchable(Touchable.enabled);
-			button1.setColor(Color.LIGHT_GRAY);
-			button2.setColor(Color.LIGHT_GRAY);
-			button9.setColor(Color.LIGHT_GRAY);
+			button1.setDisabled(false);
+			button2.setDisabled(false);
+			button9.setDisabled(false);
 			break;
 		case 1:
 			button9.setTouchable(Touchable.enabled);
 			button20.setTouchable(Touchable.enabled);
 			button2.setTouchable(Touchable.enabled);
-			button9.setColor(Color.LIGHT_GRAY);
-			button20.setColor(Color.LIGHT_GRAY);
-			button2.setColor(Color.LIGHT_GRAY);
+			button9.setDisabled(false);
+			button20.setDisabled(false);
+			button2.setDisabled(false);
 			button1.setName("P");
 			break;
 		case 2:
@@ -995,10 +994,10 @@ public class ForestMap implements Screen{
 			button8.setTouchable(Touchable.enabled);
 			button3.setTouchable(Touchable.enabled);
 			button9.setTouchable(Touchable.enabled);
-			button9.setColor(Color.LIGHT_GRAY);
-			button1.setColor(Color.LIGHT_GRAY);
-			button8.setColor(Color.LIGHT_GRAY);
-			button3.setColor(Color.LIGHT_GRAY);
+			button9.setDisabled(false);
+			button1.setDisabled(false);
+			button8.setDisabled(false);
+			button3.setDisabled(false);
 			button2.setName("P");
 			break;
 		case 3:
@@ -1006,36 +1005,36 @@ public class ForestMap implements Screen{
 			button5.setTouchable(Touchable.enabled);
 			button8.setTouchable(Touchable.enabled);
 			button2.setTouchable(Touchable.enabled);
-			button4.setColor(Color.LIGHT_GRAY);
-			button5.setColor(Color.LIGHT_GRAY);
-			button8.setColor(Color.LIGHT_GRAY);
-			button2.setColor(Color.LIGHT_GRAY);
+			button4.setDisabled(false);
+			button5.setDisabled(false);
+			button8.setDisabled(false);
+			button2.setDisabled(false);
 			button3.setName("P");
 			break;
 		case 4:
 			button3.setTouchable(Touchable.enabled);
 			button5.setTouchable(Touchable.enabled);
-			button3.setColor(Color.LIGHT_GRAY);
-			button5.setColor(Color.LIGHT_GRAY);
+			button3.setDisabled(false);
+			button5.setDisabled(false);
 			button4.setName("P");
 			break;
 		case 5:
 			button3.setTouchable(Touchable.enabled);
 			button6.setTouchable(Touchable.enabled);
-			button3.setColor(Color.LIGHT_GRAY);
-			button6.setColor(Color.LIGHT_GRAY);
+			button3.setDisabled(false);
+			button6.setDisabled(false);
 			button5.setName("P");
 			break;
 		case 6:
 			button5.setTouchable(Touchable.enabled);
 			button7.setTouchable(Touchable.enabled);
-			button5.setColor(Color.LIGHT_GRAY);
-			button7.setColor(Color.LIGHT_GRAY);
+			button5.setDisabled(false);
+			button7.setDisabled(false);
 			button6.setName("P");
 			break;
 		case 7:
 			button6.setTouchable(Touchable.enabled);
-			button6.setColor(Color.LIGHT_GRAY);
+			button6.setDisabled(false);
 			button7.setName("P");
 			break;
 		case 8:
@@ -1043,10 +1042,10 @@ public class ForestMap implements Screen{
 			button21.setTouchable(Touchable.enabled);
 			button20.setTouchable(Touchable.enabled);
 			button2.setTouchable(Touchable.enabled);
-			button3.setColor(Color.LIGHT_GRAY);
-			button21.setColor(Color.LIGHT_GRAY);
-			button20.setColor(Color.LIGHT_GRAY);
-			button2.setColor(Color.LIGHT_GRAY);
+			button3.setDisabled(false);
+			button21.setDisabled(false);
+			button20.setDisabled(false);
+			button2.setDisabled(false);
 			button8.setName("P");
 			break;
 		case 9:
@@ -1054,10 +1053,10 @@ public class ForestMap implements Screen{
 			button10.setTouchable(Touchable.enabled);
 			button11.setTouchable(Touchable.enabled);
 			button2.setTouchable(Touchable.enabled);
-			button1.setColor(Color.LIGHT_GRAY);
-			button2.setColor(Color.LIGHT_GRAY);
-			button10.setColor(Color.LIGHT_GRAY);
-			button11.setColor(Color.LIGHT_GRAY);
+			button1.setDisabled(false);
+			button2.setDisabled(false);
+			button10.setDisabled(false);
+			button11.setDisabled(false);
 			button9.setName("P");
 			break;
 		case 10:
@@ -1065,24 +1064,24 @@ public class ForestMap implements Screen{
 			button13.setTouchable(Touchable.enabled);
 			button14.setTouchable(Touchable.enabled);
 			button11.setTouchable(Touchable.enabled);
-			button11.setColor(Color.LIGHT_GRAY);
-			button9.setColor(Color.LIGHT_GRAY);
-			button13.setColor(Color.LIGHT_GRAY);
-			button14.setColor(Color.LIGHT_GRAY);
+			button11.setDisabled(false);
+			button9.setDisabled(false);
+			button13.setDisabled(false);
+			button14.setDisabled(false);
 			button10.setName("P");
 			break;
 		case 11:
 			button12.setTouchable(Touchable.enabled);
 			button9.setTouchable(Touchable.enabled);
 			button10.setTouchable(Touchable.enabled);
-			button12.setColor(Color.LIGHT_GRAY);
-			button9.setColor(Color.LIGHT_GRAY);
-			button10.setColor(Color.LIGHT_GRAY);
+			button12.setDisabled(false);
+			button9.setDisabled(false);
+			button10.setDisabled(false);
 			button11.setName("P");
 			break;
 		case 12:
 			button11.setTouchable(Touchable.enabled);
-			button11.setColor(Color.LIGHT_GRAY);
+			button11.setDisabled(false);
 			button12.setName("P");
 			break;
 		case 13:
@@ -1090,31 +1089,31 @@ public class ForestMap implements Screen{
 			button18.setTouchable(Touchable.enabled);
 			button10.setTouchable(Touchable.enabled);
 			button14.setTouchable(Touchable.enabled);
-			button14.setColor(Color.LIGHT_GRAY);
-			button10.setColor(Color.LIGHT_GRAY);
-			button16.setColor(Color.LIGHT_GRAY);
-			button18.setColor(Color.LIGHT_GRAY);
+			button14.setDisabled(false);
+			button10.setDisabled(false);
+			button16.setDisabled(false);
+			button18.setDisabled(false);
 			button13.setName("P");
 			break;
 		case 14:
 			button15.setTouchable(Touchable.enabled);
 			button13.setTouchable(Touchable.enabled);
-			button15.setColor(Color.LIGHT_GRAY);
-			button13.setColor(Color.LIGHT_GRAY);
+			button15.setDisabled(false);
+			button13.setDisabled(false);
 			button14.setName("P");
 			break;
 		case 15:
 			button14.setTouchable(Touchable.enabled);
-			button14.setColor(Color.LIGHT_GRAY);
+			button14.setDisabled(false);
 			button15.setName("P");
 			break;
 		case 16:
 			button13.setTouchable(Touchable.enabled);
 			button17.setTouchable(Touchable.enabled);
 			button18.setTouchable(Touchable.enabled);
-			button13.setColor(Color.LIGHT_GRAY);
-			button17.setColor(Color.LIGHT_GRAY);
-			button18.setColor(Color.LIGHT_GRAY);
+			button13.setDisabled(false);
+			button17.setDisabled(false);
+			button18.setDisabled(false);
 			button16.setName("P");
 			break;
 		case 17:
@@ -1122,15 +1121,15 @@ public class ForestMap implements Screen{
 			button17.setName("P");
 			if(exit3.getColor().equals(Color.GREEN))
 				exit3.setTouchable(Touchable.enabled);
-			button16.setColor(Color.LIGHT_GRAY);
+			button16.setDisabled(false);
 			break;
 		case 18:
 			button16.setTouchable(Touchable.enabled);
 			button19.setTouchable(Touchable.enabled);
 			button20.setTouchable(Touchable.enabled);
-			button16.setColor(Color.LIGHT_GRAY);
-			button19.setColor(Color.LIGHT_GRAY);
-			button20.setColor(Color.LIGHT_GRAY);
+			button16.setDisabled(false);
+			button19.setDisabled(false);
+			button20.setDisabled(false);
 			button18.setName("P");
 			break;
 		case 19:
@@ -1138,10 +1137,10 @@ public class ForestMap implements Screen{
 			button26.setTouchable(Touchable.enabled);
 			button20.setTouchable(Touchable.enabled);
 			button18.setTouchable(Touchable.enabled);
-			button25.setColor(Color.LIGHT_GRAY);
-			button26.setColor(Color.LIGHT_GRAY);
-			button20.setColor(Color.LIGHT_GRAY);
-			button18.setColor(Color.LIGHT_GRAY);
+			button25.setDisabled(false);
+			button26.setDisabled(false);
+			button20.setDisabled(false);
+			button18.setDisabled(false);
 			button19.setName("P");
 			break;
 		case 20:
@@ -1150,50 +1149,50 @@ public class ForestMap implements Screen{
 			button8.setTouchable(Touchable.enabled);
 			button21.setTouchable(Touchable.enabled);
 			button1.setTouchable(Touchable.enabled);
-			button1.setColor(Color.LIGHT_GRAY);
-			button19.setColor(Color.LIGHT_GRAY);
-			button18.setColor(Color.LIGHT_GRAY);
-			button8.setColor(Color.LIGHT_GRAY);
-			button21.setColor(Color.LIGHT_GRAY);
+			button1.setDisabled(false);
+			button19.setDisabled(false);
+			button18.setDisabled(false);
+			button8.setDisabled(false);
+			button21.setDisabled(false);
 			button20.setName("P");
 			break;
 		case 21:
 			button20.setTouchable(Touchable.enabled);
 			button24.setTouchable(Touchable.enabled);
 			button22.setTouchable(Touchable.enabled);
-			button20.setColor(Color.LIGHT_GRAY);
-			button24.setColor(Color.LIGHT_GRAY);
-			button22.setColor(Color.LIGHT_GRAY);
+			button20.setDisabled(false);
+			button24.setDisabled(false);
+			button22.setDisabled(false);
 			button21.setName("P");
 			break;
 		case 22:
 			button21.setTouchable(Touchable.enabled);
 			button24.setTouchable(Touchable.enabled);
 			button23.setTouchable(Touchable.enabled);
-			button21.setColor(Color.LIGHT_GRAY);
-			button24.setColor(Color.LIGHT_GRAY);
-			button23.setColor(Color.LIGHT_GRAY);
+			button21.setDisabled(false);
+			button24.setDisabled(false);
+			button23.setDisabled(false);
 			button22.setName("P");
 			break;
 		case 23:
 			button22.setTouchable(Touchable.enabled);
 			button33.setTouchable(Touchable.enabled);
-			button22.setColor(Color.LIGHT_GRAY);
-			button33.setColor(Color.LIGHT_GRAY);
+			button22.setDisabled(false);
+			button33.setDisabled(false);
 			button23.setName("P");
 			break;
 		case 24:
 			button22.setTouchable(Touchable.enabled);
 			button32.setTouchable(Touchable.enabled);
-			button22.setColor(Color.LIGHT_GRAY);
-			button32.setColor(Color.LIGHT_GRAY);
+			button22.setDisabled(false);
+			button32.setDisabled(false);
 			button24.setName("P");
 			break;
 		case 25:
 			button19.setTouchable(Touchable.enabled);
 			button26.setTouchable(Touchable.enabled);
-			button19.setColor(Color.LIGHT_GRAY);
-			button26.setColor(Color.LIGHT_GRAY);
+			button19.setDisabled(false);
+			button26.setDisabled(false);
 			button25.setName("P");
 			break;
 		case 26:
@@ -1201,40 +1200,40 @@ public class ForestMap implements Screen{
 			button25.setTouchable(Touchable.enabled);
 			button30.setTouchable(Touchable.enabled);
 			button27.setTouchable(Touchable.enabled);
-			button19.setColor(Color.LIGHT_GRAY);
-			button25.setColor(Color.LIGHT_GRAY);
-			button30.setColor(Color.LIGHT_GRAY);
-			button27.setColor(Color.LIGHT_GRAY);
+			button19.setDisabled(false);
+			button25.setDisabled(false);
+			button30.setDisabled(false);
+			button27.setDisabled(false);
 			button26.setName("P");
 			break;
 		case 27:
 			button28.setTouchable(Touchable.enabled);
 			button26.setTouchable(Touchable.enabled);
 			button30.setTouchable(Touchable.enabled);
-			button28.setColor(Color.LIGHT_GRAY);
-			button26.setColor(Color.LIGHT_GRAY);
-			button30.setColor(Color.LIGHT_GRAY);
+			button28.setDisabled(false);
+			button26.setDisabled(false);
+			button30.setDisabled(false);
 			button27.setName("P");
 			break;
 		case 28:
 			button27.setTouchable(Touchable.enabled);
 			button29.setTouchable(Touchable.enabled);
-			button27.setColor(Color.LIGHT_GRAY);
-			button29.setColor(Color.LIGHT_GRAY);
+			button27.setDisabled(false);
+			button29.setDisabled(false);
 			button28.setName("P");
 			break;
 		case 29:
 			button28.setTouchable(Touchable.enabled);
-			button28.setColor(Color.LIGHT_GRAY);
+			button28.setDisabled(false);
 			button29.setName("P");
 			break;
 		case 30:
 			button26.setTouchable(Touchable.enabled);
 			button27.setTouchable(Touchable.enabled);
 			button31.setTouchable(Touchable.enabled);
-			button26.setColor(Color.LIGHT_GRAY);
-			button27.setColor(Color.LIGHT_GRAY);
-			button31.setColor(Color.LIGHT_GRAY);
+			button26.setDisabled(false);
+			button27.setDisabled(false);
+			button31.setDisabled(false);
 			button30.setName("P");
 			break;
 		case 31:
@@ -1243,21 +1242,21 @@ public class ForestMap implements Screen{
 			button31.setName("P");
 			if(exit1.getColor().equals(Color.GREEN))
 				exit1.setTouchable(Touchable.enabled);
-			button30.setColor(Color.LIGHT_GRAY);
-			button32.setColor(Color.LIGHT_GRAY);
+			button30.setDisabled(false);
+			button32.setDisabled(false);
 			break;
 		case 32:
 			button31.setTouchable(Touchable.enabled);
 			button24.setTouchable(Touchable.enabled);
-			button31.setColor(Color.LIGHT_GRAY);
-			button24.setColor(Color.LIGHT_GRAY);
+			button31.setDisabled(false);
+			button24.setDisabled(false);
 			button32.setName("P");
 			break;
 		case 33:
 			button23.setTouchable(Touchable.enabled);
 			button34.setTouchable(Touchable.enabled);
-			button23.setColor(Color.LIGHT_GRAY);
-			button34.setColor(Color.LIGHT_GRAY);
+			button23.setDisabled(false);
+			button34.setDisabled(false);
 			button33.setName("P");
 			break;
 		case 34:
@@ -1265,7 +1264,7 @@ public class ForestMap implements Screen{
 			button34.setName("P");
 			if(exit2.getColor().equals(Color.GREEN))
 				exit2.setTouchable(Touchable.enabled);
-			button33.setColor(Color.LIGHT_GRAY);
+			button33.setDisabled(false);
 			break;
 		}
 	}

@@ -22,6 +22,9 @@ public class Player {
 	private static int twoHandStr = 0, oneHandStr = 0;
 	public static int abID1, abID2, abID3, abID4;
 	public static int weaponState = 0;	
+	private static int extraAP = 0;
+	private static int extraDP = 0;
+	private static int extraHP = 0;
 	private static Random rand = new Random();
 	
 	public static void skillTreeGains(int x) {
@@ -45,6 +48,18 @@ public class Player {
 			skillMaxHP += 3;
 			break;
 		}
+	}
+	
+	public static void gainExtraAP(int x) {
+		extraAP += x;
+	}
+	
+	public static void gainExtraDP(int x) {
+		extraDP += x;
+	}
+	
+	public static void gainExtraHP(int x) {
+		extraHP += x;
 	}
 	
 	public static void gainDR(int x) {
@@ -275,5 +290,29 @@ public class Player {
 
 	public static void setSkillMaxHP(int skillMaxHP) {
 		Player.skillMaxHP = skillMaxHP;
+	}
+
+	public static int getExtraAP() {
+		return extraAP;
+	}
+
+	public static void setExtraAP(int extraAP) {
+		Player.extraAP = extraAP;
+	}
+
+	public static int getExtraDP() {
+		return extraDP;
+	}
+
+	public static void setExtraDP(int extraDP) {
+		Player.extraDP = extraDP;
+	}
+
+	public static int getExtraHP() {
+		return extraHP;
+	}
+
+	public static void setExtraHP(int extraHP) {
+		Player.extraHP = extraHP;
 	}
 }

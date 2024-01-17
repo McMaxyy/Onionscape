@@ -3,6 +3,7 @@ package com.onionscape.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,15 +12,17 @@ public class MusicManager {
     private static MusicManager instance = new MusicManager();
     private List<Music> backgroundMusicTracks, fightMusicTracks;
     private List<Sound> soundEffects;
-    private int currentTrackIndex;
+    private static int currentTrackIndex;
     private Music currentMusic;
-    public static float musicVol = 0.1f, sfxVol = 0.45f;
+    public static float musicVol = 0.0f, sfxVol = 0.45f;
+    private List<String> songList;
 
     private MusicManager() {
         // private constructor to enforce singleton pattern
         backgroundMusicTracks = new ArrayList<>();
         fightMusicTracks = new ArrayList<>();
         soundEffects = new ArrayList<>();
+        songList = new ArrayList<>();
         currentTrackIndex = 0;
     }
 
@@ -32,7 +35,10 @@ public class MusicManager {
     		musicVol = 0.0f;
     	
     	for (Music music : backgroundMusicTracks) {
-            music.setLooping(true);
+    		if(music == backgroundMusicTracks.get(3) ||  music == backgroundMusicTracks.get(4))
+    			music.setLooping(true);
+    		else
+    			music.setLooping(false);
             music.setVolume(musicVol);
         }
         for (Music music : fightMusicTracks) {
@@ -47,19 +53,27 @@ public class MusicManager {
         Music track2 = Gdx.audio.newMusic(Gdx.files.internal("sounds/InDreams.mp3"));
         Music track3 = Gdx.audio.newMusic(Gdx.files.internal("sounds/PhaseShift.mp3"));
         Music track4 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Chase.mp3"));
-        Music track5 = Gdx.audio.newMusic(Gdx.files.internal("sounds/SuperEpic.mp3"));
-        Music track6 = Gdx.audio.newMusic(Gdx.files.internal("sounds/MainMenuLoop.mp3"));
+        Music track5 = Gdx.audio.newMusic(Gdx.files.internal("sounds/SuperEpic.mp3"));        
+        Music track6 = Gdx.audio.newMusic(Gdx.files.internal("sounds/JazzyMenu.ogg"));
+        Music track7 = Gdx.audio.newMusic(Gdx.files.internal("sounds/MainMenuLoop.mp3"));
 
-//        backgroundMusicTracks.add(track1);
-//        backgroundMusicTracks.add(track2);
-//        backgroundMusicTracks.add(track3);
+        backgroundMusicTracks.add(track1);
+        backgroundMusicTracks.add(track2);
+        backgroundMusicTracks.add(track3);
         backgroundMusicTracks.add(track6);
+        backgroundMusicTracks.add(track7);
+        
+        songList.add("Shadows and Dust");
+        songList.add("In Dreams");
+        songList.add("Phase Shift");
+        songList.add("Jazzy Menu");
+        songList.add("Main Menu Loop");
 
         fightMusicTracks.add(track4);
         fightMusicTracks.add(track5);
 
         for (Music music : backgroundMusicTracks) {
-            music.setLooping(true);
+            music.setLooping(false);
             music.setVolume(musicVol);
         }
         for (Music music : fightMusicTracks) {
@@ -76,10 +90,18 @@ public class MusicManager {
         
         playBackgroundMusic();
     }
-
+    
+    public String getSongName() {
+    	return songList.get(currentTrackIndex);
+    }
+    
     public void playBackgroundMusic() {
         stopCurrentTrack();
 
+        if(currentTrackIndex == 3 || currentTrackIndex == 4)
+        	currentMusic.setLooping(true);
+        else
+        	currentMusic.setLooping(false);
         currentTrackIndex = (currentTrackIndex + 1) % backgroundMusicTracks.size();
         currentMusic = backgroundMusicTracks.get(currentTrackIndex);
         currentMusic.play();

@@ -91,7 +91,7 @@ public class BerserkerSkillTree implements Screen{
 		homeBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.HOME);
+    			gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
 		homeBtn.setSize(150, 40);
 		homeBtn.setPosition(vp.getWorldWidth() / 50f, vp.getWorldHeight() / 1.064f);

@@ -50,7 +50,7 @@ public class StartScreen implements Screen{
 		newGame.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.HOME);
+    			gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
 		newGame.setSize(350, 100);
 		newGame.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 3f);
@@ -62,7 +62,7 @@ public class StartScreen implements Screen{
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			saveData.loadGame();
-    			gameScreen.setCurrentState(GameScreen.HOME);
+    			gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
 		loadGame.setSize(350, 100);
 		loadGame.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 4.5f);
@@ -73,7 +73,7 @@ public class StartScreen implements Screen{
 		settings.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.SETTINGS);
+    			gameScreen.switchToNewState(GameScreen.SETTINGS);
     	    }});
 		settings.setSize(150, 100);
 		settings.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 9f);

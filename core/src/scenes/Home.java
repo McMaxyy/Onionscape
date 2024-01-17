@@ -31,8 +31,8 @@ public class Home implements Screen {
 	private Storage storage;
 	private Game game;
 	private TextButton slots, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
-	saveBtn, exitBtn, forestBtn, merchantBtn, playBtn, settingsBtn;
-	private Label level, playerStats, coins;
+	saveBtn, exitBtn, forestBtn, merchantBtn, playBtn, settingsBtn, nextSong;
+	private Label level, playerStats, coins, currentMusic;
 	private GameScreen gameScreen; 
 	private Inventory inv;
 	private SaveData saveData = new SaveData();
@@ -61,7 +61,9 @@ public class Home implements Screen {
 		if(!story && stageLvl != 0) {
 			Inventory.characterTable.clear();
 			saveData.loadGame();
-		}
+		}				
+		
+		removeBonusStats();
 		
 		if(hpBoost)
 			Player.loseMaxHP(10);
@@ -84,6 +86,16 @@ public class Home implements Screen {
 			Player.weaponState = 0;
 				
 		createComponents();	
+	}
+	
+	private void removeBonusStats() {
+		Player.loseMaxHP(Player.getExtraHP());
+		Player.loseBonusStr(Player.getExtraAP());
+		Player.loseDR(Player.getExtraDP());
+		
+		Player.setExtraAP(0);
+		Player.setExtraDP(0);
+		Player.setExtraHP(0);
 	}
 	
 	private void createComponents() {
@@ -109,12 +121,31 @@ public class Home implements Screen {
 		coins.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 3.5f);
 		stage.addActor(coins);
 		
+		nextSong = new TextButton("Next song", storage.homeBtnStyle);
+		nextSong.setColor(Color.LIGHT_GRAY);
+		nextSong.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			MusicManager.getInstance().playBackgroundMusic();
+    			currentMusic.remove();
+    			currentMusic = new Label(MusicManager.getInstance().getSongName(), storage.labelStyle);
+    			currentMusic.setPosition(nextSong.getX() - currentMusic.getWidth() - 50, nextSong.getY() + nextSong.getHeight() / 4f);
+    			stage.addActor(currentMusic);
+    	    }});
+		nextSong.setSize(200, 50);
+		nextSong.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 32f);
+		stage.addActor(nextSong);
+		
+		currentMusic = new Label(MusicManager.getInstance().getSongName(), storage.labelStyle);
+		currentMusic.setPosition(nextSong.getX() - currentMusic.getWidth() - 50, nextSong.getY() + nextSong.getHeight() / 4f);
+		stage.addActor(currentMusic);
+		
 		slots = new TextButton("Slots", storage.homeBtnStyle);
 		slots.setColor(Color.LIGHT_GRAY);
 		slots.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.SLOT_GAME);
+    			gameScreen.switchToNewState(GameScreen.SLOT_GAME);
     	    }});
 		slots.setSize(200, 50);
 		slots.setPosition(vp.getWorldWidth() / 5.5f, vp.getWorldHeight() / 1.08f);
@@ -175,7 +206,7 @@ public class Home implements Screen {
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
     				freshLoad = false;
     			}    			
-    			gameScreen.setCurrentState(GameScreen.FIGHT_SCENE);
+    			gameScreen.switchToNewState(GameScreen.FOREST_MAP_QUICK);
     	    }});
 		newGame.setSize(200, 50);
 		newGame.setPosition(vp.getWorldWidth() / 3.18f, vp.getWorldHeight() / 1.08f);
@@ -187,7 +218,7 @@ public class Home implements Screen {
 		zerkerTreeBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.ZERKER_TREE);
+    			gameScreen.switchToNewState(GameScreen.ZERKER_TREE);
     	    }});
 		zerkerTreeBtn.setSize(200, 50);
 		zerkerTreeBtn.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 32f);
@@ -198,7 +229,7 @@ public class Home implements Screen {
 		inventory.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.INVENTORY);
+    			gameScreen.switchToNewState(GameScreen.INVENTORY);
     	    }});
 		inventory.setSize(200, 50);
 		inventory.setPosition(vp.getWorldWidth() / 5.5f, vp.getWorldHeight() / 32f);
@@ -222,7 +253,7 @@ public class Home implements Screen {
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
     				freshLoad = false;
     			}
-    			gameScreen.setCurrentState(GameScreen.FOREST_MAP);
+    			gameScreen.switchToNewState(GameScreen.FOREST_MAP);
     	    }});
 		forestBtn.setSize(200, 50);
 		forestBtn.setPosition(vp.getWorldWidth() / 5.5f, vp.getWorldHeight() / 1.08f);
@@ -235,10 +266,10 @@ public class Home implements Screen {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			if(freshLoad) {
-    				gameScreen.setCurrentState(GameScreen.INVENTORY);
+    				gameScreen.switchToNewState(GameScreen.INVENTORY);
     				freshLoad = false;
     			}
-    			gameScreen.setCurrentState(GameScreen.MERCHANT);
+    			gameScreen.switchToNewState(GameScreen.MERCHANT);
     	    }});
 		merchantBtn.setSize(200, 50);
 		merchantBtn.setPosition(vp.getWorldWidth() / 3.18f, vp.getWorldHeight() / 32f);
@@ -255,7 +286,7 @@ public class Home implements Screen {
     			storage.inventoryWeapons(storage.defensiveSteelGA, "Add");
     			storage.inventoryWeapons(storage.healthyIronAxe, "Add");
     			storage.inventoryWeapons(storage.healthyBronzeAxe, "Add");
-    			storage.inventoryWeapons(storage.healthySteelAxe, "Add");
+    			storage.inventoryWeapons(storage.strongSteelAxe, "Add");
     			storage.inventoryWeapons(storage.woodenShield, "Add");
     			storage.inventoryWeapons(storage.woodenAxe, "Add");
     			storage.inventoryWeapons(storage.healthyIronShield, "Add");
@@ -307,7 +338,7 @@ public class Home implements Screen {
 		settingsBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.setCurrentState(GameScreen.SETTINGS);
+    			gameScreen.switchToNewState(GameScreen.SETTINGS);
     	    }});
 		settingsBtn.setSize(50, 50);
 		settingsBtn.setPosition(vp.getWorldWidth() / 1.21f, vp.getWorldHeight() / 1.08f);

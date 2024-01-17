@@ -375,7 +375,7 @@ public class SlotMinigame implements Screen{
 		backBtn.addListener(new ClickListener() {
 			@Override
 		    public void clicked(InputEvent event, float x, float y) {  
-				gameScreen.setCurrentState(GameScreen.HOME);					
+				gameScreen.switchToNewState(GameScreen.HOME);					
 		    }});
 		backBtn.setSize(150, 100);
 		backBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.25f);

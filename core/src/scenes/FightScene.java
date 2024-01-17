@@ -119,6 +119,10 @@ public class FightScene implements Screen{
         if(BerserkerSkillTree.luckyStrike == 1)
         	firstAttack = true;
         
+        Player.gainMaxHP(Player.getExtraHP());
+        Player.gainBonusStr(Player.getExtraAP());
+        Player.gainDR(Player.getExtraDP());
+        
         if(Home.story) {
         	Player.gainMaxHP(Player.getSkillMaxHP());
         	Player.gainDR(Player.getSkillDmgResist());
@@ -357,7 +361,7 @@ public class FightScene implements Screen{
 	        				storage.equippedWeapons(null, "Clear");
 	        				storage.equippedItems(null, "Clear");
 	        			}
-	        			gameScreen.setCurrentState(GameScreen.HOME);
+	        			gameScreen.switchToNewState(GameScreen.HOME);
 	        	    }});
 	        }	        	
 	        else {
@@ -1414,25 +1418,32 @@ public class FightScene implements Screen{
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			stage.clear();    			
-    			if(Merchant.raid) {
-    				Player.loseMaxHP(Player.getSkillMaxHP());
-    	    		Player.loseDR(Player.getSkillDmgResist());
-    				GameScreen.newGame = false;
-    				RaidTextScenes.enrage = RaidTextScenes.poison = RaidTextScenes.weaken = false;
-    				gameScreen.setCurrentState(GameScreen.FOREST_MAP);
-    			}
-    			else {
-    				Player.gainCoins(Player.getRaidCoins());
-    				Player.setRaidCoins(0);
-    				Player.setStrength(3);
-        			Player.setOneHandStr(0);
-        			Player.setTwoHandStr(0);
-        			Player.setMaxHP(70);
-        			Player.setDmgResist(0);
-        			Player.setWeaponDmg(0);
-        			MusicManager.getInstance().playBackgroundMusic();
-    				gameScreen.setCurrentState(GameScreen.HOME);
-    			}    				
+//    			if(Home.story) {
+//    				Player.loseMaxHP((Player.getSkillMaxHP() + Player.getExtraHP()));
+//    	    		Player.loseDR((Player.getSkillDmgResist() + Player.getExtraDP()));
+//    	    		Player.loseBonusStr(Player.getExtraAP());
+//    				GameScreen.newGame = false;
+//    				RaidTextScenes.enrage = RaidTextScenes.poison = RaidTextScenes.weaken = false;
+//    				gameScreen.switchToNewState(GameScreen.FOREST_MAP);
+//    			}
+//    			else {
+//    				Player.gainCoins(Player.getRaidCoins());
+//    				Player.setRaidCoins(0);
+//    				Player.setStrength(3);
+//        			Player.setOneHandStr(0);
+//        			Player.setTwoHandStr(0);
+//        			Player.setMaxHP(70);
+//        			Player.setDmgResist(0);
+//        			Player.setWeaponDmg(0);
+//        			MusicManager.getInstance().playBackgroundMusic();
+//    				gameScreen.switchToNewState(GameScreen.HOME);
+//    			}  
+    			Player.loseMaxHP((Player.getSkillMaxHP() + Player.getExtraHP()));
+	    		Player.loseDR((Player.getSkillDmgResist() + Player.getExtraDP()));
+	    		Player.loseBonusStr(Player.getExtraAP());
+				GameScreen.newGame = false;
+				RaidTextScenes.enrage = RaidTextScenes.poison = RaidTextScenes.weaken = false;
+				gameScreen.switchToNewState(GameScreen.FOREST_MAP);
     	    }});
     	
     	reward1 = new TextButton("", storage.buttonStyle);
