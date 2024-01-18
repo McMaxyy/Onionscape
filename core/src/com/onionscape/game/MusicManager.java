@@ -35,7 +35,7 @@ public class MusicManager {
     		musicVol = 0.0f;
     	
     	for (Music music : backgroundMusicTracks) {
-    		if(music == backgroundMusicTracks.get(3) ||  music == backgroundMusicTracks.get(4))
+    		if(music == backgroundMusicTracks.get(3) ||  music == backgroundMusicTracks.get(4) || music == backgroundMusicTracks.get(5))
     			music.setLooping(true);
     		else
     			music.setLooping(false);
@@ -54,20 +54,23 @@ public class MusicManager {
         Music track3 = Gdx.audio.newMusic(Gdx.files.internal("sounds/PhaseShift.mp3"));
         Music track4 = Gdx.audio.newMusic(Gdx.files.internal("sounds/Chase.mp3"));
         Music track5 = Gdx.audio.newMusic(Gdx.files.internal("sounds/SuperEpic.mp3"));        
-        Music track6 = Gdx.audio.newMusic(Gdx.files.internal("sounds/JazzyMenu.ogg"));
-        Music track7 = Gdx.audio.newMusic(Gdx.files.internal("sounds/MainMenuLoop.mp3"));
+        Music track6 = Gdx.audio.newMusic(Gdx.files.internal("sounds/JazzyMenu.wav"));
+        Music track7 = Gdx.audio.newMusic(Gdx.files.internal("sounds/MainMenuLoop.ogg"));
+        Music track8 = Gdx.audio.newMusic(Gdx.files.internal("sounds/No3.wav"));
 
         backgroundMusicTracks.add(track1);
         backgroundMusicTracks.add(track2);
         backgroundMusicTracks.add(track3);
         backgroundMusicTracks.add(track6);
         backgroundMusicTracks.add(track7);
+        backgroundMusicTracks.add(track8);
         
         songList.add("Shadows and Dust");
         songList.add("In Dreams");
         songList.add("Phase Shift");
         songList.add("Jazzy Menu");
         songList.add("Main Menu Loop");
+        songList.add("No3");
 
         fightMusicTracks.add(track4);
         fightMusicTracks.add(track5);
@@ -98,10 +101,10 @@ public class MusicManager {
     public void playBackgroundMusic() {
         stopCurrentTrack();
 
-        if(currentTrackIndex == 3 || currentTrackIndex == 4)
-        	currentMusic.setLooping(true);
-        else
-        	currentMusic.setLooping(false);
+        if ((currentTrackIndex == 3 || currentTrackIndex == 4 || currentTrackIndex == 5) && currentMusic != null)
+            currentMusic.setLooping(true);
+        else if (currentMusic != null)
+            currentMusic.setLooping(false);
         currentTrackIndex = (currentTrackIndex + 1) % backgroundMusicTracks.size();
         currentMusic = backgroundMusicTracks.get(currentTrackIndex);
         currentMusic.play();
