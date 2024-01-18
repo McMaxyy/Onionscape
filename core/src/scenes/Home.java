@@ -202,6 +202,7 @@ public class Home implements Screen {
     			stageLvl = 1;
     			resetSkills();
     			GameScreen.newGame = true;
+    			ForestMap.newRaid = true;
     			if(freshLoad) {
     				gameScreen.setCurrentState(GameScreen.INVENTORY);
     				freshLoad = false;

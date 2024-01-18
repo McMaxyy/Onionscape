@@ -914,7 +914,7 @@ public class ForestMap implements Screen{
 		disableButtons();
 		moved = true;
 		enableButtons();
-		int x = rand.nextInt(11);
+		int x = rand.nextInt(13);
 		
 		switch(action) {
 		case "F":
@@ -927,16 +927,12 @@ public class ForestMap implements Screen{
 				encounter = 1;
 				gameScreen.switchToNewState(GameScreen.TEXT_SCENE);
 			}
-			else if(x == 7){
+			else if(x == 7 || x == 8){
 				FightScene.elite = FightScene.boss = false;
 				FightScene.normal = true;
 				gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 			}
-			else if(x == 8){
-				encounter = 1;
-				gameScreen.switchToNewState(GameScreen.TEXT_SCENE);
-			}
-			else if(x == 9){
+			else if(x == 9 || x == 10){
 				encounter = 2;
 				gameScreen.switchToNewState(GameScreen.TEXT_SCENE);
 			}

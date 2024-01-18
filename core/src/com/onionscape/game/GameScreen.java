@@ -28,9 +28,9 @@ public class GameScreen implements Screen {
 	public static boolean newGame = true;
 	
 	private static final int MIN_WIDTH = 1280;
-    private static final int MIN_HEIGHT = 720;
-    public static final int MAX_WIDTH = 1920;
-    public static final int MAX_HEIGHT = 1080;
+	private static final int MIN_HEIGHT = 720;
+	private static final int MAX_WIDTH = 1920;
+    private static final int MAX_HEIGHT = 1080;
     public static int SELECTED_WIDTH = MAX_WIDTH;
     public static int SELECTED_HEIGHT = MAX_HEIGHT;
     

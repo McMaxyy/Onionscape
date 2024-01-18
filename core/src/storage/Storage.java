@@ -134,7 +134,8 @@ public class Storage {
 		assetManager.load("maps/HomeScreen.png", Texture.class, textureParameter);
 		assetManager.load("maps/MerchantScreen.png", Texture.class, textureParameter);
 		assetManager.load("maps/SkillTreeZerker.png", Texture.class, textureParameter);
-		
+		assetManager.load("maps/SettingsScreen.png", Texture.class, textureParameter);
+
 		// Buffs & Debuffs
 		assetManager.load("buffs/Barrier.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Enrage.png", Texture.class, textureParameter);

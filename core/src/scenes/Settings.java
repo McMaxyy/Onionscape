@@ -4,13 +4,21 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.MusicManager;
@@ -27,6 +35,9 @@ public class Settings implements Screen{
 	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn, musicUp, musicDown, sfxUp, sfxDown;
 	private ShapeRenderer musicBar = new ShapeRenderer();
 	private ShapeRenderer sfxBar = new ShapeRenderer();
+	private SpriteBatch mapBatch = new SpriteBatch();
+	private Texture mapTexture;
+	private Label musicLbl, sfxLbl, screenModeLbl;
 	
 	public Settings(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -37,6 +48,9 @@ public class Settings implements Screen{
 		storage = Storage.getInstance();
 		skin = storage.skin;
 		storage.createFont();
+		
+		mapTexture = Storage.assetManager.get("maps/SettingsScreen.png", Texture.class);
+		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		
 		createComponents();
 	}
@@ -50,8 +64,8 @@ public class Settings implements Screen{
     			Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
     			Gdx.graphics.setFullscreenMode(currentMode);
     	    }});
-		fullscreenBtn.setSize(300, 100);
-		fullscreenBtn.setPosition(vp.getWorldWidth() / 4f, vp.getWorldHeight() / 5f);
+		fullscreenBtn.setSize(200, 50);
+		fullscreenBtn.setPosition(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 1.7f);
 		stage.addActor(fullscreenBtn);
 		
 		borderlessBtn = new TextButton("Borderless", storage.buttonStyle);
@@ -64,8 +78,8 @@ public class Settings implements Screen{
 		        Gdx.graphics.setWindowedMode(currentMode.width, currentMode.height);
 		    }
 		});
-		borderlessBtn.setSize(300, 100);
-		borderlessBtn.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 5f);
+		borderlessBtn.setSize(200, 50);
+		borderlessBtn.setPosition(vp.getWorldWidth() / 2.24f, vp.getWorldHeight() / 1.7f);
 		stage.addActor(borderlessBtn);
 		
 		windowedBtn = new TextButton("Windowed", storage.buttonStyle);
@@ -76,8 +90,8 @@ public class Settings implements Screen{
     			Gdx.graphics.setUndecorated(false);
     			Gdx.graphics.setWindowedMode(1280, 720);
     	    }});
-		windowedBtn.setSize(300, 100);
-		windowedBtn.setPosition(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 10f);
+		windowedBtn.setSize(200, 50);
+		windowedBtn.setPosition(vp.getWorldWidth() / 1.79f, vp.getWorldHeight() / 1.7f);
 		stage.addActor(windowedBtn);
 		
 		musicUp = new TextButton("+", storage.buttonStyle);
@@ -91,7 +105,7 @@ public class Settings implements Screen{
     			}    				
     	    }});
 		musicUp.setSize(30, 30);
-		musicUp.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 1.4f);
+		musicUp.setPosition(vp.getWorldWidth() / 1.68f, vp.getWorldHeight() / 2.2f, Align.center);
 		stage.addActor(musicUp);
 		
 		musicDown = new TextButton("-", storage.buttonStyle);
@@ -120,7 +134,7 @@ public class Settings implements Screen{
     			}    				
     	    }});
 		sfxUp.setSize(30, 30);
-		sfxUp.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 1.6f);
+		sfxUp.setPosition(vp.getWorldWidth() / 1.68f, vp.getWorldHeight() / 2.7f, Align.center);
 		stage.addActor(sfxUp);
 		
 		sfxDown = new TextButton("-", storage.buttonStyle);
@@ -138,7 +152,7 @@ public class Settings implements Screen{
 		sfxDown.setPosition(sfxUp.getX() - 370, sfxUp.getY());
 		stage.addActor(sfxDown);
 		
-		backBtn = new TextButton("Return", storage.buttonStyle);
+		backBtn = new TextButton("Return", storage.homeBtnStyle);
 		backBtn.setColor(Color.LIGHT_GRAY);
 		backBtn.addListener(new ClickListener() {
     		@Override
@@ -148,9 +162,26 @@ public class Settings implements Screen{
     			else
     				gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
-		backBtn.setSize(200, 150);
-		backBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.2f);
+		backBtn.setSize(150, 40);
+		backBtn.setPosition(vp.getWorldWidth() / 50f, vp.getWorldHeight() / 1.064f);
 		stage.addActor(backBtn);
+		
+		musicLbl = new Label("Music Volume", storage.labelStyleBlack);
+		musicLbl.setSize(300, 30);
+		float centerX = (musicUp.getX() + musicDown.getRight()) / 1.88f;
+		musicLbl.setPosition(centerX - musicLbl.getWidth() / 2f, musicUp.getY() + musicUp.getHeight() + 10);
+		stage.addActor(musicLbl);
+		
+		sfxLbl = new Label("Sound Effects Volume", storage.labelStyleBlack);
+		sfxLbl.setSize(300, 30);
+		centerX = (sfxUp.getX() + sfxDown.getRight()) / 2;
+		sfxLbl.setPosition(centerX - sfxLbl.getWidth() / 2f, sfxUp.getY() + sfxUp.getHeight() + 10);
+		stage.addActor(sfxLbl);
+		
+		screenModeLbl = new Label("Window Mode", storage.labelStyleBlack);
+		screenModeLbl.setPosition(borderlessBtn.getX() + 20, borderlessBtn.getY() + borderlessBtn.getHeight() + 20);
+		stage.addActor(screenModeLbl);
+		
 	}
 	
 	private void drawSoundBar() {
@@ -195,8 +226,22 @@ public class Settings implements Screen{
 
 	@Override
 	public void render(float delta) {
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
+		
+		mapBatch.begin();
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
+		mapBatch.end();
+		
 		drawSoundBar();
 		drawSfxBar();
+		
+		if(Gdx.input.isKeyPressed(Keys.F5)) {
+			for(Actor actor : stage.getActors()) {
+				actor.addAction(Actions.removeActor());
+			}
+			
+			createComponents();
+		}
 		
 		stage.act();
 		stage.draw();	
@@ -206,6 +251,7 @@ public class Settings implements Screen{
 	public void resize(int width, int height) {
 		musicBar.setProjectionMatrix(vp.getCamera().combined);
 		sfxBar.setProjectionMatrix(vp.getCamera().combined);
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 	}
 
 	@Override

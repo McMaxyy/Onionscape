@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher{
     
-    private static boolean decorated = false; // Default to decorated
+    private static boolean decorated = true; // Default to decorated
 
     public static void main(String[] arg) {
     	Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -14,8 +14,7 @@ public class DesktopLauncher{
         config.setTitle("Onionscape");
 
         // Set the windowed mode to the screen size
-        config.setWindowedMode(Lwjgl3ApplicationConfiguration.getDisplayMode().width,
-                Lwjgl3ApplicationConfiguration.getDisplayMode().height);
+        config.setWindowedMode(1280, 720);
 
         // Set the decoration status in the configuration
         config.setDecorated(decorated);

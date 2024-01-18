@@ -622,6 +622,12 @@ public class SaveData {
 	    		else
 	    			storage.equippedItems(storage.bomb, "Add");
 	    		break;
+	    	case "Throwing Knife":
+	    		if(inventory.equals("Bag"))
+	    			storage.inventoryItems(storage.throwingKnife, "Add");
+	    		else
+	    			storage.equippedItems(storage.throwingKnife, "Add");
+	    		break;
 	    	case "Attack Boost":
 	    		if(inventory.equals("Bag"))
 	    			storage.inventoryItems(storage.apBoost, "Add");

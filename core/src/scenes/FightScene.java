@@ -78,7 +78,7 @@ public class FightScene implements Screen{
     private boolean enemyStunned, barrierActive, hardenActive, firstAttack = false, 
     		riposteActive, firstLoad = true;
     private int eRendLeft, ePoisonLeft, eEnrageLeft;
-    private boolean eHardenActive, playerStunned, eBarrierActive, showCard;
+    private boolean eHardenActive, playerStunned, eBarrierActive, showCard, abilitySwapActive;
     java.util.List<Items> equippedItems;
     Table itemTable = new Table();
     Table abilitySwapTable = new Table();
@@ -241,17 +241,22 @@ public class FightScene implements Screen{
             	setEnemyAttributes(storage.mimicTree, "enemies/MimicTree.png");
             	RaidTextScenes.mimic = false;
             }       	
-            else {
+            else if(boss){
                 setEnemyAttributes(storage.boar, "enemies/Boar.png");
             }
         }       
     }
 
     private void setEnemyAttributes(Enemy enemy, String texturePath) {
-    	if(!Home.story) {
+    	if(!Home.story && Home.stageLvl > 1) {
     		enemyMaxHP = enemy.getMaxHP() / (Home.stageLvl + 1);
     		enemyValue = enemy.getValue() / (Home.stageLvl + 1);
     		enemyDamage = enemy.getAttackPower() / (Home.stageLvl + 1);
+    	}
+    	else if(!Home.story && Home.stageLvl == 1) {
+    		enemyMaxHP = (int) (enemy.getMaxHP() / 1.5f);
+    		enemyValue = enemy.getValue() - 2;
+    		enemyDamage = enemy.getAttackPower() - 2;
     	}
     	else {
     		enemyMaxHP = enemy.getMaxHP();
@@ -1014,6 +1019,8 @@ public class FightScene implements Screen{
             		Player.loseHP(3);
             		dealDamage(playerHPLbl.getX(), playerHPLbl.getY(), 3);
                     eRendLeft--;
+                    if(Player.getHp() <= 0)
+                    	pDead = true; 
             	}
             }, 0.5f);    		
     	}
@@ -1025,6 +1032,8 @@ public class FightScene implements Screen{
             		Player.loseHP(3);
             		dealDamage(playerHPLbl.getX(), playerHPLbl.getY(), 3);
             		ePoisonLeft--;
+            		if(Player.getHp() <= 0)
+                    	pDead = true; 
             	}
             }, 0.5f); 
     	}
@@ -1240,8 +1249,10 @@ public class FightScene implements Screen{
     	attackBtn.addListener(new ClickListener() {
     	    @Override
     	    public void clicked(InputEvent event, float x, float y) {
-    	    	onButtonClicked((TextButton) event.getListenerActor());  	        
-    	        btnClicked = true;
+    	    	if(enemyHP > 0) {
+    	    		onButtonClicked((TextButton) event.getListenerActor());  	        
+        	        btnClicked = true;
+    	    	}
     	    }});
     	
     	ability1 = new TextButton("Ability1", storage.buttonStyle);
@@ -1572,7 +1583,24 @@ public class FightScene implements Screen{
 	                	if(!gameOver)
 	                		handleInventoryClick(inventorySlotImage, item);
 	                }				
-	            });   			
+	            });
+    			inventorySlotImage.addListener(new InputListener() {
+	                @Override
+	                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+	                	gearName.setText(item + "\n\n\n" + storage.itemDescription(item));
+	                    gearName.setAlignment(Align.center);
+	                	gearName.setVisible(true);	                  	                    
+	                    gearName.setPosition(vp.getWorldWidth() / 2f - gearName.getWidth() / 2f, vp.getWorldHeight() / 2f);
+	                    if(!item.equals(""))
+	                    	showCard = true;
+	                }
+
+	                @Override
+	                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+	                    gearName.setVisible(false);
+	                    showCard = false;
+	                }
+	            });
     		}
     		
     		itemTable.row();
@@ -1641,8 +1669,9 @@ public class FightScene implements Screen{
     	    		Home.expBoost = true;
     	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Experience Boost activated");
     	    		break;
-    	    	default:   	       	    		
-    	    		createAbilityGrid(itemName);
+    	    	default:   	      
+    	    		if(!abilitySwapActive)
+    	    			createAbilityGrid(itemName);
     	    		break;
     	    	}
         		
@@ -1654,6 +1683,8 @@ public class FightScene implements Screen{
     }
     
     private void createAbilityGrid(final String ability) {
+    	abilitySwapActive = true;
+    	
     	abilitySwapTable.defaults().size(150, 100);
     	abilitySwapTable.setName("abilitySwapTable");
     	
@@ -1672,28 +1703,32 @@ public class FightScene implements Screen{
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				swapAbility(ability1, ability, ab1UseLbl);
+				abilitySwapActive = false;
 			}
 		});
 		abilityLabel2.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				swapAbility(ability2, ability, ab2UseLbl);
+				abilitySwapActive = false;
 			}
 		});
 		abilityLabel3.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				swapAbility(ability3, ability, ab3UseLbl);
+				abilitySwapActive = false;
 			}
 		});
 		abilityLabel4.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				swapAbility(ability4, ability, ab4UseLbl);
+				abilitySwapActive = false;
 			}
 		});
     	
-    	abilitySwapTable.setPosition(vp.getWorldWidth() / 1.15f, vp.getWorldHeight() / 3f, Align.center);
+    	abilitySwapTable.setPosition(vp.getWorldWidth() / 2f - abilitySwapTable.getWidth() / 2f, vp.getWorldHeight() / 2f, Align.center);
 	    stage.addActor(abilitySwapTable);
     }
     
@@ -1875,67 +1910,96 @@ public class FightScene implements Screen{
     }
     
     private void drawBuffs() {
-    	float x1 = playerHPLbl.getX() - playerHPLbl.getWidth() / 4f;
-    	float x2 = enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f;
-    	float y = playerHPLbl.getY() - 30f;
-    	buffBatch.begin();
-    	
-    	if(barrierActive)
-    		buffBatch.draw(barrierBuffTex, x1, y, 25, 25);
-    	
-    	if(enrageLeft > 0)
-    		buffBatch.draw(enrageBuffTex, x1 + 30, y, 25, 25);
-    	
-    	if(hardenActive)
-    		buffBatch.draw(hardenBuffTex, x1 + 60, y, 25, 25);
-    	
-    	if(thornsLeft > 0)
-    		buffBatch.draw(thornsBuffTex, x1 + 90, y, 25, 25);
-    	
-    	if(eBarrierActive)
-    		buffBatch.draw(barrierBuffTex, x2, y, 25, 25);
-    	
-    	if(eEnrageLeft > 0)
-    		buffBatch.draw(enrageBuffTex, x2 + 30, y, 25, 25);
-    	
-    	if(eHardenActive)
-    		buffBatch.draw(hardenBuffTex, x2 + 60, y, 25, 25);
-    	
-    	if(eThornsLeft > 0)
-    		buffBatch.draw(thornsBuffTex, x2 + 90, y, 25, 25);
-    	
-    	buffBatch.end();
+        float x1 = playerHPLbl.getX() - playerHPLbl.getWidth() / 4f;
+        float x2 = enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f;
+        float y = playerHPLbl.getY() - 30f;
+        float currentX1 = x1;
+        float currentX2 = x2;
+
+        buffBatch.begin();
+
+        if (barrierActive)
+            buffBatch.draw(barrierBuffTex, currentX1, y, 25, 25);
+
+        currentX1 += 30; // Move to the next position
+
+        if (enrageLeft > 0)
+            buffBatch.draw(enrageBuffTex, currentX1, y, 25, 25);
+
+        currentX1 += 30;
+
+        if (hardenActive)
+            buffBatch.draw(hardenBuffTex, currentX1, y, 25, 25);
+
+        currentX1 += 30;
+
+        if (thornsLeft > 0)
+            buffBatch.draw(thornsBuffTex, currentX1, y, 25, 25);
+
+        if (eBarrierActive)
+            buffBatch.draw(barrierBuffTex, currentX2, y, 25, 25);
+
+        currentX2 += 30;
+
+        if (eEnrageLeft > 0)
+            buffBatch.draw(enrageBuffTex, currentX2, y, 25, 25);
+
+        currentX2 += 30;
+
+        if (eHardenActive)
+            buffBatch.draw(hardenBuffTex, currentX2, y, 25, 25);
+
+        currentX2 += 30;
+
+        if (eThornsLeft > 0)
+            buffBatch.draw(thornsBuffTex, currentX2, y, 25, 25);
+
+        buffBatch.end();
     }
-    
+  
     private void drawDebuffs() {
-    	float x1 = playerHPLbl.getX() - playerHPLbl.getWidth() / 4f;
-    	float x2 = enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f;
+    	float x1 = (playerHPLbl.getX() - playerHPLbl.getWidth() / 4f) + 120;
+    	float x2 = (enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f) + 120;
     	float y = playerHPLbl.getY() - 30f;
+    	float currentX1 = x1;
+        float currentX2 = x2;
     	debuffBatch.begin();
     	
     	if(rendLeft > 0)
-    		debuffBatch.draw(bleedBuffTex, x2 + 120, y, 25, 25);
+    		debuffBatch.draw(bleedBuffTex, currentX2, y, 25, 25);
+    	
+    	currentX2 += 30;
     	
     	if(rendLeft > 0 && BerserkerSkillTree.poisonRend == 1)
-    		debuffBatch.draw(poisonBuffTex, x2 + 150, y, 25, 25);
+    		debuffBatch.draw(poisonBuffTex, currentX2, y, 25, 25);
+    	
+    	currentX2 += 30;
     	
     	if(enemyStunned)
-    		debuffBatch.draw(stunBuffTex, x2 + 180, y, 25, 25);
+    		debuffBatch.draw(stunBuffTex, currentX2, y, 25, 25);
+    	
+    	currentX2 += 30;
     	
     	if(weakenLeft > 0)
-    		debuffBatch.draw(weakenBuffTex, x2 + 210, y, 25, 25);
+    		debuffBatch.draw(weakenBuffTex, currentX2, y, 25, 25);
     	
     	if(eRendLeft > 0)
-    		debuffBatch.draw(bleedBuffTex, x1 + 120, y, 25, 25);
+    		debuffBatch.draw(bleedBuffTex, currentX1, y, 25, 25);
+    	
+    	currentX1 += 30;
     	
     	if(ePoisonLeft > 0)
-    		debuffBatch.draw(poisonBuffTex, x1 + 150, y, 25, 25);
+    		debuffBatch.draw(poisonBuffTex, currentX1, y, 25, 25);
+    	
+    	currentX1 += 30;
     	
     	if(playerStunned)
-    		debuffBatch.draw(stunBuffTex, x1 + 180, y, 25, 25);
+    		debuffBatch.draw(stunBuffTex, currentX1, y, 25, 25);
+    	
+    	currentX1 += 30;
     	
     	if(eWeakenLeft > 0)
-    		debuffBatch.draw(weakenBuffTex, x1 + 210, y, 25, 25);
+    		debuffBatch.draw(weakenBuffTex, currentX1, y, 25, 25);
     	
     	debuffBatch.end();
     }
