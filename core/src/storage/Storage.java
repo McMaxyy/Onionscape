@@ -125,6 +125,7 @@ public class Storage {
 		assetManager.load("items/DefenseBoost.png", Texture.class, textureParameter);
 		assetManager.load("items/HealthBoost.png", Texture.class, textureParameter);
 		assetManager.load("items/ExperienceBoost.png", Texture.class, textureParameter);
+		assetManager.load("items/ThrowingKnife.png", Texture.class, textureParameter);
 		
 		// Maps
 		assetManager.load("maps/InventoryScreen.png", Texture.class, textureParameter);
@@ -157,8 +158,23 @@ public class Storage {
 		assetManager.load("slots/Skull.png", Texture.class, textureParameter);
 		assetManager.load("slots/Scatter.png", Texture.class, textureParameter);
 		
-		// Misc
-		assetManager.load("abilities/SwingIcon.png", Texture.class, textureParameter);
+		// Ability icons
+		assetManager.load("abilities/Swing.png", Texture.class, textureParameter);
+		assetManager.load("abilities/BarbedArmor.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Barrier.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Bash.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Decapitate.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Enrage.png", Texture.class, textureParameter);
+		assetManager.load("abilities/GroundBreaker.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Harden.png", Texture.class, textureParameter);
+		assetManager.load("abilities/HiltBash.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Mend.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Rend.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Riposte.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Stab.png", Texture.class, textureParameter);
+		assetManager.load("abilities/Whirlwind.png", Texture.class, textureParameter);
+		
+		// Misc		
 		assetManager.load("player/Onion.png", Texture.class, textureParameter);
 		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);	
 		assetManager.load("items/CardLarge.png", Texture.class, textureParameter);	

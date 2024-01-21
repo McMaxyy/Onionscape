@@ -352,7 +352,6 @@ public class ForestMap implements Screen{
 	
 	private void createComponents() {
 		button1 = new ImageButton(skin, "default");		
-		button1.setColor(Color.LIGHT_GRAY);
 		button1.setBounds(vp.getWorldWidth() / 1.865f, vp.getWorldHeight() / 4f, 70, 70);
 		buttons[0] = button1;
 		button1.addListener(new ClickListener() {
@@ -366,7 +365,6 @@ public class ForestMap implements Screen{
 		button1.setName(setEncounter(1, button1));
 		
 		button2 = new ImageButton(skin, "default");
-		button2.setColor(Color.LIGHT_GRAY);
 		button2.setBounds(vp.getWorldWidth() / 3f, vp.getWorldHeight() / 13.4f, 70, 70);
 		buttons[1] = button2;
 		button2.addListener(new ClickListener() {
@@ -380,7 +378,6 @@ public class ForestMap implements Screen{
 		button2.setName(setEncounter(2, button2));
 		
 		button3 = new ImageButton(skin, "default");
-		button3.setColor(Color.LIGHT_GRAY);
 		button3.setBounds(vp.getWorldWidth() / 5.2f, vp.getWorldHeight() / 13.4f, 70, 70);
 		buttons[2] = button3;
 		button3.addListener(new ClickListener() {
@@ -394,7 +391,6 @@ public class ForestMap implements Screen{
 		button3.setName(setEncounter(3, button3));
 		
 		button4 = new ImageButton(skin, "default");
-		button4.setColor(Color.LIGHT_GRAY);
 		button4.setBounds(vp.getWorldWidth() / 100f, vp.getWorldHeight() / 13.4f, 70, 70);
 		buttons[3] = button4;
 		button4.addListener(new ClickListener() {
@@ -408,7 +404,6 @@ public class ForestMap implements Screen{
 		button4.setName(setEncounter(4, button4));
 		
 		button5 = new ImageButton(skin, "default");
-		button5.setColor(Color.LIGHT_GRAY);
 		button5.setBounds(vp.getWorldWidth() / 6.78f, vp.getWorldHeight() / 4f, 70, 70);
 		buttons[4] = button5;
 		button5.addListener(new ClickListener() {
@@ -422,7 +417,6 @@ public class ForestMap implements Screen{
 		button5.setName(setEncounter(5, button5));
 		
 		button6 = new ImageButton(skin, "default");
-		button6.setColor(Color.LIGHT_GRAY);
 		button6.setBounds(vp.getWorldWidth() / 13f, vp.getWorldHeight() / 2.55f, 70, 70);
 		buttons[5] = button6;
 		button6.addListener(new ClickListener() {
@@ -436,7 +430,6 @@ public class ForestMap implements Screen{
 		button6.setName(setEncounter(6, button6));
 		
 		button7 = new ImageButton(skin, "default");
-		button7.setColor(Color.LIGHT_GRAY);
 		button7.setBounds(vp.getWorldWidth() / 100f, vp.getWorldHeight() / 2.55f, 70, 70);
 		buttons[6] = button7;
 		button7.addListener(new ClickListener() {
@@ -450,7 +443,6 @@ public class ForestMap implements Screen{
 		button7.setName(setEncounter(7, button7));
 		
 		button8 = new ImageButton(skin, "default");
-		button8.setColor(Color.LIGHT_GRAY);
 		button8.setBounds(vp.getWorldWidth() / 4.25f, vp.getWorldHeight() / 4f, 70, 70);
 		buttons[7] = button8;
 		button8.addListener(new ClickListener() {
@@ -464,7 +456,6 @@ public class ForestMap implements Screen{
 		button8.setName(setEncounter(8, button8));
 		
 		button9 = new ImageButton(skin, "default");
-		button9.setColor(Color.LIGHT_GRAY);
 		button9.setBounds(vp.getWorldWidth() / 1.63f, vp.getWorldHeight() / 13.4f, 70, 70);
 		buttons[8] = button9;
 		button9.addListener(new ClickListener() {
@@ -478,7 +469,6 @@ public class ForestMap implements Screen{
 		button9.setName(setEncounter(9, button9));
 		
 		button10 = new ImageButton(skin, "default");
-		button10.setColor(Color.LIGHT_GRAY);
 		button10.setBounds(vp.getWorldWidth() / 1.455f, vp.getWorldHeight() / 6f, 70, 70);
 		buttons[9] = button10;
 		button10.addListener(new ClickListener() {
@@ -492,7 +482,6 @@ public class ForestMap implements Screen{
 		button10.setName(setEncounter(10, button10));
 		
 		button11 = new ImageButton(skin, "default");
-		button11.setColor(Color.LIGHT_GRAY);
 		button11.setBounds(vp.getWorldWidth() / 1.25f, vp.getWorldHeight() / 13.4f, 70, 70);
 		buttons[10] = button11;
 		button11.addListener(new ClickListener() {
@@ -506,7 +495,6 @@ public class ForestMap implements Screen{
 		button11.setName(setEncounter(11, button11));
 		
 		button12 = new ImageButton(skin, "default");
-		button12.setColor(Color.LIGHT_GRAY);
 		button12.setBounds(vp.getWorldWidth() / 1.05f, vp.getWorldHeight() / 13.4f, 70, 70);
 		buttons[11] = button12;
 		button12.addListener(new ClickListener() {
@@ -520,7 +508,6 @@ public class ForestMap implements Screen{
 		button12.setName(setEncounter(12, button12));
 		
 		button13 = new ImageButton(skin, "default");
-		button13.setColor(Color.LIGHT_GRAY);
 		button13.setBounds(vp.getWorldWidth() / 1.345f, vp.getWorldHeight() / 2.8f, 70, 70);
 		buttons[12] = button13;
 		button13.addListener(new ClickListener() {
@@ -534,7 +521,6 @@ public class ForestMap implements Screen{
 		button13.setName(setEncounter(13, button13));
 		
 		button14 = new ImageButton(skin, "default");
-		button14.setColor(Color.LIGHT_GRAY);
 		button14.setBounds(vp.getWorldWidth() / 1.075f, vp.getWorldHeight() / 2.8f, 70, 70);
 		buttons[13] = button14;
 		button14.addListener(new ClickListener() {
@@ -548,7 +534,6 @@ public class ForestMap implements Screen{
 		button14.setName(setEncounter(14, button14));
 		
 		button15 = new ImageButton(skin, "default");
-		button15.setColor(Color.LIGHT_GRAY);
 		button15.setBounds(vp.getWorldWidth() / 1.115f, vp.getWorldHeight() / 2.2f, 70, 70);
 		buttons[14] = button15;
 		button15.addListener(new ClickListener() {
@@ -562,7 +547,6 @@ public class ForestMap implements Screen{
 		button15.setName(setEncounter(15, button15));
 		
 		button16 = new ImageButton(skin, "default");
-		button16.setColor(Color.LIGHT_GRAY);
 		button16.setBounds(vp.getWorldWidth() / 1.25f, vp.getWorldHeight() / 2.2f, 70, 70);
 		buttons[15] = button16;
 		button16.addListener(new ClickListener() {
@@ -576,7 +560,6 @@ public class ForestMap implements Screen{
 		button16.setName(setEncounter(16, button16));
 		
 		button17 = new ImageButton(skin, "default");
-		button17.setColor(Color.LIGHT_GRAY);
 		button17.setBounds(vp.getWorldWidth() / 1.13f, vp.getWorldHeight() / 1.655f, 70, 70);
 		buttons[16] = button17;
 		button17.addListener(new ClickListener() {
@@ -590,7 +573,6 @@ public class ForestMap implements Screen{
 		button17.setName(setEncounter(17, button17));
 		
 		button18 = new ImageButton(skin, "default");
-		button18.setColor(Color.LIGHT_GRAY);
 		button18.setBounds(vp.getWorldWidth() / 1.55f, vp.getWorldHeight() / 2.03f, 70, 70);
 		buttons[17] = button18;
 		button18.addListener(new ClickListener() {
@@ -604,7 +586,6 @@ public class ForestMap implements Screen{
 		button18.setName(setEncounter(18, button18));
 		
 		button19 = new ImageButton(skin, "default");
-		button19.setColor(Color.LIGHT_GRAY);
 		button19.setBounds(vp.getWorldWidth() / 2.03f, vp.getWorldHeight() / 1.8f, 70, 70);
 		buttons[18] = button19;
 		button19.addListener(new ClickListener() {
@@ -618,7 +599,6 @@ public class ForestMap implements Screen{
 		button19.setName(setEncounter(19, button19));
 		
 		button20 = new ImageButton(skin, "default");
-		button20.setColor(Color.LIGHT_GRAY);
 		button20.setBounds(vp.getWorldWidth() / 2.19f, vp.getWorldHeight() / 2.2f, 70, 70);
 		buttons[19] = button20;
 		button20.addListener(new ClickListener() {
@@ -632,7 +612,6 @@ public class ForestMap implements Screen{
 		button20.setName(setEncounter(20, button20));
 		
 		button21 = new ImageButton(skin, "default");
-		button21.setColor(Color.LIGHT_GRAY);
 		button21.setBounds(vp.getWorldWidth() / 2.55f, vp.getWorldHeight() / 1.72f, 70, 70);
 		buttons[20] = button21;
 		button21.addListener(new ClickListener() {
@@ -646,7 +625,6 @@ public class ForestMap implements Screen{
 		button21.setName(setEncounter(21, button21));
 		
 		button22 = new ImageButton(skin, "default");
-		button22.setColor(Color.LIGHT_GRAY);
 		button22.setBounds(vp.getWorldWidth() / 3.5f, vp.getWorldHeight() / 1.72f, 70, 70);
 		buttons[21] = button22;
 		button22.addListener(new ClickListener() {
@@ -660,7 +638,6 @@ public class ForestMap implements Screen{
 		button22.setName(setEncounter(22, button22));
 		
 		button23 = new ImageButton(skin, "default");
-		button23.setColor(Color.LIGHT_GRAY);
 		button23.setBounds(vp.getWorldWidth() / 16.5f, vp.getWorldHeight() / 1.6f, 70, 70);
 		buttons[22] = button23;
 		button23.addListener(new ClickListener() {
@@ -674,7 +651,6 @@ public class ForestMap implements Screen{
 		button23.setName(setEncounter(23, button23));
 		
 		button24 = new ImageButton(skin, "default");
-		button24.setColor(Color.LIGHT_GRAY);
 		button24.setBounds(vp.getWorldWidth() / 2.75f, vp.getWorldHeight() / 1.37f, 70, 70);
 		buttons[23] = button24;
 		button24.addListener(new ClickListener() {
@@ -688,7 +664,6 @@ public class ForestMap implements Screen{
 		button24.setName(setEncounter(24, button24));
 		
 		button25 = new ImageButton(skin, "default");
-		button25.setColor(Color.LIGHT_GRAY);
 		button25.setBounds(vp.getWorldWidth() / 2.18f, vp.getWorldHeight() / 1.37f, 70, 70);
 		buttons[24] = button25;
 		button25.addListener(new ClickListener() {
@@ -702,7 +677,6 @@ public class ForestMap implements Screen{
 		button25.setName(setEncounter(25, button25));
 		
 		button26 = new ImageButton(skin, "default");
-		button26.setColor(Color.LIGHT_GRAY);
 		button26.setBounds(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 1.37f, 70, 70);
 		buttons[25] = button26;
 		button26.addListener(new ClickListener() {
@@ -716,7 +690,6 @@ public class ForestMap implements Screen{
 		button26.setName(setEncounter(26, button26));
 		
 		button27 = new ImageButton(skin, "default");
-		button27.setColor(Color.LIGHT_GRAY);
 		button27.setBounds(vp.getWorldWidth() / 1.43f, vp.getWorldHeight() / 1.37f, 70, 70);
 		buttons[26] = button27;
 		button27.addListener(new ClickListener() {
@@ -730,7 +703,6 @@ public class ForestMap implements Screen{
 		button27.setName(setEncounter(27, button27));
 		
 		button28 = new ImageButton(skin, "default");
-		button28.setColor(Color.LIGHT_GRAY);
 		button28.setBounds(vp.getWorldWidth() / 1.28f, vp.getWorldHeight() / 1.107f, 70, 70);
 		buttons[27] = button28;
 		button28.addListener(new ClickListener() {
@@ -744,7 +716,6 @@ public class ForestMap implements Screen{
 		button28.setName(setEncounter(28, button28));
 		
 		button29 = new ImageButton(skin, "default");
-		button29.setColor(Color.LIGHT_GRAY);
 		button29.setBounds(vp.getWorldWidth() / 1.05f, vp.getWorldHeight() / 1.107f, 70, 70);
 		buttons[28] = button29;
 		button29.addListener(new ClickListener() {
@@ -758,7 +729,6 @@ public class ForestMap implements Screen{
 		button29.setName(setEncounter(29, button29));
 		
 		button30 = new ImageButton(skin, "default");
-		button30.setColor(Color.LIGHT_GRAY);
 		button30.setBounds(vp.getWorldWidth() / 1.6f, vp.getWorldHeight() / 1.107f, 70, 70);
 		buttons[29] = button30;
 		button30.addListener(new ClickListener() {
@@ -772,7 +742,6 @@ public class ForestMap implements Screen{
 		button30.setName(setEncounter(30, button30));
 		
 		button31 = new ImageButton(skin, "default");
-		button31.setColor(Color.LIGHT_GRAY);
 		button31.setBounds(vp.getWorldWidth() / 1.865f, vp.getWorldHeight() / 1.107f, 70, 70);
 		buttons[30] = button31;
 		button31.addListener(new ClickListener() {
@@ -786,7 +755,6 @@ public class ForestMap implements Screen{
 		button31.setName(setEncounter(31, button31));
 		
 		button32 = new ImageButton(skin, "default");
-		button32.setColor(Color.LIGHT_GRAY);
 		button32.setBounds(vp.getWorldWidth() / 2.28f, vp.getWorldHeight() / 1.107f, 70, 70);
 		buttons[31] = button32;
 		button32.addListener(new ClickListener() {
@@ -800,7 +768,6 @@ public class ForestMap implements Screen{
 		button32.setName(setEncounter(32, button32));
 		
 		button33 = new ImageButton(skin, "default");
-		button33.setColor(Color.LIGHT_GRAY);
 		button33.setBounds(vp.getWorldWidth() / 6.9f, vp.getWorldHeight() / 1.26f, 70, 70);
 		buttons[32] = button33;
 		button33.addListener(new ClickListener() {
@@ -814,7 +781,6 @@ public class ForestMap implements Screen{
 		button33.setName(setEncounter(33, button33));
 		
 		button34 = new ImageButton(skin, "default");
-		button34.setColor(Color.LIGHT_GRAY);
 		button34.setBounds(vp.getWorldWidth() / 8f, vp.getWorldHeight() / 1.075f, 70, 70);
 		buttons[33] = button34;
 		button34.addListener(new ClickListener() {

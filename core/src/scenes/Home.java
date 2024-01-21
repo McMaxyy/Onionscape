@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -31,8 +32,9 @@ public class Home implements Screen {
 	private Storage storage;
 	private Game game;
 	private TextButton slots, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
-	saveBtn, exitBtn, forestBtn, merchantBtn, playBtn, settingsBtn, nextSong;
+	forestBtn, merchantBtn, playBtn, nextSong;
 	private Label level, playerStats, coins, currentMusic;
+	private ImageButton saveBtn, exitBtn, settingsBtn, homeBtn;
 	private GameScreen gameScreen; 
 	private Inventory inv;
 	private SaveData saveData = new SaveData();
@@ -324,7 +326,21 @@ public class Home implements Screen {
     	    public void clicked(InputEvent event, float x, float y) {
     			storage.inventoryItems(storage.healthPot, "Add");
     			storage.inventoryItems(storage.bomb, "Add");
+    			storage.inventoryItems(storage.throwingKnife, "Add");
     			storage.inventoryItems(storage.itemSwing, "Add");
+    			storage.inventoryItems(storage.itemRend, "Add");
+    			storage.inventoryItems(storage.itemWhirlwind, "Add");
+    			storage.inventoryItems(storage.itemGroundBreaker, "Add");
+    			storage.inventoryItems(storage.itemBash, "Add");
+    			storage.inventoryItems(storage.itemBarrier, "Add");
+    			storage.inventoryItems(storage.itemHarden, "Add");
+    			storage.inventoryItems(storage.itemMend, "Add");
+    			storage.inventoryItems(storage.itemHiltBash, "Add");
+    			storage.inventoryItems(storage.itemBarbedArmor, "Add");
+    			storage.inventoryItems(storage.itemEnrage, "Add");
+    			storage.inventoryItems(storage.itemRiposte, "Add");
+    			storage.inventoryItems(storage.itemStab, "Add");
+    			storage.inventoryItems(storage.itemDecapitate, "Add");
     			storage.inventoryItems(storage.apBoost, "Add");
     			storage.inventoryItems(storage.dpBoost, "Add");
     			storage.inventoryItems(storage.hpBoost, "Add");
@@ -334,39 +350,50 @@ public class Home implements Screen {
 		itemsBtn.setPosition(vp.getWorldWidth() / 25f, vp.getWorldHeight() / 1.9f);
 		stage.addActor(itemsBtn);
 		
-		settingsBtn = new TextButton("SE", storage.homeBtnStyle);
-		settingsBtn.setColor(Color.LIGHT_GRAY);
+		settingsBtn = new ImageButton(skin, "default");	
+		settingsBtn.setStyle(skin.get("settingsIcon", ImageButton.ImageButtonStyle.class));
 		settingsBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			gameScreen.switchToNewState(GameScreen.SETTINGS);
     	    }});
-		settingsBtn.setSize(50, 50);
+		settingsBtn.setSize(60, 50);
 		settingsBtn.setPosition(vp.getWorldWidth() / 1.21f, vp.getWorldHeight() / 1.08f);
 		stage.addActor(settingsBtn);
 		
-		saveBtn = new TextButton("S", storage.homeBtnStyle);
-		saveBtn.setColor(Color.LIGHT_GRAY);
+		saveBtn = new ImageButton(skin, "default");	
+		saveBtn.setStyle(skin.get("saveIcon", ImageButton.ImageButtonStyle.class));
 		saveBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			saveData.saveGame();
     	    }});
-		saveBtn.setSize(50, 50);
+		saveBtn.setSize(60, 50);
 		saveBtn.setPosition(vp.getWorldWidth() / 1.14f, vp.getWorldHeight() / 1.08f);
 		stage.addActor(saveBtn);
 		
-		exitBtn = new TextButton("X", storage.homeBtnStyle);
-		exitBtn.setColor(Color.LIGHT_GRAY);
+		exitBtn = new ImageButton(skin, "default");	
+		exitBtn.setStyle(skin.get("exitIcon", ImageButton.ImageButtonStyle.class));
 		exitBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			Gdx.app.exit();
     			System.exit(0);
     	    }});
-		exitBtn.setSize(50, 50);
+		exitBtn.setSize(60, 50);
 		exitBtn.setPosition(vp.getWorldWidth() / 1.08f, vp.getWorldHeight() / 1.08f);
 		stage.addActor(exitBtn);
+		
+		homeBtn = new ImageButton(skin, "default");	
+		homeBtn.setStyle(skin.get("homeIcon", ImageButton.ImageButtonStyle.class));
+		homeBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			gameScreen.switchToNewState(GameScreen.START_SCREEN);
+    	    }});
+		homeBtn.setSize(60, 50);
+		homeBtn.setPosition(vp.getWorldWidth() / 1.29f, vp.getWorldHeight() / 1.08f);
+		stage.addActor(homeBtn);
 	}
 	
 	private void resetSkills() {

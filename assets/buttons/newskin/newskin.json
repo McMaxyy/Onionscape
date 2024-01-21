@@ -61,54 +61,108 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	FightIconDown: {
 		name: FightIcon
 		color: {
-			r: 0.73333335
-			g: 0.73333335
-			b: 0.73333335
-			a: 1
-		}
-	}
-	BossIconDown: {
-		name: BossIcon
-		color: {
-			r: 0.827451
-			g: 0.827451
-			b: 0.827451
-			a: 1
-		}
-	}
-	RandIconDown: {
-		name: RandIcon
-		color: {
-			r: 0.81960785
-			g: 0.81960785
-			b: 0.81960785
+			r: 0.5372549
+			g: 0.5372549
+			b: 0.5372549
 			a: 1
 		}
 	}
 	MerchIconDown: {
 		name: MerchIcon
 		color: {
-			r: 0.81960785
-			g: 0.81960785
-			b: 0.81960785
+			r: 0.56078434
+			g: 0.56078434
+			b: 0.56078434
+			a: 1
+		}
+	}
+	BossIconDown: {
+		name: BossIcon
+		color: {
+			r: 0.54901963
+			g: 0.54901963
+			b: 0.54901963
 			a: 1
 		}
 	}
 	StrEnemyIconDown: {
 		name: StrEnemyIcon
 		color: {
-			r: 0.81960785
-			g: 0.81960785
-			b: 0.81960785
+			r: 0.56078434
+			g: 0.56078434
+			b: 0.56078434
+			a: 1
+		}
+	}
+	RandIconDown: {
+		name: RandIcon
+		color: {
+			r: 0.5921569
+			g: 0.5921569
+			b: 0.5921569
 			a: 1
 		}
 	}
 	TreasureIconDown: {
 		name: TreasureIcon
 		color: {
-			r: 0.81960785
-			g: 0.81960785
-			b: 0.81960785
+			r: 0.6
+			g: 0.6
+			b: 0.6
+			a: 1
+		}
+	}
+	PlayerIconDown: {
+		name: PlayerIcon
+		color: {
+			r: 0.59607846
+			g: 0.59607846
+			b: 0.59607846
+			a: 1
+		}
+	}
+	DefaultDown: {
+		name: Default
+		color: {
+			r: 0.5803922
+			g: 0.5803922
+			b: 0.5803922
+			a: 1
+		}
+	}
+	HomeDown: {
+		name: Home
+		color: {
+			r: 0.5882353
+			g: 0.5882353
+			b: 0.5882353
+			a: 1
+		}
+	}
+	BackDown: {
+		name: Back
+		color: {
+			r: 0.6
+			g: 0.6
+			b: 0.6
+			a: 1
+		}
+	}
+	SaveDown: {
+		name: Save
+		color: {
+			r: 0.63529414
+			g: 0.63529414
+			b: 0.63529414
+			a: 1
+		}
+	}
+	SettingsDown: {
+		name: Settings
+		color: {
+			r: 0.61960787
+			g: 0.61960787
+			b: 0.61960787
 			a: 1
 		}
 	}
@@ -134,10 +188,9 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 	default: {
-		up: default-round-large
-		down: default-scroll
-		focused: default-scroll
-		disabled: default-round-down
+		up: Default
+		down: DefaultDown
+		disabled: DefaultDown
 		pressedOffsetX: 1
 		pressedOffsetY: 1
 	}
@@ -178,10 +231,26 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		imageChecked: TreasureIconDown
 	}
 	playerIcon: {
-		imageUp: tree-plus
-		imageDown: tree-plus
-		imageDisabled: tree-plus
-		imageChecked: tree-plus
+		imageUp: PlayerIcon
+		imageDown: PlayerIconDown
+		imageDisabled: PlayerIconDown
+		imageChecked: PlayerIconDown
+	}
+	homeIcon: {
+		imageUp: Home
+		imageDown: HomeDown
+	}
+	exitIcon: {
+		imageUp: Back
+		imageDown: BackDown
+	}
+	saveIcon: {
+		imageUp: Save
+		imageDown: SaveDown
+	}
+	settingsIcon: {
+		imageUp: Settings
+		imageDown: SettingsDown
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
