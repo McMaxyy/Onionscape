@@ -425,6 +425,7 @@ public class FightScene implements Screen{
     		reward1.setText("Experience Boost");
     		break;
     	case 11:
+    		reward1.setText("Ability Refill Potion");
     	case 12:
     	case 13:
     		reward1.setText("Throwing Knife");
@@ -547,6 +548,9 @@ public class FightScene implements Screen{
         		break;
 			case "Experience Boost":
 				storage.equippedItems(storage.expBoost, "Add");
+        		break;
+			case "Ability Refill Potion":
+				storage.equippedItems(storage.abilityRefill, "Add");
         		break;
         	}
     		
@@ -1669,6 +1673,14 @@ public class FightScene implements Screen{
     	    		Home.expBoost = true;
     	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Experience Boost activated");
     	    		break;
+    	    	case "Ability Refill Potion":
+    	    		swapAbility(ability1, ability1.getName().toString(), ab1UseLbl);
+    	    		swapAbility(ability2, ability2.getName().toString(), ab2UseLbl);
+    	    		swapAbility(ability3, ability3.getName().toString(), ab3UseLbl);
+    	    		swapAbility(ability4, ability4.getName().toString(), ab4UseLbl);
+    	    		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Abilities replenished");
+    	    		storage.equippedItems(storage.abilityRefill, "Remove");
+    	    		break;
     	    	default:   	      
     	    		if(!abilitySwapActive)
     	    			createAbilityGrid(itemName);
@@ -1867,6 +1879,8 @@ public class FightScene implements Screen{
 				return TextureManager.hpTexture;
 			case "Experience Boost":
 				return TextureManager.expTexture;
+			case "Ability Refill Potion":
+				return TextureManager.abilityRefillTexture;
 			default:
 				return TextureManager.inventorySlotTexture;
 			}
@@ -1883,7 +1897,7 @@ public class FightScene implements Screen{
     	playerHealthBar.setColor(Color.BLACK);
     	playerHealthBar.rect(playerHPLbl.getX() - playerHPLbl.getWidth() / 4f, playerHPLbl.getY() + 0.1f, 300, 30);
 
-    	playerHealthBar.setColor(Color.RED);
+    	playerHealthBar.setColor(193 / 255f, 60 / 255f, 55 / 255f, 1);
         float barWidth = (float)Player.getHp() / (float)Player.getMaxHP();
         int width = (int)(barWidth * 300);
         width = (width / 10) * 10;
@@ -1899,7 +1913,7 @@ public class FightScene implements Screen{
         enemyHealthBar.setColor(Color.BLACK);
         enemyHealthBar.rect(enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f, enemyHPLbl.getY() + 0.1f, 300, 30);
 
-        enemyHealthBar.setColor(Color.RED);
+        enemyHealthBar.setColor(193 / 255f, 60 / 255f, 55 / 255f, 1);
         barWidth = (float)enemyHP / (float)enemyMaxHP;
         width = (int)(barWidth * 300);
         width = (width / 10) * 10;
@@ -2109,6 +2123,7 @@ public class FightScene implements Screen{
 		buffBatch.setProjectionMatrix(vp.getCamera().combined);
 		debuffBatch.setProjectionMatrix(vp.getCamera().combined);
 		abilityBatch.setProjectionMatrix(vp.getCamera().combined);
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	    time += delta; // Increment time by frame time
 	    rotationTime += delta;

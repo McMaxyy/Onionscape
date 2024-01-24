@@ -7,6 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -33,6 +36,8 @@ public class RaidTextScenes implements Screen{
 	private int encNum, btnSelected;
 	private float centerX;
 	public static boolean mimic, enrage, weaken, poison;
+	private SpriteBatch mapBatch = new SpriteBatch();
+	private Texture mapTexture;
 	
 	public RaidTextScenes(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -45,6 +50,12 @@ public class RaidTextScenes implements Screen{
 		storage.createFont();
 		centerX = vp.getWorldWidth() / 2f;
 //		GameScreen.newGame = false;
+		
+		if(ForestMap.encounter == 2)
+			mapTexture = Storage.assetManager.get("maps/TreasureEncounterScreen.png", Texture.class);
+		else
+			mapTexture = Storage.assetManager.get("maps/RandomEncounterScreen.png", Texture.class);
+		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		
 		createComponents();
 		setScene();
@@ -66,15 +77,17 @@ public class RaidTextScenes implements Screen{
 	}
 	
 	private void setEncounter() {
-		text.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 2f);
+		text.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 4f);
 		
 		if(ForestMap.encounter == 2) {
-			encNum = rand.nextInt(1, 11);
-			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
-			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			encNum = rand.nextInt(1, 12);
+			if(encNum != 11) {
+				option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+				option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			}			
 		}			
 		else
-			encNum = rand.nextInt(31, 43);
+			encNum = rand.nextInt(31, 66);
 		
 		switch(encNum) {
 		case 1:
@@ -121,7 +134,7 @@ public class RaidTextScenes implements Screen{
 			option2.setText("No");
 			break;
 		case 9:
-			text.setText("You find a mysterious vial with unknown properties, will you drink it?");
+			text.setText("You find a scroll floating in the wind and manage to snatch it out of the air");
 			option1.setVisible(false);
 			option2.setVisible(false);
 			rewards.setText("+ 5 Experience Points");
@@ -133,6 +146,33 @@ public class RaidTextScenes implements Screen{
 			text.setText("You find a strange deformity, offering you a random boost, will you take it?");
 			option1.setText("Yes");
 			option2.setText("No");
+			break;
+		case 11:
+			int x1 = rand.nextInt(3);
+			int x2 = rand.nextInt(3);
+			int x3 = rand.nextInt(3);
+			option3.setVisible(true);
+			text.setText("You find an odd vending machine, offering you an ability");	
+			if(x1 == 0)
+				option1.setText("Swing");
+			else if(x1 == 1)
+				option1.setText("Rend");
+			else if(x1 == 2)
+				option1.setText("Whirlwind");
+			
+			if(x2 == 0)
+				option1.setText("Hilt Bash");
+			else if(x2 == 1)
+				option1.setText("Ground Breaker");
+			else if(x2 == 2)
+				option1.setText("Bash");
+			
+			if(x3 == 0)
+				option1.setText("Mend");
+			else if(x3 == 1)
+				option1.setText("Barrier");
+			else if(x3 == 2)
+				option1.setText("Barbed Armor");
 			break;
 		case 31:
 			text.setText("You stumble upon a suspicious looking fella and he tells you he's a "
@@ -167,7 +207,7 @@ public class RaidTextScenes implements Screen{
 			option3.setVisible(false);
 			break;
 		case 35:
-			text.setText("You don’t notice a pile of grass on the ground as you walk towards "
+			text.setText("You don't notice a pile of grass on the ground as you walk towards "
 					+ "it, resulting in the ground caving in and you falling into a spike trap.");
 			rewards.setText("- 5 Health Points");
 			Player.loseHP(5);
@@ -231,27 +271,105 @@ public class RaidTextScenes implements Screen{
 			option2.setVisible(false);
 			option3.setVisible(false);
 			break;
+		case 43:
+		case 44:
+		case 45:
+		case 46:
+			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			text.setText("You find an abandoned building, but get an eerie feeling upon approaching, what will you do?");
+			option3.setVisible(false);
+			option1.setText("Explore");
+			option2.setText("Go past it");
+			break;
+		case 47:
+		case 48:
+		case 49:
+		case 50:
+			text.setText("You stumble upon a deformed figure, wearing a wizard's hat, you're unsure of whether they're good or bad");
+			option1.setText("Talk to them");
+			option2.setText("Flick the hat off of their head");
+			option3.setText("Kill them");
+			break;
+		case 51:
+		case 52:
+		case 53:
+			text.setText("You meet an entity, offering to train you, what will you do?");
+			option1.setText("Train with them");
+			option2.setText("Attack them");
+			option3.setText("Reject their offer");
+			break;
+		case 54:
+		case 55:
+		case 56:
+			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			text.setText("You find a worn down training dummy, will you take some time to train yourself?");
+			option1.setText("Yes");
+			option2.setText("No");
+			option3.setVisible(false);
+			break;
+		case 57:
+			option1.setPosition(vp.getWorldWidth() / 2f - option1.getWidth() / 2, vp.getWorldHeight() / 10f);
+			text.setText("You're fatigued, which causes you to trip and fall");
+			option1.setText("Pick yourself back up");
+			option2.setVisible(false);
+			option3.setVisible(false);
+			break;
+		case 58:
+			option1.setPosition(vp.getWorldWidth() / 2f - option1.getWidth() / 2, vp.getWorldHeight() / 10f);
+			text.setText("You find a river, finally you can take a short break");
+			option1.setText("Sit down");
+			option2.setVisible(false);
+			option3.setVisible(false);
+			break;
+		case 59:
+		case 60:
+			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			text.setText("You fall down a hole in the ground and are confused as to what to do");
+			option3.setVisible(false);
+			option1.setText("Break down and cry");
+			option2.setText("Climb out of it");
+			break;
+		case 61:
+		case 62:
+		case 63:
+		case 64:
+			option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+			option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+			text.setText("You find some weights, they're all rusty, but potentially useful");
+			option3.setVisible(false);
+			option1.setText("Train");
+			option2.setText("Leave them");
+			break;
+		case 65:
+			text.setText("You stumble upon an abnormally strong figure, that offers to train you");
+			option1.setText("Food training");
+			option2.setText("Run laps");
+			option3.setText("Be a punching dummy");
+			break;
 		}
 	}
 	
 	private void createComponents() {
-		title = new Label("", storage.labelStyleBig);
-	    title.setSize(vp.getWorldWidth(), 100); // Set the desired width
+		title = new Label("", storage.labelStyleBiggerBlack);
+	    title.setSize(vp.getWorldWidth(), 100);
 	    title.setAlignment(Align.center);
-	    title.setPosition(0, vp.getWorldHeight() / 1.3f); // Set Y position at the top
+	    title.setPosition(0, vp.getWorldHeight() / 1.2f);
 	    stage.addActor(title);
 	    
-	    text = new Label("", storage.labelStyle);
-	    text.setSize(800, 400); // Set the desired width and height
-	    text.setWrap(true); // Enable word wrapping
-	    text.setAlignment(Align.center); // Center horizontally and align text to the top
-	    text.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 1.3f); // Center on screen horizontally
+	    text = new Label("", storage.labelStyleBigBlack);
+	    text.setSize(1200, 600);
+	    text.setWrap(true);
+	    text.setAlignment(Align.center);
+	    text.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 4f);
 	    stage.addActor(text);
 	    
-	    rewards = new Label("", storage.labelStyle);
-	    rewards.setSize(400, 200);
+	    rewards = new Label("", storage.labelStyleBigBlack);
+	    rewards.setSize(800, 200);
 	    rewards.setWrap(true);
-	    rewards.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 5f); 
+	    rewards.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 4f); 
 	    stage.addActor(rewards);
 		
 		option1 = new TextButton("", storage.buttonStyle);
@@ -297,7 +415,7 @@ public class RaidTextScenes implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			gameScreen.switchToNewState(GameScreen.FOREST_MAP);
     	    }});
-		backBtn.setSize(250, 150);
+		backBtn.setSize(250, 100);
 		backBtn.setPosition(vp.getWorldWidth() / 2f - backBtn.getWidth() / 2, vp.getWorldHeight() / 10f);
 		backBtn.setVisible(false);
 		stage.addActor(backBtn);	
@@ -307,7 +425,7 @@ public class RaidTextScenes implements Screen{
 
 	private void optionActions() {
 		String lostItem;
-		text.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 2f);
+		text.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 3f);
 		
 		backBtn.setVisible(true);
 		option1.setVisible(false);
@@ -410,6 +528,20 @@ public class RaidTextScenes implements Screen{
 					text.setText("The bottle you drank was full of poison");
 				}					
 				break;
+			case 11:
+				if(storage.getEquippedItems().size() < 14) {
+					text.setText("You gain an ability!");
+					rewards.setText("+ " + option1.getText().toString());
+					if(option1.getText().toString().equals("Swing"))
+						storage.equippedItems(storage.itemSwing, "Add");
+					else if(option1.getText().toString().equals("Rend"))
+						storage.equippedItems(storage.itemRend, "Add");
+					else if(option1.getText().toString().equals("Whirlwind"))
+						storage.equippedItems(storage.itemWhirlwind, "Add");
+				}
+				else
+					text.setText("Full inventory, cannot obtain an ability");
+				break;
 			case 31:
 				text.setText("The suspicious person turned out to be a bandit, good thing you're "
 						+ "quick on your feet, so you manage to get away");
@@ -508,25 +640,228 @@ public class RaidTextScenes implements Screen{
 				text.setText("The person standing in front of you turned out to be "
 						+ "friendly. They proceed to give you a booster to help you on your journey.");
 				if(storage.getEquippedItems().size() < 14) {
-					switch(rand.nextInt(3)) {
-					case 0:
-						rewards.setText("+ 1 Attack Boost");
-						if(storage.getEquippedItems().size() < 14)
-						storage.equippedItems(storage.apBoost, "Add");
-						break;
-					case 1:
-						rewards.setText("+ 1 Defense Boost");
-						storage.equippedItems(storage.dpBoost, "Add");
-						break;
-					case 2:
-						rewards.setText("+ 1 Health Boost");
-						storage.equippedItems(storage.hpBoost, "Add");
-						break;
-					}
+					addBooster();
 				}
 				else
 					rewards.setText("No space in inventory");
-				break;				
+				break;	
+			case 43:
+				text.setText("You found a treasure, but upon looting, an enemy jumps out and attacks you");
+				rewards.setText("+ 10 Coins");
+				Player.gainRaidCoins(10);
+				backBtn.setText("To battle");
+				backBtn.clearListeners();
+				backBtn.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			FightScene.elite = FightScene.boss = false;
+		    			FightScene.normal = true;
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				break;
+			case 44:
+				text.setText("You find treasure!");
+				rewards.setText("+ 5 Coins");
+				Player.gainRaidCoins(5);
+				break;
+			case 45:
+				text.setText("You find a Health Potion");				
+				if(storage.getEquippedItems().size() < 14) {
+					rewards.setText("+ 1 Health Potion");
+					storage.equippedItems(storage.healthPot, "Add");
+				}
+				else
+					rewards.setText("Full inventory");
+				break;
+			case 46:
+				text.setText("You find treasure, but as you're clumsy, you trip and fall, hurting yourself in the process");
+				if(storage.getEquippedItems().size() < 14) {
+					rewards.setText("+ 5 Coins" + "\n+ 1 Health Potion" + "\n- 5 Health Points");
+					storage.equippedItems(storage.healthPot, "Add");
+					Player.gainRaidCoins(5);
+					Player.loseHP(5);
+					if(Player.getHp() <= 0)
+						Player.setHp(1);
+				}
+				else {
+					rewards.setText("+ 5 Coins" + "\n-5 Health Points");
+					Player.gainRaidCoins(5);
+					Player.loseHP(5);
+					if(Player.getHp() <= 0)
+						Player.setHp(1);
+				}
+				break;
+			case 47:
+				text.setText("The figure turned out to be an enemy");
+				backBtn.setText("To battle");
+				backBtn.clearListeners();
+				backBtn.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			FightScene.elite = FightScene.boss = false;
+		    			FightScene.normal = true;
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				break;
+			case 48:
+				text.setText("They give you an item dear to their heart");
+				if(rand.nextInt(10) == 9 && storage.getEquippedItems().size() < 14) {
+					rewards.setText("+ 1 Ability Refill Potion");
+					storage.equippedItems(storage.abilityRefill, "Add");
+				}
+				else if(storage.getEquippedItems().size() < 14) {
+					rewards.setText("+ 1 Health Potion");
+					storage.equippedItems(storage.healthPot, "Add");
+				}
+				else {
+					rewards.setText("+ 10 Coins");
+					Player.gainRaidCoins(10);
+				}
+				break;
+			case 49:
+				option1.setPosition(vp.getWorldWidth() / 4.5f, vp.getWorldHeight() / 10f);
+				option2.setPosition(vp.getWorldWidth() / 1.9f, vp.getWorldHeight() / 10f);
+				text.setText("They ask you to help them out with a nuisance");
+				option1.setVisible(true);
+				option2.setVisible(true);
+				backBtn.setVisible(false);
+				option1.setText("Yes");
+				option2.setText("No");
+				option1.clearListeners();
+				option2.clearListeners();
+				option1.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			FightScene.elite = FightScene.boss = false;
+		    			FightScene.normal = true;
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				option2.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			gameScreen.switchToNewState(GameScreen.FOREST_MAP);
+		    	    }});
+				break;
+			case 50:
+				text.setText("You attempt to talk to them, but they bite you in reply");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 51:
+				text.setText("You decide to train with the entiry, boosting one of your stats");
+				int x = rand.nextInt(3);
+				if(x == 0) {
+					rewards.setText("+ 3 Max Health Points");
+					Player.gainExtraHP(3);
+					Player.gainHP(3);
+				}
+				else if(x == 1) {
+					rewards.setText("+ 1 Strength");
+					Player.gainExtraAP(1);
+				}
+				else {
+					rewards.setText("+ 2 Damage Resist");
+					Player.gainExtraDP(2);
+				}
+				break;
+			case 52:
+				text.setText("The training took quite a toll on your body and you learned nothing");
+				rewards.setText("- 3 Health Points");
+				Player.loseHP(3);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 53:
+				text.setText("You train until you pass out from exhaustion");
+				rewards.setText("+ 1 Strength" + "\n+ 1 Damage Resist" + "\n-2 Health Points");
+				Player.gainExtraAP(1);
+				Player.gainExtraDP(1);
+				Player.loseHP(2);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 54:
+				text.setText("You decide to punch the dummy with your bare hands, even you're bewildered by your choice");
+				rewards.setText("+ 1 Strength" + "\n-1 Health Points");
+				Player.gainExtraAP(1);
+				Player.loseHP(1);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 55:
+				text.setText("You swing your weapon at the dummy for a long time, eventually learning Swing");
+				if(storage.getEquippedItems().size() < 14) {
+					rewards.setText("+ Swing");
+					storage.equippedItems(storage.itemSwing, "Add");
+				}
+				else
+					rewards.setText("Full inventory");
+				break;
+			case 56:
+				text.setText("You hit the dummy with your weapon, causing a piece of it to fly into your eye");
+				rewards.setText("- 3 Health Points");
+				Player.loseHP(3);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 57:
+				text.setText("You shouldn't overworkd yourself!");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 58:
+				text.setText("You sit by the river bank, relaxing and taking a whiff of fresh air");
+				rewards.setText("+ 5 Health Points");
+				Player.gainHP(5);
+				if(Player.getHp() > Player.getMaxHP())
+					Player.setHp(Player.getMaxHP());
+				break;
+			case 59:
+				text.setText("You break down and cry, wondering why such horrible things happen to you."
+						+ " You remain in the hole for the whole day");
+				rewards.setText("- 3 Health Points");
+				Player.loseHP(3);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 60:
+				text.setText("You fall asleep from crying so much, finally getting some rest");
+				rewards.setText("+ 2 Max Health Points");
+				Player.gainExtraHP(2);
+				Player.gainHP(2);
+				break;
+			case 61:
+				text.setText("You decide to take some time off of raiding and train your body");
+				rewards.setText("+ 2 Strength");
+				Player.gainExtraAP(2);
+				break;
+			case 62:
+				text.setText("You use the weights to train yourself, but as they're rusty, you get sick from it");
+				rewards.setText("+ 1 Strength" + "\nPlayer poisoned");
+				Player.gainExtraAP(1);
+				poison = true;
+				break;
+			case 63:
+				text.setText("You train yourself to exhaustion");
+				rewards.setText("+ 1 Strength" + "\nPlayer weakened");
+				Player.gainExtraAP(1);
+				weaken = true;
+				break;
+			case 64:
+				text.setText("You choose a weird and unexplainable method of training with the weights");
+				rewards.setText("+ 2 Damage Resist");
+				Player.gainExtraDP(2);
+				break;
+			case 65:
+				text.setText("Your training paid off, expanding your Health pool");
+				rewards.setText("+ 2 Max Health Points");
+				Player.gainExtraHP(2);
+				Player.gainHP(2);
+				break;
 			}
 		}	
 		
@@ -543,7 +878,7 @@ public class RaidTextScenes implements Screen{
 				text.setText("You attempt to walk away from the chest, but it sucks you in, throwing "
 						+ "you into a battle");
 				backBtn.clearListeners();
-				backBtn.setText("To battle!");
+				backBtn.setText("To battle");
 				backBtn.addListener(new ClickListener() {
 		    		@Override
 		    	    public void clicked(InputEvent event, float x, float y) {
@@ -569,7 +904,7 @@ public class RaidTextScenes implements Screen{
 			case 10:
 				text.setText("They're not happy with your rejection and attack you");
 				backBtn.clearListeners();
-				backBtn.setText("To battle!");
+				backBtn.setText("To battle");
 				backBtn.addListener(new ClickListener() {
 		    		@Override
 		    	    public void clicked(InputEvent event, float x, float y) {
@@ -577,6 +912,20 @@ public class RaidTextScenes implements Screen{
 		    			FightScene.normal = true;
 		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
+				break;
+			case 11:
+				if(storage.getEquippedItems().size() < 14) {
+					text.setText("You gain an ability!");
+					rewards.setText("+ " + option2.getText().toString());
+					if(option2.getText().toString().equals("Hilt Bash"))
+						storage.equippedItems(storage.itemHiltBash, "Add");
+					else if(option2.getText().toString().equals("Ground Breaker"))
+						storage.equippedItems(storage.itemGroundBreaker, "Add");
+					else if(option2.getText().toString().equals("Bash"))
+						storage.equippedItems(storage.itemBash, "Add");
+				}
+				else
+					text.setText("Full inventory, cannot obtain an ability");
 				break;
 			case 31:
 				text.setText("The suspicious person turned out to be a bandit. He proceeds"
@@ -697,12 +1046,138 @@ public class RaidTextScenes implements Screen{
 				if(Player.getHp() <= 0)
 					Player.setHp(1);
 				break;	
+			case 43:
+				text.setText("Better to trust your gut and turn coat, than to get eaten by monsters");
+				break;
+			case 44:
+			case 45:
+				text.setText("You decide to go past the abandoned building, but an enemy creeps up behind you");
+				backBtn.clearListeners();
+				backBtn.setText("To battle");
+				backBtn.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			FightScene.elite = FightScene.boss = false;
+		    			FightScene.normal = true;
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				break;
+			case 46:
+				text.setText("You go around and past the building, but trip on some debris");
+				rewards.setText("+ 5 Coins" + "\n- 1 Health Point");
+				Player.loseHP(1);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 47:
+				text.setText("Apparently flicking their hat angered them, who would've thought");
+				backBtn.clearListeners();
+				backBtn.setText("To battle");
+				backBtn.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			FightScene.elite = FightScene.boss = false;
+		    			FightScene.normal = true;
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				break;
+			case 48:
+				text.setText("Maybe you shouldn't be agitating random strangers. Just a passing thought");
+				rewards.setText("Player poisoned");
+				poison = true;
+				break;
+			case 49:
+				text.setText("They run away in shame, as they were using the hat to hide their deformities");
+				break;
+			case 50:
+				text.setText("Next time, don't fuck with stranger, you never know what they might do");
+				backBtn.clearListeners();
+				backBtn.setText("To battle");
+				backBtn.addListener(new ClickListener() {
+		    		@Override
+		    	    public void clicked(InputEvent event, float x, float y) {
+		    			FightScene.elite = FightScene.boss = false;
+		    			FightScene.normal = true;
+		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
+		    	    }});
+				break;
+			case 51:
+				text.setText("They beat you up and to add insult to injury, ask you if you were even trying to fight them");
+				rewards.setText("- 10 Health Points");
+				Player.loseHP(10);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 52:
+				text.setText("They find your answer compeling and decide to spar with you");
+				rewards.setText("+ 1 Strength" + "\n+ 1 Damage Resist");
+				Player.gainExtraAP(1);
+				Player.gainExtraDP(1);
+				break;
+			case 53:
+				text.setText("You attack the entity and as you do in fact lose the fight, at least you gained some experience");
+				rewards.setText("+ 5 Experience Points" + "\n- 3 Health Points");
+				Player.loseHP(3);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				Player.gainExp(5);
+				Player.checkExp();
+				break;
+			case 54:
+			case 55:
+			case 56:
+				text.setText("You're too lazy to actually work on yourself, you'd rather just depend on your gear");
+				break;
+			case 59:
+				text.setText("You climb out of the hole with your bare hands and strength");
+				rewards.setText("+ 2 Damage Resist" + "- 1 Health Points");
+				Player.gainExtraDP(2);
+				Player.loseHP(1);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 60:
+				text.setText("You manage to climb out of the hole. It was quite strenuous on your body");
+				if(Player.getExtraAP() > 0) {
+					Player.setExtraAP(Player.getExtraAP() - 1);
+					rewards.setText("- 1 Strength");
+				}					
+				break;
+			case 61:
+			case 62:
+			case 63:
+				text.setText("You don't feel like working out");
+				break;
+			case 64:
+				text.setText("You decide to not train, which makes you feel bad about yourself. You feel weakened");
+				rewards.setText("Player weakened");
+				weaken = true;
+				break;
+			case 65:
+				text.setText("All that running boosted your overall strength");
+				rewards.setText("+ 1 Strength");
+				Player.gainExtraAP(1);
+				break;
 			}
 		}
 		
 		// Option 3
 		if(btnSelected == 3) {
 			switch(encNum) {
+			case 11:
+				if(storage.getEquippedItems().size() < 14) {
+					text.setText("You gain an ability!");
+					rewards.setText("+ " + option3.getText().toString());
+					if(option3.getText().toString().equals("Mend"))
+						storage.equippedItems(storage.itemMend, "Add");
+					else if(option3.getText().toString().equals("Barrier"))
+						storage.equippedItems(storage.itemBarrier, "Add");
+					else if(option3.getText().toString().equals("Barbed Armor"))
+						storage.equippedItems(storage.itemBarbedArmor, "Add");
+				}
+				else
+					text.setText("Full inventory, cannot obtain an ability");
+				break;
 			case 31:
 				text.setText("You kill the suspicious person, stealing their belongings");
 				Player.gainRaidCoins(10);
@@ -751,10 +1226,61 @@ public class RaidTextScenes implements Screen{
 		    			mimic = true;
 		    			gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
 		    	    }});
+				break;
+			case 47:
+				text.setText("Killing them made you feel like a villain and you start spiraling");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 48:
+				text.setText("You don't know whether they were good or bad, but they did drop loot, so you're happy "
+						+ "with your decision");
+				if(storage.getEquippedItems().size() < 14) {
+					storage.equippedItems(storage.healthPot, "Add");
+					Player.gainRaidCoins(5);
+					rewards.setText("+ 1 Health Potion" + "\n+ 5 Coins");
+				}
+				else {
+					Player.gainRaidCoins(5);
+					rewards.setText("+ 5 Coins");
+				}
+				break;
+			case 49:
+				text.setText("You feel bad for killing a potentially innocent stranger");
+				break;
+			case 50:
+				text.setText("You kill the stranger, which causes you to learn the Stab ability");
+				if(storage.getEquippedItems().size() < 14) {
+					storage.equippedItems(storage.itemStab, "Add");
+					rewards.setText("+ Stab");
+				}
+				else
+					rewards.setText("Inventory full");
+				break;
+			case 51:
+				text.setText("You politely decline their offer");
+				break;
+			case 52:
+				text.setText("You tell them you don't need any training. They are insulted by this and attack you");
+				rewards.setText("- 5 Health Points");
+				Player.loseHP(5);
+				if(Player.getHp() <= 0)
+					Player.setHp(1);
+				break;
+			case 53:
+				text.setText("You politely decline their offer");
+				break;
+			case 65:
+				text.setText("You feel stronger and think to yourself, that sometimes it pays off to be a punching dummy");
+				Player.gainExtraDP(2);
+				rewards.setText("+ 2 Damage Resist");
+				break;
 			}
 		}
 		
-		rewards.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 3f); 
+		rewards.setPosition(centerX - text.getWidth() / 2, vp.getWorldHeight() / 4f); 
 	}
 	
 	private void addBooster() {
@@ -787,6 +1313,12 @@ public class RaidTextScenes implements Screen{
 
 	@Override
 	public void render(float delta) {
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
+		
+		mapBatch.begin();
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
+		mapBatch.end();
+		
 		stage.act();
 		stage.draw();	
 		
@@ -803,7 +1335,7 @@ public class RaidTextScenes implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	}
 

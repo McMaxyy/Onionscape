@@ -191,3 +191,11 @@ class HPBoost extends Items{
 		setID(20);
 	}
 }
+
+class AbilityRefill extends Items{
+	public AbilityRefill() {
+		setValue(40);
+		setItemName("Ability Refill Potion");
+		setID(21);
+	}
+}

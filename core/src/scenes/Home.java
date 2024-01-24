@@ -345,6 +345,7 @@ public class Home implements Screen {
     			storage.inventoryItems(storage.dpBoost, "Add");
     			storage.inventoryItems(storage.hpBoost, "Add");
     			storage.inventoryItems(storage.expBoost, "Add");
+    			storage.inventoryItems(storage.abilityRefill, "Add");
     	    }});
 		itemsBtn.setSize(200, 50);
 		itemsBtn.setPosition(vp.getWorldWidth() / 25f, vp.getWorldHeight() / 1.9f);

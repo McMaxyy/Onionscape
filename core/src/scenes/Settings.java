@@ -159,6 +159,8 @@ public class Settings implements Screen{
     	    public void clicked(InputEvent event, float x, float y) {
     			if(Home.newHome)
     				gameScreen.switchToNewState(GameScreen.START_SCREEN);
+    			else if(Merchant.raid)
+    				gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
     			else
     				gameScreen.switchToNewState(GameScreen.HOME);
     	    }});

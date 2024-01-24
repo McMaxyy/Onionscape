@@ -59,7 +59,6 @@ public class Inventory implements Screen {
 	private SpriteBatch bootsBatch = new SpriteBatch();
 	private SpriteBatch mapBatch = new SpriteBatch();
 	private SpriteBatch abilityBatch = new SpriteBatch();
-	private SpriteBatch gearBatch = new SpriteBatch();
 	public static int shieldDP = 0, helmetDP = 0, chestDP = 0, bootsDP = 0, weaponAP = 0,
 			bonusHP = 0, bonusAP = 0, bonusDP = 0;
 	boolean twoHand = false, gearEq, showCard;
@@ -660,6 +659,8 @@ public class Inventory implements Screen {
 				return TextureManager.hpTexture;
 			case "Experience Boost":
 				return TextureManager.expTexture;
+			case "Ability Refill Potion":
+				return TextureManager.abilityRefillTexture;
 			default:
 				return TextureManager.inventorySlotTexture;
 			}
@@ -1499,6 +1500,10 @@ public class Inventory implements Screen {
 	    		storage.inventoryItems(storage.expBoost, "Remove");
 	    		storage.equippedItems(storage.expBoost, "Add");
 	    		break;
+	    	case "Ability Refill Potion":
+	    		storage.inventoryItems(storage.abilityRefill, "Remove");
+	    		storage.equippedItems(storage.abilityRefill, "Add");
+	    		break;
 	    	case "Swing":
 	    		storage.inventoryItems(storage.itemSwing, "Remove");
 	    		storage.equippedItems(storage.itemSwing, "Add");
@@ -1603,6 +1608,10 @@ public class Inventory implements Screen {
 	    	case "Experience Boost":
 	    		storage.inventoryItems(storage.expBoost, "Add");
 	    		storage.equippedItems(storage.expBoost, "Remove");
+	    		break;
+	    	case "Ability Refill Potion":
+	    		storage.inventoryItems(storage.abilityRefill, "Add");
+	    		storage.equippedItems(storage.abilityRefill, "Remove");
 	    		break;
 	    	case "Swing":
 	    		storage.inventoryItems(storage.itemSwing, "Add");

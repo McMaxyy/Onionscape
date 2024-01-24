@@ -493,6 +493,8 @@ public class Merchant implements Screen{
 				return TextureManager.hpTexture;
 			case "Experience Boost":
 				return TextureManager.expTexture;
+			case "Ability Refill Potion":
+				return TextureManager.abilityRefillTexture;
 			default:
 				return TextureManager.inventorySlotTexture;
 			}
@@ -589,9 +591,9 @@ public class Merchant implements Screen{
 			// Discounted prices table
 			for (int i = 0; i < discountBtns.length; i++) {
 				if(i == 0)
-					discountBtns[i] = new Image(chooseItem(rand.nextInt(1, 7)));					
+					discountBtns[i] = new Image(chooseItem(rand.nextInt(1, 8)));					
 				else 
-					discountBtns[i] = new Image(chooseItem(rand.nextInt(7, 21)));
+					discountBtns[i] = new Image(chooseItem(rand.nextInt(7, 22)));
 					
 				discountBtns[i].setName(itemName);
 				
@@ -620,7 +622,7 @@ public class Merchant implements Screen{
 			int index = 0;
 			for(int y = 0; y < 3; y++) {
 				if (index < discountBtns.length) {
-					discountTable.add(discountBtns[index]).pad(0);
+					discountTable.add(discountBtns[index]).pad(3);
 		            index++;
 		        }
 				
@@ -642,9 +644,9 @@ public class Merchant implements Screen{
 			// Normal prices table
 			for (int i = 0; i < standardBtns.length; i++) {
 				if(i == 0)
-					standardBtns[i] = new Image(chooseItem(rand.nextInt(1, 7)));
+					standardBtns[i] = new Image(chooseItem(rand.nextInt(1, 8)));
 				else
-					standardBtns[i] = new Image(chooseItem(rand.nextInt(7, 21)));
+					standardBtns[i] = new Image(chooseItem(rand.nextInt(7, 22)));
 				standardBtns[i].setName(itemName);
 				
 				final int cost = itemValue;
@@ -670,7 +672,7 @@ public class Merchant implements Screen{
 			index = 0;
 			for(int y = 0; y < 3; y++) {
 				if (index < standardBtns.length) {
-					standardTable.add(standardBtns[index]).pad(0);
+					standardTable.add(standardBtns[index]).pad(3);
 		            index++;
 		        }
 				
@@ -718,58 +720,62 @@ public class Merchant implements Screen{
 			itemValue = storage.expBoost.getValue();
 			return TextureManager.expTexture;
 		case 7:
+			itemName = storage.abilityRefill.getItemName().toString();
+			itemValue = storage.abilityRefill.getValue();
+			return TextureManager.abilityRefillTexture;
+		case 8:
 			itemName = storage.itemSwing.getItemName().toString();
 			itemValue = storage.itemSwing.getValue();
 			return TextureManager.swingTexture;
-		case 8:
+		case 9:
 			itemName = storage.itemRend.getItemName().toString();
 			itemValue = storage.itemRend.getValue();
 			return TextureManager.rendTexture;
-		case 9:
+		case 10:
 			itemName = storage.itemWhirlwind.getItemName().toString();
 			itemValue = storage.itemWhirlwind.getValue();
 			return TextureManager.whirlwindTexture;
-		case 10:
+		case 11:
 			itemName = storage.itemGroundBreaker.getItemName().toString();
 			itemValue = storage.itemGroundBreaker.getValue();
 			return TextureManager.groundBreakerTexture;
-		case 11:
+		case 12:
 			itemName = storage.itemBash.getItemName().toString();
 			itemValue = storage.itemBash.getValue();
 			return TextureManager.bashTexture;
-		case 12:
+		case 13:
 			itemName = storage.itemBarrier.getItemName().toString();
 			itemValue = storage.itemBarrier.getValue();
 			return TextureManager.barrierTexture;
-		case 13:
+		case 14:
 			itemName = storage.itemHarden.getItemName().toString();
 			itemValue = storage.itemHarden.getValue();
 			return TextureManager.hardenTexture;
-		case 14:
+		case 15:
 			itemName = storage.itemMend.getItemName().toString();
 			itemValue = storage.itemMend.getValue();
 			return TextureManager.mendTexture;
-		case 15:
+		case 16:
 			itemName = storage.itemHiltBash.getItemName().toString();
 			itemValue = storage.itemHiltBash.getValue();
 			return TextureManager.hiltBashTexture;
-		case 16:
+		case 17:
 			itemName = storage.itemBarbedArmor.getItemName().toString();
 			itemValue = storage.itemBarbedArmor.getValue();
 			return TextureManager.barbedArmorTexture;
-		case 17:
+		case 18:
 			itemName = storage.itemRiposte.getItemName().toString();
 			itemValue = storage.itemRiposte.getValue();
 			return TextureManager.riposteTexture;
-		case 18:
+		case 19:
 			itemName = storage.itemStab.getItemName().toString();
 			itemValue = storage.itemStab.getValue();
 			return TextureManager.stabTexture;
-		case 19:
+		case 20:
 			itemName = storage.itemDecapitate.getItemName().toString();
 			itemValue = storage.itemDecapitate.getValue();
 			return TextureManager.decapitateTexture;
-		case 20:
+		case 21:
 			itemName = storage.itemEnrage.getItemName().toString();
 			itemValue = storage.itemEnrage.getValue();
 			return TextureManager.enrageTexture;
@@ -783,6 +789,7 @@ public class Merchant implements Screen{
 		itemMap.put("Health Potion", storage.healthPot);
 		itemMap.put("Bomb", storage.bomb);
 		itemMap.put("Experience Boost", storage.expBoost);
+		itemMap.put("Ability Refill Potion", storage.abilityRefill);
 		itemMap.put("Attack Boost", storage.apBoost);
 		itemMap.put("Defense Boost", storage.dpBoost);
 		itemMap.put("Health Boost", storage.hpBoost);
@@ -899,6 +906,7 @@ public class Merchant implements Screen{
 		itemMap.put("Health Potion", storage.healthPot);
 		itemMap.put("Bomb", storage.bomb);
 		itemMap.put("Experience Boost", storage.expBoost);
+		itemMap.put("Ability Refill Potion", storage.abilityRefill);
 		itemMap.put("Attack Boost", storage.apBoost);
 		itemMap.put("Defense Boost", storage.dpBoost);
 		itemMap.put("Health Boost", storage.hpBoost);
