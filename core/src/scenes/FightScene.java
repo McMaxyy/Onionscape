@@ -123,11 +123,6 @@ public class FightScene implements Screen{
         Player.gainBonusStr(Player.getExtraAP());
         Player.gainDR(Player.getExtraDP());
         
-        if(Home.story) {
-        	Player.gainMaxHP(Player.getSkillMaxHP());
-        	Player.gainDR(Player.getSkillDmgResist());
-        }
-        
         if(GameScreen.newGame) {
         	Player.newGame();
         	Player.setHp(Player.getMaxHP());
@@ -355,8 +350,6 @@ public class FightScene implements Screen{
 	        			stage.clear();
 	        			if(!Home.story) {
 	        				Player.setStrength(3);
-	            			Player.setOneHandStr(0);
-	            			Player.setTwoHandStr(0);
 	            			Player.setMaxHP(70);
 	            			Player.setDmgResist(0);
 	            			Player.setWeaponDmg(0);
@@ -365,6 +358,7 @@ public class FightScene implements Screen{
 	        				storage.equippedArmor(null, "Clear");
 	        				storage.equippedWeapons(null, "Clear");
 	        				storage.equippedItems(null, "Clear");
+	        				storage.resetBonuses();
 	        			}
 	        			gameScreen.switchToNewState(GameScreen.HOME);
 	        	    }});
@@ -723,7 +717,7 @@ public class FightScene implements Screen{
     	// Add weapon damage
     	if(Player.weaponState == 1) {
     		doubleSwingCount++;
-    		temp += Player.getOneHandStr() + Player.getWeaponDmg() + Player.getSkillWeaponDmg();
+    		temp += Player.getOneHandStr() + Player.getWeaponDmg();
     		if(doubleSwingCount == 3 && BerserkerSkillTree.doubleSwing == 1) {
     			doubleSwingCount = 0;
     			temp *= 2;
@@ -731,7 +725,7 @@ public class FightScene implements Screen{
     	}   		
     	else if(Player.weaponState == 2) {
     		bludgeonCount++;
-    		temp += Player.getTwoHandStr() + Player.getWeaponDmg() + Player.getSkillWeaponDmg();
+    		temp += Player.getTwoHandStr() + Player.getWeaponDmg();
     		if(bludgeonCount == 5  && BerserkerSkillTree.bludgeonEnemy == 1) {
     			bludgeonCount = 0;
     			enemyStunned = true;

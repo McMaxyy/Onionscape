@@ -1,6 +1,7 @@
 package storage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -15,6 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+
+import scenes.Inventory;
+
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 
 public class Storage {
@@ -50,6 +54,15 @@ public class Storage {
 			newLoad = false;
 			loadAssets();
 		}		
+	}
+	
+	public void resetBonuses() {
+		Arrays.fill(bonusAP, 0);
+	    Arrays.fill(bonusHP, 0);
+	    Arrays.fill(bonusDP, 0);
+	    
+	    Inventory.helmetDP = Inventory.chestDP = Inventory.bootsDP = Inventory.shieldDP =
+		Inventory.bonusDP = Inventory.bonusHP = Inventory.weaponAP = Inventory.bonusAP = 0;
 	}
 	
 	// Load assets

@@ -3,6 +3,7 @@ package scenes;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.MusicManager;
@@ -32,7 +34,9 @@ public class Settings implements Screen{
 	private Storage storage;
 	private Game game;
 	private GameScreen gameScreen; 
-	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn, musicUp, musicDown, sfxUp, sfxDown;
+	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn, musicUp, musicDown, sfxUp, sfxDown,
+	changeMonitor;
+	private Array<TextButton> monitorButtons = new Array<>();
 	private ShapeRenderer musicBar = new ShapeRenderer();
 	private ShapeRenderer sfxBar = new ShapeRenderer();
 	private SpriteBatch mapBatch = new SpriteBatch();
@@ -93,6 +97,18 @@ public class Settings implements Screen{
 		windowedBtn.setSize(200, 50);
 		windowedBtn.setPosition(vp.getWorldWidth() / 1.79f, vp.getWorldHeight() / 1.7f);
 		stage.addActor(windowedBtn);
+		
+		changeMonitor = new TextButton("Change", storage.buttonStyle);
+		changeMonitor.setColor(Color.LIGHT_GRAY);
+		changeMonitor.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			changeMonitor.setVisible(false);
+                createMonitorButtons();
+    	    }});
+		changeMonitor.setSize(200, 50);
+		changeMonitor.setPosition(vp.getWorldWidth() / 2f - changeMonitor.getWidth() / 2f, vp.getWorldHeight() / 1.2f);
+		stage.addActor(changeMonitor);
 		
 		musicUp = new TextButton("+", storage.buttonStyle);
 		musicUp.setColor(Color.LIGHT_GRAY);
@@ -160,7 +176,7 @@ public class Settings implements Screen{
     			if(Home.newHome)
     				gameScreen.switchToNewState(GameScreen.START_SCREEN);
     			else if(Merchant.raid)
-    				gameScreen.switchToNewState(GameScreen.FIGHT_SCENE);
+    				gameScreen.switchToNewState(GameScreen.FOREST_MAP);
     			else
     				gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
@@ -184,6 +200,44 @@ public class Settings implements Screen{
 		screenModeLbl.setPosition(borderlessBtn.getX() + 20, borderlessBtn.getY() + borderlessBtn.getHeight() + 20);
 		stage.addActor(screenModeLbl);
 		
+	}
+	
+	private void createMonitorButtons() {
+		Monitor[] monitors = Gdx.graphics.getMonitors();
+        float buttonWidth = 200;
+        float buttonHeight = 50;
+        float buttonSpacing = 10;
+        float totalWidth = (buttonWidth + buttonSpacing) * monitors.length - buttonSpacing;
+        float startX = vp.getWorldWidth() / 2f - totalWidth / 2f;
+        float startY = vp.getWorldHeight() / 1.2f;
+        int i = 1;
+        String mon;
+
+        for (Monitor monitor : monitors) {
+        	mon = i + "";
+            TextButton monitorButton = new TextButton(mon, storage.buttonStyle);
+            monitorButton.setSize(buttonWidth, buttonHeight);
+            monitorButton.setPosition(startX, startY);
+            stage.addActor(monitorButton);
+            monitorButtons.add(monitorButton);
+            i++;
+            startX += buttonWidth + buttonSpacing;
+            final int t = i - 1;
+            
+            monitorButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    monitorChangeAction(t);
+                }
+            });
+        }
+	}
+	
+	private void monitorChangeAction(int x) {
+		switch(x) {
+		case 1:
+			
+		}
 	}
 	
 	private void drawSoundBar() {

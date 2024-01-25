@@ -35,6 +35,7 @@ public class SaveData {
 	public int skillMaxHP;
 	public int weaponState;
 	public int shieldDP, helmetDP, chestDP, bootsDP;
+	public int gearAP, gearDP, gearHP;
 	public List<Weapons> playerWeapons = new ArrayList<>();
 	public List<Armor> playerArmor = new ArrayList<>();
 	public List<Items> playerItems = new ArrayList<>();
@@ -101,6 +102,9 @@ public class SaveData {
 		saveData.skillDmgResist = Player.getSkillDmgResist();
 		saveData.skillWeaponDmg = Player.getSkillWeaponDmg();
 		saveData.skillMaxHP = Player.getSkillMaxHP();
+		saveData.gearAP = Player.getGearAP();
+		saveData.gearDP = Player.getGearDP();
+		saveData.gearHP = Player.getGearHP();
 		
 		saveData.playerArmor = storage.getPlayerArmor();
 		saveData.playerWeapons = storage.getPlayerWeapons();
@@ -174,6 +178,9 @@ public class SaveData {
 		    Player.setSkillDmgResist(loadedData.skillDmgResist);
 		    Player.setSkillWeaponDmg(loadedData.skillWeaponDmg);
 		    Player.setSkillMaxHP(loadedData.skillMaxHP);
+		    Player.setGearAP(loadedData.gearAP);
+		    Player.setGearDP(loadedData.gearDP);
+		    Player.setGearHP(loadedData.gearHP);
 		    
 		    loadArmor(loadedData.playerArmor, "Bag");
 		    loadWeapons(loadedData.playerWeapons, "Bag");	

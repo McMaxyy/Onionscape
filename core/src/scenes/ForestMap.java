@@ -41,6 +41,7 @@ public class ForestMap implements Screen{
 	private static ImageButton button24, button25, button26, button27, button28, button29, button30, 
 	button31, button32, button33, button34;
 	private TextButton exit1, exit2, exit3;
+	private ImageButton settingsBtn, homeBtn;
 	private static ImageButton[] buttons = new ImageButton[34];
 	private static int location = 0, lastLocation = 0;
 	private Random rand = new Random();
@@ -716,7 +717,7 @@ public class ForestMap implements Screen{
 		button28.setName(setEncounter(28, button28));
 		
 		button29 = new ImageButton(skin, "default");
-		button29.setBounds(vp.getWorldWidth() / 1.05f, vp.getWorldHeight() / 1.107f, 70, 70);
+		button29.setBounds(vp.getWorldWidth() / 1.05f, vp.getWorldHeight() /  1.655f, 70, 70);
 		buttons[28] = button29;
 		button29.addListener(new ClickListener() {
     		@Override
@@ -824,7 +825,7 @@ public class ForestMap implements Screen{
 		exit3 = new TextButton("", storage.buttonStyle);
 		exit3.setColor(Color.RED);
 		exit3.setTouchable(Touchable.disabled);
-		exit3.setBounds(vp.getWorldWidth() / 1.029f, vp.getWorldHeight() / 1.655f, 50, 70);
+		exit3.setBounds(vp.getWorldWidth() / 1.02f, vp.getWorldHeight() / 1.107f, 50, 70);
 		exit3.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
@@ -834,6 +835,43 @@ public class ForestMap implements Screen{
     				gameScreen.switchToNewState(GameScreen.HOME);
     			}  
     	    }});
+		
+		settingsBtn = new ImageButton(skin, "default");	
+		settingsBtn.setStyle(skin.get("settingsIcon", ImageButton.ImageButtonStyle.class));
+		settingsBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			gameScreen.switchToNewState(GameScreen.SETTINGS);
+    	    }});
+		settingsBtn.setSize(60, 50);
+		settingsBtn.setPosition(vp.getWorldWidth() / 1.05f, vp.getWorldHeight() / 80f);
+		stage.addActor(settingsBtn);
+		
+		homeBtn = new ImageButton(skin, "default");	
+		homeBtn.setStyle(skin.get("homeIcon", ImageButton.ImageButtonStyle.class));
+		homeBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			Player.gainCoins(Player.getRaidCoins());
+				Player.setRaidCoins(0);
+				Player.setStrength(3);
+    			Player.setMaxHP(70);
+    			Player.setDmgResist(0);
+    			Player.setWeaponDmg(0);
+    			if(Home.story) {
+    				storage.equippedArmor(null, "Clear");
+    				storage.equippedWeapons(null, "Clear");
+    				storage.equippedItems(null, "Clear");
+    				Player.setGearAP(0);
+    				Player.setGearDP(0);
+    				Player.setGearHP(0);
+    				storage.resetBonuses();
+    			}				
+    			gameScreen.switchToNewState(GameScreen.HOME);
+    	    }});
+		homeBtn.setSize(60, 50);
+		homeBtn.setPosition(vp.getWorldWidth() / 1.2f, vp.getWorldHeight() / 80f);
+		stage.addActor(homeBtn);
 		
 		stage.addActor(button1);
 		stage.addActor(button2);
@@ -1081,8 +1119,8 @@ public class ForestMap implements Screen{
 		case 17:
 			button16.setTouchable(Touchable.enabled);
 			button17.setName("P");
-			if(exit3.getColor().equals(Color.GREEN))
-				exit3.setTouchable(Touchable.enabled);
+			button29.setTouchable(Touchable.enabled);
+			button29.setDisabled(false);
 			button16.setDisabled(false);
 			break;
 		case 18:
@@ -1179,14 +1217,14 @@ public class ForestMap implements Screen{
 			break;
 		case 28:
 			button27.setTouchable(Touchable.enabled);
-			button29.setTouchable(Touchable.enabled);
 			button27.setDisabled(false);
-			button29.setDisabled(false);
+			if(exit3.getColor().equals(Color.GREEN))
+				exit3.setTouchable(Touchable.enabled);
 			button28.setName("P");
 			break;
 		case 29:
-			button28.setTouchable(Touchable.enabled);
-			button28.setDisabled(false);
+			button17.setTouchable(Touchable.enabled);
+			button17.setDisabled(false);
 			button29.setName("P");
 			break;
 		case 30:

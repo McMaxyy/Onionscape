@@ -67,9 +67,6 @@ public class Inventory implements Screen {
 	// Map texture
 	private Texture mapTexture  = Storage.assetManager.get("maps/InventoryScreen.png", Texture.class);
 	
-	// Get textures from storage
-	
-	
 	public Inventory(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
 		this.game = game;
@@ -87,9 +84,9 @@ public class Inventory implements Screen {
 		createInventoryGrid();
 		createCharacterGrid();
 		createItemGrid();
-		removeBonusStats();
-		if(gearEq)
-			addBonusStats();
+//		removeBonusStats();
+//		if(gearEq)
+//			addBonusStats();
 	}
 	
 	private void addBonusStats() {
@@ -1783,10 +1780,10 @@ public class Inventory implements Screen {
     			for(int dp : storage.getBonusDP())
     				bonusDP += dp;
     			
-    			Player.setDmgResist(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
-    			Player.gainMaxHP(bonusHP);
-    			Player.setWeaponDmg(weaponAP);
-    			Player.gainBonusStr(bonusAP);
+    			Player.setGearAP(bonusAP + weaponAP);
+    			Player.setGearDP(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
+    			Player.setGearHP(bonusHP);
+
     			gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
 		backBtn.setSize(150, 100);

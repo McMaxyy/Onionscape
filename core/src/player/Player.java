@@ -14,6 +14,7 @@ public class Player {
 	private static int skillDmgResist = 0;
 	private static int skillWeaponDmg = 0;
 	private static int skillMaxHP = 0;
+	private static int skillStrength = 0;
 	private static int coins = 200;
 	private static int level = 1;
 	private static int exp = 0;
@@ -25,6 +26,9 @@ public class Player {
 	private static int extraAP = 0;
 	private static int extraDP = 0;
 	private static int extraHP = 0;
+	private static int gearHP = 0;
+	private static int gearAP = 0;
+	private static int gearDP = 0;
 	private static Random rand = new Random();
 	
 	public static void skillTreeGains(int x) {
@@ -42,7 +46,7 @@ public class Player {
 			skillWeaponDmg++;
 			break;
 		case 4:
-			strength++;
+			skillStrength++;
 			break;
 		case 5:
 			skillMaxHP += 3;
@@ -314,5 +318,37 @@ public class Player {
 
 	public static void setExtraHP(int extraHP) {
 		Player.extraHP = extraHP;
+	}
+
+	public static int getSkillStrength() {
+		return skillStrength;
+	}
+
+	public static void setSkillStrength(int skillStrength) {
+		Player.skillStrength = skillStrength;
+	}
+
+	public static int getGearHP() {
+		return gearHP;
+	}
+
+	public static void setGearHP(int gearHP) {
+		Player.gearHP = gearHP;
+	}
+
+	public static int getGearAP() {
+		return gearAP;
+	}
+
+	public static void setGearAP(int gearAP) {
+		Player.gearAP = gearAP;
+	}
+
+	public static int getGearDP() {
+		return gearDP;
+	}
+
+	public static void setGearDP(int gearDP) {
+		Player.gearDP = gearDP;
 	}
 }

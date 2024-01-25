@@ -65,6 +65,7 @@ public class Home implements Screen {
 			saveData.loadGame();
 		}				
 		
+		setStats();
 		removeBonusStats();
 		
 		if(hpBoost)
@@ -90,6 +91,13 @@ public class Home implements Screen {
 		createComponents();	
 	}
 	
+	private void setStats() {
+		Player.setStrength(3 +  Player.getSkillStrength());
+		Player.setMaxHP(70 + Player.getSkillMaxHP() + Player.getGearHP());
+		Player.setDmgResist(Player.getSkillDmgResist() + Player.getGearDP());
+		Player.setWeaponDmg(Player.getGearAP() + Player.getSkillWeaponDmg());
+	}
+	
 	private void removeBonusStats() {
 		Player.loseMaxHP(Player.getExtraHP());
 		Player.loseBonusStr(Player.getExtraAP());
@@ -109,14 +117,13 @@ public class Home implements Screen {
 		playerStats = new Label("", storage.labelStyle);
 		playerStats.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 2f);
 		if(Player.weaponState == 0)
-			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg()) + 
-					"\n\nDefense: " + (Player.getDmgResist() + Player.getSkillDmgResist()) + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
+			playerStats.setText("Attack: " + Player.getStrength() + "\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
 		else if(Player.weaponState == 1)
-			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getOneHandStr() + Player.getSkillWeaponDmg()) + 
-					"\n\nDefense: " + (Player.getDmgResist() + Player.getSkillDmgResist()) + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
+			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getOneHandStr()) + 
+					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
 		else if(Player.weaponState == 2)
-			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getTwoHandStr() + Player.getSkillWeaponDmg()) + 
-					"\n\nDefense: " + (Player.getDmgResist() + Player.getSkillDmgResist()) + "\n\nHealth: " + (Player.getMaxHP() + Player.getSkillMaxHP()));
+			playerStats.setText("Attack: " + (Player.getStrength() + Player.getWeaponDmg() + Player.getTwoHandStr()) + 
+					"\n\nDefense: " + Player.getDmgResist() + "\n\nHealth: " + Player.getMaxHP());
 		stage.addActor(playerStats);
 		
 		coins = new Label("Coins: " + Player.getCoins(), storage.labelStyle);
@@ -180,7 +187,6 @@ public class Home implements Screen {
 		newGame.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			MusicManager.getInstance().playFightMusic();
     			saveData.saveGame();
     			story = false;   	    			
     			storage.equippedArmor(null, "Clear");
@@ -197,7 +203,6 @@ public class Home implements Screen {
     			Player.weaponState = 1;   			
     			Player.setStrength(3);
     			Player.setOneHandStr(0);
-    			Player.setTwoHandStr(0);
     			Player.setMaxHP(82);
     			Player.setDmgResist(17);
     			Player.setWeaponDmg(2);
