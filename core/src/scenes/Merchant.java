@@ -32,6 +32,7 @@ import storage.Items;
 import storage.Storage;
 import storage.Weapons;
 
+@SuppressWarnings("unused")
 public class Merchant implements Screen{
 	Skin skin;
 	Viewport vp;
@@ -138,7 +139,7 @@ public class Merchant implements Screen{
 	    for (int x = 0; x < 6; x++) {
 	        for (int y = 0; y < 3; y++) {
 	            if (index < gearBtns.length) {
-	                gearTable.add(gearBtns[index]).pad(0);
+	                gearTable.add(gearBtns[index]).pad(3);
 	                index++;
 	            }
 	        }
@@ -311,7 +312,7 @@ public class Merchant implements Screen{
 	            boolean emptySlot = false;
 	            String itemName = "";
 	            Texture slotTexture = null;
-	            int value = 0;
+	            int value = 0;	            
 	        	
 	            // Check if there's a weapon to display in this slot.
 	            if (weaponIndex < inventoryWeapons.size()) {
@@ -457,6 +458,8 @@ public class Merchant implements Screen{
 				return TextureManager.healthPotionTexture;
 			case "Bomb":
 				return TextureManager.bombTexture;
+			case "Throwing Knife":
+				return TextureManager.knifeTexture;
 			case "Swing":
 				return TextureManager.swingTexture;
 			case "Rend":
@@ -558,7 +561,7 @@ public class Merchant implements Screen{
 			}
 			
 			for(TextButton button : prefixBtns) {
-				prefixTable.add(button).pad(0);
+				prefixTable.add(button).pad(1);
 				prefixTable.row();
 			}
 			
@@ -575,7 +578,7 @@ public class Merchant implements Screen{
 			for(int x = 0; x < 6; x++) {
 				for(int y = 0; y < 3; y++) {
 					if (index < gearBtns.length) {
-			            gearTable.add(gearBtns[index]).pad(0);
+			            gearTable.add(gearBtns[index]).pad(3);
 			            index++;
 			        }
 				}
@@ -591,9 +594,9 @@ public class Merchant implements Screen{
 			// Discounted prices table
 			for (int i = 0; i < discountBtns.length; i++) {
 				if(i == 0)
-					discountBtns[i] = new Image(chooseItem(rand.nextInt(1, 8)));					
+					discountBtns[i] = new Image(chooseItem(rand.nextInt(1, 9)));					
 				else 
-					discountBtns[i] = new Image(chooseItem(rand.nextInt(7, 22)));
+					discountBtns[i] = new Image(chooseItem(rand.nextInt(8, 23)));
 					
 				discountBtns[i].setName(itemName);
 				
@@ -617,7 +620,7 @@ public class Merchant implements Screen{
 	                }
 	            });
 			}
-			discountTable.defaults().size(150, 150);
+			discountTable.defaults().size(100, 100);
 			
 			int index = 0;
 			for(int y = 0; y < 3; y++) {
@@ -644,9 +647,9 @@ public class Merchant implements Screen{
 			// Normal prices table
 			for (int i = 0; i < standardBtns.length; i++) {
 				if(i == 0)
-					standardBtns[i] = new Image(chooseItem(rand.nextInt(1, 8)));
+					standardBtns[i] = new Image(chooseItem(rand.nextInt(1, 9)));
 				else
-					standardBtns[i] = new Image(chooseItem(rand.nextInt(7, 22)));
+					standardBtns[i] = new Image(chooseItem(rand.nextInt(8, 23)));
 				standardBtns[i].setName(itemName);
 				
 				final int cost = itemValue;
@@ -667,7 +670,7 @@ public class Merchant implements Screen{
 	                }
 	            });
 			}
-			standardTable.defaults().size(150, 150);
+			standardTable.defaults().size(100, 100);
 			
 			index = 0;
 			for(int y = 0; y < 3; y++) {
@@ -724,58 +727,62 @@ public class Merchant implements Screen{
 			itemValue = storage.abilityRefill.getValue();
 			return TextureManager.abilityRefillTexture;
 		case 8:
+			itemName = storage.throwingKnife.getItemName().toString();
+			itemValue = storage.throwingKnife.getValue();
+			return TextureManager.knifeTexture;
+		case 9:
 			itemName = storage.itemSwing.getItemName().toString();
 			itemValue = storage.itemSwing.getValue();
 			return TextureManager.swingTexture;
-		case 9:
+		case 10:
 			itemName = storage.itemRend.getItemName().toString();
 			itemValue = storage.itemRend.getValue();
 			return TextureManager.rendTexture;
-		case 10:
+		case 11:
 			itemName = storage.itemWhirlwind.getItemName().toString();
 			itemValue = storage.itemWhirlwind.getValue();
 			return TextureManager.whirlwindTexture;
-		case 11:
+		case 12:
 			itemName = storage.itemGroundBreaker.getItemName().toString();
 			itemValue = storage.itemGroundBreaker.getValue();
 			return TextureManager.groundBreakerTexture;
-		case 12:
+		case 13:
 			itemName = storage.itemBash.getItemName().toString();
 			itemValue = storage.itemBash.getValue();
 			return TextureManager.bashTexture;
-		case 13:
+		case 14:
 			itemName = storage.itemBarrier.getItemName().toString();
 			itemValue = storage.itemBarrier.getValue();
 			return TextureManager.barrierTexture;
-		case 14:
+		case 15:
 			itemName = storage.itemHarden.getItemName().toString();
 			itemValue = storage.itemHarden.getValue();
 			return TextureManager.hardenTexture;
-		case 15:
+		case 16:
 			itemName = storage.itemMend.getItemName().toString();
 			itemValue = storage.itemMend.getValue();
 			return TextureManager.mendTexture;
-		case 16:
+		case 17:
 			itemName = storage.itemHiltBash.getItemName().toString();
 			itemValue = storage.itemHiltBash.getValue();
 			return TextureManager.hiltBashTexture;
-		case 17:
+		case 18:
 			itemName = storage.itemBarbedArmor.getItemName().toString();
 			itemValue = storage.itemBarbedArmor.getValue();
 			return TextureManager.barbedArmorTexture;
-		case 18:
+		case 19:
 			itemName = storage.itemRiposte.getItemName().toString();
 			itemValue = storage.itemRiposte.getValue();
 			return TextureManager.riposteTexture;
-		case 19:
+		case 20:
 			itemName = storage.itemStab.getItemName().toString();
 			itemValue = storage.itemStab.getValue();
 			return TextureManager.stabTexture;
-		case 20:
+		case 21:
 			itemName = storage.itemDecapitate.getItemName().toString();
 			itemValue = storage.itemDecapitate.getValue();
 			return TextureManager.decapitateTexture;
-		case 21:
+		case 22:
 			itemName = storage.itemEnrage.getItemName().toString();
 			itemValue = storage.itemEnrage.getValue();
 			return TextureManager.enrageTexture;
@@ -788,6 +795,7 @@ public class Merchant implements Screen{
 		HashMap<String, Items> itemMap = new HashMap<>();
 		itemMap.put("Health Potion", storage.healthPot);
 		itemMap.put("Bomb", storage.bomb);
+		itemMap.put("Throwing Knife", storage.throwingKnife);
 		itemMap.put("Experience Boost", storage.expBoost);
 		itemMap.put("Ability Refill Potion", storage.abilityRefill);
 		itemMap.put("Attack Boost", storage.apBoost);
@@ -905,6 +913,7 @@ public class Merchant implements Screen{
 		HashMap<String, Items> itemMap = new HashMap<>();
 		itemMap.put("Health Potion", storage.healthPot);
 		itemMap.put("Bomb", storage.bomb);
+		itemMap.put("Throwing Knife", storage.throwingKnife);
 		itemMap.put("Experience Boost", storage.expBoost);
 		itemMap.put("Ability Refill Potion", storage.abilityRefill);
 		itemMap.put("Attack Boost", storage.apBoost);
@@ -1025,8 +1034,7 @@ public class Merchant implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		mapBatch.setProjectionMatrix(vp.getCamera().combined);
-		
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);		
 	}
 
 	@Override
@@ -1051,8 +1059,6 @@ public class Merchant implements Screen{
 	public void dispose() {
 		stage.dispose();
 		skin.dispose();
-		storage.font.dispose();	
-		
+		storage.font.dispose();			
 	}
-
 }

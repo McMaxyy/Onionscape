@@ -10,11 +10,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -24,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
@@ -32,6 +29,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.DamageNumbers;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.MusicManager;
+import com.onionscape.game.ScreenShake;
 import com.onionscape.game.TextureManager;
 
 import player.Player;
@@ -40,12 +38,13 @@ import storage.Enemy;
 import storage.Items;
 import storage.Storage;
 
+@SuppressWarnings("unused")
 public class FightScene implements Screen{
 	Skin skin;
     Viewport vp;
     String combatText;
-    Random rand = new Random();
-    private Game game;
+    Random rand = new Random();    
+	private Game game;
     public Stage stage;
     private TextButton attackBtn, endTurn, ability1, ability2, ability3, ability4, backBtn;
     private TextButton reward1, reward2, reward3;
@@ -93,6 +92,7 @@ public class FightScene implements Screen{
     public static boolean normal, elite, boss;
     private ShapeRenderer playerHealthBar = new ShapeRenderer();
     private ShapeRenderer enemyHealthBar = new ShapeRenderer();
+    private int numBuff = 0, numDebuff = 0, numEBuff = 0, numEDebuff = 0;
     
     public FightScene(Viewport viewport, Game game, GameScreen gameScreen) {
     	this.gameScreen = gameScreen;
@@ -326,18 +326,19 @@ public class FightScene implements Screen{
     	}    		
     	  	
     	if(pDead || eDead) {
-    		attackBtn.setTouchable(Touchable.disabled);
-    		attackBtn.setText("");
-    		endTurn.setTouchable(Touchable.disabled);
-    		endTurn.setText("");
-    		ability1.setTouchable(Touchable.disabled);
-    		ability1.setText("");
-    		ability2.setTouchable(Touchable.disabled);
-    		ability2.setText("");
-    		ability3.setTouchable(Touchable.disabled);
-    		ability3.setText("");
-    		ability4.setTouchable(Touchable.disabled);
-    		ability4.setText("");   		
+    		attackBtn.setVisible(false);
+    		endTurn.setVisible(false);
+    		ability1.setVisible(false);
+    		ability2.setVisible(false);
+    		ability3.setVisible(false);
+    		ability4.setVisible(false);	
+    		Array<Actor> children = itemTable.getChildren();
+    		for (Actor actor : children) {
+    		    if (actor instanceof Image) {
+    		        Image button = (Image) actor;
+    		        button.setVisible(false);
+    		    }
+    		}
     		
 	        if(pDead) {
 	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player died");
@@ -733,6 +734,7 @@ public class FightScene implements Screen{
     	} 
         
         if(hit) {
+        	ScreenShake.rumble(ScreenShake.rumblePower, 0.2f);
         	// Play sound effect if weapon equiped
         	if(Player.weaponState == 1 || Player.weaponState == 2)
         		MusicManager.getInstance().playSoundEffect(0);
@@ -933,6 +935,8 @@ public class FightScene implements Screen{
         			enemyHP -= temp;
         			dealDamage(enemyHPLbl.getX(), enemyHPLbl.getY(), temp);
         		}
+        		
+        		ScreenShake.rumble(ScreenShake.rumblePower, 0.2f);
         	}
         	else if(barrierActive){
         		sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Attack blocked");
@@ -1246,7 +1250,7 @@ public class FightScene implements Screen{
     	attackBtn.setName("Attack");
     	attackBtn.addListener(new ClickListener() {
     	    @Override
-    	    public void clicked(InputEvent event, float x, float y) {
+    	    public void clicked(InputEvent event, float x, float y) {    	    	
     	    	if(enemyHP > 0) {
     	    		onButtonClicked((TextButton) event.getListenerActor());  	        
         	        btnClicked = true;
@@ -1427,26 +1431,6 @@ public class FightScene implements Screen{
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
     			stage.clear();    			
-//    			if(Home.story) {
-//    				Player.loseMaxHP((Player.getSkillMaxHP() + Player.getExtraHP()));
-//    	    		Player.loseDR((Player.getSkillDmgResist() + Player.getExtraDP()));
-//    	    		Player.loseBonusStr(Player.getExtraAP());
-//    				GameScreen.newGame = false;
-//    				RaidTextScenes.enrage = RaidTextScenes.poison = RaidTextScenes.weaken = false;
-//    				gameScreen.switchToNewState(GameScreen.FOREST_MAP);
-//    			}
-//    			else {
-//    				Player.gainCoins(Player.getRaidCoins());
-//    				Player.setRaidCoins(0);
-//    				Player.setStrength(3);
-//        			Player.setOneHandStr(0);
-//        			Player.setTwoHandStr(0);
-//        			Player.setMaxHP(70);
-//        			Player.setDmgResist(0);
-//        			Player.setWeaponDmg(0);
-//        			MusicManager.getInstance().playBackgroundMusic();
-//    				gameScreen.switchToNewState(GameScreen.HOME);
-//    			}  
     			Player.loseMaxHP((Player.getSkillMaxHP() + Player.getExtraHP()));
 	    		Player.loseDR((Player.getSkillDmgResist() + Player.getExtraDP()));
 	    		Player.loseBonusStr(Player.getExtraAP());
@@ -1518,13 +1502,13 @@ public class FightScene implements Screen{
         ability4.setPosition(vp.getWorldWidth() / 3.7f - ability4.getWidth() / 2f, vp.getWorldHeight() / 9.8f - ability4.getHeight() / 2f);
         
         reward1.setSize(250, 250);
-        reward1.setPosition(vp.getWorldWidth() / 5f - reward1.getWidth() / 2f, vp.getWorldHeight() / 2f - reward1.getHeight() / 2f);
+        reward1.setPosition(vp.getWorldWidth() / 3f - reward1.getWidth() / 2f, vp.getWorldHeight() / 2f - reward1.getHeight() / 2f);
         
         reward2.setSize(250, 250);
-        reward2.setPosition(vp.getWorldWidth() / 2f - reward2.getWidth() / 2f, vp.getWorldHeight() / 2f - reward2.getHeight() / 2f);
+        reward2.setPosition(reward1.getX() + reward1.getWidth() + 50, vp.getWorldHeight() / 2f - reward2.getHeight() / 2f);
         
         reward3.setSize(250, 250);
-        reward3.setPosition(vp.getWorldWidth() / 1.4f - reward3.getWidth() / 2f, vp.getWorldHeight() / 2f - reward3.getHeight() / 2f);
+        reward3.setPosition(reward2.getX() + reward2.getWidth() + 50, vp.getWorldHeight() / 2f - reward3.getHeight() / 2f);
         
         stage.addActor(attackBtn);
         stage.addActor(endTurn);
@@ -1917,99 +1901,215 @@ public class FightScene implements Screen{
         enemyHealthBar.end();
     }
     
+    private void showBuffInfo(String buff) {
+    	
+    }
+    
     private void drawBuffs() {
         float x1 = playerHPLbl.getX() - playerHPLbl.getWidth() / 4f;
         float x2 = enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f;
         float y = playerHPLbl.getY() - 30f;
         float currentX1 = x1;
-        float currentX2 = x2;
+        float currentX2 = x2;   
+        boolean buff = false;     
 
+        if(barrierActive)
+        	numBuff++;        	
+        if(enrageLeft > 0)
+        	numBuff++;
+        if(hardenActive)
+        	numBuff++;
+        if(thornsLeft > 0)
+        	numBuff++;
+        
+        if(eBarrierActive)
+        	numEBuff++;
+        if(eEnrageLeft > 0)
+        	numEBuff++;
+        if(eHardenActive)
+        	numEBuff++;
+        if(eThornsLeft > 0)
+        	numEBuff++;
+        
         buffBatch.begin();
 
-        if (barrierActive)
+        if (barrierActive) {
             buffBatch.draw(barrierBuffTex, currentX1, y, 25, 25);
+            buff = true;           
+        }
+        
+        if(numBuff > 0 && buff) {
+        	currentX1 += 30;
+        	buff = false;
+        }
 
-        currentX1 += 30; // Move to the next position
-
-        if (enrageLeft > 0)
+        if (enrageLeft > 0) {
             buffBatch.draw(enrageBuffTex, currentX1, y, 25, 25);
+            buff = true;
+        }
 
-        currentX1 += 30;
+        if(numBuff > 1 && buff) {
+        	currentX1 += 30;
+        	buff = false;
+        }
 
-        if (hardenActive)
+        if (hardenActive) {
             buffBatch.draw(hardenBuffTex, currentX1, y, 25, 25);
+            buff = true;
+        }
 
-        currentX1 += 30;
+        if(numBuff > 2 && buff) {
+        	currentX1 += 30;
+        	buff = false;
+        }
 
         if (thornsLeft > 0)
             buffBatch.draw(thornsBuffTex, currentX1, y, 25, 25);
-
-        if (eBarrierActive)
+        
+        buff = false;
+        
+        // Enemy buffs
+        if (eBarrierActive) {
             buffBatch.draw(barrierBuffTex, currentX2, y, 25, 25);
+            buff = true;
+        }
 
-        currentX2 += 30;
+        if(numEBuff > 0 && buff) {
+        	currentX2 += 30;
+        	buff = false;
+        }
 
-        if (eEnrageLeft > 0)
+        if (eEnrageLeft > 0) {
             buffBatch.draw(enrageBuffTex, currentX2, y, 25, 25);
+            buff = true;
+        }
 
-        currentX2 += 30;
+        if(numEBuff > 1 && buff) {
+        	currentX2 += 30;
+        	buff = false;
+        }
 
-        if (eHardenActive)
+        if (eHardenActive) {
             buffBatch.draw(hardenBuffTex, currentX2, y, 25, 25);
+        	buff = true;
+    	}
 
-        currentX2 += 30;
+        if(numEBuff > 2 && buff) {
+        	currentX2 += 30;
+        	buff = false;
+        }
 
         if (eThornsLeft > 0)
             buffBatch.draw(thornsBuffTex, currentX2, y, 25, 25);
 
         buffBatch.end();
+        
+        numBuff = numEBuff = 0;
     }
   
     private void drawDebuffs() {
-    	float x1 = (playerHPLbl.getX() - playerHPLbl.getWidth() / 4f) + 120;
-    	float x2 = (enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f) + 120;
-    	float y = playerHPLbl.getY() - 30f;
-    	float currentX1 = x1;
+        float x1 = playerHPLbl.getX() - playerHPLbl.getWidth() / 4f + 120;
+        float x2 = enemyHPLbl.getX() - enemyHPLbl.getWidth() / 4f + 120;
+        float y = playerHPLbl.getY() - 30f;
+        float currentX1 = x1;
         float currentX2 = x2;
-    	debuffBatch.begin();
-    	
-    	if(rendLeft > 0)
-    		debuffBatch.draw(bleedBuffTex, currentX2, y, 25, 25);
-    	
-    	currentX2 += 30;
-    	
-    	if(rendLeft > 0 && BerserkerSkillTree.poisonRend == 1)
-    		debuffBatch.draw(poisonBuffTex, currentX2, y, 25, 25);
-    	
-    	currentX2 += 30;
-    	
-    	if(enemyStunned)
-    		debuffBatch.draw(stunBuffTex, currentX2, y, 25, 25);
-    	
-    	currentX2 += 30;
-    	
-    	if(weakenLeft > 0)
-    		debuffBatch.draw(weakenBuffTex, currentX2, y, 25, 25);
-    	
-    	if(eRendLeft > 0)
-    		debuffBatch.draw(bleedBuffTex, currentX1, y, 25, 25);
-    	
-    	currentX1 += 30;
-    	
-    	if(ePoisonLeft > 0)
-    		debuffBatch.draw(poisonBuffTex, currentX1, y, 25, 25);
-    	
-    	currentX1 += 30;
-    	
-    	if(playerStunned)
-    		debuffBatch.draw(stunBuffTex, currentX1, y, 25, 25);
-    	
-    	currentX1 += 30;
-    	
-    	if(eWeakenLeft > 0)
-    		debuffBatch.draw(weakenBuffTex, currentX1, y, 25, 25);
-    	
-    	debuffBatch.end();
+        
+        boolean debuff = false;
+
+        if (rendLeft > 0)
+            numEDebuff++;
+        if (rendLeft > 0 && BerserkerSkillTree.poisonRend == 1)
+            numEDebuff++;
+        if (enemyStunned)
+            numEDebuff++;
+        if (weakenLeft > 0)
+            numEDebuff++;
+
+        if (eRendLeft > 0)
+            numDebuff++;
+        if (ePoisonLeft > 0)
+            numDebuff++;
+        if (playerStunned)
+            numDebuff++;
+        if (eWeakenLeft > 0)
+            numDebuff++;
+
+        debuffBatch.begin();
+
+        if (rendLeft > 0) {
+            debuffBatch.draw(bleedBuffTex, currentX2, y, 25, 25);
+            debuff = true;
+        }
+
+        if (numEDebuff > 0 && debuff) {
+            currentX2 += 30;
+            debuff = false;
+        }
+
+        if (rendLeft > 0 && BerserkerSkillTree.poisonRend == 1) {
+            debuffBatch.draw(poisonBuffTex, currentX2, y, 25, 25);
+            debuff = true;
+        }
+
+        if (numEDebuff > 1 && debuff) {
+            currentX2 += 30;
+            debuff = false;
+        }
+
+        if (enemyStunned) {
+            debuffBatch.draw(stunBuffTex, currentX2, y, 25, 25);
+            debuff = true;
+        }
+
+        if (numEDebuff > 2 && debuff) {
+            currentX2 += 30;
+            debuff = false;
+        }
+
+        if (weakenLeft > 0) {
+            debuffBatch.draw(weakenBuffTex, currentX2, y, 25, 25);
+        }
+
+        // Player debuffs
+        debuff = false;
+
+        if (eRendLeft > 0) {
+            debuffBatch.draw(bleedBuffTex, currentX1, y, 25, 25);
+            debuff = true;
+        }
+
+        if (numDebuff > 0 && debuff) {
+            currentX1 += 30;
+            debuff = false;
+        }
+
+        if (ePoisonLeft > 0) {
+            debuffBatch.draw(poisonBuffTex, currentX1, y, 25, 25);
+            debuff = true;
+        }
+
+        if (numDebuff > 1 && debuff) {
+            currentX1 += 30;
+            debuff = false;
+        }
+
+        if (playerStunned) {
+            debuffBatch.draw(stunBuffTex, currentX1, y, 25, 25);
+            debuff = true;
+        }
+
+        if (numDebuff > 2 && debuff) {
+            currentX1 += 30;
+            debuff = false;
+        }
+
+        if (eWeakenLeft > 0) {
+            debuffBatch.draw(weakenBuffTex, currentX1, y, 25, 25);
+        }
+
+        debuffBatch.end();
+
+        numDebuff = numEDebuff = 0;
     }
     
     private void dealDamage(float x, float y, float damage) {
@@ -2371,6 +2471,13 @@ public class FightScene implements Screen{
 			abilityBatch.draw(TextureManager.gearCardTexture, gearName.getX() - 40f, gearName.getY(), 380, gearName.getHeight());
 			abilityBatch.end();
 		}
+
+	    if (ScreenShake.getRumbleTimeLeft() > 0){
+	        ScreenShake.tick(Gdx.graphics.getDeltaTime());
+	        vp.getCamera().translate(ScreenShake.getPos());
+	    } 
+	    else
+	    	gameScreen.resize(vp.getScreenWidth(), vp.getScreenHeight());
 	    
     	update();
     	stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));

@@ -33,6 +33,7 @@ import storage.Items;
 import storage.Storage;
 import storage.Weapons;
 
+@SuppressWarnings("unused")
 public class Inventory implements Screen {
 	Skin skin;
 	Viewport vp;
@@ -84,81 +85,10 @@ public class Inventory implements Screen {
 		createInventoryGrid();
 		createCharacterGrid();
 		createItemGrid();
-//		removeBonusStats();
-//		if(gearEq)
-//			addBonusStats();
 	}
-	
-	private void addBonusStats() {
-		System.out.println("Adding stats");
-		Player.setDmgResist(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
-		Player.setWeaponDmg(weaponAP);	
-		Player.gainBonusStr(bonusAP);
-		Player.gainMaxHP(bonusHP);
-	}
-
+ 
 	private void smoothFilter(){
-		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
-		
-	}
-	
-	private void removeBonusStats() {		
-		Actor item = characterTable.getChildren().get(0);					
-		String itemName = item.getName();
-		if(!itemName.equals("Empty")) {
-			setArmor(itemName, "Helmet");
-			addArmorDefenses(itemName);
-		}
-		
-		item = characterTable.getChildren().get(1);					
-		itemName = item.getName();
-		if(!itemName.equals("Empty")) {
-			setArmor(itemName, "Chest");
-			addArmorDefenses(itemName);
-		}	
-		
-		item = characterTable.getChildren().get(2);					
-		itemName = item.getName();
-		if(!itemName.equals("Empty")) {
-			setArmor(itemName, "Boots");
-			addArmorDefenses(itemName);
-		}
-		
-		item = characterTable.getChildren().get(3);					
-		itemName = item.getName();
-		if(!itemName.equals("Empty")) {
-			if(itemName.endsWith("Axe"))
-				setWeapon(itemName, "OneHanded");	
-			else
-				setWeapon(itemName, "TwoHanded");
-			addWeaponDamage(itemName);
-		}
-						
-		item = characterTable.getChildren().get(4);					
-		itemName = item.getName();
-		if(!itemName.equals("Empty")) {
-			setWeapon(itemName, "Offhand");		
-			addWeaponDamage(itemName);
-		}
-		if(SaveData.loaded) {
-			bonusAP = bonusHP = bonusDP = 0;
-			for(int ap : storage.getBonusAP())
-				bonusAP += ap;
-			for(int hp : storage.getBonusHP())
-				bonusHP += hp;
-			for(int dp : storage.getBonusDP())
-				bonusDP += dp;
-		}
-		
-		if(helmetDP != 0 || chestDP != 0 || bootsDP != 0 || shieldDP != 0 || weaponAP != 0)	
-			if(!haveGear) {
-				haveGear = true;
-				gearEq = true;
-			}
-		Player.loseDR(helmetDP + chestDP + bootsDP + shieldDP + bonusDP);
-		Player.loseMaxHP(bonusHP);
-		Player.loseWeaponDmg(weaponAP);
-		Player.loseBonusStr(bonusAP);
+		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);		
 	}
 	
 	private void createInventoryGrid() {    
@@ -282,7 +212,7 @@ public class Inventory implements Screen {
 	                }
 	            });
 	        }
-	        inventoryTable.row(); // To move to the next row after 5 items
+	        inventoryTable.row();
 	    } 
 	    
 	    inventoryTable.setPosition(vp.getWorldWidth() / 1.25f, vp.getWorldHeight() / 2f, Align.center);

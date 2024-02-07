@@ -2,7 +2,6 @@ package com.onionscape.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -55,7 +54,9 @@ public class GameScreen implements Screen {
 
 	public GameScreen(Game game) {		
 		this.game = game;
-		viewport = new FitViewport(SELECTED_WIDTH, SELECTED_HEIGHT);		
+		viewport = new FitViewport(SELECTED_WIDTH, SELECTED_HEIGHT);	
+		Gdx.graphics.setUndecorated(false);
+		Gdx.graphics.setWindowedMode(1280, 720);
 	    setCurrentState(LOADING_SCREEN);
 	    
 	    isTransitioning = false;
@@ -150,7 +151,6 @@ public class GameScreen implements Screen {
 
             Gdx.gl.glDisable(GL20.GL_BLEND);
 
-            // Update elapsed time
             elapsedTime += delta;
 
             // If the transition is complete, switch to the new state
@@ -206,7 +206,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// Make sure the width and height are within our minimum and maximum values
         int finalWidth = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, width));
         int finalHeight = Math.min(MAX_HEIGHT, Math.max(MIN_HEIGHT, height));
 
@@ -247,6 +246,7 @@ public class GameScreen implements Screen {
 		settings.dispose();
 		slot.dispose();
 		shapeRenderer.dispose();
+		forestMap.dispose();
 	}
 
 }

@@ -23,11 +23,12 @@ import com.onionscape.game.GameScreen;
 import player.Player;
 import storage.Storage;
 
+@SuppressWarnings("unused")
 public class BerserkerSkillTree implements Screen{
 	Skin skin;
 	Viewport vp;
 	public Stage stage;
-	private Storage storage;
+	private Storage storage;	
 	private Game game;
 	private TextButton homeBtn, resetBtn;
 	private TextButton twoHandBtn, oneHandBtn, thickSkinBtn, weaponMasteryBtn, blockAuraBtn,

@@ -25,6 +25,7 @@ import com.onionscape.game.GameScreen;
 import player.Player;
 import storage.Storage;
 
+@SuppressWarnings("unused")
 public class SlotMinigame implements Screen{
 	Skin skin;
 	Viewport vp;

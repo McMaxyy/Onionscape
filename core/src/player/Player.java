@@ -88,10 +88,19 @@ public class Player {
 	
 	public static void checkExp() {
 		if(exp >= levelCap) {
-			level++;
-			levelCap += 10;
+			level++;			
 			exp = 0;
 			skillPoints++;
+			if(level >= 1 && level <= 5)
+				levelCap += 10;
+			else if(level >= 6 && level <= 10)
+				levelCap += 20;
+			else if(level >= 11 && level <= 15)
+				levelCap += 35;
+			else if(level >= 16 && level <= 20)
+				levelCap += 50;
+			else
+				levelCap += 80;
 		}			
 	}
 	

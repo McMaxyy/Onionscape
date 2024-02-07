@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -24,9 +25,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.MusicManager;
+import com.onionscape.game.ScreenShake;
 
 import storage.Storage;
 
+@SuppressWarnings("unused")
 public class Settings implements Screen{
 	Skin skin;
 	Viewport vp;
@@ -34,14 +37,14 @@ public class Settings implements Screen{
 	private Storage storage;
 	private Game game;
 	private GameScreen gameScreen; 
-	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn, musicUp, musicDown, sfxUp, sfxDown,
-	changeMonitor;
-	private Array<TextButton> monitorButtons = new Array<>();
+	private TextButton fullscreenBtn, borderlessBtn, backBtn, windowedBtn, musicUp, musicDown, sfxUp, sfxDown;
 	private ShapeRenderer musicBar = new ShapeRenderer();
 	private ShapeRenderer sfxBar = new ShapeRenderer();
 	private SpriteBatch mapBatch = new SpriteBatch();
 	private Texture mapTexture;
-	private Label musicLbl, sfxLbl, screenModeLbl;
+	private Label musicLbl, sfxLbl, screenModeLbl, screenShakeLbl;
+	private CheckBox screenShake;
+	private static boolean shake = true;
 	
 	public Settings(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -97,18 +100,6 @@ public class Settings implements Screen{
 		windowedBtn.setSize(200, 50);
 		windowedBtn.setPosition(vp.getWorldWidth() / 1.79f, vp.getWorldHeight() / 1.7f);
 		stage.addActor(windowedBtn);
-		
-		changeMonitor = new TextButton("Change", storage.buttonStyle);
-		changeMonitor.setColor(Color.LIGHT_GRAY);
-		changeMonitor.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			changeMonitor.setVisible(false);
-                createMonitorButtons();
-    	    }});
-		changeMonitor.setSize(200, 50);
-		changeMonitor.setPosition(vp.getWorldWidth() / 2f - changeMonitor.getWidth() / 2f, vp.getWorldHeight() / 1.2f);
-		stage.addActor(changeMonitor);
 		
 		musicUp = new TextButton("+", storage.buttonStyle);
 		musicUp.setColor(Color.LIGHT_GRAY);
@@ -196,48 +187,30 @@ public class Settings implements Screen{
 		sfxLbl.setPosition(centerX - sfxLbl.getWidth() / 2f, sfxUp.getY() + sfxUp.getHeight() + 10);
 		stage.addActor(sfxLbl);
 		
-		screenModeLbl = new Label("Window Mode", storage.labelStyleBlack);
+		screenModeLbl = new Label("Display Mode", storage.labelStyleBlack);
 		screenModeLbl.setPosition(borderlessBtn.getX() + 20, borderlessBtn.getY() + borderlessBtn.getHeight() + 20);
-		stage.addActor(screenModeLbl);
+		stage.addActor(screenModeLbl);		
 		
-	}
-	
-	private void createMonitorButtons() {
-		Monitor[] monitors = Gdx.graphics.getMonitors();
-        float buttonWidth = 200;
-        float buttonHeight = 50;
-        float buttonSpacing = 10;
-        float totalWidth = (buttonWidth + buttonSpacing) * monitors.length - buttonSpacing;
-        float startX = vp.getWorldWidth() / 2f - totalWidth / 2f;
-        float startY = vp.getWorldHeight() / 1.2f;
-        int i = 1;
-        String mon;
-
-        for (Monitor monitor : monitors) {
-        	mon = i + "";
-            TextButton monitorButton = new TextButton(mon, storage.buttonStyle);
-            monitorButton.setSize(buttonWidth, buttonHeight);
-            monitorButton.setPosition(startX, startY);
-            stage.addActor(monitorButton);
-            monitorButtons.add(monitorButton);
-            i++;
-            startX += buttonWidth + buttonSpacing;
-            final int t = i - 1;
-            
-            monitorButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    monitorChangeAction(t);
-                }
-            });
-        }
-	}
-	
-	private void monitorChangeAction(int x) {
-		switch(x) {
-		case 1:
-			
-		}
+		screenShake = new CheckBox("", storage.skin);
+		screenShake.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 4f);
+		screenShake.setChecked(shake);
+		screenShake.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			if(shake) {
+    				shake = false;
+    				ScreenShake.rumblePower = 0;
+    			}
+    			else {
+    				shake = true;
+    				ScreenShake.rumblePower = 2;
+    			}
+    	    }});
+		stage.addActor(screenShake);
+		
+		screenShakeLbl = new Label("Screen shake", storage.labelStyleBlack);
+		screenShakeLbl.setPosition(screenShake.getX() - screenShakeLbl.getWidth() * 2, screenShake.getY());
+		stage.addActor(screenShakeLbl);
 	}
 	
 	private void drawSoundBar() {

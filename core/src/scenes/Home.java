@@ -111,7 +111,7 @@ public class Home implements Screen {
 	private void createComponents() {
 		level = new Label("Level: " + Player.getLevel(), storage.labelStyle);
 		level.setPosition(vp.getWorldWidth() / 1.5f, vp.getWorldHeight() / 1.45f);
-		level.setText("Level: " + Player.getLevel() + "\n\nExp: " + Player.getExp());
+		level.setText("Level: " + Player.getLevel() + "\n\nExp: " + Player.getExp() + "/" + Player.getLevelCap());
 		stage.addActor(level);
 		
 		playerStats = new Label("", storage.labelStyle);

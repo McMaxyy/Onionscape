@@ -486,7 +486,7 @@ public class Storage {
 	}
 
 	public void setBonusHP(int index, int x) {
-		this.bonusHP[index] = x;
+		Storage.bonusHP[index] = x;
 	}
 
 	public int[] getBonusAP() {
@@ -494,7 +494,7 @@ public class Storage {
 	}
 
 	public void setBonusAP(int index, int x) {
-		this.bonusAP[index] = x;
+		Storage.bonusAP[index] = x;
 	}
 	
 	public int[] getBonusDP() {
@@ -502,7 +502,7 @@ public class Storage {
 	}
 
 	public void setBonusDP(int index, int x) {
-		this.bonusDP[index] = x;
+		Storage.bonusDP[index] = x;
 	}
 	
 	public String itemDescription(String item) {

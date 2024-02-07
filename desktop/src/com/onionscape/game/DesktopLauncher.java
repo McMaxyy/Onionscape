@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher{
     
-    private static boolean decorated = false; // Default to decorated
+    private static boolean decorated = false;
 
     public static void main(String[] arg) {
     	Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
@@ -18,7 +18,7 @@ public class DesktopLauncher{
 
         // Set the decoration status in the configuration
         config.setDecorated(decorated);
-        config.setWindowIcon("player/MapIcon.png");
+        config.setWindowIcon("mapIcons/ExitIcon.png");
 
         int samples = 32;
         config.setBackBufferConfig(8, 8, 8, 8, 16, 0, samples);
