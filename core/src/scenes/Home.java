@@ -31,7 +31,7 @@ public class Home implements Screen {
 	public Stage stage;
 	private Storage storage;
 	private Game game;
-	private TextButton slots, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
+	private TextButton questLog, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
 	forestBtn, merchantBtn, playBtn, nextSong;
 	private Label level, playerStats, coins, currentMusic;
 	private ImageButton saveBtn, exitBtn, settingsBtn, homeBtn;
@@ -149,16 +149,20 @@ public class Home implements Screen {
 		currentMusic.setPosition(nextSong.getX() - currentMusic.getWidth() - 50, nextSong.getY() + nextSong.getHeight() / 4f);
 		stage.addActor(currentMusic);
 		
-		slots = new TextButton("Slots", storage.homeBtnStyle);
-		slots.setColor(Color.LIGHT_GRAY);
-		slots.addListener(new ClickListener() {
+		questLog = new TextButton("Quests", storage.homeBtnStyle);
+		questLog.setColor(Color.LIGHT_GRAY);
+		questLog.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			gameScreen.switchToNewState(GameScreen.SLOT_GAME);
+    			for (int i = 0; i < storage.quests.length; i++)
+    		        if(storage.quests[i].getActive() == 1)
+    		        	QuestLog.activeQuests = true;
+    			QuestLog.checkQuests = true;
+    			gameScreen.switchToNewState(GameScreen.QUEST_LOG);
     	    }});
-		slots.setSize(200, 50);
-		slots.setPosition(vp.getWorldWidth() / 5.5f, vp.getWorldHeight() / 1.08f);
-		stage.addActor(slots);
+		questLog.setSize(200, 50);
+		questLog.setPosition(vp.getWorldWidth() / 5.5f, vp.getWorldHeight() / 1.08f);
+		stage.addActor(questLog);
 		
 		playBtn = new TextButton("Play", storage.homeBtnStyle);
 		playBtn.setColor(Color.LIGHT_GRAY);
@@ -168,13 +172,13 @@ public class Home implements Screen {
     			if(playBtn.getText().toString().equals("Play")) {
     				newGame.setVisible(true);
         			forestBtn.setVisible(true);
-        			slots.setVisible(false);
+        			questLog.setVisible(false);
         			playBtn.setText("Back");
     			}
     			else {
     				newGame.setVisible(false);
 	    			forestBtn.setVisible(false);
-	    			slots.setVisible(true);
+	    			questLog.setVisible(true);
 	    			playBtn.setText("Play");
     			}
     	    }});

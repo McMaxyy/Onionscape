@@ -314,6 +314,13 @@ public class Storage {
 	public Enemy boar = new BoarBoss();
 	public Enemy vulture = new Vulture();
 	
+	// Load quests
+	public Quests wolfQuest = new WolfQuest();
+	public Quests spiderQuest = new SpiderQuest();
+	public Quests spiderBearQuest = new SpiderBearQuest();
+	public Quests bearQuest = new BearQuest();
+	public Quests[] quests = {wolfQuest, spiderQuest, spiderBearQuest, bearQuest};
+	
 	public void swapAbilities(Abilities ability) {
 		emptyAbility = ability;
 	}

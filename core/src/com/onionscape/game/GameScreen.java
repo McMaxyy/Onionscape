@@ -23,6 +23,8 @@ public class GameScreen implements Screen {
 	private Merchant merchant;
 	private Settings settings;
 	private SlotMinigame slot;
+	private QuestLog quest;
+	private static QuestLog questSave;
 	private Viewport viewport;
 	public static boolean newGame = true;
 	
@@ -45,6 +47,7 @@ public class GameScreen implements Screen {
     public static final int SETTINGS = 9;
     public static final int SLOT_GAME = 10;
     public static final int FOREST_MAP_QUICK = 11;
+    public static final int QUEST_LOG = 12;
     private int currentState;
     
     private boolean isTransitioning;
@@ -115,6 +118,15 @@ public class GameScreen implements Screen {
 	        case FOREST_MAP_QUICK:
 	        	this.forestMap = new ForestMap(viewport, game, this);
 	            Gdx.input.setInputProcessor(forestMap.stage);
+	            break;
+	        case QUEST_LOG:
+	        	if(this.quest == null && questSave != null)
+	        		this.quest = questSave;
+	        	else if(this.quest == null) {
+	        		this.quest = new QuestLog(viewport, game, this);
+	        		questSave = quest;
+	        	}
+	            Gdx.input.setInputProcessor(quest.stage);
 	            break;
 	    }
 	}
@@ -195,6 +207,9 @@ public class GameScreen implements Screen {
 	        case FOREST_MAP_QUICK:
 	        	forestMap.render(delta);
 	        	break;
+	        case QUEST_LOG:
+	        	quest.render(delta);
+	        	break;
         	}
         }    
 	}
@@ -245,9 +260,17 @@ public class GameScreen implements Screen {
 		merchant.dispose();
 		settings.dispose();
 		slot.dispose();
+		quest.dispose();
 		shapeRenderer.dispose();
 		forestMap.dispose();
 	}
 
+	public static QuestLog getQuestSave() {
+		return questSave;
+	}
+
+	public static void setQuestSave(QuestLog questSave) {
+		GameScreen.questSave = questSave;
+	}
 }
 

@@ -365,6 +365,7 @@ public class FightScene implements Screen{
 	        	    }});
 	        }	        	
 	        else {
+	        	checkQuests();	        	
 	        	sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Enemy died");
 	        	chooseReward();	
 	        	if(Home.story) {
@@ -390,6 +391,21 @@ public class FightScene implements Screen{
 	        gameOver = true;
 	        pDead = eDead = false; 		
     	} 		
+    }
+    
+    private void checkQuests() {
+        if (storage.wolfQuest.getActive() == 1 && enemyName.equals("Wolf"))
+            storage.wolfQuest.setObj1Prog(storage.wolfQuest.getObj1Prog() + 1);
+        
+        if (storage.spiderQuest.getActive() == 1 && enemyName.equals("Spider"))
+            storage.spiderQuest.setObj1Prog(storage.spiderQuest.getObj1Prog() + 1);
+        
+        if (storage.spiderBearQuest.getActive() == 1) {
+            if (enemyName.equals("Spider"))
+                storage.spiderBearQuest.setObj1Prog(storage.spiderBearQuest.getObj1Prog() + 1);
+            else if (enemyName.equals("Bear"))
+                storage.spiderBearQuest.setObj2Prog(storage.spiderBearQuest.getObj2Prog() + 1);
+        }
     }
     
     private void chooseReward() {

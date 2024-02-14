@@ -3,13 +3,22 @@ package com.onionscape.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import player.Player;
 import scenes.BerserkerSkillTree;
 import scenes.Inventory;
+import scenes.QuestLog;
 import storage.Armor;
 import storage.Items;
 import storage.Storage;
@@ -74,8 +83,14 @@ public class SaveData {
 	public int strength2;
 	public int maxHP2;
 	
-	public static boolean loaded = true;
+	public int[] questDone = {0, 0, 0};
+	public int[] newQuest = {0, 0, 0};
+	public int[] takenQuest = {0, 0, 0};
+	public int[] questProgress = {0, 0, 0, 0, 0};
+	public int[] activeQuest = {0, 0, 0};
 	
+	public static boolean loaded = true;
+
 	public SaveData() {
 		storage = Storage.getInstance();
 	}
@@ -116,6 +131,18 @@ public class SaveData {
 		saveData.bonusHP = storage.getBonusHP();
 		saveData.bonusDP = storage.getBonusDP();
 		
+		saveData.newQuest = QuestLog.getNewQuest();
+		saveData.questDone = QuestLog.getQuestDone();
+		saveData.takenQuest = QuestLog.getTakenQuest();
+		int counter = 0;
+		for(int i = 0; i < storage.quests.length; i++) {
+			if(storage.quests[i].getActive() == 1) {
+				System.out.println(storage.quests[i].getActive());
+				saveData.activeQuest[counter] = storage.quests[i].getQuestID();
+				counter++;
+			}
+		}		
+		
 		saveData.twoHMastery = BerserkerSkillTree.twoHMastery;
 		saveData.oneHMastery = BerserkerSkillTree.oneHMastery;
 		saveData.thickSkin = BerserkerSkillTree.thickSkin;
@@ -145,7 +172,7 @@ public class SaveData {
 		saveData.musicVol = MusicManager.musicVol;
 		saveData.sfxVol = MusicManager.sfxVol;
 		
-		jsonString = json.toJson(saveData);		
+		jsonString = json.toJson(saveData);
 		FileHandle file = Gdx.files.local("saveData.json");
 		file.writeString(jsonString, false);
 		System.out.println("Saved the game state");
@@ -191,6 +218,11 @@ public class SaveData {
 		    loadBonusStats(loadedData.bonusAP, "AP");
 		    loadBonusStats(loadedData.bonusHP, "HP");
 		    loadBonusStats(loadedData.bonusDP, "DP");
+			
+			QuestLog.setNewQuest(loadedData.newQuest);
+			QuestLog.setTakenQuest(loadedData.takenQuest);
+			QuestLog.setQuestDone(loadedData.questDone);
+			loadActiveQuests(loadedData.activeQuest);
 		    
 		    BerserkerSkillTree.twoHMastery = loadedData.twoHMastery;
 		    BerserkerSkillTree.oneHMastery = loadedData.oneHMastery;
@@ -223,6 +255,25 @@ public class SaveData {
 		    MusicManager.getInstance().changeVolume();
 		    
 		    System.out.println("Loaded the game state");
+		}
+	}
+	
+	private void loadActiveQuests(int[] active) {
+		for(int i = 0; i < active.length; i++) {
+			switch(active[i]) {
+			case 1:
+				storage.wolfQuest.setActive(1);
+				break;
+			case 2:
+				storage.spiderQuest.setActive(1);
+				break;
+			case 31:
+				storage.spiderBearQuest.setActive(1);
+				break;
+			case 4:
+				storage.bearQuest.setActive(1);
+				break;
+			}
 		}
 	}
 	
