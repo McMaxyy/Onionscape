@@ -29,6 +29,7 @@ public class StartScreen implements Screen{
 	private Texture mapTexture;
 	private TextButton newGame, loadGame, settings, quit;
 	private SaveData saveData = new SaveData();
+	private static boolean freshLoad = true;
 	
 	public StartScreen(Viewport viewport, Game game, GameScreen gameScreen) {
 		this.gameScreen = gameScreen;
@@ -50,6 +51,8 @@ public class StartScreen implements Screen{
 		newGame.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
+    			if(GameScreen.getQuestSave() != null)
+    				freshLoad = true;
     			gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
 		newGame.setSize(350, 100);
@@ -137,5 +140,13 @@ public class StartScreen implements Screen{
 	public void dispose() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public static boolean isFreshLoad() {
+		return freshLoad;
+	}
+
+	public static void setFreshLoad(boolean freshLoad) {
+		StartScreen.freshLoad = freshLoad;
 	}
 }

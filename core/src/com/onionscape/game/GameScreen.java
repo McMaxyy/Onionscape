@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
 	    
 	    isTransitioning = false;
         transitionTime = 0.55f;
-        elapsedTime = 0.0f;
+        elapsedTime = 0.0f;       
 	}
 	
 	public void setCurrentState(int newState) {
@@ -126,6 +126,11 @@ public class GameScreen implements Screen {
 	        		this.quest = new QuestLog(viewport, game, this);
 	        		questSave = quest;
 	        	}
+	        	else if(StartScreen.isFreshLoad()) {
+	        		this.quest = new QuestLog(viewport, game, this);
+	        		questSave = quest;
+	        	}
+	        		
 	            Gdx.input.setInputProcessor(quest.stage);
 	            break;
 	    }

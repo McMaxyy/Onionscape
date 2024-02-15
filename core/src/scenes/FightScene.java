@@ -406,6 +406,24 @@ public class FightScene implements Screen{
             else if (enemyName.equals("Bear"))
                 storage.spiderBearQuest.setObj2Prog(storage.spiderBearQuest.getObj2Prog() + 1);
         }
+        
+        if (storage.bearQuest.getActive() == 1 && enemyName.equals("Bear"))
+            storage.bearQuest.setObj1Prog(storage.bearQuest.getObj1Prog() + 1);
+        
+        if (storage.waspQuest.getActive() == 1 && enemyName.equals("Wasp"))
+            storage.waspQuest.setObj1Prog(storage.waspQuest.getObj1Prog() + 1);
+        
+        if (storage.monkeyQuest.getActive() == 1 && enemyName.equals("Monkey"))
+            storage.monkeyQuest.setObj1Prog(storage.monkeyQuest.getObj1Prog() + 1);
+        
+        if (storage.monWasWolfQuest.getActive() == 1) {
+            if (enemyName.equals("Monkey"))
+                storage.monWasWolfQuest.setObj1Prog(storage.monWasWolfQuest.getObj1Prog() + 1);
+            else if (enemyName.equals("Wasp"))
+                storage.monWasWolfQuest.setObj2Prog(storage.monWasWolfQuest.getObj2Prog() + 1);
+            else if (enemyName.equals("Wolf"))
+                storage.monWasWolfQuest.setObj3Prog(storage.monWasWolfQuest.getObj3Prog() + 1);
+        }
     }
     
     private void chooseReward() {
@@ -604,8 +622,11 @@ public class FightScene implements Screen{
     			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Failed to apply bleed");		
     		break;
     	case "Whirlwind":
-    		if(rand.nextInt(4) != 0)
+    		if(rand.nextInt(4) != 0) {
     			playerAttack(3);
+    			if (storage.whirlwindQuest.getActive() == 1)
+    	            storage.whirlwindQuest.setObj1Prog(storage.whirlwindQuest.getObj1Prog() + 1);
+    		}
     		else
     			sendText(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 1.5f, "Player's attack missed"); 			
     		break;

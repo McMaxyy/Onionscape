@@ -12,6 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 
@@ -35,12 +37,13 @@ public class QuestLog implements Screen {
 		private Storage storage;
 		private Game game;
 		private GameScreen gameScreen; 
-		private TextButton backBtn, resetQuestBtn;
+		private TextButton backBtn;
 		private static TextButton q1Accept, q2Accept, q3Accept;
 		private static Label q1Title, q2Title, q3Title, q1Text, q2Text, q3Text, timer;
 		private static int[] questDone = {0, 0, 0};
 		private static int[] newQuest = {0, 0, 0};
 		private static int[] takenQuest = {0, 0, 0};
+		private static int[] activeQuest = {0, 0, 0};
 		private Random rand = new Random();
 		public static boolean checkQuests = false, activeQuests = false;
 	
@@ -54,10 +57,14 @@ public class QuestLog implements Screen {
 		skin = storage.skin;
 		storage.createFont();	
 		checkQuests = false;
-	
+		
+		if(StartScreen.isFreshLoad()) {
+			resetQuests();
+			StartScreen.setFreshLoad(false);
+		}
+		
 		createComponents();
 		setQuest();
-		checkAvailableQuests();
 	}	
 	
 	private void checkCompletedQuest() {
@@ -77,6 +84,18 @@ public class QuestLog implements Screen {
 	                break;
 	            case 4:
 	            	currentQuest = storage.bearQuest;
+	            	break;
+	            case 5:
+	            	currentQuest = storage.waspQuest;
+	            	break;
+	            case 6:
+	            	currentQuest = storage.monkeyQuest;
+	            	break;
+	            case 7:
+	            	currentQuest = storage.monWasWolfQuest;
+	            	break;
+	            case 8:
+	            	currentQuest = storage.whirlwindQuest;
 	            	break;
 	        }
 
@@ -101,52 +120,53 @@ public class QuestLog implements Screen {
 
 	private void updateQuestButton(TextButton button, int questIndex, Quests currentQuest) {
 	    button.setTouchable(Touchable.enabled);
+	    button.setColor(Color.GREEN);
 	    button.setDisabled(false);
 	    button.clearListeners();
 	    button.addListener(new ClickListener() {
 	        @Override
 	        public void clicked(InputEvent event, float x, float y) {
-	            Player.gainCoins(currentQuest.getReward());
+	        	if(currentQuest.getRewardType() == 1)
+	        		Player.gainCoins(currentQuest.getReward());
+	        	else if(currentQuest.getRewardType() == 2){
+	        		Player.gainExp(currentQuest.getReward());
+	        		Player.checkExp();
+	        	}
+	        	else {
+	        		storage.inventoryItems(storage.itemWhirlwind, "Add");
+	        	}
 	            questDone[questIndex] = 1;
 	            button.setVisible(false);
+	            setActiveQuest(takenQuest[questIndex], 0);
 	        }
 	    });
 	}
-
 	
-	private void checkAvailableQuests() {
-		 if(questDone[0] == 1) {
-			 q1Title.setVisible(false);
-			 q1Text.setVisible(false);
-			 q1Accept.setVisible(false);
-		 }
-		 
-		 if(questDone[1] == 1) {
-			 q2Title.setVisible(false);
-			 q2Text.setVisible(false);
-			 q2Accept.setVisible(false);
-		 }
-		 
-		 if(questDone[2] == 1) {
-			 q3Title.setVisible(false);
-			 q3Text.setVisible(false);
-			 q3Accept.setVisible(false);
-		 }
-	}
-	
-	private void setActiveQuest(int x) {
+	private void setActiveQuest(int x, int a) {		
 		switch(x) {
 		case 1:
-			storage.wolfQuest.setActive(1);
+			storage.wolfQuest.setActive(a);
 			break;
 		case 2:
-			storage.spiderQuest.setActive(1);
+			storage.spiderQuest.setActive(a);
 			break;
 		case 3:
-			storage.spiderBearQuest.setActive(1);
+			storage.spiderBearQuest.setActive(a);
 			break;
 		case 4:
-			storage.bearQuest.setActive(1);
+			storage.bearQuest.setActive(a);
+			break;
+		case 5:
+			storage.waspQuest.setActive(a);
+			break;
+		case 6:
+			storage.monkeyQuest.setActive(a);
+			break;
+		case 7:
+			storage.monWasWolfQuest.setActive(a);
+			break;
+		case 8:
+			storage.whirlwindQuest.setActive(a);
 			break;
 		}	
 	}
@@ -155,29 +175,74 @@ public class QuestLog implements Screen {
 	    takenQuest[q - 1] = x;
 	    String questTitle = "";
 	    String questText = "";
+	    String questObj1, questObj2, questObj3;
+	    String[] objective;
 
 	    switch (x) {
 	        case 1:
+	        	objective = storage.wolfQuest.getObjective1().split(" ");
+	        	questObj1 = objective[objective.length - 1];
 	            questTitle = storage.wolfQuest.getQuestName();
-	            questText = storage.wolfQuest.getObjective1() + "\n" + storage.wolfQuest.getObj1Prog() + "/" + storage.wolfQuest.getObj1()
-	            + "\n\nReward: " + storage.wolfQuest.getReward() + " coins";
+	            questText = "\n" + storage.wolfQuest.getObjective1() + "\n\n\n" + storage.wolfQuest.getObj1Prog() + "/" + storage.wolfQuest.getObj1()
+	            + " " + questObj1 + "\n\n\nReward: " + storage.wolfQuest.getReward() + " coins";
 	            break;
 	        case 2:
+	        	objective = storage.spiderQuest.getObjective1().split(" ");
+	        	questObj1 = objective[objective.length - 1];
 	            questTitle = storage.spiderQuest.getQuestName();
-	            questText = storage.spiderQuest.getObjective1() + "\n" + storage.spiderQuest.getObj1Prog() + "/" + storage.spiderQuest.getObj1()
-	            + "\n\nReward: " + storage.spiderQuest.getReward() + " coins";
+	            questText = "\n" + storage.spiderQuest.getObjective1() + "\n\n\n" + storage.spiderQuest.getObj1Prog() + "/" + storage.spiderQuest.getObj1()
+	            + " " + questObj1 + "\n\n\nReward: " + storage.spiderQuest.getReward() + " coins";
 	            break;
 	        case 3:
+	        	objective = storage.spiderBearQuest.getObjective1().split(" ");
+	        	questObj1 = objective[objective.length - 1];
+	        	objective = storage.spiderBearQuest.getObjective2().split(" ");
+	        	questObj2 = objective[objective.length - 1];
 	            questTitle = storage.spiderBearQuest.getQuestName();
-	            questText = storage.spiderBearQuest.getObjective1() + "\n" + storage.spiderBearQuest.getObjective2() + "\n\n" +
-	                    storage.spiderBearQuest.getObj1Prog() + "/" + storage.spiderBearQuest.getObj1() + "\n" +
+	            questText = "\n" + storage.spiderBearQuest.getObjective1() + "\n" + storage.spiderBearQuest.getObjective2() + "\n\n\n" +
+	                    storage.spiderBearQuest.getObj1Prog() + "/" + storage.spiderBearQuest.getObj1() + " " + questObj1 + "\n" +
 	                    storage.spiderBearQuest.getObj2Prog() + "/" + storage.spiderBearQuest.getObj2()
-	                    + "\n\nReward: " + storage.spiderBearQuest.getReward() + " coins";
+	                    + " " + questObj2 + "\n\n\nReward: " + storage.spiderBearQuest.getReward() + " EXP";
 	            break;
 	        case 4:
+	        	objective = storage.bearQuest.getObjective1().split(" ");
+	        	questObj1 = objective[objective.length - 1];
 	        	questTitle = storage.bearQuest.getQuestName();
-	            questText = storage.bearQuest.getObjective1() + "\n" + storage.bearQuest.getObj1Prog() + "/" + storage.bearQuest.getObj1()
-	            + "\n\nReward: " + storage.bearQuest.getReward() + " coins";
+	            questText = "\n" + storage.bearQuest.getObjective1() + "\n\n\n" + storage.bearQuest.getObj1Prog() + "/" + storage.bearQuest.getObj1()
+	            + " " + questObj1 + "\n\n\nReward: " + storage.bearQuest.getReward() + " coins";
+	            break;
+	        case 5:
+	        	objective = storage.waspQuest.getObjective1().split(" ");
+	        	questObj1 = objective[objective.length - 1];
+	        	questTitle = storage.waspQuest.getQuestName();
+	            questText = "\n" + storage.waspQuest.getObjective1() + "\n\n\n" + storage.waspQuest.getObj1Prog() + "/" + storage.waspQuest.getObj1()
+	            + " " + questObj1 + "\n\n\nReward: " + storage.waspQuest.getReward() + " EXP";
+	            break;
+	        case 6:
+	        	objective = storage.monkeyQuest.getObjective1().split(" ");
+	        	questObj1 = objective[objective.length - 1];
+	        	questTitle = storage.monkeyQuest.getQuestName();
+	            questText = "\n" + storage.monkeyQuest.getObjective1() + "\n\n\n" + storage.monkeyQuest.getObj1Prog() + "/" + storage.monkeyQuest.getObj1()
+	            + " " + questObj1 + "\n\n\nReward: " + storage.monkeyQuest.getReward() + " EXP";
+	            break;
+	        case 7:
+	        	objective = storage.monWasWolfQuest.getObjective1().split(" ");
+	        	questObj1 = objective[objective.length - 1];
+	        	objective = storage.monWasWolfQuest.getObjective2().split(" ");
+	        	questObj2 = objective[objective.length - 1];
+	        	objective = storage.monWasWolfQuest.getObjective3().split(" ");
+	        	questObj3 = objective[objective.length - 1];
+	            questTitle = storage.monWasWolfQuest.getQuestName();
+	            questText = "\n" + storage.monWasWolfQuest.getObjective1() + "\n" + storage.monWasWolfQuest.getObjective2() + "\n" + storage.monWasWolfQuest.getObjective3() +"\n\n\n" +
+	                    storage.monWasWolfQuest.getObj1Prog() + "/" + storage.monWasWolfQuest.getObj1() + " " + questObj1 + "\n" +
+	                    storage.monWasWolfQuest.getObj2Prog() + "/" + storage.monWasWolfQuest.getObj2() + " " + questObj2 + "\n" +
+	                    storage.monWasWolfQuest.getObj3Prog() + "/" + storage.monWasWolfQuest.getObj3() + " " + questObj3 +
+	                    "\n\n\nReward: " + storage.monWasWolfQuest.getReward() + " EXP";
+	            break;
+	        case 8:
+	        	questTitle = storage.whirlwindQuest.getQuestName();
+	            questText = "\n" + storage.whirlwindQuest.getObjective1() + "\n\n\n" + storage.whirlwindQuest.getObj1Prog() + "/" + storage.whirlwindQuest.getObj1()
+	            + " Whirlwinds" + "\n\n\nReward: Whirlwind";
 	            break;
 	    }
 
@@ -199,7 +264,7 @@ public class QuestLog implements Screen {
 
 	
 	private void setQuest() {		
-		int x = rand.nextInt(1, 5);
+		int x = rand.nextInt(1, 9);
 		boolean newQ = false;
 		
 		if(newQuest[0] == 0) {
@@ -207,26 +272,24 @@ public class QuestLog implements Screen {
 			 selectQuest(x, 1);
 		}
 		 
-		x = rand.nextInt(1, 5);
+		x = rand.nextInt(1, 9);
 		while(x == takenQuest[0])
-			x = rand.nextInt(1, 5);
+			x = rand.nextInt(1, 9);
 		
 		if(newQuest[1] == 0) {
 			newQuest[1] = 1;
 			selectQuest(x, 2);
 		}
 		
-		x = rand.nextInt(1, 5);
+		x = rand.nextInt(1, 9);
 		while(x == takenQuest[0] || x == takenQuest[1])
-			x = rand.nextInt(1, 5);
+			x = rand.nextInt(1, 9);
 		 
 		if(newQuest[2] == 0) {
 			newQuest[2] = 1;
 			selectQuest(x, 3);
 		}
-		
-		
-		
+				
 		for (int i = 0; i < newQuest.length; i++)
 	        if(newQuest[i] == 0)
 	        	newQ = true;
@@ -235,6 +298,22 @@ public class QuestLog implements Screen {
 			selectQuest(takenQuest[0], 1);
 			selectQuest(takenQuest[1], 2);
 			selectQuest(takenQuest[2], 3);
+			
+			if(activeQuest[0] == 1) {
+				q1Accept.setText("Complete");
+    			q1Accept.setDisabled(true);
+    			q1Accept.setTouchable(Touchable.disabled);
+			}
+			if(activeQuest[1] == 1) {
+				q2Accept.setText("Complete");
+				q2Accept.setDisabled(true);
+				q2Accept.setTouchable(Touchable.disabled);
+			}
+			if(activeQuest[2] == 1) {
+				q3Accept.setText("Complete");
+				q3Accept.setDisabled(true);
+				q3Accept.setTouchable(Touchable.disabled);
+			}
 		}
 	}
 	
@@ -247,57 +326,50 @@ public class QuestLog implements Screen {
     			gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
 		backBtn.setSize(150, 100);
-		backBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.25f);
+		backBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.15f);
 		stage.addActor(backBtn);	
 		
-//		resetQuestBtn = new TextButton("Reset", storage.buttonStyle);
-//		resetQuestBtn.setColor(Color.LIGHT_GRAY);
-//		resetQuestBtn.addListener(new ClickListener() {
-//    		@Override
-//    	    public void clicked(InputEvent event, float x, float y) {     			
-//    			resetQuests();
-//    			setQuest();
-//    			checkAvailableQuests();
-//    	    }});
-//		resetQuestBtn.setSize(150, 100);
-//		resetQuestBtn.setPosition(vp.getWorldWidth() / 10f, vp.getWorldHeight() / 1.25f);
-//		stage.addActor(resetQuestBtn);
-		
 		timer = new Label("", storage.labelStyle);
-		timer.setPosition(backBtn.getX() + backBtn.getWidth() * 2, backBtn.getY());
+		timer.setPosition(backBtn.getX() + backBtn.getWidth() * 2, backBtn.getY() + 50);
 		stage.addActor(timer);
 		
-		q1Title = new Label("Some Extermination1", storage.labelStyle);
-		q1Title.setPosition(vp.getWorldWidth() / 5f, vp.getWorldHeight() / 1.5f);
+		q1Title = new Label("Some Extermination1", storage.labelStyleMed);
+		q1Title.setPosition(vp.getWorldWidth() / 4f, vp.getWorldHeight() / 1.5f, Align.center);
 		q1Title.setSize(300, 100);
 		q1Title.setWrap(true);
+		q1Title.setAlignment(Align.center);
 		stage.addActor(q1Title);
 		
-		q2Title = new Label("Some Extermination2", storage.labelStyle);
-		q2Title.setPosition(q1Title.getX() + q1Title.getWidth() + 50, vp.getWorldHeight() / 1.5f);
+		q2Title = new Label("Some Extermination2", storage.labelStyleMed);
+		q2Title.setPosition(q1Title.getX() + q1Title.getWidth() + 400, vp.getWorldHeight() / 1.5f, Align.center);
 		q2Title.setSize(300, 100);
 		q2Title.setWrap(true);
+		q2Title.setAlignment(Align.center);
 		stage.addActor(q2Title);
 		
-		q3Title = new Label("Some Extermination3", storage.labelStyle);
-		q3Title.setPosition(q2Title.getX() + q2Title.getWidth() + 50, vp.getWorldHeight() / 1.5f);
+		q3Title = new Label("Some Extermination3", storage.labelStyleMed);
+		q3Title.setPosition(q2Title.getX() + q2Title.getWidth() + 400, vp.getWorldHeight() / 1.5f, Align.center);
 		q3Title.setSize(300, 100);
 		q3Title.setWrap(true);
+		q3Title.setAlignment(Align.center);
 		stage.addActor(q3Title);
 		
 		q1Text = new Label("Kill 5 stuff", storage.labelStyle);
-		q1Text.setPosition(q1Title.getX(), q1Title.getY() - q1Title.getHeight() * 2);
+		q1Text.setPosition(q1Title.getX(), q1Title.getY() - q1Title.getHeight() * 2.5f);
 		q1Text.setSize(300, 200);
+		q1Text.setWrap(true);
 		stage.addActor(q1Text);
 		
 		q2Text = new Label("Kill 3 stuff", storage.labelStyle);
-		q2Text.setPosition(q2Title.getX(), q2Title.getY() - q2Title.getHeight() * 2);
+		q2Text.setPosition(q2Title.getX(), q2Title.getY() - q2Title.getHeight() * 2.5f);
 		q2Text.setSize(300, 200);
+		q2Text.setWrap(true);
 		stage.addActor(q2Text);
 		
 		q3Text = new Label("Kill 5 stuff \nKill 3 stuff", storage.labelStyle);
-		q3Text.setPosition(q3Title.getX(), q3Title.getY() - q3Title.getHeight() * 2);
+		q3Text.setPosition(q3Title.getX(), q3Title.getY() - q3Title.getHeight() * 2.5f);
 		q3Text.setSize(300, 200);
+		q3Text.setWrap(true);
 		stage.addActor(q3Text);
 		
 		q1Accept = new TextButton("Accept", storage.buttonStyle);
@@ -305,13 +377,14 @@ public class QuestLog implements Screen {
 		q1Accept.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			setActiveQuest(takenQuest[0]);
+    			setActiveQuest(takenQuest[0], 1);
     			q1Accept.setText("Complete");
     			q1Accept.setDisabled(true);
     			q1Accept.setTouchable(Touchable.disabled);
+    			activeQuest[0] = 1;
     	    }});
-		q1Accept.setSize(150, 70);
-		q1Accept.setPosition(q1Text.getX(), q1Text.getY() - q1Text.getHeight());
+		q1Accept.setSize(200, 70);
+		q1Accept.setPosition(q1Text.getX() + q1Text.getWidth() / 6f, q1Text.getY() - q1Text.getHeight());
 		stage.addActor(q1Accept);
 		
 		q2Accept = new TextButton("Accept", storage.buttonStyle);
@@ -319,13 +392,14 @@ public class QuestLog implements Screen {
 		q2Accept.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			setActiveQuest(takenQuest[1]);
+    			setActiveQuest(takenQuest[1], 1);
     			q2Accept.setText("Complete");
     			q2Accept.setDisabled(true);
     			q2Accept.setTouchable(Touchable.disabled);
+    			activeQuest[1] = 1;
     	    }});
-		q2Accept.setSize(150, 70);
-		q2Accept.setPosition(q2Text.getX(), q2Text.getY() - q2Text.getHeight());
+		q2Accept.setSize(200, 70);
+		q2Accept.setPosition(q2Text.getX() + q2Text.getWidth() / 6f, q2Text.getY() - q2Text.getHeight());
 		stage.addActor(q2Accept);
 		
 		q3Accept = new TextButton("Accept", storage.buttonStyle);
@@ -333,13 +407,14 @@ public class QuestLog implements Screen {
 		q3Accept.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			setActiveQuest(takenQuest[2]);
+    			setActiveQuest(takenQuest[2], 1);
     			q3Accept.setText("Complete");
     			q3Accept.setDisabled(true);
     			q3Accept.setTouchable(Touchable.disabled);
+    			activeQuest[2] = 1;
     	    }});
-		q3Accept.setSize(150, 70);
-		q3Accept.setPosition(q3Text.getX(), q3Text.getY() - q3Text.getHeight());
+		q3Accept.setSize(200, 70);
+		q3Accept.setPosition(q3Text.getX() + q3Text.getWidth() / 6f, q3Text.getY() - q3Text.getHeight());
 		stage.addActor(q3Accept);
 	}
 	
@@ -353,15 +428,15 @@ public class QuestLog implements Screen {
 	    for (int i = 0; i < takenQuest.length; i++)
 	        takenQuest[i] = 0;
 	    
-	    storage.wolfQuest.setActive(0);
-	    storage.wolfQuest.setObj1Prog(0);
-	    storage.spiderQuest.setActive(0);
-	    storage.spiderQuest.setObj1Prog(0);
-	    storage.spiderBearQuest.setActive(0);
-	    storage.spiderBearQuest.setObj1Prog(0);
-	    storage.spiderBearQuest.setObj2Prog(0);
-	    storage.bearQuest.setActive(0);
-	    storage.bearQuest.setObj1Prog(0);
+	    for (int i = 0; i < activeQuest.length; i++)
+	    	activeQuest[i] = 0;
+	    
+	    for (int i = 0; i < storage.quests.length; i++) {
+	    	storage.quests[i].setActive(0);
+	    	storage.quests[i].setObj1Prog(0);
+    		storage.quests[i].setObj2Prog(0);
+    		storage.quests[i].setObj3Prog(0);
+	    }
 	}
 	
 	@Override
@@ -407,8 +482,9 @@ public class QuestLog implements Screen {
 	        for (Actor actor : stage.getActors()) {
 	            actor.addAction(Actions.removeActor());
 	        }
-
+	        resetQuests();
 	        createComponents();
+	        setQuest();      
 	    }
 
 	    if (checkQuests && activeQuests) {
@@ -419,10 +495,24 @@ public class QuestLog implements Screen {
 			selectQuest(takenQuest[2], 3);
 	    }
 
+	    ShapeRenderer shapeRenderer = new ShapeRenderer();
+	    shapeRenderer.setProjectionMatrix(vp.getCamera().combined);
+	    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+	    shapeRenderer.setColor(Color.BLACK);
+	    
+	    int thickness = 3; // Set thickness value
+	    for (int i = 0; i < thickness; i++) {
+            shapeRenderer.rect(q1Title.getX() - 50 - i, q1Accept.getY() - 25 - i, q1Title.getWidth() + 100 + 2 * i, 600 + 2 * i);
+            shapeRenderer.rect(q2Title.getX() - 50 - i, q2Accept.getY() - 25 - i, q2Title.getWidth() + 100 + 2 * i, 600 + 2 * i);
+            shapeRenderer.rect(q3Title.getX() - 50 - i, q3Accept.getY() - 25 - i, q3Title.getWidth() + 100 + 2 * i, 600 + 2 * i);
+	    }
+
+	    shapeRenderer.end();
+	    shapeRenderer.dispose();
+	    
 	    stage.act();
 	    stage.draw();
 	}
-
 	
 	@Override
 	public void resize(int width, int height) {
@@ -477,5 +567,12 @@ public class QuestLog implements Screen {
 	public static void setTakenQuest(int[] takenQuest) {
 		QuestLog.takenQuest = takenQuest;
 	}
-	
+
+	public static int[] getActiveQuest() {
+		return activeQuest;
+	}
+
+	public static void setActiveQuest(int[] activeQuest) {
+		QuestLog.activeQuest = activeQuest;
+	}
 }

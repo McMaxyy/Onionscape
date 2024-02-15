@@ -1,9 +1,8 @@
 package storage;
 
 public abstract class Quests {
-	private int reward, questID, obj1, obj2, obj3, rewardType, obj1Prog, obj2Prog, obj3Prog;
+	private int reward, questID, obj1, obj2, obj3, rewardType, obj1Prog, obj2Prog, obj3Prog, active;
 	private String questName, objective1, objective2, objective3;
-	private static int active;
 	
 	public int getReward() {
 		return reward;
@@ -69,7 +68,7 @@ public abstract class Quests {
 		return active;
 	}
 	public void setActive(int active) {
-		Quests.active = active;
+		this.active = active;
 	}
 	public int getObj1Prog() {
 		return obj1Prog;
@@ -127,8 +126,8 @@ class SpiderBearQuest extends Quests{
 		setObj2(3);
 		setObj1Prog(0);
 		setObj2Prog(0);
-		setRewardType(1);
-		setReward(50);
+		setRewardType(2);
+		setReward(20);
 		setActive(0);
 	}
 }
@@ -142,6 +141,63 @@ class BearQuest extends Quests{
 		setObj1Prog(0);
 		setRewardType(1);
 		setReward(20);
+		setActive(0);
+	}
+}
+
+class WaspQuest extends Quests{
+	public WaspQuest() {
+		setQuestName("Wasp Extermination");
+		setQuestID(5);
+		setObjective1("Kill 5 Wasps");
+		setObj1(5);
+		setObj1Prog(0);
+		setRewardType(2);
+		setReward(20);
+		setActive(0);
+	}
+}
+
+class MonkeyQuest extends Quests{
+	public MonkeyQuest() {
+		setQuestName("Monkey Extermination");
+		setQuestID(6);
+		setObjective1("Kill 5 Monkeys");
+		setObj1(5);
+		setObj1Prog(0);
+		setRewardType(2);
+		setReward(20);
+		setActive(0);
+	}
+}
+
+class MonkeyWaspWolfQuest extends Quests{
+	public MonkeyWaspWolfQuest() {
+		setQuestName("Mass Extermination");
+		setQuestID(7);
+		setObjective1("Kill 2 Wolves");
+		setObjective2("Kill 2 Monkeys");
+		setObjective3("Kill 2 Wasps");
+		setObj1(2);
+		setObj2(2);
+		setObj3(2);
+		setObj1Prog(0);
+		setObj2Prog(0);
+		setRewardType(1);
+		setReward(30);
+		setActive(0);
+	}
+}
+
+class WhirlwindQuest extends Quests{
+	public WhirlwindQuest() {
+		setQuestName("Skill Training");
+		setQuestID(8);
+		setObjective1("Hit enemies with Whirlwind 5 times");
+		setObj1(5);
+		setObj1Prog(0);
+		setRewardType(3);
+		setReward(1);
 		setActive(0);
 	}
 }

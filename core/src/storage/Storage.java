@@ -26,7 +26,7 @@ public class Storage {
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle, buttonStyleBig, homeBtnStyle;
 	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol, labelStyleBlack, 
-	labelStyleBigBlack, labelStyleBiggerBlack;
+	labelStyleBigBlack, labelStyleBiggerBlack, labelStyleMed;
 	public BitmapFont font, fontBig, fontSmol, fontMedium, fontBlack, fontBigBlack, fontBiggerBlack;
 	private List<Weapons> playerWeapons = new ArrayList<>();
 	private List<Armor> playerArmor = new ArrayList<>();
@@ -319,7 +319,12 @@ public class Storage {
 	public Quests spiderQuest = new SpiderQuest();
 	public Quests spiderBearQuest = new SpiderBearQuest();
 	public Quests bearQuest = new BearQuest();
-	public Quests[] quests = {wolfQuest, spiderQuest, spiderBearQuest, bearQuest};
+	public Quests waspQuest = new WaspQuest();
+	public Quests monkeyQuest = new MonkeyQuest();
+	public Quests monWasWolfQuest = new MonkeyWaspWolfQuest();
+	public Quests whirlwindQuest = new WhirlwindQuest();
+	public Quests[] quests = {wolfQuest, spiderQuest, spiderBearQuest, bearQuest, waspQuest,
+			monkeyQuest, monWasWolfQuest, whirlwindQuest};
 	
 	public void swapAbilities(Abilities ability) {
 		emptyAbility = ability;
@@ -438,7 +443,7 @@ public class Storage {
         parameter.color = Color.WHITE;
         parameter.size = 18;
         fontSmol = generator.generateFont(parameter);
-        parameter.size = 40;
+        parameter.size = 35;
         fontMedium = generator.generateFont(parameter);
         parameter.size = 100;
         parameter.color = Color.BLACK;
@@ -486,6 +491,9 @@ public class Storage {
         
         labelStyleBiggerBlack = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyleBiggerBlack.font = fontBiggerBlack; 
+        
+        labelStyleMed = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
+        labelStyleMed.font = fontMedium;
     }
 
 	public int[] getBonusHP() {
