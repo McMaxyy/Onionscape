@@ -154,10 +154,11 @@ public class Home implements Screen {
 		questLog.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			for (int i = 0; i < storage.quests.length; i++)
+    			for (int i = 0; i < storage.quests.length; i++) {
     		        if(storage.quests[i].getActive() == 1)
     		        	QuestLog.activeQuests = true;
-    			QuestLog.checkQuests = true;
+    			}	
+    			QuestLog.checkQuests = true;    			
     			gameScreen.switchToNewState(GameScreen.QUEST_LOG);
     	    }});
 		questLog.setSize(200, 50);

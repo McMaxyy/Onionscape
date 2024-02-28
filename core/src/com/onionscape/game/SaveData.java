@@ -97,38 +97,6 @@ public class SaveData {
 	public SaveData() {
 		storage = Storage.getInstance();
 	}
-	
-	private void saveProgress(int x, int[] y) {
-		switch(x) {
-		case 1:
-			y[0] = storage.wolfQuest.getObj1Prog();
-			break;
-		case 2:
-			y[0] = storage.spiderQuest.getObj1Prog();
-			break;
-		case 3:
-			y[0] = storage.spiderBearQuest.getObj1Prog();
-			y[1] = storage.spiderBearQuest.getObj2Prog();
-			break;
-		case 4:
-			y[0] = storage.bearQuest.getObj1Prog();
-			break;
-		case 5:
-			y[0] = storage.waspQuest.getObj1Prog();
-			break;
-		case 6:
-			y[0] = storage.monkeyQuest.getObj1Prog();
-			break;
-		case 7:
-			y[0] = storage.monWasWolfQuest.getObj1Prog();
-			y[1] = storage.monWasWolfQuest.getObj2Prog();
-			y[2] = storage.monWasWolfQuest.getObj3Prog();
-			break;
-		case 8:
-			y[0] = storage.whirlwindQuest.getObj1Prog();
-			break;
-		}
-	}
 
 	public void saveGame() {
 		SaveData saveData = new SaveData();
@@ -170,23 +138,22 @@ public class SaveData {
 		saveData.questDone = QuestLog.getQuestDone();
 		saveData.takenQuest = QuestLog.getTakenQuest();
 		saveData.activeQuestsLog = QuestLog.getActiveQuest();
-		int counter = 0;
-		for(int i = 0; i < storage.quests.length; i++) {
-			if(storage.quests[i].getActive() == 1) {
-				saveData.activeQuest[counter] = storage.quests[i].getQuestID();				
-				counter++;
-			}
-		}
-		
-		int counter2 = 0;
-		for(int i = 0; i < QuestLog.getTakenQuest().length; i++) {
-			if(counter2 == 0)
-				saveProgress(storage.quests[i].getQuestID(), saveData.questProg1);
-			else if(counter2 == 1)
-				saveProgress(storage.quests[i].getQuestID(), saveData.questProg2);
-			else if(counter2 == 2)
-				saveProgress(storage.quests[i].getQuestID(), saveData.questProg3);
-		}
+		for(int i = 0; i < 3; i++) {
+			for(int j = 0; j < storage.quests.length; j++) {
+				if(storage.quests[j].getActive() == 1 && saveData.takenQuest[i] == storage.quests[j].getQuestID()) {
+					saveData.activeQuest[i] = storage.quests[j].getQuestID();			
+				}
+			}			
+		}		
+		saveData.questProg1[0] = storage.quests[saveData.takenQuest[0] - 1].getObj1Prog();
+		saveData.questProg1[1] = storage.quests[saveData.takenQuest[0] - 1].getObj2Prog();
+		saveData.questProg1[2] = storage.quests[saveData.takenQuest[0] - 1].getObj3Prog();
+		saveData.questProg2[0] = storage.quests[saveData.takenQuest[1] - 1].getObj1Prog();
+		saveData.questProg2[1] = storage.quests[saveData.takenQuest[1] - 1].getObj2Prog();
+		saveData.questProg2[2] = storage.quests[saveData.takenQuest[1] - 1].getObj3Prog();
+		saveData.questProg3[0] = storage.quests[saveData.takenQuest[2] - 1].getObj1Prog();
+		saveData.questProg3[1] = storage.quests[saveData.takenQuest[2] - 1].getObj2Prog();
+		saveData.questProg3[2] = storage.quests[saveData.takenQuest[2] - 1].getObj3Prog();
 		
 		saveData.twoHMastery = BerserkerSkillTree.twoHMastery;
 		saveData.oneHMastery = BerserkerSkillTree.oneHMastery;
@@ -269,8 +236,8 @@ public class SaveData {
 			QuestLog.setQuestDone(loadedData.questDone);
 			QuestLog.setActiveQuest(loadedData.activeQuestsLog);
 			loadActiveQuests(loadedData.activeQuest);
-			loadQuestProgress(loadedData.takenQuest, loadedData.questProg1, loadedData.questProg2, loadedData.questProg3);
-		    
+			loadQuestProgress(loadedData.takenQuest, loadedData.questProg1, loadedData.questProg2, loadedData.questProg3);			
+			
 		    BerserkerSkillTree.twoHMastery = loadedData.twoHMastery;
 		    BerserkerSkillTree.oneHMastery = loadedData.oneHMastery;
 		    BerserkerSkillTree.thickSkin = loadedData.thickSkin;
@@ -307,6 +274,7 @@ public class SaveData {
 	
 	private void loadQuestProgress(int[] prog, int[] q1, int[] q2, int[] q3) {
 		for(int i = 0; i < prog.length; i++) {
+			System.out.println(prog[i]);
 			switch(prog[i]) {
 			case 1:
 				if(i == 0)
@@ -326,16 +294,16 @@ public class SaveData {
 				break;
 			case 3:
 				if(i == 0) {
-					storage.spiderQuest.setObj1Prog(q1[0]);
-					storage.spiderQuest.setObj1Prog(q1[1]);
+					storage.spiderBearQuest.setObj1Prog(q1[0]);
+					storage.spiderBearQuest.setObj2Prog(q1[1]);
 				}
 				else if(i == 1) {
-					storage.spiderQuest.setObj1Prog(q2[0]);
-					storage.spiderQuest.setObj1Prog(q2[1]);
+					storage.spiderBearQuest.setObj1Prog(q2[0]);
+					storage.spiderBearQuest.setObj2Prog(q2[1]);
 				}	
 				else if(i == 2) {
-					storage.spiderQuest.setObj1Prog(q3[0]);
-					storage.spiderQuest.setObj1Prog(q3[1]);
+					storage.spiderBearQuest.setObj1Prog(q3[0]);
+					storage.spiderBearQuest.setObj2Prog(q3[1]);
 				}
 				break;
 			case 4:
@@ -364,19 +332,19 @@ public class SaveData {
 				break;
 			case 7:
 				if(i == 0) {
-					storage.spiderQuest.setObj1Prog(q1[0]);
-					storage.spiderQuest.setObj1Prog(q1[1]);
-					storage.spiderQuest.setObj1Prog(q1[2]);
+					storage.monWasWolfQuest.setObj1Prog(q1[0]);
+					storage.monWasWolfQuest.setObj2Prog(q1[1]);
+					storage.monWasWolfQuest.setObj3Prog(q1[2]);
 				}
 				else if(i == 1) {
-					storage.spiderQuest.setObj1Prog(q2[0]);
-					storage.spiderQuest.setObj1Prog(q2[1]);
-					storage.spiderQuest.setObj1Prog(q2[2]);
+					storage.monWasWolfQuest.setObj1Prog(q2[0]);
+					storage.monWasWolfQuest.setObj2Prog(q2[1]);
+					storage.monWasWolfQuest.setObj3Prog(q2[2]);
 				}	
 				else if(i == 2) {
-					storage.spiderQuest.setObj1Prog(q3[0]);
-					storage.spiderQuest.setObj1Prog(q3[1]);
-					storage.spiderQuest.setObj1Prog(q3[2]);
+					storage.monWasWolfQuest.setObj1Prog(q3[0]);
+					storage.monWasWolfQuest.setObj2Prog(q3[1]);
+					storage.monWasWolfQuest.setObj3Prog(q3[2]);
 				}	
 				break;
 			case 8:

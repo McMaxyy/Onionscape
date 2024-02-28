@@ -56,9 +56,9 @@ public class QuestLog implements Screen {
 		storage = Storage.getInstance();
 		skin = storage.skin;
 		storage.createFont();	
-		checkQuests = false;
+//		checkQuests = false;
 		
-		if(StartScreen.isFreshLoad()) {
+		if(StartScreen.isFreshLoad() && !StartScreen.isLoadedGame()) {
 			resetQuests();
 			StartScreen.setFreshLoad(false);
 		}
@@ -105,13 +105,16 @@ public class QuestLog implements Screen {
 	            currentQuest.getObj2() == 0)) {
 	            switch (questIndex) {
 	                case 1:
-	                    updateQuestButton(q1Accept, 0, currentQuest);
+	                	if(questDone[0] == 0)
+	                		updateQuestButton(q1Accept, 0, currentQuest);
 	                    break;
 	                case 2:
-	                    updateQuestButton(q2Accept, 1, currentQuest);
+	                	if(questDone[1] == 0)
+	                		updateQuestButton(q2Accept, 1, currentQuest);
 	                    break;
 	                case 3:
-	                    updateQuestButton(q3Accept, 2, currentQuest);
+	                	if(questDone[2] == 0)
+	                		updateQuestButton(q3Accept, 2, currentQuest);
 	                    break;
 	            }
 	        }
@@ -136,6 +139,7 @@ public class QuestLog implements Screen {
 	        		storage.inventoryItems(storage.itemWhirlwind, "Add");
 	        	}
 	            questDone[questIndex] = 1;
+	            activeQuest[questIndex] = 0;
 	            button.setVisible(false);
 	            setActiveQuest(takenQuest[questIndex], 0);
 	        }
@@ -265,7 +269,31 @@ public class QuestLog implements Screen {
 	
 	private void setQuest() {		
 		int x = rand.nextInt(1, 9);
-		boolean newQ = false;
+		
+		if(StartScreen.isLoadedGame()) {
+			selectQuest(takenQuest[0], 1);
+			selectQuest(takenQuest[1], 2);
+			selectQuest(takenQuest[2], 3);
+			
+			if(activeQuest[0] == 1) {
+				q1Accept.setText("Complete");
+    			q1Accept.setDisabled(true);
+    			q1Accept.setTouchable(Touchable.disabled);
+    			storage.quests[takenQuest[0]].setActive(1);
+			}
+			if(activeQuest[1] == 1) {
+				q2Accept.setText("Complete");
+				q2Accept.setDisabled(true);
+				q2Accept.setTouchable(Touchable.disabled);
+				storage.quests[takenQuest[1]].setActive(1);
+			}
+			if(activeQuest[2] == 1) {
+				q3Accept.setText("Complete");
+				q3Accept.setDisabled(true);
+				q3Accept.setTouchable(Touchable.disabled);
+				storage.quests[takenQuest[2]].setActive(1);
+			}		
+		}
 		
 		if(newQuest[0] == 0) {
 			 newQuest[0] = 1;
@@ -288,33 +316,7 @@ public class QuestLog implements Screen {
 		if(newQuest[2] == 0) {
 			newQuest[2] = 1;
 			selectQuest(x, 3);
-		}
-				
-		for (int i = 0; i < newQuest.length; i++)
-	        if(newQuest[i] == 0)
-	        	newQ = true;
-		
-		if(!newQ) {
-			selectQuest(takenQuest[0], 1);
-			selectQuest(takenQuest[1], 2);
-			selectQuest(takenQuest[2], 3);
-			
-			if(activeQuest[0] == 1) {
-				q1Accept.setText("Complete");
-    			q1Accept.setDisabled(true);
-    			q1Accept.setTouchable(Touchable.disabled);
-			}
-			if(activeQuest[1] == 1) {
-				q2Accept.setText("Complete");
-				q2Accept.setDisabled(true);
-				q2Accept.setTouchable(Touchable.disabled);
-			}
-			if(activeQuest[2] == 1) {
-				q3Accept.setText("Complete");
-				q3Accept.setDisabled(true);
-				q3Accept.setTouchable(Touchable.disabled);
-			}
-		}
+		}	
 	}
 	
 	private void createComponents() {
@@ -385,6 +387,8 @@ public class QuestLog implements Screen {
     	    }});
 		q1Accept.setSize(200, 70);
 		q1Accept.setPosition(q1Text.getX() + q1Text.getWidth() / 6f, q1Text.getY() - q1Text.getHeight());
+		if(questDone[0] == 1)
+			q1Accept.setVisible(false);
 		stage.addActor(q1Accept);
 		
 		q2Accept = new TextButton("Accept", storage.buttonStyle);
@@ -400,6 +404,8 @@ public class QuestLog implements Screen {
     	    }});
 		q2Accept.setSize(200, 70);
 		q2Accept.setPosition(q2Text.getX() + q2Text.getWidth() / 6f, q2Text.getY() - q2Text.getHeight());
+		if(questDone[1] == 1)
+			q2Accept.setVisible(false);
 		stage.addActor(q2Accept);
 		
 		q3Accept = new TextButton("Accept", storage.buttonStyle);
@@ -415,6 +421,8 @@ public class QuestLog implements Screen {
     	    }});
 		q3Accept.setSize(200, 70);
 		q3Accept.setPosition(q3Text.getX() + q3Text.getWidth() / 6f, q3Text.getY() - q3Text.getHeight());
+		if(questDone[2] == 1)
+			q3Accept.setVisible(false);
 		stage.addActor(q3Accept);
 	}
 	
@@ -473,7 +481,12 @@ public class QuestLog implements Screen {
 	        timer.setText(timeLeft);
 
 	    if (durationUntilReset.isZero() || durationUntilReset.isNegative()) {
-	        resetQuests();
+	    	for (Actor actor : stage.getActors()) {
+	            actor.addAction(Actions.removeActor());
+	        }
+	    	resetQuests();
+	        createComponents();
+	        setQuest(); 
 	        // Update reset time to next day
 	        resetTime = resetTime.plusDays(1);
 	    }
@@ -487,14 +500,15 @@ public class QuestLog implements Screen {
 	        setQuest();      
 	    }
 
-	    if (checkQuests && activeQuests) {
-	        checkCompletedQuest();
+	    if (checkQuests) {
+	    	System.out.println("Checking quests");
+	    	checkCompletedQuest();
 	        checkQuests = false;
-	        selectQuest(takenQuest[0], 1);
-			selectQuest(takenQuest[1], 2);
-			selectQuest(takenQuest[2], 3);
+//	        selectQuest(takenQuest[0], 1);
+//			selectQuest(takenQuest[1], 2);
+//			selectQuest(takenQuest[2], 3);
 	    }
-
+	    
 	    ShapeRenderer shapeRenderer = new ShapeRenderer();
 	    shapeRenderer.setProjectionMatrix(vp.getCamera().combined);
 	    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
