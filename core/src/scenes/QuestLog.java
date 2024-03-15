@@ -55,8 +55,7 @@ public class QuestLog implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		storage = Storage.getInstance();
 		skin = storage.skin;
-		storage.createFont();	
-//		checkQuests = false;
+		storage.createFont();
 		
 		if(StartScreen.isFreshLoad() && !StartScreen.isLoadedGame()) {
 			resetQuests();
@@ -504,9 +503,6 @@ public class QuestLog implements Screen {
 	    	System.out.println("Checking quests");
 	    	checkCompletedQuest();
 	        checkQuests = false;
-//	        selectQuest(takenQuest[0], 1);
-//			selectQuest(takenQuest[1], 2);
-//			selectQuest(takenQuest[2], 3);
 	    }
 	    
 	    ShapeRenderer shapeRenderer = new ShapeRenderer();

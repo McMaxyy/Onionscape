@@ -64,6 +64,7 @@ public class LoadingScreen implements Screen {
             // All assets are loaded
         	MusicManager.getInstance().initialize();
         	TextureManager.getInstance().smoothFilter();
+        	gameScreen.setCurrentState(GameScreen.QUEST_LOG);
             gameScreen.setCurrentState(GameScreen.START_SCREEN);
         } else {
             progressBar.setValue(Storage.assetManager.getProgress());

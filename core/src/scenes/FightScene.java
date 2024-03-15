@@ -303,6 +303,23 @@ public class FightScene implements Screen{
     		ability3.setColor(Color.GRAY);
     		ability4.setTouchable(Touchable.disabled);
     		ability4.setColor(Color.GRAY);
+    		
+    		if(!eDead)
+    			attackCount = 3;
+    		
+    		Timer.schedule(new Timer.Task() {
+            	@Override
+                public void run() {
+            		bleedHit();
+            		if(!eDead) {            			
+            			if(eAbility3 == null)
+                			enemyAttack(rand.nextInt(5));
+                		else
+                			enemyAttack(rand.nextInt(6));
+            	        turnEnded = true;
+            		}
+            	}
+            }, 0.3f);  		
     	}
     	else {
     		attackBtn.setTouchable(Touchable.enabled);
@@ -624,7 +641,7 @@ public class FightScene implements Screen{
     	case "Whirlwind":
     		if(rand.nextInt(4) != 0) {
     			playerAttack(3);
-    			if (storage.whirlwindQuest.getActive() == 1)
+    			if (storage.whirlwindQuest.getActive() == 1 && Home.story)
     	            storage.whirlwindQuest.setObj1Prog(storage.whirlwindQuest.getObj1Prog() + 1);
     		}
     		else
@@ -1461,6 +1478,9 @@ public class FightScene implements Screen{
         	        turnEnded = true;
         		}      		
     	    }});
+    	endTurn.setVisible(false);
+    	endTurn.setDisabled(true);
+    	endTurn.setTouchable(Touchable.disabled);
     	
     	backBtn = new TextButton("Return", storage.buttonStyle);
     	backBtn.setColor(Color.LIGHT_GRAY);

@@ -154,10 +154,6 @@ public class Home implements Screen {
 		questLog.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
-    			for (int i = 0; i < storage.quests.length; i++) {
-    		        if(storage.quests[i].getActive() == 1)
-    		        	QuestLog.activeQuests = true;
-    			}	
     			QuestLog.checkQuests = true;    			
     			gameScreen.switchToNewState(GameScreen.QUEST_LOG);
     	    }});
@@ -187,7 +183,7 @@ public class Home implements Screen {
 		playBtn.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 1.08f);
 		stage.addActor(playBtn);
 		
-		newGame = new TextButton("New Game", storage.homeBtnStyle);
+		newGame = new TextButton("Quick Play", storage.homeBtnStyle);
 		newGame.setColor(Color.LIGHT_GRAY);
 		newGame.addListener(new ClickListener() {
     		@Override
