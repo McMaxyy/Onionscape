@@ -39,10 +39,10 @@ public class ForestMap implements Screen{
 	button9, button10, button11, button12, button13, button14;
 	private static ImageButton button15, button16, button17, button18, button19, button20, button21, button22, button23;
 	private static ImageButton button24, button25, button26, button27, button28, button29, button30, 
-	button31, button32, button33, button34;
-	private TextButton exit1, exit2, exit3;
+	button32, button33, button34;
+	private ImageButton exit1, exit2, exit3;
 	private ImageButton settingsBtn, homeBtn;
-	private static ImageButton[] buttons = new ImageButton[34];
+	private static ImageButton[] buttons = new ImageButton[33];
 	private static int location = 0, lastLocation = 0;
 	private Random rand = new Random();
 	private boolean moved = false;
@@ -70,12 +70,21 @@ public class ForestMap implements Screen{
 			location = 0;
 			ex = rand.nextInt(3);
 			
-			if(ex == 0)
+			if(ex == 0) {
 				exit1.setColor(Color.GREEN);
-			else if(ex == 1) 
+				exit2.setStyle(skin.get("escapeIconLocked", ImageButton.ImageButtonStyle.class));
+				exit3.setStyle(skin.get("escapeIconLocked", ImageButton.ImageButtonStyle.class));
+			}
+			else if(ex == 1) {
 				exit2.setColor(Color.GREEN);
-			else 
-				exit3.setColor(Color.GREEN);			
+				exit1.setStyle(skin.get("escapeIconLocked", ImageButton.ImageButtonStyle.class));
+				exit3.setStyle(skin.get("escapeIconLocked", ImageButton.ImageButtonStyle.class));
+			}
+			else {
+				exit3.setColor(Color.GREEN);		
+				exit2.setStyle(skin.get("escapeIconLocked", ImageButton.ImageButtonStyle.class));
+				exit1.setStyle(skin.get("escapeIconLocked", ImageButton.ImageButtonStyle.class));
+			}	
 		}
 		
 		disableButtons();
@@ -742,22 +751,22 @@ public class ForestMap implements Screen{
     	    }});
 		button30.setName(setEncounter(30, button30));
 		
-		button31 = new ImageButton(skin, "default");
-		button31.setBounds(vp.getWorldWidth() / 1.865f, vp.getWorldHeight() / 1.107f, 70, 70);
-		buttons[30] = button31;
-		button31.addListener(new ClickListener() {
-    		@Override
-    	    public void clicked(InputEvent event, float x, float y) {
-    			lastLocation = location;
-				location = 31;
-				btnClick(button31.getName().toString());
-				setBtnStyle("P", button31);
-    	    }});
-		button31.setName(setEncounter(31, button31));
+//		button31 = new ImageButton(skin, "default");
+//		button31.setBounds(vp.getWorldWidth() / 1.865f, vp.getWorldHeight() / 1.107f, 70, 70);
+//		buttons[30] = button31;
+//		button31.addListener(new ClickListener() {
+//    		@Override
+//    	    public void clicked(InputEvent event, float x, float y) {
+//    			lastLocation = location;
+//				location = 31;
+//				btnClick(button31.getName().toString());
+//				setBtnStyle("P", button31);
+//    	    }});
+//		button31.setName(setEncounter(31, button31));
 		
 		button32 = new ImageButton(skin, "default");
 		button32.setBounds(vp.getWorldWidth() / 2.28f, vp.getWorldHeight() / 1.107f, 70, 70);
-		buttons[31] = button32;
+		buttons[30] = button32;
 		button32.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
@@ -770,7 +779,7 @@ public class ForestMap implements Screen{
 		
 		button33 = new ImageButton(skin, "default");
 		button33.setBounds(vp.getWorldWidth() / 6.9f, vp.getWorldHeight() / 1.26f, 70, 70);
-		buttons[32] = button33;
+		buttons[31] = button33;
 		button33.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
@@ -783,7 +792,7 @@ public class ForestMap implements Screen{
 		
 		button34 = new ImageButton(skin, "default");
 		button34.setBounds(vp.getWorldWidth() / 8f, vp.getWorldHeight() / 1.075f, 70, 70);
-		buttons[33] = button34;
+		buttons[32] = button34;
 		button34.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
@@ -794,10 +803,10 @@ public class ForestMap implements Screen{
     	    }});
 		button34.setName(setEncounter(34, button34));
 		
-		exit1 = new TextButton("", storage.buttonStyle);
+		exit1 = new ImageButton(skin, "escapeIcon");
 		exit1.setColor(Color.RED);
 		exit1.setTouchable(Touchable.disabled);
-		exit1.setBounds(vp.getWorldWidth() / 1.865f, vp.getWorldHeight() / 1.03f, 70, 30);
+		exit1.setBounds(vp.getWorldWidth() / 1.865f, vp.getWorldHeight() / 1.1f, 55, 80);
 		exit1.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
@@ -808,10 +817,10 @@ public class ForestMap implements Screen{
     			}  				
     	    }});
 		
-		exit2 = new TextButton("", storage.buttonStyle);
+		exit2 = new ImageButton(skin, "escapeIcon");
 		exit2.setColor(Color.RED);
 		exit2.setTouchable(Touchable.disabled);
-		exit2.setBounds(vp.getWorldWidth() / 500f, vp.getWorldHeight() / 1.075f, 50, 70);
+		exit2.setBounds(vp.getWorldWidth() / 500f, vp.getWorldHeight() / 1.075f, 55, 80);
 		exit2.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
@@ -822,10 +831,10 @@ public class ForestMap implements Screen{
     			}  
     	    }});
 		
-		exit3 = new TextButton("", storage.buttonStyle);
+		exit3 = new ImageButton(skin, "escapeIcon");
 		exit3.setColor(Color.RED);
 		exit3.setTouchable(Touchable.disabled);
-		exit3.setBounds(vp.getWorldWidth() / 1.02f, vp.getWorldHeight() / 1.107f, 50, 70);
+		exit3.setBounds(vp.getWorldWidth() / 1.04f, vp.getWorldHeight() / 1.107f, 55, 80);
 		exit3.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {
@@ -903,7 +912,7 @@ public class ForestMap implements Screen{
 		stage.addActor(button28);
 		stage.addActor(button29);
 		stage.addActor(button30);
-		stage.addActor(button31);
+//		stage.addActor(button31);
 		stage.addActor(button32);
 		stage.addActor(button33);
 		stage.addActor(button34);
@@ -1230,26 +1239,26 @@ public class ForestMap implements Screen{
 		case 30:
 			button26.setTouchable(Touchable.enabled);
 			button27.setTouchable(Touchable.enabled);
-			button31.setTouchable(Touchable.enabled);
-			button26.setDisabled(false);
-			button27.setDisabled(false);
-			button31.setDisabled(false);
-			button30.setName("P");
-			break;
-		case 31:
-			button30.setTouchable(Touchable.enabled);
-			button32.setTouchable(Touchable.enabled);
-			button31.setName("P");
 			if(exit1.getColor().equals(Color.GREEN))
 				exit1.setTouchable(Touchable.enabled);
-			button30.setDisabled(false);
-			button32.setDisabled(false);
+			button26.setDisabled(false);
+			button27.setDisabled(false);
+			button30.setName("P");
 			break;
+//		case 31:
+//			button30.setTouchable(Touchable.enabled);
+//			button32.setTouchable(Touchable.enabled);
+//			button31.setName("P");
+//			if(exit1.getColor().equals(Color.GREEN))
+//				exit1.setTouchable(Touchable.enabled);
+//			button30.setDisabled(false);
+//			button32.setDisabled(false);
+//			break;
 		case 32:
-			button31.setTouchable(Touchable.enabled);
 			button24.setTouchable(Touchable.enabled);
-			button31.setDisabled(false);
 			button24.setDisabled(false);
+			if(exit1.getColor().equals(Color.GREEN))
+				exit1.setTouchable(Touchable.enabled);
 			button32.setName("P");
 			break;
 		case 33:
@@ -1394,9 +1403,9 @@ public class ForestMap implements Screen{
 			case 30:
 				setBtnStyle("D", button30);
 				break;
-			case 31:
-				setBtnStyle("D", button31);
-				break;
+//			case 31:
+//				setBtnStyle("D", button31);
+//				break;
 			case 32:
 				setBtnStyle("D", button32);
 				break;

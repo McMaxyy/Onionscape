@@ -166,6 +166,42 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 			a: 1
 		}
 	}
+	ExitIconDown: {
+		name: ExitIcon
+		color: {
+			r: 0.7647059
+			g: 0.7647059
+			b: 0.7647059
+			a: 1
+		}
+	}
+	ExitIcon2Down: {
+		name: ExitIcon2
+		color: {
+			r: 0.7647059
+			g: 0.75686276
+			b: 0.75686276
+			a: 1
+		}
+	}
+	RandomEncounterDown: {
+		name: RandomEncounter
+		color: {
+			r: 0.69411767
+			g: 0.69411767
+			b: 0.69411767
+			a: 1
+		}
+	}
+	Help2Down: {
+		name: Help2
+		color: {
+			r: 0.7647059
+			g: 0.7647059
+			b: 0.7647059
+			a: 1
+		}
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {
@@ -180,8 +216,8 @@ com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 	default: {
-		checkboxOn: check-on
-		checkboxOff: check-off
+		checkboxOn: Asset 7
+		checkboxOff: Asset 6
 		font: default-font
 		fontColor: white
 	}
@@ -219,10 +255,10 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		imageChecked: StrEnemyIconDown
 	}
 	randIcon: {
-		imageUp: RandIcon
-		imageDown: RandIconDown
-		imageDisabled: RandIconDown
-		imageChecked: RandIconDown
+		imageUp: RandomEncounter
+		imageDown: RandomEncounterDown
+		imageDisabled: RandomEncounterDown
+		imageChecked: RandomEncounterDown
 	}
 	treasureIcon: {
 		imageUp: TreasureIcon
@@ -252,6 +288,26 @@ com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		imageUp: Settings
 		imageDown: SettingsDown
 	}
+	escapeIcon: {
+		imageUp: ExitIcon
+		imageDown: ExitIconDown
+		imageDisabled: ExitIconDown
+		imageChecked: ExitIconDown
+	}
+	escapeIconLocked: {
+		imageUp: ExitIcon2
+		imageDown: ExitIcon2Down
+		imageDisabled: ExitIcon2Down
+		imageChecked: ExitIcon2Down
+	}
+	helpIcon: {
+		imageUp: Help2
+		imageDown: Help2Down
+	}
+	logo: {
+		imageUp: Logo
+		imageDown: Logo
+	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
 	default: {
@@ -277,8 +333,9 @@ com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 }
 com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	default-horizontal: {
-		background: default-scroll
-		knob: default-round
+		background: load4
+		knob: load5
+		knobBefore: load5
 	}
 	default-vertical: {
 		background: default-slider

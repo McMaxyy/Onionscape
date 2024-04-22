@@ -288,9 +288,14 @@ public class FightScene implements Screen{
     		enemyHPLbl.setText(enemyHP + "/" + enemyMaxHP);   
     		firstLoad = false;
     	}
-        	 		
+        
+    	if(eDead)
+    		enemyHPLbl.setText(0 + "/" + enemyMaxHP);
     	
-    	if(attackCount <= 0) {
+    	if(pDead)
+    		playerHPLbl.setText(0 + "/" + Player.getMaxHP());
+    	
+    	if(attackCount <= 0 && !eDead) {
     		playerTurn = false;
     		
     		attackBtn.setTouchable(Touchable.disabled);
@@ -307,7 +312,7 @@ public class FightScene implements Screen{
     		if(!eDead)
     			attackCount = 3;
     		
-    		Timer.schedule(new Timer.Task() {
+			Timer.schedule(new Timer.Task() {
             	@Override
                 public void run() {
             		bleedHit();
@@ -319,7 +324,7 @@ public class FightScene implements Screen{
             	        turnEnded = true;
             		}
             	}
-            }, 0.3f);  		
+            }, 0.4f);  	 			
     	}
     	else {
     		attackBtn.setTouchable(Touchable.enabled);
@@ -342,7 +347,7 @@ public class FightScene implements Screen{
     		}
     	}    		
     	  	
-    	if(pDead || eDead) {
+    	if(pDead || eDead && !gameOver) {
     		attackBtn.setVisible(false);
     		endTurn.setVisible(false);
     		ability1.setVisible(false);
@@ -406,7 +411,7 @@ public class FightScene implements Screen{
 	        }
 	        
 	        gameOver = true;
-	        pDead = eDead = false; 		
+	        pDead = false; 		
     	} 		
     }
     
@@ -940,7 +945,7 @@ public class FightScene implements Screen{
     	
 //    	System.out.println(attackType);
     	
-    	if(attackType.equals("Attack")) {
+    	if(attackType.equals("Attack") && !eDead) {
     		int temp = enemyDamage;
     		if(eEnrageLeft > 0) {
     			temp += temp / 3;
@@ -1035,7 +1040,7 @@ public class FightScene implements Screen{
         		enemyStunned = false;
         	}
     	}
-    	else {
+    	else if(!eDead){
     		switch(attackType) {
     		case "Bleed":
     			eRendLeft = 3;
@@ -1078,7 +1083,7 @@ public class FightScene implements Screen{
                     if(Player.getHp() <= 0)
                     	pDead = true; 
             	}
-            }, 0.5f);    		
+            }, 0.55f);    		
     	}
     	
     	if(ePoisonLeft > 0) {
@@ -1091,7 +1096,7 @@ public class FightScene implements Screen{
             		if(Player.getHp() <= 0)
                     	pDead = true; 
             	}
-            }, 0.5f); 
+            }, 0.55f); 
     	}
     	
     	if(eRendLeft == 3)
@@ -2508,7 +2513,7 @@ public class FightScene implements Screen{
 			enemySprite.draw(enemyBatch);
 			enemyBatch.end();
 	    }
-	    else {
+	    else if(!eDead){
 	    	if(enemyClickTime < 0.1f) {
 	    		enemyBatch.begin();
 	    		enemyBatch.draw(enemyTexture, vp.getWorldWidth() / 1.45f, vp.getWorldHeight() / 2f, 500, 500);

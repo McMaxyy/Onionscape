@@ -58,8 +58,8 @@ public class GameScreen implements Screen {
 	public GameScreen(Game game) {		
 		this.game = game;
 		viewport = new FitViewport(SELECTED_WIDTH, SELECTED_HEIGHT);	
-		Gdx.graphics.setUndecorated(false);
-		Gdx.graphics.setWindowedMode(1280, 720);
+		Gdx.graphics.setUndecorated(true);
+		Gdx.graphics.setWindowedMode(SELECTED_WIDTH, SELECTED_HEIGHT);
 	    setCurrentState(LOADING_SCREEN);
 	    
 	    isTransitioning = false;

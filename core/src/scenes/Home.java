@@ -34,7 +34,7 @@ public class Home implements Screen {
 	private TextButton questLog, newGame, zerkerTreeBtn, inventory, weaponsBtn, armorBtn, itemsBtn, 
 	forestBtn, merchantBtn, playBtn, nextSong;
 	private Label level, playerStats, coins, currentMusic;
-	private ImageButton saveBtn, exitBtn, settingsBtn, homeBtn;
+	private ImageButton saveBtn, exitBtn, settingsBtn, homeBtn, helpBtn;
 	private GameScreen gameScreen; 
 	private Inventory inv;
 	private SaveData saveData = new SaveData();
@@ -401,6 +401,17 @@ public class Home implements Screen {
 		homeBtn.setSize(60, 50);
 		homeBtn.setPosition(vp.getWorldWidth() / 1.29f, vp.getWorldHeight() / 1.08f);
 		stage.addActor(homeBtn);
+		
+		helpBtn = new ImageButton(skin, "default");	
+		helpBtn.setStyle(skin.get("helpIcon", ImageButton.ImageButtonStyle.class));
+		helpBtn.addListener(new ClickListener() {
+    		@Override
+    	    public void clicked(InputEvent event, float x, float y) {
+    			
+    	    }});
+		helpBtn.setSize(60, 50);
+		helpBtn.setPosition(vp.getWorldWidth() / 1.38f, vp.getWorldHeight() / 1.08f);
+		stage.addActor(helpBtn);
 	}
 	
 	private void resetSkills() {

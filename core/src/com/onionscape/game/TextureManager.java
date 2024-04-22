@@ -9,6 +9,7 @@ public class TextureManager {
 	private static TextureManager instance = new TextureManager();
 	
 	public static Texture inventorySlotTexture = Storage.assetManager.get("InventorySlot.png", Texture.class);
+	public static Texture logoTexture = Storage.assetManager.get("maps/Logo.png", Texture.class);
 	public static Texture ironGreataxeTexture = Storage.assetManager.get("weapons/inventory/IronGreataxe.png", Texture.class);
 	public static Texture ironShieldTexture = Storage.assetManager.get("weapons/inventory/IronShield.png", Texture.class);
 	public static Texture ironAxeTexture = Storage.assetManager.get("weapons/inventory/IronAxe.png", Texture.class);
@@ -83,6 +84,7 @@ public class TextureManager {
 	
 	public void smoothFilter(){
 		inventorySlotTexture.setFilter(TextureFilter.Linear,TextureFilter.Nearest);
+		logoTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		abilityRefillTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eIronGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		eWoodenGreataxeTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);

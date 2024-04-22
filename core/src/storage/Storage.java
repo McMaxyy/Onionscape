@@ -26,8 +26,9 @@ public class Storage {
 	public Skin skin;
 	public TextButton.TextButtonStyle buttonStyle, buttonStyleBig, homeBtnStyle;
 	public LabelStyle labelStyle, labelStyleBig, labelStyleSmol, labelStyleBlack, 
-	labelStyleBigBlack, labelStyleBiggerBlack, labelStyleMed;
-	public BitmapFont font, fontBig, fontSmol, fontMedium, fontBlack, fontBigBlack, fontBiggerBlack;
+	labelStyleBigBlack, labelStyleBiggerBlack, labelStyleMed, labelStyleMedBlack;
+	public BitmapFont font, fontBig, fontSmol, fontMedium, fontBlack, fontBigBlack, 
+	fontBiggerBlack, fontMedBlack;
 	private List<Weapons> playerWeapons = new ArrayList<>();
 	private List<Armor> playerArmor = new ArrayList<>();
 	private List<Items> playerItems = new ArrayList<>();
@@ -153,7 +154,8 @@ public class Storage {
 		assetManager.load("maps/SettingsScreen.png", Texture.class, textureParameter);
 		assetManager.load("maps/RandomEncounterScreen.png", Texture.class, textureParameter);
 		assetManager.load("maps/TreasureEncounterScreen.png", Texture.class, textureParameter);
-
+		assetManager.load("maps/QuestScreen.png", Texture.class, textureParameter);
+		
 		// Buffs & Debuffs
 		assetManager.load("buffs/Barrier.png", Texture.class, textureParameter);
 		assetManager.load("buffs/Enrage.png", Texture.class, textureParameter);
@@ -195,7 +197,8 @@ public class Storage {
 		assetManager.load("player/Onion.png", Texture.class, textureParameter);
 		assetManager.load("player/MapIcon.png", Texture.class, textureParameter);	
 		assetManager.load("items/CardLarge.png", Texture.class, textureParameter);	
-		assetManager.load("items/CardSmall.png", Texture.class, textureParameter);	
+		assetManager.load("items/CardSmall.png", Texture.class, textureParameter);
+		assetManager.load("maps/Logo.png", Texture.class, textureParameter);
 	}
 	
 	// Load items
@@ -445,8 +448,9 @@ public class Storage {
         fontSmol = generator.generateFont(parameter);
         parameter.size = 35;
         fontMedium = generator.generateFont(parameter);
-        parameter.size = 100;
         parameter.color = Color.BLACK;
+        fontMedBlack = generator.generateFont(parameter);
+        parameter.size = 100;
         fontBiggerBlack = generator.generateFont(parameter);
         
         Texture borderTextureUp = new Texture(Gdx.files.internal("buttons/newskin/newskin_data/textbutton.9.png"));
@@ -494,6 +498,9 @@ public class Storage {
         
         labelStyleMed = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
         labelStyleMed.font = fontMedium;
+        
+        labelStyleMedBlack = new Label.LabelStyle(skin.get(Label.LabelStyle.class));
+        labelStyleMedBlack.font = fontMedBlack;
     }
 
 	public int[] getBonusHP() {

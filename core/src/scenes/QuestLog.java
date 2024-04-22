@@ -12,6 +12,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -44,6 +47,8 @@ public class QuestLog implements Screen {
 		private static int[] newQuest = {0, 0, 0};
 		private static int[] takenQuest = {0, 0, 0};
 		private static int[] activeQuest = {0, 0, 0};
+		private SpriteBatch mapBatch = new SpriteBatch();
+		private Texture mapTexture;
 		private Random rand = new Random();
 		public static boolean checkQuests = false, activeQuests = false;
 	
@@ -56,6 +61,9 @@ public class QuestLog implements Screen {
 		storage = Storage.getInstance();
 		skin = storage.skin;
 		storage.createFont();
+		
+		mapTexture = Storage.assetManager.get("maps/QuestScreen.png", Texture.class);
+		mapTexture.setFilter(TextureFilter.MipMap,TextureFilter.Nearest);
 		
 		if(StartScreen.isFreshLoad() && !StartScreen.isLoadedGame()) {
 			resetQuests();
@@ -319,55 +327,55 @@ public class QuestLog implements Screen {
 	}
 	
 	private void createComponents() {
-		backBtn = new TextButton("Back", storage.buttonStyle);
+		backBtn = new TextButton("Back", storage.homeBtnStyle);
 		backBtn.setColor(Color.LIGHT_GRAY);
 		backBtn.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {     			
     			gameScreen.switchToNewState(GameScreen.HOME);
     	    }});
-		backBtn.setSize(150, 100);
-		backBtn.setPosition(vp.getWorldWidth() / 40f, vp.getWorldHeight() / 1.15f);
+		backBtn.setSize(200, 40);
+		backBtn.setPosition(vp.getWorldWidth() / 20f, vp.getWorldHeight() / 1.062f);
 		stage.addActor(backBtn);	
 		
 		timer = new Label("", storage.labelStyle);
-		timer.setPosition(backBtn.getX() + backBtn.getWidth() * 2, backBtn.getY() + 50);
+		timer.setPosition(backBtn.getX() + backBtn.getWidth() * 2, backBtn.getY() + 20);
 		stage.addActor(timer);
 		
-		q1Title = new Label("Some Extermination1", storage.labelStyleMed);
+		q1Title = new Label("Some Extermination1", storage.labelStyleMedBlack);
 		q1Title.setPosition(vp.getWorldWidth() / 4f, vp.getWorldHeight() / 1.5f, Align.center);
 		q1Title.setSize(300, 100);
 		q1Title.setWrap(true);
 		q1Title.setAlignment(Align.center);
 		stage.addActor(q1Title);
 		
-		q2Title = new Label("Some Extermination2", storage.labelStyleMed);
+		q2Title = new Label("Some Extermination2", storage.labelStyleMedBlack);
 		q2Title.setPosition(q1Title.getX() + q1Title.getWidth() + 400, vp.getWorldHeight() / 1.5f, Align.center);
 		q2Title.setSize(300, 100);
 		q2Title.setWrap(true);
 		q2Title.setAlignment(Align.center);
 		stage.addActor(q2Title);
 		
-		q3Title = new Label("Some Extermination3", storage.labelStyleMed);
+		q3Title = new Label("Some Extermination3", storage.labelStyleMedBlack);
 		q3Title.setPosition(q2Title.getX() + q2Title.getWidth() + 400, vp.getWorldHeight() / 1.5f, Align.center);
 		q3Title.setSize(300, 100);
 		q3Title.setWrap(true);
 		q3Title.setAlignment(Align.center);
 		stage.addActor(q3Title);
 		
-		q1Text = new Label("Kill 5 stuff", storage.labelStyle);
+		q1Text = new Label("Kill 5 stuff", storage.labelStyleBlack);
 		q1Text.setPosition(q1Title.getX(), q1Title.getY() - q1Title.getHeight() * 2.5f);
 		q1Text.setSize(300, 200);
 		q1Text.setWrap(true);
 		stage.addActor(q1Text);
 		
-		q2Text = new Label("Kill 3 stuff", storage.labelStyle);
+		q2Text = new Label("Kill 3 stuff", storage.labelStyleBlack);
 		q2Text.setPosition(q2Title.getX(), q2Title.getY() - q2Title.getHeight() * 2.5f);
 		q2Text.setSize(300, 200);
 		q2Text.setWrap(true);
 		stage.addActor(q2Text);
 		
-		q3Text = new Label("Kill 5 stuff \nKill 3 stuff", storage.labelStyle);
+		q3Text = new Label("Kill 5 stuff \nKill 3 stuff", storage.labelStyleBlack);
 		q3Text.setPosition(q3Title.getX(), q3Title.getY() - q3Title.getHeight() * 2.5f);
 		q3Text.setSize(300, 200);
 		q3Text.setWrap(true);
@@ -454,6 +462,12 @@ public class QuestLog implements Screen {
 	
 	@Override
 	public void render(float delta) {
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
+		
+		mapBatch.begin();
+		mapBatch.draw(mapTexture, 0, 0, GameScreen.SELECTED_WIDTH, GameScreen.SELECTED_HEIGHT);
+		mapBatch.end();
+		
 	    long currentTime = System.currentTimeMillis();
 
 	    // Get the current time in the CET timezone
@@ -526,7 +540,7 @@ public class QuestLog implements Screen {
 	
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		mapBatch.setProjectionMatrix(vp.getCamera().combined);
 		
 	}
 	

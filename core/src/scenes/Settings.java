@@ -194,6 +194,7 @@ public class Settings implements Screen{
 		screenShake = new CheckBox("", storage.skin);
 		screenShake.setPosition(vp.getWorldWidth() / 1.7f, vp.getWorldHeight() / 4f);
 		screenShake.setChecked(shake);
+		screenShake.setSize(30, 30);
 		screenShake.addListener(new ClickListener() {
     		@Override
     	    public void clicked(InputEvent event, float x, float y) {

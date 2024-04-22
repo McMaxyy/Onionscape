@@ -139,7 +139,7 @@ public class Merchant implements Screen{
 	    for (int x = 0; x < 6; x++) {
 	        for (int y = 0; y < 3; y++) {
 	            if (index < gearBtns.length) {
-	                gearTable.add(gearBtns[index]).pad(3);
+	                gearTable.add(gearBtns[index]).pad(6);
 	                index++;
 	            }
 	        }
@@ -251,7 +251,7 @@ public class Merchant implements Screen{
 	            }
 
 	            final Image inventorySlotImage = new Image(slotTexture);
-	            itemTable.add(inventorySlotImage).pad(3);
+	            itemTable.add(inventorySlotImage).pad(6);
 	            
 	            if(emptySlot) {
 	                emptySlot = false;
@@ -342,7 +342,7 @@ public class Merchant implements Screen{
 	            }
 
 	            final Image inventorySlotImage = new Image(slotTexture);
-	            inventoryTable.add(inventorySlotImage).pad(3);
+	            inventoryTable.add(inventorySlotImage).pad(6);
 	            
 	            if(emptySlot) {
 	                emptySlot = false;
@@ -578,7 +578,7 @@ public class Merchant implements Screen{
 			for(int x = 0; x < 6; x++) {
 				for(int y = 0; y < 3; y++) {
 					if (index < gearBtns.length) {
-			            gearTable.add(gearBtns[index]).pad(3);
+			            gearTable.add(gearBtns[index]).pad(6);
 			            index++;
 			        }
 				}
@@ -625,7 +625,7 @@ public class Merchant implements Screen{
 			int index = 0;
 			for(int y = 0; y < 3; y++) {
 				if (index < discountBtns.length) {
-					discountTable.add(discountBtns[index]).pad(3);
+					discountTable.add(discountBtns[index]).pad(6);
 		            index++;
 		        }
 				
@@ -675,7 +675,7 @@ public class Merchant implements Screen{
 			index = 0;
 			for(int y = 0; y < 3; y++) {
 				if (index < standardBtns.length) {
-					standardTable.add(standardBtns[index]).pad(3);
+					standardTable.add(standardBtns[index]).pad(6);
 		            index++;
 		        }
 				

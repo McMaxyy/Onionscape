@@ -3,16 +3,25 @@ package scenes;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.onionscape.game.GameScreen;
 import com.onionscape.game.MusicManager;
 import com.onionscape.game.TextureManager;
 
+import player.Player;
 import storage.Storage;
 
 public class LoadingScreen implements Screen {
@@ -24,6 +33,7 @@ public class LoadingScreen implements Screen {
     private GameScreen gameScreen;
     private Storage storage;
     private Label loading;
+    private ImageButton logo;
     
     public LoadingScreen(Viewport viewport, Game game, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
@@ -34,6 +44,10 @@ public class LoadingScreen implements Screen {
         storage = Storage.getInstance();
         storage.createFont();
         skin = storage.skin;
+        
+        logo = new ImageButton(skin, "logo");
+        logo.setBounds(vp.getWorldWidth() / 5.8f, vp.getWorldHeight() / 3f, 1200, 500);
+        stage.addActor(logo);
 
         // Create a progress bar using the default skin
         float progressBarWidth = vp.getWorldWidth() / 2f;
@@ -42,7 +56,7 @@ public class LoadingScreen implements Screen {
 
         // Calculate the position for the progress bar at the center of the screen
         float progressBarX = (vp.getWorldWidth() - progressBarWidth) / 2f;
-        float progressBarY = (vp.getWorldHeight() - progressBarHeight) / 2f;
+        float progressBarY = (vp.getWorldHeight() - progressBarHeight) / 4f;
         progressBar.setBounds(progressBarX, progressBarY, progressBarWidth, progressBarHeight);
 
         // Create the loading label
@@ -83,7 +97,6 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
 		
 	}
 
